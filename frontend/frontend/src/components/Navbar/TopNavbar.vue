@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    name: 'FrontendProfilephoto',
+    name: 'FrontendNavbar',
 
     data() {
         return {
@@ -24,6 +24,6 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style>
 
 </style>
