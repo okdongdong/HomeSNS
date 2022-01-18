@@ -17,6 +17,10 @@ public class UserDto {
 	// 회원 구분
 	private String userCls;
 
+	// 세션 로그인용 refreshtoken
+	private String refreshToken;
+
+	
 	public int getUserSeq() {
 		return userSeq;
 	}
@@ -105,13 +109,20 @@ public class UserDto {
 		this.userCls = userCls;
 	}
 
+	public String getRefreshToken() {
+		return refreshToken;
+	}
+
+	public void setRefreshToken(String refreshToken) {
+		this.refreshToken = refreshToken;
+	}
+
 	@Override
 	public String toString() {
 		return "UserDto [userSeq=" + userSeq + ", userId=" + userId + ", userPassword=" + userPassword + ", userEmail="
 				+ userEmail + ", userName=" + userName + ", userNickname=" + userNickname + ", userPhone=" + userPhone
 				+ ", userBod=" + userBod + ", userProfileImageUrl=" + userProfileImageUrl + ", userRegisterDate="
-				+ userRegisterDate + ", userCls=" + userCls + "]";
+				+ userRegisterDate + ", userCls=" + userCls + ", refreshToken=" + refreshToken + "]";
 	}
-	
 	
 }
