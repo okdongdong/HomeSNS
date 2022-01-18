@@ -4,9 +4,9 @@
       <div style="width: 33%; background-color: black">
       </div>
       <v-main style="max-width: 450px; width: 100%">
-        <top-navbar v-if="$route.name!=='Select'||$route.name!=='GroupCreate' "></top-navbar>
+        <top-navbar v-if="$route.name!=='GroupCreate'"></top-navbar>
         <router-view/>
-        <bottom-navbar></bottom-navbar>
+        <bottom-navbar v-if="$route.name!=='GroupCreate'"></bottom-navbar>
       </v-main>
       <div style="width: 33%; background-color: black">
       </div>
