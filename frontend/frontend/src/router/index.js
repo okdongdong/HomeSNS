@@ -23,7 +23,7 @@ import GroupCreate from '../views/Group/GroupCreate.vue'
 // import Member from '../views/Group/Member.vue'
 import Select from '../views/Group/Select.vue'
 
-// import UserPage from '../views/Profile/UserPage.vue'
+import UserPage from '../views/Profile/UserPage.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -117,11 +117,11 @@ const routes = [
     name: 'Select',
     component: Select
   },
-  // {
-  //   path: '/userpage',
-  //   name: 'UserPage',
-  //   component: UserPage
-  // },
+  {
+    path: '/userpage',
+    name: 'UserPage',
+    component: UserPage
+  },
 ]
 
 const router = new VueRouter({
