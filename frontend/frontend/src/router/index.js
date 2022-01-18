@@ -4,7 +4,7 @@ import Login from '../views/Account/Login.vue'
 // import FindId from '../views/Account/FindId.vue'
 // import FindPassword from '../views/Account/FindPassword.vue'
 // import MyPage from '../views/Account/MyPage.vue'
-// import SignUp from '../views/Account/SignUp.vue'
+import SignUp from '../views/Account/SignUp.vue'
 
 // import Location from '../views/Collection/Location.vue'
 // import Schedule from '../views/Collection/Schedule.vue'
@@ -23,7 +23,7 @@ import GroupCreate from '../views/Group/GroupCreate.vue'
 // import Member from '../views/Group/Member.vue'
 import Select from '../views/Group/Select.vue'
 
-// import UserPage from '../views/Profile/UserPage.vue'
+import UserPage from '../views/Profile/UserPage.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -47,11 +47,11 @@ const routes = [
   //   name: 'MyPage',
   //   component: MyPage
   // },
-  // {
-  //   path: '/signup',
-  //   name: 'SignUp',
-  //   component: SignUp
-  // },
+  {
+    path: '/signup',
+    name: 'SignUp',
+    component: SignUp
+  },
   // {
   //   path: '/location',
   //   name: 'Location',
@@ -117,11 +117,11 @@ const routes = [
     name: 'Select',
     component: Select
   },
-  // {
-  //   path: '/userpage',
-  //   name: 'UserPage',
-  //   component: UserPage
-  // },
+  {
+    path: '/userpage',
+    name: 'UserPage',
+    component: UserPage
+  },
 ]
 
 const router = new VueRouter({
