@@ -1,32 +1,45 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+  <v-app>
+    <div class="d-flex justify-center">
+      <div style="width: 33%; background-color: black"></div>
+      <v-main style="max-width: 450px; width: 100%">
+        <top-navbar v-if="noneNav"></top-navbar>
+        <router-view />
+        <bottom-navbar v-if="noneNav"></bottom-navbar>
+      </v-main>
+      <div style="width: 33%; background-color: black"></div>
     </div>
-    <router-view/>
-  </div>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import BottomNavbar from "./components/Navbar/BottomNavbar.vue";
+import TopNavbar from "./components/Navbar/TopNavbar.vue";
+export default {
+  name: "App",
+  components: {
+    BottomNavbar,
+    TopNavbar,
+  },
+  data: () => ({
+    noneNavPages: [
+      "SignUp",
+      "Login",
+      "FindId",
+      "FindPassword",
+      "Select",
+      "GroupCreate",
+    ],
+  }),
+  computed: {
+    noneNav: function () {
+      if (this.noneNavPages.includes(this.$router.app._route.name)) {
+        return false;
+      }
+      return true;
+    },
+  },
+};
+</script>
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+<style></style>
