@@ -13,4 +13,5 @@ public interface UserService {
 	public UserResultDto checkUserId(String id);
 	public UserResultDto checkUserEmail(String email);
 	public UserResultDto checkUserPhone(String phone);
+
 }

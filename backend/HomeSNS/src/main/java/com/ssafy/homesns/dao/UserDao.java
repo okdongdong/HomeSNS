@@ -23,4 +23,5 @@ public interface UserDao {
 	
 	// phone을 받아서 DB에 유저 정보가 있는지 확인한다
 	public int checkUserPhone(String phone);
+	
 }

@@ -39,6 +39,7 @@ public class UserController {
 		}
 	}
 	
+	
 	// 마이페이지 조회
 	@GetMapping(value="/mypage")
 	public UserDto mypage(UserDto dto, HttpSession session) {
