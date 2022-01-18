@@ -9,6 +9,7 @@
       <v-form ref="form" v-model="valid" lazy-validation>
         <!-- 아이디 -->
         <v-text-field
+        :elevation="18"
           clearable
           background-color="white"
           solo
@@ -21,6 +22,7 @@
 
         <!-- 이메일 -->
         <v-text-field
+        :elevation="18"
           clearable
           background-color="white"
           solo
@@ -32,6 +34,7 @@
 
         <!-- 비밀번호 -->
         <v-text-field
+        :elevation="18"
           clearable
           background-color="white"
           solo
@@ -44,6 +47,7 @@
 
         <!-- 비밀번호 확인 -->
         <v-text-field
+        :elevation="18"
           clearable
           background-color="white"
           solo
@@ -56,6 +60,7 @@
 
         <!-- 이름 -->
         <v-text-field
+        :elevation="18"
           clearable
           background-color="white"
           solo
@@ -67,6 +72,7 @@
 
         <!-- 연락처 -->
         <v-text-field
+        :elevation="18"
           clearable
           background-color="white"
           solo
@@ -79,6 +85,7 @@
 
         <!-- 생년월일 -->
         <v-text-field
+        :elevation="18"
           clearable
           background-color="white"
           solo
@@ -88,6 +95,7 @@
         ></v-text-field>
 
         <v-btn
+        :elevation="18"
           rounded
           dark
           large
