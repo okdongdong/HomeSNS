@@ -12,6 +12,15 @@ public interface UserDao {
 	// userSeq를 받아서 DB에 유저 정보를 삭제한다
 	public int userDelete(int userSeq);
 	
-	// userDto를 받아서 DB에 유저 정보가 있는지 확인한다
-	public int userExist(UserDto userDto);
+	// phone을 받아서 DB에 있는 유저 정보를 가져온다.
+	public UserDto userExist(String phone);
+	
+	// id를 받아서 DB에 유저 정보가 있는지 확인한다
+	public int checkUserId(String id);
+	
+	// email을 받아서 DB에 유저 정보가 있는지 확인한다
+	public int checkUserEmail(String email);
+	
+	// phone을 받아서 DB에 유저 정보가 있는지 확인한다
+	public int checkUserPhone(String phone);
 }
