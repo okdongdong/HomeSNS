@@ -9,7 +9,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.mycom.myboard.dto.UserDto;
+import com.ssafy.homesns.dto.UserDto;
 
 @Component
 public class LoginInterceptor implements HandlerInterceptor{ // HandlerInterceptorAdapter 는 deprecated
