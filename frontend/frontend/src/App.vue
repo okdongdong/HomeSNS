@@ -2,27 +2,28 @@
   <v-app>
     <v-container-fluid class="d-flex justify-center">
       <div style="width: 33%; background-color: black">
-        123123
       </div>
       <v-main style="max-width: 450px; width: 100%">
+        <top-navbar></top-navbar>
         <router-view/>
+        <bottom-navbar></bottom-navbar>
       </v-main>
       <div style="width: 33%; background-color: black">
-        123123123123123
       </div>
     </v-container-fluid>
   </v-app>
 </template>
 
 <script>
+import BottomNavbar from './components/Navbar/BottomNavbar.vue';
+import TopNavbar from './components/Navbar/TopNavbar.vue';
 export default {
   name: "App",
   components :{
-
+    BottomNavbar,
+    TopNavbar,
   },
-  data: () => ({
-    //
-  }),
+  
 };
 </script>
 
