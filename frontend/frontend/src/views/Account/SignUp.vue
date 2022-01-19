@@ -1,6 +1,6 @@
 <template>
   <v-app class="my-background">
-      <v-spacer></v-spacer>
+    <v-spacer></v-spacer>
 
     <div class="container">
       <div class="d-flex justify-center">
@@ -9,7 +9,7 @@
       <v-form ref="form" v-model="valid" lazy-validation>
         <!-- 아이디 -->
         <v-text-field
-        :elevation="18"
+          :elevation="18"
           clearable
           background-color="white"
           solo
@@ -22,7 +22,7 @@
 
         <!-- 이메일 -->
         <v-text-field
-        :elevation="18"
+          :elevation="18"
           clearable
           background-color="white"
           solo
@@ -34,7 +34,7 @@
 
         <!-- 비밀번호 -->
         <v-text-field
-        :elevation="18"
+          :elevation="18"
           clearable
           background-color="white"
           solo
@@ -47,7 +47,7 @@
 
         <!-- 비밀번호 확인 -->
         <v-text-field
-        :elevation="18"
+          :elevation="18"
           clearable
           background-color="white"
           solo
@@ -60,7 +60,7 @@
 
         <!-- 이름 -->
         <v-text-field
-        :elevation="18"
+          :elevation="18"
           clearable
           background-color="white"
           solo
@@ -72,7 +72,7 @@
 
         <!-- 연락처 -->
         <v-text-field
-        :elevation="18"
+          :elevation="18"
           clearable
           background-color="white"
           solo
@@ -85,7 +85,7 @@
 
         <!-- 생년월일 -->
         <v-text-field
-        :elevation="18"
+          :elevation="18"
           clearable
           background-color="white"
           solo
@@ -95,38 +95,39 @@
         ></v-text-field>
 
         <v-btn
-        :elevation="18"
+          :elevation="18"
           rounded
           dark
           large
           :disabled="!valid"
           color="black"
           class="mr-4"
-          @click="validate"
+          @click.stop="signup(credentials)"
           width="100%"
         >
           회원가입
         </v-btn>
-          <v-btn
-            text
-            dark
-            large
-            rounded
-            class="mr-4 my-2"
-            @click="move('Login')"
-            width="100%"
-          >
-            뒤로가기
-          </v-btn>
+        <v-btn
+          text
+          dark
+          large
+          rounded
+          class="mr-4 my-2"
+          @click.stop="move('Login')"
+          width="100%"
+        >
+          뒤로가기
+        </v-btn>
       </v-form>
     </div>
-      <v-spacer></v-spacer>
-      <v-spacer></v-spacer>
-
+    <v-spacer></v-spacer>
+    <v-spacer></v-spacer>
   </v-app>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "SignUp",
   data: () => ({
@@ -175,12 +176,13 @@ export default {
   }),
 
   methods: {
+    ...mapActions(["signup"]),
     validate() {
       this.$refs.form.validate();
     },
     move(name) {
-      this.$router.push({name: name})
-    }
+      this.$router.push({ name: name });
+    },
   },
 };
 </script>
