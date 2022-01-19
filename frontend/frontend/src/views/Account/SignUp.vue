@@ -11,6 +11,7 @@
         <v-text-field
           :elevation="18"
           clearable
+          maxlength="20"
           background-color="white"
           solo
           v-model="credentials.id"
@@ -35,6 +36,7 @@
         <!-- 비밀번호 -->
         <v-text-field
           :elevation="18"
+          maxlength="20"
           clearable
           background-color="white"
           solo
@@ -48,6 +50,7 @@
         <!-- 비밀번호 확인 -->
         <v-text-field
           :elevation="18"
+          maxlength="20"
           clearable
           background-color="white"
           solo
@@ -61,6 +64,7 @@
         <!-- 이름 -->
         <v-text-field
           :elevation="18"
+          maxlength="20"
           clearable
           background-color="white"
           solo

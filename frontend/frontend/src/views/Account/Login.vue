@@ -9,6 +9,7 @@
         <!-- 아이디 -->
         <v-text-field
           clearable
+          maxlength="20"
           background-color="white"
           solo
           v-model="credentials.id"
