@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Login from '../views/Account/Login.vue'
 import FindId from '../views/Account/FindId.vue'
 import FindPassword from '../views/Account/FindPassword.vue'
-// import MyPage from '../views/Account/MyPage.vue'
+import MyPage from '../views/Account/MyPage.vue'
 import SignUp from '../views/Account/SignUp.vue'
 
 // import Location from '../views/Collection/Location.vue'
@@ -42,11 +42,11 @@ const routes = [
     name: 'FindPassword',
     component: FindPassword
   },
-  // {
-  //   path: '/mypage',
-  //   name: 'MyPage',
-  //   component: MyPage
-  // },
+  {
+    path: '/mypage',
+    name: 'MyPage',
+    component: MyPage
+  },
   {
     path: '/signup',
     name: 'SignUp',
