@@ -33,7 +33,7 @@
 
 <script>
 export default {
-  name: '02SubPjtSelect',
+  name: 'Select',
 
   data() {
     return {
