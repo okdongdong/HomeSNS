@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 <mapper namespace="com.ssafy.homesns.dao.LoginDao">
 
+
 	<select id="login" parameterType="string" resultType="com.ssafy.homesns.dto.UserDto">
 		SELECT USER_SEQ as userSeq, USER_ID as userId, USER_PASSWORD as userPassword, USER_EMAIL as userEmail, 
 			   USER_NAME as userName, USER_NICKNAME as userNickname, USER_PHONE as userPhone, USER_BOD as userBod, 
