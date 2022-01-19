@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app id="app">
     <div class="d-flex justify-center">
       <div style="width: 33%; background-color: black"></div>
       <v-main style="max-width: 450px; width: 100%">
@@ -42,4 +42,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+
+#app {
+  font-family: 'Gowun Dodum', sans-serif;
+}
+</style>

@@ -13,9 +13,9 @@
           >
           </v-img>
         </div>
-        <v-card-title class="main-text justify-center text-h4 font-weight-bold">아아디 찾기</v-card-title>
+        <v-card-title class="main-text justify-center font-weight-bold">아아디 찾기</v-card-title>
         <br />
-        <v-card-title class="main-text justify-left text-h4 font-weight-bold">가입시 <br />사용합 이메일로<br />아이디가<br />발송됩니다.</v-card-title>
+        <v-card-title class="main-text justify-left font-weight-bold">가입시 <br />사용합 이메일로<br />아이디가<br />발송됩니다.</v-card-title>
       </v-card>
     </div>
     <br />
@@ -88,5 +88,6 @@ export default {
 
   .main-text {
     color: #fff;
+    font-size: 30px;
   }
 </style>
