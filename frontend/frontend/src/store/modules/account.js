@@ -1,8 +1,6 @@
 import axios from "axios";
-import createPersistedState from "vuex-persistedstate";
 
-const login = {
-  plugins: [createPersistedState()],
+const account = {
   namespaced: true,
   state: {
     isLogin: localStorage.getItem("jwt") ? true : false,
@@ -47,4 +45,4 @@ const login = {
   getters: {},
 };
 
-export default login;
+export default account;
