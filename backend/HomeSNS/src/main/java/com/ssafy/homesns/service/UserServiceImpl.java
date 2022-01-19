@@ -52,11 +52,11 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserResultDto userExist(String phone){
+	public UserResultDto userExist(String userPhone){
 		UserResultDto userResultDto = new UserResultDto();
 
 		try {
-			UserDto userDto =  userDao.userExist(phone);  
+			UserDto userDto =  userDao.userExist(userPhone);  
 			userResultDto.setUserDto(userDto);			
 			userResultDto.setResult(SUCCESS);
 			
@@ -72,9 +72,9 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserResultDto checkUserId(String id) {
+	public UserResultDto checkUserId(String userId) {
 		UserResultDto userResultDto = new UserResultDto();
-		if ( userDao.checkUserId(id) == 1 ) {
+		if ( userDao.checkUserId(userId) == 1 ) {
 			userResultDto.setResult(SUCCESS);
 		} else {
 			userResultDto.setResult(FAIL);
@@ -84,9 +84,9 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserResultDto checkUserEmail(String email) {
+	public UserResultDto checkUserEmail(String userEmail) {
 		UserResultDto userResultDto = new UserResultDto();
-		if ( userDao.checkUserEmail(email) == 1 ) {
+		if ( userDao.checkUserEmail(userEmail) == 1 ) {
 			userResultDto.setResult(SUCCESS);
 		} else {
 			userResultDto.setResult(FAIL);
@@ -95,9 +95,9 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserResultDto checkUserPhone(String phone) {
+	public UserResultDto checkUserPhone(String userPhone) {
 		UserResultDto userResultDto = new UserResultDto();
-		if ( userDao.checkUserPhone(phone) == 1 ) {
+		if ( userDao.checkUserPhone(userPhone) == 1 ) {
 			userResultDto.setResult(SUCCESS);
 		} else {
 			userResultDto.setResult(FAIL);
