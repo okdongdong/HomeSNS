@@ -33,9 +33,12 @@ public class LoginController {
 		// 로그인이 성공한다면 session에 현재 유저 정보를 저장한다
 		if (userDto != null) {
 			session.setAttribute("userDto", userDto);
+			System.out.println("로그인 성공");
 			return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);
+		} else {
+			System.out.println("로그인 실패");
+			return new ResponseEntity<UserDto>(userDto, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<UserDto>(userDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@GetMapping(value="/logout")

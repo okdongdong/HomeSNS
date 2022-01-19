@@ -40,6 +40,9 @@ public class GroupController {
 	
 	// 새로운 그룹을 생성하는 동시에 그룹에 참가한다
 	// 동시에 group member 에 추가되어야 한다는 것도 추가해야할 것
+	// 그룹 아이디를 가져오기 위해서는 우선 테이블을 생성해야 그룹 아이디가 나올 것이다 (AI)
+	// 그 다음, 다시 찾을 때, groupId가 큰 순서 대로 찾아서 userSeq가 leaderSeq인 것 하나의 id만 찾는다
+	// 그리고 그것을 멤버에 넣어야 한다
 	@PostMapping(value="/group")
 	public ResponseEntity<GroupResultDto> groupCreate(GroupDto groupDto, HttpSession session) {
 		UserDto userDto = (UserDto) session.getAttribute("userDto");
@@ -61,6 +64,7 @@ public class GroupController {
 	// 이거 하나를 위해서 추가적으로 겹치게 구현될 부분이 많을 것 같다
 	// 그룹장이 그룹에서 나가기 위해서는 마이페이지 같은 부분에서 나가는 것도 좋은 방법일 것
 	// 프론트에서 그룹장과 현재 유저가 같다면 알아서 기능을 못쓰도록 막아줘야 할 것
+	// ==> 프론트에서 처리할 일, 그룹장이 그룹을 삭제하는 것은 따로 구현할 수 있을 것 ( 프론트에서 막는다 )
 	@DeleteMapping(value="/group/{groupId}")
 	public ResponseEntity<GroupResultDto> groupDelete(@PathVariable(value="groupId") int groupId, HttpSession session) {
 		UserDto userDto = (UserDto) session.getAttribute("userDto");
