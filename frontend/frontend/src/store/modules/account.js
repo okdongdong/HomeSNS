@@ -1,7 +1,7 @@
 import axios from "axios";
 import createPersistedState from "vuex-persistedstate";
 
-const login = {
+const account = {
   plugins: [createPersistedState()],
   namespaced: true,
   state: {
@@ -47,4 +47,4 @@ const login = {
   getters: {},
 };
 
-export default login;
+export default account;
