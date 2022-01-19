@@ -1,8 +1,6 @@
 import axios from "axios";
-import createPersistedState from "vuex-persistedstate";
 
 const account = {
-  plugins: [createPersistedState()],
   namespaced: true,
   state: {
     isLogin: localStorage.getItem("jwt") ? true : false,
