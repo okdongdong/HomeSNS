@@ -1,22 +1,9 @@
 <template>
-  <v-card class="mx-auto overflow-hidden">
-
-    <v-app-bar color="deep-purple accent-4" dark prominent>
+  <v-card>
+    <v-app-bar color="deep-purple accent-4" dark>
+      <v-spacer></v-spacer>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-spacer></v-spacer>
-
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-filter</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" absolute right temporary>
@@ -48,7 +35,7 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-  </v-card>
+    </v-card>
 </template>
 
 <script>
@@ -72,4 +59,7 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+
+
+</style>
