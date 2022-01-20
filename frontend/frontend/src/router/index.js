@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Account/Login.vue'
-// import FindId from '../views/Account/FindId.vue'
-// import FindPassword from '../views/Account/FindPassword.vue'
-// import MyPage from '../views/Account/MyPage.vue'
+import FindId from '../views/Account/FindId.vue'
+import FindPassword from '../views/Account/FindPassword.vue'
+import MyPage from '../views/Account/MyPage.vue'
 import SignUp from '../views/Account/SignUp.vue'
 
 // import Location from '../views/Collection/Location.vue'
@@ -11,7 +11,8 @@ import SignUp from '../views/Account/SignUp.vue'
 // import Timeline from '../views/Collection/Timeline.vue'
 
 // import MiniGame from '../views/Entertainment/MiniGame.vue'
-// import Vote from '../views/Entertainment/Vote.vue'
+import VoteList from '../views/Entertainment/VoteList.vue'
+import VoteCreate from '../views/Entertainment/VoteCreate.vue'
 
 // import FeedCreate from '../views/Feed/FeedCreate.vue'
 // import Detail from '../views/Feed/Detail.vue'
@@ -32,21 +33,21 @@ const routes = [
     name: 'Login',
     component: Login
   },
-  // {
-  //   path: '/findid',
-  //   name: 'FindId',
-  //   component: FindId
-  // },
-  // {
-  //   path: '/findpassword',
-  //   name: 'FindPassword',
-  //   component: FindPassword
-  // },
-  // {
-  //   path: '/mypage',
-  //   name: 'MyPage',
-  //   component: MyPage
-  // },
+  {
+    path: '/findid',
+    name: 'FindId',
+    component: FindId
+  },
+  {
+    path: '/findpassword',
+    name: 'FindPassword',
+    component: FindPassword
+  },
+  {
+    path: '/mypage',
+    name: 'MyPage',
+    component: MyPage
+  },
   {
     path: '/signup',
     name: 'SignUp',
@@ -72,11 +73,16 @@ const routes = [
   //   name: 'MiniGame',
   //   component: MiniGame
   // },
-  // {
-  //   path: '/vote',
-  //   name: 'Vote',
-  //   component: Vote
-  // },
+  {
+    path: '/votelist',
+    name: 'VoteList',
+    component: VoteList
+  },
+  {
+    path: '/votecreate',
+    name: 'VoteCreate',
+    component: VoteCreate
+  },
   // {
   //   path: '/feedcreate',
   //   name: 'FeedCreate',

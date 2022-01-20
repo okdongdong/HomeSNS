@@ -9,6 +9,7 @@
         <!-- 아이디 -->
         <v-text-field
           clearable
+          maxlength="20"
           background-color="white"
           solo
           v-model="credentials.id"
@@ -36,7 +37,7 @@
           :disabled="!valid"
           color="black"
           class="mr-4"
-          @click="login()"
+          @click="login(credentials)"
           width="100%"
         >
           로그인
@@ -69,6 +70,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "Login",
   data: () => ({
@@ -85,6 +88,7 @@ export default {
   }),
 
   methods: {
+    ...mapActions(["login"]),
     move(name) {
       this.$router.push({ name: name });
     },
