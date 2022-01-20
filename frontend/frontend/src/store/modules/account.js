@@ -27,14 +27,14 @@ const account = {
           console.log(err);
         });
     },
-    signup: function ({ commit }, credentials) {
+    signup: function (credentials) {
       axios({
         method: "POST",
         url: `${process.env.VUE_APP_MCS_URL}/signup`,
         data: credentials,
       })
         .then((res) => {
-          login(credentials);
+          this.login(credentials);
           console.log(res);
         })
         .catch((err) => {
