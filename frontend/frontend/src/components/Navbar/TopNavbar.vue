@@ -2,6 +2,8 @@
   <div>
     <v-app-bar color="rgb(98,101,232)" dark>
       <v-spacer></v-spacer>
+      <v-button >추억담기</v-button>
+      <v-icon>notifications_none</v-icon>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
     </v-app-bar>
 
