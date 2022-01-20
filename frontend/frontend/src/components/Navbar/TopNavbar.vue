@@ -1,12 +1,12 @@
 <template>
-  <v-card>
+  <div>
     <v-app-bar color="deep-purple accent-4" dark>
       <v-spacer></v-spacer>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
     </v-app-bar>
-
-    <v-navigation-drawer v-model="drawer" absolute right temporary>
+    
+    <v-navigation-drawer v-model="drawer" fixed right temporary>
       <v-list nav dense>
         <v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
           <v-list-item>
@@ -35,7 +35,7 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    </v-card>
+    </div>
 </template>
 
 <script>
