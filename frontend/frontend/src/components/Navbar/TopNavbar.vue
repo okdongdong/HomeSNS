@@ -2,11 +2,13 @@
   <div>
     <v-app-bar color="deep-purple accent-4" dark>
       <v-spacer></v-spacer>
+      <v-button >추억담기</v-button>
+      <v-icon>notifications_none</v-icon>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
     </v-app-bar>
     
-    <v-navigation-drawer v-model="drawer" fixed right temporary>
+    <v-navigation-drawer v-model="drawer" fixed right temporary class= "drawer-position">
       <v-list nav dense>
         <v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
           <v-list-item>
@@ -60,6 +62,8 @@ export default {
 </script>
 
 <style>
-
+.drawer-position{
+  right : calc((100vw - 480px)/2)
+}
 
 </style>
