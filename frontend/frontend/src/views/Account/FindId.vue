@@ -7,17 +7,23 @@
       >
         <div class="d-flex justify-center">
           <v-img
-            src="@/assets/logo2.png" alt="logo"
+            src="@/assets/logo1.png" alt="logo"
             max-width="200"
             max-height="200"
           >
           </v-img>
         </div>
-        <v-card-title class="main-text justify-center font-weight-bold">아아디 찾기</v-card-title>
+        <v-card-title class="main-text justify-center font-weight-bold">아이디 찾기</v-card-title>
         <br />
-        <v-card-title class="main-text justify-left font-weight-bold">가입시 <br />사용합 이메일로<br />아이디가<br />발송됩니다.</v-card-title>
+        <div>
+        <v-card-text class="main-text justify-left font-weight-bold">가입 시</v-card-text>
+        <v-card-text class="main-text justify-left font-weight-bold">사용한 이메일로</v-card-text>
+        <v-card-text class="main-text justify-left font-weight-bold">아이디가</v-card-text>
+        <v-card-text class="main-text justify-left font-weight-bold">발송됩니다.</v-card-text>
+        </div>
       </v-card>
     </div>
+    <br />
     <br />
     
     <div class="container">
@@ -46,7 +52,7 @@
           >
             아이디 찾기
           </v-btn>
-        <a href=""><v-card-title class="main-text justify-center">뒤로</v-card-title></a>
+        <a class="d-flex text-back justify-center ma-5" href="">뒤로</a>
         </v-form>
       </v-row>
     </div>
@@ -87,7 +93,13 @@ export default {
   }
 
   .main-text {
-    color: #fff;
+    color: #fff !important;
     font-size: 30px;
+  }
+
+  .text-back {
+    text-decoration: none;
+    color: #fff;
+    display: block;
   }
 </style>
