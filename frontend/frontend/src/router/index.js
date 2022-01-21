@@ -14,7 +14,7 @@ import SignUp from '../views/Account/SignUp.vue'
 import VoteList from '../views/Entertainment/VoteList.vue'
 import VoteCreate from '../views/Entertainment/VoteCreate.vue'
 
-// import FeedCreate from '../views/Feed/FeedCreate.vue'
+import FeedCreate from '../views/Feed/FeedCreate.vue'
 // import Detail from '../views/Feed/Detail.vue'
 // import Main from '../views/Feed/Main.vue'
 // import Update from '../views/Feed/Update.vue'
@@ -83,11 +83,11 @@ const routes = [
     name: 'VoteCreate',
     component: VoteCreate
   },
-  // {
-  //   path: '/feedcreate',
-  //   name: 'FeedCreate',
-  //   component: FeedCreate
-  // },
+  {
+    path: '/feedcreate',
+    name: 'FeedCreate',
+    component: FeedCreate
+  },
   // {
   //   path: '/detail',
   //   name: 'Detail',
