@@ -22,6 +22,8 @@
             <v-text-field
               v-model="form.title"
               :rules="rules.name"
+              maxlength="20"
+              :counter="20"
               color="rgb(98,101,232)"
               label="제목"
               required
@@ -39,7 +41,7 @@
           <!-- 참석자 명단 인원?-->
           <v-col cols="12">
             <v-combobox
-              v-model="select"
+              v-model="attendPeople"
               :items="items"
               label="참석자 명단"
               multiple
@@ -51,6 +53,8 @@
             <v-textarea
               v-model="form.content"
               color="rgb(98,101,232)"
+              maxlength="100"
+              :counter="100"
             >
               <template v-slot:label>
                 <div>
@@ -60,85 +64,22 @@
             </v-textarea>
           </v-col>
           <!-- 해쉬태그 -->
-          <v-col>
-            <v-combobox
-              v-model="model"
-              :filter="filter"
-              :hide-no-data="!search"
-              :items="hashtagitems"
-              :search-input.sync="search"
-              hide-selected
-              label="Search for an option"
-              multiple
-              small-chips
-              solo
+          <v-col cols="12">
+            <v-text-field
+              v-model="tmphashtag"
+              color="rgb(98,101,232)"
+              label="해시태그"
+              @keyup.enter="addHashTag()"
+              @keyup.space="addHashTag()"
+              auto-grow
             >
-            <template v-slot:no-data>
-              <v-list-item>
-                <span class="subheading">Create</span>
-                <v-chip
-                  :color="`${colors[nonce - 1]} lighten-3`"
-                  label
-                  small
-                >
-                  {{ search }}
-                </v-chip>
-              </v-list-item>
+            <template v-slot:prepend-inner>
+              <div v-for="(tag , index) in form.hashtag" :key="index">
+                <v-chip class="ma-1" close @click:close="remove(tag)">{{tag}}</v-chip>
+              </div>
             </template>
-            <template v-slot:selection="{ attrs, item, parent, selected }">
-              <v-chip
-                v-if="item === Object(item)"
-                v-bind="attrs"
-                :color="`${item.color} lighten-3`"
-                :input-value="selected"
-                label
-                small
-              >
-                <span class="pr-2">
-                  {{ item.text }}
-                </span>
-                <v-icon
-                  small
-                  @click="parent.selectItem(item)"
-                >
-                  $delete
-                </v-icon>
-              </v-chip>
-            </template>
-            <template v-slot:item="{ index, item }">
-              <v-text-field
-                v-if="editing === item"
-                v-model="editing.text"
-                autofocus
-                flat
-                background-color="transparent"
-                hide-details
-                solo
-                @keyup.enter="edit(index, item)"
-              ></v-text-field>
-              <v-chip
-                v-else
-                :color="`${item.color} lighten-3`"
-                dark
-                label
-                small
-              >
-                {{ item.text }}
-              </v-chip>
-              <v-spacer></v-spacer>
-              <v-list-item-action @click.stop>
-                <v-btn
-                  icon
-                  @click.stop.prevent="edit(index, item)"
-                >
-                  <v-icon>{{ editing !== item ? 'mdi-pencil' : 'mdi-check' }}</v-icon>
-                </v-btn>
-              </v-list-item-action>
-            </template>
-          </v-combobox>
+            </v-text-field>
           </v-col>
-
-
         </v-row>
       </v-container>
       <v-card-actions>
@@ -169,7 +110,7 @@
       const defaultForm = Object.freeze({
         title: null,
         content: null,
-        bod:null,
+        hashtag:[],
       })
       
       return {
@@ -177,8 +118,7 @@
         rules: {
           name: [val => (val || '').length > 0 || '제목을 입력해주세요'],
         },
-
-        conditions: false,
+        tmphashtag:null,
         snackbar: false,
         defaultForm,
         items: [
@@ -188,35 +128,7 @@
           '임창현',
           '최이삭',
         ],
-        ////////////// 해쉬태그 영역 ................////////////////
-        activator: null,
-        attach: null,
-        colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
-        editing: null,
-        editingIndex: -1,
-        hashtagitems: [
-          { header: 'Select an option or create one' },
-          {
-            text: 'Foo',
-            color: 'blue',
-          },
-          {
-            text: 'Bar',
-            color: 'red',
-          },
-        ],
-        nonce: 1,
-        menu: false,
-        model: [
-          {
-            text: 'Foo',
-            color: 'blue',
-          },
-        ],
-        x: 0,
-        search: null,
-        y: 0,
-        ////////////////////////////////////////////////
+        attendPeople : [],
       }
     },
 
@@ -228,7 +140,6 @@
         )
       },
     },
-
     methods: {
       resetForm () {
         this.form = Object.assign({}, this.defaultForm)
@@ -238,52 +149,32 @@
         this.snackbar = true
         this.resetForm()
       },
-      // 해쉬태그 영역
-      edit (index, item) {
-        if (!this.editing) {
-          this.editing = item
-          this.editingIndex = index
-        } else {
-          this.editing = null
-          this.editingIndex = -1
-        }
-      },
-      filter (item, queryText, itemText) {
-        if (item.header) return false
-
-        const hasValue = val => val != null ? val : ''
-
-        const text = hasValue(itemText)
-        const query = hasValue(queryText)
-
-        return text.toString()
-          .toLowerCase()
-          .indexOf(query.toString().toLowerCase()) > -1
-      },
-      //해쉬태그 영역
-    },
-
-    // 해쉬태그 영역 //
-    watch: {
-      model (val, prev) {
-        if (val.length === prev.length) return
-
-        this.model = val.map(v => {
-          if (typeof v === 'string') {
-            v = {
-              text: v,
-              color: this.colors[this.nonce - 1],
-            }
-
-            this.items.push(v)
-
-            this.nonce++
+      addHashTag () { // 해시태그 많아지면 옆으로 넘어가게 하고싶은데 ..
+        let flag = 0
+        if (this.tmphashtag !== null) {
+          if(this.form.hashtag.length === 0){
+            this.form.hashtag.push(this.tmphashtag)
           }
-
-          return v
-        })
+          else {
+            for(let i=0;i<this.form.hashtag.length; i++){
+            if (this.form.hashtag[i] === this.tmphashtag){
+              flag = 1
+              }
+            }
+            if(flag === 0){
+              this.form.hashtag.push(this.tmphashtag)
+            }
+          }
+        }
+        this.tmphashtag = null
+        console.log(this.form.hashtag)
+        console.log(this.tmphashtag)
       },
-      // ///////// //
+      remove (id){
+        let idx = this.form.hashtag.indexOf(id)
+        this.form.hashtag.splice(idx,1)
+        this.form.hashtag = [...this.form.hashtag]
+}
     },
   }
 </script>

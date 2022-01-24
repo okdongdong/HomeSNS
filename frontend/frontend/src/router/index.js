@@ -7,8 +7,8 @@ import MyPage from '../views/Account/MyPage.vue'
 import SignUp from '../views/Account/SignUp.vue'
 
 // import Location from '../views/Collection/Location.vue'
-// import Schedule from '../views/Collection/Schedule.vue'
-// import Timeline from '../views/Collection/Timeline.vue'
+import Schedule from '../views/Collection/Schedule.vue'
+import Timeline from '../views/Collection/Timeline.vue'
 
 import MiniGame from '../views/Entertainment/MiniGameList.vue'
 import VoteList from '../views/Entertainment/VoteList.vue'
@@ -16,7 +16,7 @@ import VoteCreate from '../views/Entertainment/VoteCreate.vue'
 
 import FeedCreate from '../views/Feed/FeedCreate.vue'
 // import Detail from '../views/Feed/Detail.vue'
-// import Main from '../views/Feed/Main.vue'
+import Main from '../views/Feed/Main.vue'
 // import Update from '../views/Feed/Update.vue'
 
 import GroupCreate from '../views/Group/GroupCreate.vue'
@@ -58,16 +58,16 @@ const routes = [
   //   name: 'Location',
   //   component: Location
   // },
-  // {
-  //   path: '/schedule',
-  //   name: 'Schedule',
-  //   component: Schedule
-  // },
-  // {
-  //   path: '/timeline',
-  //   name: 'Timeline',
-  //   component: Timeline
-  // },
+  {
+    path: '/schedule',
+    name: 'Schedule',
+    component: Schedule
+  },
+  {
+    path: '/timeline',
+    name: 'Timeline',
+    component: Timeline
+  },
   {
     path: '/minigame',
     name: 'MiniGame',
@@ -93,11 +93,11 @@ const routes = [
   //   name: 'Detail',
   //   component: Detail
   // },
-  // {
-  //   path: '/main',
-  //   name: 'Main',
-  //   component: Main
-  // },
+  {
+    path: '/main',
+    name: 'Main',
+    component: Main
+  },
   // {
   //   path: '/update',
   //   name: 'Update',
