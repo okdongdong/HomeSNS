@@ -1,175 +1,165 @@
 <template>
-  <v-app>
-    <template>
-      <v-stepper v-model="step">
-        <v-stepper-header>
-          <v-stepper-step :complete="step > 1" step="1"> </v-stepper-step>
+  <v-stepper v-model="step">
+    <v-stepper-header>
+      <v-stepper-step :complete="step > 1" step="1"> </v-stepper-step>
 
-          <v-divider></v-divider>
+      <v-divider></v-divider>
 
-          <v-stepper-step :complete="step > 2" step="2"> </v-stepper-step>
+      <v-stepper-step :complete="step > 2" step="2"> </v-stepper-step>
 
-          <v-divider></v-divider>
-          <v-stepper-step :complete="step > 3" step="3"> </v-stepper-step>
+      <v-divider></v-divider>
+      <v-stepper-step :complete="step > 3" step="3"> </v-stepper-step>
 
-          <v-divider></v-divider>
+      <v-divider></v-divider>
 
-          <v-stepper-step step="4"> </v-stepper-step>
-        </v-stepper-header>
+      <v-stepper-step step="4"> </v-stepper-step>
+    </v-stepper-header>
 
-        <v-stepper-items>
-          <!-- 페이지 1 : 플레이어 수 입력 -->
-          <v-stepper-content step="1">
-            <h3>플레이어 수를 입력하세요</h3>
-            <v-text-field solo v-model="playerNum" />
+    <v-stepper-items>
+      <!-- 페이지 1 : 플레이어 수 입력 -->
+      <v-stepper-content step="1">
+        <h3>플레이어 수를 입력하세요</h3>
+        <v-text-field solo v-model="playerNum" />
 
-            <v-btn color="primary" @click="step = 2"> Continue </v-btn>
+        <v-btn color="primary" @click="step = 2"> Continue </v-btn>
 
-            <v-btn text> Cancel </v-btn>
-          </v-stepper-content>
+        <v-btn text> Cancel </v-btn>
+      </v-stepper-content>
 
-          <!-- 페이지 2 : 사다리 기초 생성 및 플레이어명, 결과값 입력 -->
-          <v-stepper-content step="2">
-            <h3>플레이어명과 결과값을 입력하세요</h3>
-            <div class="container">
-              <!-- 플레이어명 -->
-              <div class="my-2 d-flex justify-content-between">
-                <div v-for="i in calPlayerNum" :key="i">
-                  <input
-                    type="text"
-                    class="my-input"
-                    v-model="playerNames[i]"
-                  />
-                </div>
-              </div>
+      <!-- 페이지 2 : 사다리 기초 생성 및 플레이어명, 결과값 입력 -->
+      <v-stepper-content step="2">
+        <h3>플레이어명과 결과값을 입력하세요</h3>
+        <div class="container">
+          <!-- 플레이어명 -->
+          <div class="my-2 d-flex justify-content-between">
+            <div v-for="i in calPlayerNum" :key="i">
+              <input type="text" class="my-input" v-model="playerNames[i]" />
+            </div>
+          </div>
 
-              <!-- 사다리 -->
-              <div class="my-2 d-flex justify-content-between">
-                <div
-                  :class="{
-                    'ladder-base': i > 1,
-                    'start-or-end-ladder-base': i === 1,
-                  }"
-                  v-for="i in calPlayerNum"
-                  :key="i"
-                >
-                  <div v-for="j in 10" :key="j" class="box">
-                    <!-- {{ i }} {{ j }} -->
-                  </div>
-                </div>
-                <div class="start-or-end-ladder-base"></div>
-              </div>
-
-              <!-- 결과값 -->
-              <div class="my-2 d-flex justify-content-between">
-                <div v-for="i in calPlayerNum" :key="i">
-                  <input
-                    type="text"
-                    class="my-input"
-                    v-model="resultNames[i]"
-                  />
-                </div>
+          <!-- 사다리 -->
+          <div class="my-2 d-flex justify-content-between">
+            <div
+              :class="{
+                'ladder-base': i > 1,
+                'start-or-end-ladder-base': i === 1,
+              }"
+              v-for="i in calPlayerNum"
+              :key="i"
+            >
+              <div v-for="j in 10" :key="j" class="box">
+                <!-- {{ i }} {{ j }} -->
               </div>
             </div>
+            <div class="start-or-end-ladder-base"></div>
+          </div>
 
-            <v-btn color="primary" @click="(step = 3), randomPick()">
-              Continue
-            </v-btn>
+          <!-- 결과값 -->
+          <div class="my-2 d-flex justify-content-between">
+            <div v-for="i in calPlayerNum" :key="i">
+              <input type="text" class="my-input" v-model="resultNames[i]" />
+            </div>
+          </div>
+        </div>
 
-            <v-btn text @click="step = 1"> Cancel </v-btn>
-          </v-stepper-content>
+        <v-btn color="primary" @click="(step = 3), randomPick()">
+          Continue
+        </v-btn>
 
-          <!-- 페이지 3 : 결과 출력 -->
-          <v-stepper-content step="3">
-            <h3>사다리 보기</h3>
-            <div class="container">
-              <!-- 플레이어명 -->
-              <div class="my-2 d-flex justify-content-between">
-                <div
-                  v-for="i in calPlayerNum"
-                  :key="i"
-                  class="container justify-content-between"
-                >
-                  <div
-                    v-if="playerNames[i] != null"
-                    class="text-center"
-                    @click.stop="
-                      drawActive
-                        ? (draw(i), (nowActiveIdx = i))
-                        : drawAll(nowActiveIdx)
-                    "
-                  >
-                    {{ playerNames[i] }}
-                  </div>
-                </div>
-              </div>
+        <v-btn text @click="step = 1"> Cancel </v-btn>
+      </v-stepper-content>
 
-              <!-- 사다리 -->
-              <div style="position: relative">
-                <div
-                  class="container canvas-container"
-                  style="padding: 0; position: absolute"
-                >
-                  <!-- 사다리타기 진행용 캔버스 -->
-                  <canvas id="my-canvas"></canvas>
-                </div>
-
-                <div class="my-2 d-flex justify-content-between">
-                  <div
-                    :class="{
-                      'ladder-base': i > 1,
-                      'start-or-end-ladder-base': i === 1,
-                    }"
-                    v-for="i in calPlayerNum"
-                    :key="i"
-                  >
-                    <div
-                      v-for="j in 10"
-                      :key="j"
-                      class="box"
-                      :class="{ edge: isEdge[i][j] == 2 }"
-                    ></div>
-                  </div>
-                  <div class="start-or-end-ladder-base"></div>
-                </div>
-              </div>
-
-              <!-- 결과값 -->
-              <div class="my-2 d-flex justify-content-between">
-                <div
-                  v-for="i in calPlayerNum"
-                  :key="i"
-                  class="container justify-content-between"
-                >
-                  <div v-if="resultNames[i] != null" class="text-center">
-                    {{ resultNames[i] }}
-                  </div>
-                </div>
+      <!-- 페이지 3 : 결과 출력 -->
+      <v-stepper-content step="3">
+        <h3>사다리 보기</h3>
+        <div class="container">
+          <!-- 플레이어명 -->
+          <div class="my-2 d-flex justify-content-between">
+            <div
+              v-for="i in calPlayerNum"
+              :key="i"
+              class="container justify-content-between"
+            >
+              <div
+                v-if="playerNames[i] != null"
+                class="text-center"
+                @click.stop="
+                  drawActive
+                    ? (draw(i), (nowActiveIdx = i))
+                    : drawAll(nowActiveIdx)
+                "
+              >
+                {{ playerNames[i] }}
               </div>
             </div>
-            <v-btn color="primary" @click="(step = 4), calResult()">
-              Continue
-            </v-btn>
+          </div>
 
-            <v-btn text @click="step = 2"> Cancel </v-btn>
-          </v-stepper-content>
-
-          <!-- 모든결과보기 -->
-          <v-stepper-content step="4">
-            <div v-for="i in playerNum" :key="i">
-              {{ playerNames[i] }} => {{ resultNames[result[i - 1]] }}
+          <!-- 사다리 -->
+          <div style="position: relative">
+            <div
+              class="container canvas-container"
+              style="padding: 0; position: absolute"
+            >
+              <!-- 사다리타기 진행용 캔버스 -->
+              <canvas id="my-canvas"></canvas>
             </div>
 
-            {{ result }}
-            <v-btn text @click="step = 3"> Cancel </v-btn>
-          </v-stepper-content>
-        </v-stepper-items>
-      </v-stepper>
-    </template>
-  </v-app>
+            <div class="my-2 d-flex justify-content-between">
+              <div
+                :class="{
+                  'ladder-base': i > 1,
+                  'start-or-end-ladder-base': i === 1,
+                }"
+                v-for="i in calPlayerNum"
+                :key="i"
+              >
+                <div
+                  v-for="j in 10"
+                  :key="j"
+                  class="box"
+                  :class="{ edge: isEdge[i][j] == 2 }"
+                ></div>
+              </div>
+              <div class="start-or-end-ladder-base"></div>
+            </div>
+          </div>
+
+          <!-- 결과값 -->
+          <div class="my-2 d-flex justify-content-between">
+            <div
+              v-for="i in calPlayerNum"
+              :key="i"
+              class="container justify-content-between"
+            >
+              <div v-if="resultNames[i] != null" class="text-center">
+                {{ resultNames[i] }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <v-btn color="primary" @click="(step = 4), calResult()">
+          Continue
+        </v-btn>
+
+        <v-btn text @click="step = 2"> Cancel </v-btn>
+      </v-stepper-content>
+
+      <!-- 모든결과보기 -->
+      <v-stepper-content step="4">
+        <div v-for="i in playerNum" :key="i">
+          {{ playerNames[i] }} => {{ resultNames[result[i - 1]] }}
+        </div>
+
+        {{ result }}
+        <v-btn text @click="step = 3"> Cancel </v-btn>
+      </v-stepper-content>
+    </v-stepper-items>
+  </v-stepper>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "GhostLeg",
   data: () => ({
@@ -221,18 +211,6 @@ export default {
       null,
     ],
     nowColorIdx: 0,
-    colors: [
-      "#FF3333",
-      "#FF9933",
-      "#FFFF33",
-      "#99FF33",
-      "#006600",
-      "#33FFFF",
-      "#3333FF",
-      "#9933FF",
-      "#FF33FF",
-      "#FF3399",
-    ],
     nowPosX: null,
     nowPosY: null,
     drawActive: true,
@@ -387,6 +365,7 @@ export default {
     },
   },
   computed: {
+    ...mapState(["colors"]),
     calPlayerNum() {
       return [1] * this.playerNum;
     },
