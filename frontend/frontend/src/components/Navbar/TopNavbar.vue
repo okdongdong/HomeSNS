@@ -6,7 +6,7 @@
 
     </v-app-bar>
     
-    <v-navigation-drawer v-model="drawer" fixed right temporary>
+    <v-navigation-drawer v-model="drawer" fixed right temporary class="drawer-position">
       <v-list nav dense>
         <v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
           <v-list-item>
@@ -60,6 +60,8 @@ export default {
 </script>
 
 <style>
-
+  .drawer-position{
+  right : calc((100vw - 480px)/2)
+}
 
 </style>

@@ -1,13 +1,13 @@
 <template>
   <v-app id="app">
     <div class="d-flex justify-center">
-      <div style="width: 33%; background-color: black; z-index:99"></div>
+      <div style="width: 33%; background-color: white; z-index:99"></div>
       <v-main style="max-width: 450px; width: 100%">
         <top-navbar v-if="noneNav"></top-navbar>
         <router-view />
         <bottom-navbar v-if="noneNav"></bottom-navbar>
       </v-main>
-      <div style="width: 33%; background-color: black; z-index:99"></div>
+      <div style="width: 33%; background-color: white; z-index:99"></div>
     </div>
   </v-app>
 </template>
