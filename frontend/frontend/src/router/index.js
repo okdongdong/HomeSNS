@@ -10,6 +10,7 @@ import SignUp from '../views/Account/SignUp.vue'
 import Schedule from '../views/Collection/Schedule.vue'
 import Timeline from '../views/Collection/Timeline.vue'
 
+import EntFeedList from '../views/Entertainment/EntFeedList.vue'
 import MiniGame from '../views/Entertainment/MiniGameList.vue'
 import VoteList from '../views/Entertainment/VoteList.vue'
 import VoteCreate from '../views/Entertainment/VoteCreate.vue'
@@ -67,6 +68,11 @@ const routes = [
     path: '/timeline',
     name: 'Timeline',
     component: Timeline
+  },
+  {
+    path: '/EntFeed',
+    name: 'EntFeedList',
+    component: EntFeedList
   },
   {
     path: '/minigame',

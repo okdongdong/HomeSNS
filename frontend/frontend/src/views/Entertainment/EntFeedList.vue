@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div v-for="content in contentData" :key="content">
-      <EntFeedContainer :content="contenta" />
+      <EntFeedContainer :content="content" />
     </div>
   </div>
 </template>
@@ -10,26 +10,28 @@
 import EntFeedContainer from "../../components/Entertainment/EntFeedContainer.vue";
 
 export default {
-  name: "MiniGameList",
+  name: "EntFeedList",
   data: () => ({
     contentData: [
       {
         type: "ghost",
-        Info: {
+        info: {
           title: "이것은 제목입니다",
           author: "작성자",
-          autorPicUrl:
+          authorPicUrl:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiM_3DwEqCAeTk61eqxYHzcNibjWl3_2fPfQ&usqp=CAU",
           createdAt: "2020.02.02",
         },
       },
       {
         type: "vote",
-        Info: {
+        info: {
           title: "12312312312",
           author: "작성자",
-          autorPicUrl:
+          authorPicUrl:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVxb9s4l1TQIf3ZGk-aajm_mSgC8oqx4jmCQ&usqp=CAU",
+          createdAt: "2020.02.02",
+
           nowVote: false,
           voteItems: [
             {
