@@ -2,12 +2,14 @@
   <v-app id="app">
     <div class="d-flex justify-center">
       <div class="curtain"></div>
+
       <v-main style="max-width: 450px; width: 100%">
         <top-navbar v-if="noneNav"></top-navbar>
         <router-view />
         <bottom-navbar v-if="noneNav"></bottom-navbar>
       </v-main>
       <div class="curtain"></div>
+
     </div>
   </v-app>
 </template>

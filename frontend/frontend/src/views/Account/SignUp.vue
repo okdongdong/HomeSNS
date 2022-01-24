@@ -4,125 +4,128 @@
 
     <div class="container">
       <div class="d-flex justify-center">
-        <img src="@/assets/logo2.png" alt="logo" />
+        <v-card
+        flat
+        color="rgb(98, 101, 232)"
+      >
+        <div class="d-flex justify-center">
+          <v-img
+            src="@/assets/logo1.png" alt="logo"
+            max-width="200"
+            max-height="200"
+          >
+          </v-img>
+        </div>
+        <v-card-title class="main-text justify-center font-weight-bold">우리집 SNS</v-card-title>
+      </v-card>
       </div>
-      <v-form ref="form" v-model="valid" lazy-validation>
-        <!-- 아이디 -->
-        <v-text-field
-          :elevation="18"
-          clearable
-          maxlength="20"
-          background-color="white"
-          solo
-          v-model="credentials.id"
-          :counter="20"
-          :rules="rules.idRules"
-          label="아이디"
-          required
-        ></v-text-field>
+      <br />
+      <v-row justify="center">
+        <v-form class="form-data" ref="form" v-model="valid" lazy-validation>
+          <!-- 아이디 -->
+          <v-text-field
+            clearable
+            background-color="white"
+            solo
+            v-model="credentials.id"
+            :counter="20"
+            :rules="rules.idRules"
+            label="아이디"
+            required
+          ></v-text-field>
 
-        <!-- 이메일 -->
-        <v-text-field
-          :elevation="18"
-          clearable
-          background-color="white"
-          solo
-          v-model="credentials.email"
-          :rules="rules.emailRules"
-          label="E-mail"
-          required
-        ></v-text-field>
+          <!-- 이메일 -->
+          <v-text-field
+            clearable
+            background-color="white"
+            solo
+            v-model="credentials.email"
+            :rules="rules.emailRules"
+            label="E-mail"
+            required
+          ></v-text-field>
 
-        <!-- 비밀번호 -->
-        <v-text-field
-          :elevation="18"
-          maxlength="20"
-          clearable
-          background-color="white"
-          solo
-          v-model="credentials.password"
-          :rules="rules.passwordRules"
-          label="비밀번호"
-          type="password"
-          required
-        ></v-text-field>
+          <!-- 비밀번호 -->
+          <v-text-field
+            clearable
+            background-color="white"
+            solo
+            v-model="credentials.password"
+            :rules="rules.passwordRules"
+            label="비밀번호"
+            type="password"
+            required
+          ></v-text-field>
 
-        <!-- 비밀번호 확인 -->
-        <v-text-field
-          :elevation="18"
-          maxlength="20"
-          clearable
-          background-color="white"
-          solo
-          v-model="credentials.passwordConfirmation"
-          :rules="rules.passwordConfirmationRules"
-          label="비밀번호 확인"
-          type="password"
-          required
-        ></v-text-field>
+          <!-- 비밀번호 확인 -->
+          <v-text-field
+            clearable
+            background-color="white"
+            solo
+            v-model="credentials.passwordConfirmation"
+            :rules="rules.passwordConfirmationRules"
+            label="비밀번호 확인"
+            type="password"
+            required
+          ></v-text-field>
 
-        <!-- 이름 -->
-        <v-text-field
-          :elevation="18"
-          maxlength="20"
-          clearable
-          background-color="white"
-          solo
-          v-model="credentials.name"
-          :rules="rules.nameRules"
-          label="이름"
-          required
-        ></v-text-field>
+          <!-- 이름 -->
+          <v-text-field
+            clearable
+            background-color="white"
+            solo
+            v-model="credentials.name"
+            :rules="rules.nameRules"
+            label="이름"
+            required
+          ></v-text-field>
 
-        <!-- 연락처 -->
-        <v-text-field
-          :elevation="18"
-          clearable
-          background-color="white"
-          solo
-          v-model="credentials.phone"
-          :rules="rules.phoneRules"
-          label="연락처"
-          type="tel"
-          required
-        ></v-text-field>
+          <!-- 연락처 -->
+          <v-text-field
+            clearable
+            background-color="white"
+            solo
+            v-model="credentials.phone"
+            :rules="rules.phoneRules"
+            label="연락처"
+            type="tel"
+            required
+          ></v-text-field>
 
-        <!-- 생년월일 -->
-        <v-text-field
-          :elevation="18"
-          clearable
-          background-color="white"
-          solo
-          v-model="credentials.bod"
-          label="생년월일"
-          type="date"
-        ></v-text-field>
-
-        <v-btn
-          :elevation="18"
-          rounded
-          dark
-          large
-          :disabled="!valid"
-          color="black"
-          class="mr-4"
-          @click.stop="signup(credentials)"
-          width="100%"
-        >
-          회원가입
-        </v-btn>
-        <v-btn
-          text
-          dark
-          large
-          rounded
-          class="mr-4 my-2"
-          @click.stop="move('Login')"
-          width="100%"
-        >
-          뒤로가기
-        </v-btn>
-      </v-form>
+          <!-- 생년월일 -->
+          <v-text-field
+            clearable
+            background-color="white"
+            solo
+            v-model="credentials.bod"
+            label="생년월일"
+            type="date"
+          ></v-text-field>
+          <v-btn
+            rounded
+            dark
+            large
+            :disabled="!valid"
+            color="black"
+            class="mr-4"
+            @click.stop="signup(credentials)"
+            width="100%"
+          >
+            회원가입
+          </v-btn>
+          <v-btn
+            text
+            dark
+            large
+            rounded
+            class="mr-4 my-2"
+            @click.stop="move('Login')"
+            width="100%"
+          >
+            뒤로가기
+          </v-btn>
+        </v-form>
+      </v-row>
     </div>
     <v-spacer></v-spacer>
     <v-spacer></v-spacer>
@@ -195,4 +198,13 @@ export default {
 .my-background {
   background-color: rgb(98, 101, 232);
 }
+
+  .form-data {
+    width: 80%;
+  }
+
+  .main-text {
+    color: #fff !important;
+    font-size: 30px;
+  }
 </style>

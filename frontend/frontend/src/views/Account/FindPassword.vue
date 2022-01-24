@@ -60,7 +60,17 @@
           >
             비밀번호 찾기
           </v-btn>
-        <a class="d-flex text-back justify-center ma-5" href="">뒤로</a>
+        <v-btn
+            text
+            dark
+            large
+            rounded
+            class="mr-4 my-2"
+            @click.stop="move('Login')"
+            width="100%"
+          >
+            뒤로가기
+          </v-btn>
         </v-form>
       </v-row>
     </div>

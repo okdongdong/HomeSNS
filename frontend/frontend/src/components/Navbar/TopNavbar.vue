@@ -19,6 +19,7 @@
       temporary
       class="drawer-position"
     >
+
       <v-list nav dense>
         <v-list-item-group
           v-model="group"
@@ -78,4 +79,4 @@ export default {
 .drawer-position {
   right: calc((100vw - 480px) / 2);
 }
-</style>
+
