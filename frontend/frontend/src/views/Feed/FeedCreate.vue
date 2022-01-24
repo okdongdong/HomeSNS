@@ -29,6 +29,7 @@
               required
             ></v-text-field>
           </v-col>
+          
           <!-- 사진 -->
 
 
@@ -36,9 +37,65 @@
 
 
           <!-- 주소 -->
-
-
-          <!-- 참석자 명단 인원?-->
+          <v-col>
+            <v-text-field
+              label="Append outer"
+              append-outer-icon="mdi-map-marker"
+              @click="show = true"
+            ></v-text-field>  
+          </v-col>
+          <v-dialog v-model="show" width="50%" max-width="450px">
+            <v-card>
+              <v-card-title>
+                장소 찍기
+              </v-card-title>
+              <!-- 구글 api -->
+              <div style="text-align:right">
+                <v-btn
+                  small    
+                  @click="getCurrLocation()"
+                >현재위치 가지고오기</v-btn>
+              </div>
+              <v-col>
+                <div>
+                  <h2>Search and add a pin</h2>
+                    <GmapAutocomplete
+                      @place_changed='setPlace'
+                    />
+                    <button
+                      @click='addMarker'
+                    >
+                      Add
+                    </button>
+                </div>
+              <br>
+                <div> 
+                  <GmapMap
+                    :center='center'
+                    :zoom='12'
+                    style='width:100%;  height: 400px;'
+                    @click="mark"
+                    
+                  >
+                  <GmapMarker
+                    :key="index"
+                    v-for="(m, index) in markers"
+                    :position="m.position"
+                    @click="center=m.position"
+                    :clickable="true"
+                    :draggable="true"
+                    @drag="updateMarker(index,$event.latLng)"
+                  />
+                  </GmapMap>
+                </div>
+              </v-col>
+              <v-card-actions>
+                <v-btn text>확인</v-btn>
+                <v-btn text @click.stop="show=false">취소</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <!-- 참석자 명단-->
           <v-col cols="12">
             <v-combobox
               v-model="attendPeople"
@@ -53,8 +110,8 @@
             <v-textarea
               v-model="form.content"
               color="rgb(98,101,232)"
-              maxlength="100"
-              :counter="100"
+              maxlength="200"
+              :counter="200"
             >
               <template v-slot:label>
                 <div>
@@ -71,7 +128,6 @@
               label="해시태그"
               @keyup.enter="addHashTag()"
               @keyup.space="addHashTag()"
-              auto-grow
             >
             <template v-slot:prepend-inner>
               <div v-for="(tag , index) in form.hashtag" :key="index">
@@ -104,6 +160,7 @@
 </template>
 
 <script>
+import {gmapApi} from 'vue2-google-maps'
   export default {
     name: 'Feedcreate',
     data () {
@@ -129,6 +186,12 @@
           '최이삭',
         ],
         attendPeople : [],
+        show : false,
+        // 구글 맵
+        center: { lat: 37.5642135, lng: 127.0016985 },
+        currentPlace: null,
+        markers: [],
+        places: [],
       }
     },
 
@@ -139,6 +202,7 @@
           this.form.content
         )
       },
+      google: gmapApi,
     },
     methods: {
       resetForm () {
@@ -167,15 +231,63 @@
           }
         }
         this.tmphashtag = null
-        console.log(this.form.hashtag)
-        console.log(this.tmphashtag)
       },
       remove (id){
         let idx = this.form.hashtag.indexOf(id)
         this.form.hashtag.splice(idx,1)
         this.form.hashtag = [...this.form.hashtag]
-}
-    },
+        },
+        // 현재위치 들고오기
+        getCurrLocation(){
+          navigator.geolocation.getCurrentPosition(position => {
+          const currLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            }
+          this.center = currLocation
+          this.markers=[{ position: currLocation }]
+          });
+        },
+        setPlace(place) { // 검색해서 찾은 것
+          this.currentPlace = place
+        },
+        addMarker() {
+          if (this.currentPlace) {
+            const marker = {
+              lat: this.currentPlace.geometry.location.lat(),
+              lng: this.currentPlace.geometry.location.lng(),
+            };
+            this.markers=[{ position: marker }]
+            this.places = [this.currentPlace]
+            this.center = marker
+            // this.currentPlace = null;
+          }
+          console.log(this.markers)
+          console.log(this.places)
+        },
+        mark (event){
+          console.log(event)
+          console.log(event.latLng.lat())
+          console.log(event.latLng.lng())
+          const marker = {
+            lat : event.latLng.lat(),
+            lng : event.latLng.lng()
+          }
+          this.markers=[{ position: marker }]
+            this.places = [this.currentPlace]
+            this.center = marker
+        },
+        updateMarker(index,location){
+          console.log(location)
+          const marker ={
+            lat: location.lat(),
+            lng: location.lng()
+          }
+          this.markers=[{ position: marker }]
+          this.places = [this.currentPlace]
+          // this.center = marker
+        },
+    }
   }
 </script>
 
