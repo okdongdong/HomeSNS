@@ -46,7 +46,9 @@
     </div>
 
     <div class="justify-center d-flex">
-      <v-btn v-if="info.nowVote" @click.stop="info.nowVote = !info.nowVote"
+      <v-btn
+        v-if="info.nowVote"
+        @click.stop="(info.nowVote = !info.nowVote), updateVote()"
         >투표완료</v-btn
       >
       <v-btn v-else @click.stop="info.nowVote = !info.nowVote">투표하기</v-btn>
@@ -55,12 +57,26 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "Vote",
   props: {
     info: Object,
   },
   methods: {
+    updateVote() {
+      const token = localStorage.getItem("jwt");
+      const data = {
+        voteId: this.info.voteId,
+        myVoteItem: this.info.myVoteItem,
+      };
+      axios({
+        method: "put",
+        url: `${process.env.VUE_APP_MCS_URL}/ghostleg`,
+        headers: { Authorization: `JWT ${token}` },
+        data: data,
+      });
+    },
     myVote(idx) {
       if (this.info.myVoteItem === null) {
         this.info.voteItems[idx].voteCnt += 1;

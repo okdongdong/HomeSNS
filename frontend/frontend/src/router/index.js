@@ -14,6 +14,7 @@ import EntFeedList from '../views/Entertainment/EntFeedList.vue'
 import MiniGame from '../views/Entertainment/MiniGameList.vue'
 import VoteList from '../views/Entertainment/VoteList.vue'
 import VoteCreate from '../views/Entertainment/VoteCreate.vue'
+import GhostLegCreate from '../views/Entertainment/GhostLegCreate.vue'
 
 import FeedCreate from '../views/Feed/FeedCreate.vue'
 // import Detail from '../views/Feed/Detail.vue'
@@ -88,6 +89,11 @@ const routes = [
     path: '/votecreate',
     name: 'VoteCreate',
     component: VoteCreate
+  },
+  {
+    path: '/ghostlegcreate',
+    name: 'GhostLegCreate',
+    component: GhostLegCreate
   },
   {
     path: '/feedcreate',

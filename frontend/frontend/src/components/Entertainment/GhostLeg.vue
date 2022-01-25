@@ -1,87 +1,16 @@
 <template>
-  <v-stepper v-model="step">
-    <v-stepper-header>
-      <v-stepper-step :complete="step > 1" step="1"> </v-stepper-step>
-
-      <v-divider></v-divider>
-
-      <v-stepper-step :complete="step > 2" step="2"> </v-stepper-step>
-
-      <v-divider></v-divider>
-      <v-stepper-step :complete="step > 3" step="3"> </v-stepper-step>
-
-      <v-divider></v-divider>
-
-      <v-stepper-step step="4"> </v-stepper-step>
-    </v-stepper-header>
-
+  <v-stepper v-model="step" flat style="background-color: rgba(0, 0, 0, 0)">
     <v-stepper-items>
       <!-- 페이지 1 : 플레이어 수 입력 -->
-      <v-stepper-content step="1">
-        <h3>플레이어 수를 입력하세요</h3>
-        <v-text-field solo v-model="playerNum" />
-
-        <v-btn color="primary" @click="step = 2"> Continue </v-btn>
-
-        <v-btn text> Cancel </v-btn>
-      </v-stepper-content>
-
-      <!-- 페이지 2 : 사다리 기초 생성 및 플레이어명, 결과값 입력 -->
-      <v-stepper-content step="2">
-        <h3>플레이어명과 결과값을 입력하세요</h3>
-        <div class="container">
-          <!-- 플레이어명 -->
-          <div class="my-2 d-flex justify-content-between">
-            <div v-for="i in calPlayerNum" :key="i">
-              <input type="text" class="my-input" v-model="playerNames[i]" />
-            </div>
-          </div>
-
-          <!-- 사다리 -->
-          <div class="my-2 d-flex justify-content-between">
-            <div
-              :class="{
-                'ladder-base': i > 1,
-                'start-or-end-ladder-base': i === 1,
-              }"
-              v-for="i in calPlayerNum"
-              :key="i"
-            >
-              <div v-for="j in 10" :key="j" class="box">
-                <!-- {{ i }} {{ j }} -->
-              </div>
-            </div>
-            <div class="start-or-end-ladder-base"></div>
-          </div>
-
-          <!-- 결과값 -->
-          <div class="my-2 d-flex justify-content-between">
-            <div v-for="i in calPlayerNum" :key="i">
-              <input type="text" class="my-input" v-model="resultNames[i]" />
-            </div>
-          </div>
-        </div>
-
-        <v-btn color="primary" @click="(step = 3), randomPick()">
-          Continue
-        </v-btn>
-
-        <v-btn text @click="step = 1"> Cancel </v-btn>
-      </v-stepper-content>
 
       <!-- 페이지 3 : 결과 출력 -->
-      <v-stepper-content step="3">
-        <h3>사다리 보기</h3>
+      <v-stepper-content step="1">
         <div class="container">
           <!-- 플레이어명 -->
           <div class="my-2 d-flex justify-content-between">
-            <div
-              v-for="i in calPlayerNum"
-              :key="i"
-              class="container justify-content-between"
-            >
+            <div v-for="i in calPlayerNum" :key="i">
               <div
-                v-if="playerNames[i] != null"
+                v-if="info.playerNames[i] != null"
                 class="text-center"
                 @click.stop="
                   drawActive
@@ -89,7 +18,7 @@
                     : drawAll(nowActiveIdx)
                 "
               >
-                {{ playerNames[i] }}
+                {{ info.playerNames[i] }}
               </div>
             </div>
           </div>
@@ -117,7 +46,7 @@
                   v-for="j in 10"
                   :key="j"
                   class="box"
-                  :class="{ edge: isEdge[i][j] == 2 }"
+                  :class="{ edge: info.isEdge[i][j] == 2 }"
                 ></div>
               </div>
               <div class="start-or-end-ladder-base"></div>
@@ -126,32 +55,40 @@
 
           <!-- 결과값 -->
           <div class="my-2 d-flex justify-content-between">
-            <div
-              v-for="i in calPlayerNum"
-              :key="i"
-              class="container justify-content-between"
-            >
-              <div v-if="resultNames[i] != null" class="text-center">
-                {{ resultNames[i] }}
+            <div v-for="i in calPlayerNum" :key="i">
+              <div v-if="info.resultNames[i] != null" class="text-center">
+                {{ info.resultNames[i] }}
               </div>
             </div>
           </div>
         </div>
-        <v-btn color="primary" @click="(step = 4), calResult()">
-          Continue
-        </v-btn>
-
-        <v-btn text @click="step = 2"> Cancel </v-btn>
+        <div class="justify-end d-flex">
+          <div
+            @click.stop="(step = 2), calResult()"
+            class="align-center d-flex"
+          >
+            <div>모든결과보기</div>
+            <v-btn icon color="primary">
+              <v-icon> chevron_right </v-icon>
+            </v-btn>
+          </div>
+        </div>
       </v-stepper-content>
 
       <!-- 모든결과보기 -->
-      <v-stepper-content step="4">
-        <div v-for="i in playerNum" :key="i">
-          {{ playerNames[i] }} => {{ resultNames[result[i - 1]] }}
+      <v-stepper-content step="2">
+        <div v-for="i in info.playerNum" :key="i">
+          {{ info.playerNames[i] }} => {{ info.resultNames[result[i - 1]] }}
         </div>
 
-        {{ result }}
-        <v-btn text @click="step = 3"> Cancel </v-btn>
+        <div class="justify-start d-flex">
+          <div @click.stop="step = 1" class="align-center d-flex">
+            <v-btn icon text color="primary">
+              <v-icon> chevron_left </v-icon>
+            </v-btn>
+            <div>사다리보기</div>
+          </div>
+        </div>
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
@@ -164,52 +101,9 @@ export default {
   name: "GhostLeg",
   data: () => ({
     step: 1,
-    playerNum: 5,
     edgeOn: false,
     result: [],
-    isEdge: [
-      [], // 0번 인덱스는 안씀
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 1번인덱스에는 값이 들어가면 안됨
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    ],
-    playerNames: [
-      "null0",
-      "null1",
-      "null2",
-      "null3",
-      "null4",
-      "null5",
-      "null6",
-      "null7",
-      "null8",
-      "null9",
-      null,
-      null,
-    ],
-    resultNames: [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-    ],
+
     nowColorIdx: 0,
     nowPosX: null,
     nowPosY: null,
@@ -217,48 +111,18 @@ export default {
     drawDone: false,
     nowActiveIdx: null,
   }),
+  props: {
+    info: Object,
+  },
   methods: {
-    randomPick() {
-      this.isEdge = [
-        // isEdge값 초기화
-        [], // 0번 인덱스는 안씀
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      ];
-      let temp;
-      for (let i = 1; i < this.playerNum; i++) {
-        temp = [];
-        for (let j = 1; j < 10; j++) {
-          if (this.isEdge[i][j] === 0) {
-            temp.push(j);
-          }
-        }
-        let edgeCnt = Math.floor(Math.random() * 3 + 2);
-        for (let cnt = 0; cnt < edgeCnt; cnt++) {
-          let j = temp.splice(Math.floor(Math.random() * temp.length), 1);
-          this.isEdge[i][j] = 1;
-          this.isEdge[i + 1][j] = 2;
-        }
-      }
-    },
     calResult() {
       this.result = [];
-      for (let i = 1; i <= this.playerNum; i++) {
+      for (let i = 1; i <= this.info.playerNum; i++) {
         let myPos = i;
         for (let j = 0; j < 10; j++) {
-          if (this.isEdge[myPos][j] === 1) {
+          if (this.info.isEdge[myPos][j] === 1) {
             myPos += 1;
-          } else if (this.isEdge[myPos][j] === 2) {
+          } else if (this.info.isEdge[myPos][j] === 2) {
             myPos -= 1;
           }
         }
@@ -272,9 +136,9 @@ export default {
       }
 
       const ctx = canvas.getContext("2d");
-      this.nowPosX = (300 * i - 150) / this.playerNum - 1;
+      this.nowPosX = (300 * i - 150) / this.info.playerNum - 1;
       this.nowPosY = 0;
-      let addPosX = 300 / this.playerNum;
+      let addPosX = 300 / this.info.playerNum;
 
       ctx.strokeStyle = this.colors[this.nowColorIdx++];
       ctx.lineWidth = 4;
@@ -282,11 +146,11 @@ export default {
       ctx.moveTo(this.nowPosX, this.nowPosY);
       let j = 0;
       while (j < 10) {
-        if (this.isEdge[i][j] === 1) {
+        if (this.info.isEdge[i][j] === 1) {
           this.nowPosX += addPosX;
           i++;
           ctx.lineTo(this.nowPosX, this.nowPosY);
-        } else if (this.isEdge[i][j] === 2) {
+        } else if (this.info.isEdge[i][j] === 2) {
           this.nowPosX -= addPosX;
           i--;
           ctx.lineTo(this.nowPosX, this.nowPosY);
@@ -310,10 +174,10 @@ export default {
       if (this.nowPosX === null) {
         // 최초로 변수 정의하는 부분
         this.drawActive = false;
-        this.nowPosX = (300 * i - 150) / this.playerNum - 2;
+        this.nowPosX = (300 * i - 150) / this.info.playerNum - 2;
         this.nowPosY = 0;
       }
-      var addPosX = 300 / this.playerNum;
+      var addPosX = 300 / this.info.playerNum;
       var canvas = document.getElementById("my-canvas");
       var ctx = canvas.getContext("2d");
       ctx.moveTo(this.nowPosX, this.nowPosY);
@@ -332,9 +196,9 @@ export default {
       }
 
       if (dx === addPosX) {
-        if (this.isEdge[i][j] === 1) {
+        if (this.info.isEdge[i][j] === 1) {
           i++;
-        } else if (this.isEdge[i][j] === 2) {
+        } else if (this.info.isEdge[i][j] === 2) {
           i--;
         }
       }
@@ -344,10 +208,10 @@ export default {
         dy = 0;
       }
 
-      if (this.isEdge[i][j] === 1 && dx < addPosX) {
+      if (this.info.isEdge[i][j] === 1 && dx < addPosX) {
         this.nowPosX++;
         dx++;
-      } else if (this.isEdge[i][j] === 2 && dx < addPosX) {
+      } else if (this.info.isEdge[i][j] === 2 && dx < addPosX) {
         this.nowPosX--;
         dx++;
       } else {
@@ -365,9 +229,9 @@ export default {
     },
   },
   computed: {
-    ...mapState(["colors"]),
+    ...mapState("minigame", ["colors"]),
     calPlayerNum() {
-      return [1] * this.playerNum;
+      return [1] * this.info.playerNum;
     },
   },
 };
