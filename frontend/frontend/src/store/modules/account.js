@@ -3,11 +3,15 @@ import axios from "axios";
 const account = {
   namespaced: true,
   state: {
+    userSeq: null,
+    username: null,
     isLogin: localStorage.getItem("jwt") ? true : false,
   },
   mutations: {
-    LOGIN: function (state) {
+    LOGIN: function (state, res) {
       state.isLogin = true;
+      state.userSeq = res.userSeq
+      state.userSeq = res.username
     },
     LOGOUT: function (state) {
       state.isLogin = false;
@@ -22,8 +26,7 @@ const account = {
       })
         .then((res) => {
           localStorage.setItem("jwt", res.data.token);
-          commit("LOGIN");
-
+          commit("LOGIN", res);
           console.log(res);
         })
         .catch((err) => {
