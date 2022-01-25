@@ -107,10 +107,10 @@ export default {
     EntCreatePopup,
   },
   created() {
-    getContent();
+    this.getContent();
   },
   beforeUpdate() {
-    getContent();
+    this.getContent();
   },
   methods: {
     getContent() {
