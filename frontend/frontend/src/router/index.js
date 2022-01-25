@@ -136,9 +136,10 @@ const routes = [
     component: Select
   },
   {
-    path: '/userpage',
+    path: '/userpage/:userSeq',
     name: 'UserPage',
-    component: UserPage
+    component: UserPage,
+    props:true
   },
 ]
 
