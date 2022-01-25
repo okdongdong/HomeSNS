@@ -33,11 +33,39 @@
           <!-- 사진 -->
 
 
-          <!-- 장소 -->
-
-
-          <!-- 주소 -->
-          <v-col>
+          <!-- 장소레이블 -->
+          <v-col cols="12">
+            <v-combobox
+              v-model="locaLabel"
+              :items="locaLabels"
+              label="장소 이름"
+              @keyup.enter="addLocaLabel"
+            >
+            <v-btn 
+              slot="append"
+              icon
+              @click.stop="toggleCurrLocaFavBtn()"
+              v-bind:color="currLocaFav ? 'orange' : 'gray'"
+              >
+              <v-icon>mdi-star</v-icon>
+            </v-btn>
+              <template slot="item" slot-scope="data">
+                  <v-btn
+                    icon
+                    @click.stop="toggleFavBtn(data)"
+                    v-bind:color="data.item.fav ? 'orange' : 'gray'"
+                  >
+                  <v-icon>mdi-star</v-icon>
+                  </v-btn>
+                  <v-col cols="11" @click.stop="selectFavLoca(data)">
+                    {{data.item.item}}
+                  </v-col>
+              </template>
+            
+            </v-combobox>
+          </v-col>
+          <!-- 구글 api -->
+          <v-col cols="12">
             <v-text-field
               label="Append outer"
               append-outer-icon="mdi-map-marker"
@@ -49,7 +77,6 @@
               <v-card-title>
                 장소 찍기
               </v-card-title>
-              <!-- 구글 api -->
               <div style="text-align:right">
                 <v-btn
                   small    
@@ -75,7 +102,6 @@
                     :zoom='12'
                     style='width:100%;  height: 400px;'
                     @click="mark"
-                    
                   >
                   <GmapMarker
                     :key="index"
@@ -192,18 +218,14 @@ import {gmapApi} from 'vue2-google-maps'
         currentPlace: null,
         markers: [],
         places: [],
+        // 장소레이블
+        locaLabel : null,
+        locaLabels : [],
+        currLocaFav : false,
       }
     },
 
-    computed: {
-      formIsValid () {
-        return (
-          this.form.title &&
-          this.form.content
-        )
-      },
-      google: gmapApi,
-    },
+
     methods: {
       resetForm () {
         this.form = Object.assign({}, this.defaultForm)
@@ -287,7 +309,36 @@ import {gmapApi} from 'vue2-google-maps'
           this.places = [this.currentPlace]
           // this.center = marker
         },
-    }
+        addLocaLabel(){
+          if (this.locaLabel){
+            this.locaLabels.push({
+              item : this.locaLabel,
+              fav : false,
+              idx : this.locaLabels.length
+              })
+          }
+        },
+        toggleFavBtn(data){
+          // console.log(this.locaLabels[data.item.idx].fav)
+          // console.log(data)
+          this.locaLabels[data.item.idx].fav = !this.locaLabels[data.item.idx].fav
+        },
+        selectFavLoca(data){
+          this.locaLabel = data.item.item
+        },
+        toggleCurrLocaFavBtn(){ // 현재 장소 즐겨찾기 등록 여부
+          this.currLocaFav = !this.currLocaFav
+        }
+    },
+    computed: {
+      formIsValid () {
+        return (
+          this.form.title &&
+          this.form.content
+        )
+      },
+      google: gmapApi,
+    },
   }
 </script>
 
