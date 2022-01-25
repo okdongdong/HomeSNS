@@ -8,9 +8,88 @@
         @click="feedCreate()"
       >추억담기
       </v-btn>
-      <v-icon>notifications_none</v-icon>
+
+    <v-dialog
+      v-model="dialog"
+      scrollable
+      max-width="400px"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+            v-bind="attrs"
+            v-on="on"
+            icon
+          >
+            <v-icon>notifications_none</v-icon>
+        </v-btn>
+      </template>
+      <v-card class="rounded-xl">
+        <v-card-title>알람</v-card-title>
+        <v-divider></v-divider>
+        <v-card-text style="height: 500px;">
+          <v-container>
+              <v-hover>
+                <template v-slot:default="{ hover }">
+                  <v-card ripple max-width="380px" class="content-box mx-auto pa-3 transition-swing rounded-xl" :class="`elevation-${hover ? 20 : 6}`">
+                    Lorem ipsum dolor sit amet, semper quis, sapien id natoque elit. Nostra urna at, magna at neque sed sed ante imperdiet, dolor mauris cursus velit, velit non, sem nec. Volutpat sem ridiculus placerat leo, augue in, duis erat proin condimentum in a eget, sed fermentum sed vestibulum varius ac, vestibulum volutpat orci ut elit eget tortor. Ultrices nascetur nulla gravida ante arcu. Pharetra rhoncus morbi ipsum, nunc tempor debitis, ipsum pellentesque, vitae id quam ut mauris dui tempor, aptent non. Quisque turpis. Phasellus quis lectus luctus orci eget rhoncus. Amet donec vestibulum mattis commodo, nulla aliquet, nibh praesent, elementum nulla. Sit lacus pharetra tempus magna neque pellentesque, nulla vel erat.
+                    Justo ex quisque nulla accusamus venenatis, sed quis. N
+                  </v-card>
+                </template>
+              </v-hover>
+            </v-container>
+            <v-container>
+              <v-hover>
+                <template v-slot:default="{ hover }">
+                  <v-card ripple  max-width="380px" class="mx-auto pa-3 transition-swing rounded-xl" :class="`elevation-${hover ? 20 : 5}`">
+                    Lorem ipsum dolor sit amet, semper quis, sapien id natoque elit. Nostra urna at, magna at neque sed sed ante imperdiet, dolor mauris cursus velit, velit non, sem nec. 
+                    Justo ex quisque nulla accusamus venenatis, sed quis. N
+                  </v-card>
+                </template>
+              </v-hover>
+            </v-container>
+            <v-container>
+              <v-hover>
+                <template v-slot:default="{ hover }">
+                  <v-card ripple max-width="380px" class="mx-auto pa-3 transition-swing rounded-xl" :class="`elevation-${hover ? 20 : 5}`">
+                    Lorem ipsum dolor sit amet, semper quis, sapien id natoque elit. Nostra urna at, magna at neque sed sed ante imperdiet, 
+                  </v-card>
+                </template>
+              </v-hover>
+            </v-container>
+            <v-container>
+              <v-hover>
+                <template v-slot:default="{ hover }">
+                  <v-card ripple max-width="380px" class="mx-auto pa-3 transition-swing rounded-xl" :class="`elevation-${hover ? 20 : 5}`">
+                    Lorem ipsum dolor sit amet, semper quis, sapien id natoque elit. Nostra urna at, magna at neque sed sed ante imperdiet, 
+                  </v-card>
+                </template>
+              </v-hover>
+            </v-container>
+            <v-container>
+              <v-hover>
+                <template v-slot:default="{ hover }">
+                  <v-card ripple max-width="380px" class="mx-auto pa-3 transition-swing rounded-xl" :class="`elevation-${hover ? 20 : 5}`">
+                    Lorem ipsum dolor sit amet, semper quis, sapien id natoque elit. Nostra urna at, magna at neque sed sed ante imperdiet, 
+                  </v-card>
+                </template>
+              </v-hover>
+            </v-container>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="dialog = false"
+          >
+            닫기
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
     </v-app-bar>
+    
 
     <v-navigation-drawer
       v-model="drawer"
@@ -55,6 +134,7 @@ export default {
   name: "FrontendNavbar",
 
   data: () => ({
+    dialog: false,
     drawer: false,
     group: null,
   }),
@@ -80,3 +160,4 @@ export default {
   right: calc((100vw - 480px) / 2);
 }
 
+</style>
