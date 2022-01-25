@@ -116,23 +116,24 @@ export default {
     getContent() {
       // 임시용 경로변경
       this.$router.push({ name: "EntFeedList" });
-
-      const data = {
+      const token = localStorage.getItem("jwt");
+      const params = {
         playerNum: 0,
         isEdge: [],
         playerNames: [],
         resultNames: [],
       };
-      data.playerNum = this.playerNum;
+      params.playerNum = this.playerNum;
       for (let i = 1; i <= this.playerNum; i++) {
-        data.isEdge.push(this.isEdge[i]);
-        data.playerNames.push(this.playerNames[i]);
-        data.resultNames.push(this.resultNames[i]);
+        params.isEdge.push(this.isEdge[i]);
+        params.playerNames.push(this.playerNames[i]);
+        params.resultNames.push(this.resultNames[i]);
       }
       axios({
         method: "get",
         url: `${process.env.VUE_APP_MCS_URL}/ghostleg`,
-        data: data,
+        headers: { Authorization: `JWT ${token}` },
+        params: params,
       })
         .then((res) => {
           this.contentData = res.data;

@@ -10,6 +10,12 @@
           class="profile-img"
           :src="content.info.authorPicUrl"
           alt="유저프로필사진"
+          @click.stop="
+            $router.push({
+              name: 'UserPage',
+              params: { userSeq: this.userSeq },
+            })
+          "
         />
 
         <h3 class="d-inline-flex">{{ contentType }}</h3>
