@@ -40,6 +40,7 @@
 
 <script>
 import { mapActions } from "vuex";
+import axios from "axios";
 export default {
   name: "VoteCreate",
   data: () => ({
@@ -77,6 +78,26 @@ export default {
     },
     voteDelItem(idx) {
       this.voteInfo.voteItems.splice(idx, 1);
+    },
+    voteCreate() {
+      // 임시용 경로변경
+      this.$router.push({ name: "EntFeedList" });
+
+      const data = this.voteInfo;
+      const token = localStorage.getItem("jwt");
+      axios({
+        method: "POST",
+        url: `${process.env.VUE_APP_MCS_URL}/vote`,
+        headers: { Authorization: `JWT ${token}` },
+        data: data,
+      })
+        .then((res) => {
+          this.$router.push({ name: "EntFeedList" });
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
