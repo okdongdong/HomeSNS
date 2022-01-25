@@ -9,6 +9,9 @@ const account = {
     LOGIN: function (state) {
       state.isLogin = true;
     },
+    LOGOUT: function (state) {
+      state.isLogin = false;
+    },
   },
   actions: {
     login: function ({ commit }, credentials) {
@@ -26,6 +29,10 @@ const account = {
         .catch((err) => {
           console.log(err);
         });
+    },
+    logout:function({commit}) {
+      localStorage.removeItem('jwt')
+      commit("LOGOUT")
     },
     signup: function (credentials) {
       axios({

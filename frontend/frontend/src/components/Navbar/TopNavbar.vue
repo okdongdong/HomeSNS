@@ -117,6 +117,7 @@
             <v-list-item-title>투표/미니게임</v-list-item-title>
           </v-list-item>
           <v-list-item>
+          <v-list-item @click.stop="logout()">
             <v-list-item-title>로그아웃</v-list-item-title>
           </v-list-item>
           <v-list-item>
@@ -130,6 +131,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "FrontendNavbar",
 
@@ -151,6 +153,13 @@ export default {
     feedCreate: function() {
       this.$router.push({name : 'FeedCreate'});
     }
+    ...mapActions(["logout"]),
+    feedCreate: function () {
+      this.$router.push({ name: "FeedCreate" });
+    },
+    move(page) {
+      this.$router.push({ name: page });
+    },
   },
 };
 </script>
