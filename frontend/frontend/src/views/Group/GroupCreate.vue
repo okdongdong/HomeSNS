@@ -25,8 +25,8 @@
                 <div class="border">
                     <template v-if="previewImage" class="d-flex align-items-center">
                         <v-img :src="previewImage" class="group-img" />
-                        <p class="mb-1">file name: {{ image.name }}</p>
-                        <p class="mb-1">size: {{ image.size/1024 }}KB</p>
+                        <!-- <p class="mb-1">file name: {{ image.name }}</p>
+                        <p class="mb-1">size: {{ image.size/1024 }}KB</p> -->
                     </template>
                     <template v-else>
                         <v-img src="@/assets/emptyImg.png" alt="그룹 프로필" class="group-img" />
