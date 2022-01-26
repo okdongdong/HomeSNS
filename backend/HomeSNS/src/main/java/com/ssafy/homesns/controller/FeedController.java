@@ -83,7 +83,7 @@ public class FeedController {
 	}
 	
 	
-	
+	//sdfsdf
 	// feed 삭제
 //	@DeleteMapping(value="/feed/{feedId}")
 //	public ResponseEntity<FeedResultDto> feedDelete(@PathVariable int feedId){
