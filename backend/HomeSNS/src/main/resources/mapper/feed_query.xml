@@ -4,7 +4,7 @@
 
 
 
-	<select id="feedMainPage" parameterType="map" resultType="com.ssafy.homesns.dto.feedDto">
+	<select id="feedMainPage" parameterType="map" resultType="com.ssafy.homesns.dto.FeedDto">
 		SELECT FEED_ID, GROUP_ID, FEED_AUTHOR, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION 
   		  FROM HOME_SNS.FEED
 		 ORDER BY FEED_UPLOAD_DATE DESC
@@ -75,7 +75,13 @@
 	<!-- 피드 수정 -->
 	
 	<update id="feedUpdate" parameterType="com.ssafy.homesns.dto.FeedDto">
-	
+		UPDATE HOME_SNS.FEED
+		   SET 
+			   FEED_TITLE = #{feedTitle},
+			   FEED_CONTENT = #{feedContent},
+			   FEED_EVENT_DATE = #{feedEventDate},
+			   FEED_LOCATION =  #{feedLocation}
+		 WHERE FEED_ID = #{feedId}
 	</update>
 	
 	<select id="feedFileUrlDeleteList" parameterType="int" resultType="string">
