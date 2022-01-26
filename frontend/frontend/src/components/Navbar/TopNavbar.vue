@@ -5,13 +5,17 @@
       dark
       absolute
       hide-on-scroll
-      scroll-target="#scrolling-techniques-4"
-      height="80"
+      scroll-target="#scrolling-sheet"
       class="align-space-center"
+      height="80px"
     >
-      <v-btn text rounded @click.stop="move('Main')">
-        <img height="70" width="70" src="../../assets/logo2.png" alt="로고" />
-      </v-btn>
+      <img
+        height="70"
+        width="70"
+        src="../../assets/logo2.png"
+        alt="로고"
+        @click.stop="move('Main')"
+      />
       <v-spacer></v-spacer>
       <v-btn rounded text @click.stop="move('FeedCreate')">추억담기 </v-btn>
 

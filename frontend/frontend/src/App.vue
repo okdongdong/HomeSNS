@@ -6,9 +6,9 @@
       <v-main style="max-width: 450px; width: 100%">
         <top-navbar v-if="noneNav"></top-navbar>
         <v-sheet
-          id="scrolling-techniques-4"
+          id="scrolling-sheet"
           class="overflow-y-auto"
-          max-height="95vh"
+          :style="!noneNav ? 'max-height:100vh' : ''"
         >
           <div v-if="noneNav" style="height: 80px"></div>
           <v-sheet>
@@ -58,7 +58,9 @@ export default {
 #app {
   font-family: "Gowun Dodum", sans-serif;
 }
-
+#scrolling-sheet {
+  max-height: calc(100vh - 80px);
+}
 .curtain {
   width: calc((100vw - 450px) / 2);
   background-color: rgb(50, 52, 121);

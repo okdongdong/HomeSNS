@@ -1,5 +1,10 @@
 <template>
-  <v-bottom-navigation>
+  <v-bottom-navigation
+    height="80px"
+    hide-on-scroll
+    scroll-threshold
+    scroll-target="#scrolling-sheet"
+  >
     <v-btn @click="moveToFeed">
       <span>게시물</span>
 
@@ -22,32 +27,27 @@
 
 <script>
 export default {
-    name: 'FrontendBottomnavbar',
+  name: "FrontendBottomnavbar",
+  props: { noneNav: Boolean },
 
-    data() {
-        return {
-            
-        };
-    },
+  data() {
+    return {};
+  },
 
-    mounted() {
-        
-    },
+  mounted() {},
 
-    methods: {
-      moveToFeed () {
-        this.$router.push({name : 'Main'})
-      },
-      moveToTimeLine () {
-        this.$router.push({name : 'Timeline'})
-      },
-      moveToSchedule () {
-        this.$router.push({name : 'Schedule'})
-      }
+  methods: {
+    moveToFeed() {
+      this.$router.push({ name: "Main" });
     },
+    moveToTimeLine() {
+      this.$router.push({ name: "Timeline" });
+    },
+    moveToSchedule() {
+      this.$router.push({ name: "Schedule" });
+    },
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
