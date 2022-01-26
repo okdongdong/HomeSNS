@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -81,5 +82,19 @@ public class FeedController {
 	
 	}
 	
+	
+	
+	// feed 삭제
+//	@DeleteMapping(value="/feed/{feedId}")
+//	public ResponseEntity<FeedResultDto> feedDelete(@PathVariable int feedId){
+//		
+//		FeedResultDto feedResultDto = feedService.feedDelete(feedId);
+//		
+//		if( feedResultDto.getResult() == SUCCESS ) {
+//			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);
+//		}else {
+//			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+//		}		
+//	}
 	
 }
