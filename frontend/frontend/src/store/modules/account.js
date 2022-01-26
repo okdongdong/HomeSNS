@@ -32,7 +32,7 @@ const account = {
   actions: {
     login: function ({ commit }, credentials) {
       // 로그인 임시연결
-      router.push({name:"Select"})
+      // router.push({name:"Select"})
       axios({
         method: "POST",
         url: `${process.env.VUE_APP_MCS_URL}/login`,
@@ -42,6 +42,8 @@ const account = {
           localStorage.setItem("jwt", res.data.token);
           commit("LOGIN", res);
           console.log(res);
+          console.log(res.data);
+          router.push({name:"Select"})
         })
         .catch((err) => {
           console.log(err);
@@ -59,8 +61,9 @@ const account = {
         data: credentials,
       })
         .then((res) => {
-          this.login(credentials);
           console.log(res);
+          console.log(res.data);
+          this.login(credentials);
         })
         .catch((err) => {
           console.log(err);
