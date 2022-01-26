@@ -33,11 +33,11 @@
                     <h3 style="color:white">{{}}</h3>
                 </div> -->
                 <div class="col-6">
-                    <img src="@/assets/logo2.png" alt="그룹 사진입니다." class="group-img">
+                    <img src="@/assets/logo2.png" alt="그룹 사진입니다." class="group-img" @click.stop="$router.push({name:'Main'})">
                     <h3>우가우가</h3>
                 </div>
                 <div class="col-6">
-                    <img src="@/assets/logo2.png" alt="그룹 사진입니다." class="group-img">
+                    <img src="@/assets/logo2.png" alt="그룹 사진입니다." class="group-img" @click.stop="$router.push({name:'Main'})">
                     <h3>우가우가</h3>
                 </div>
             </div>
