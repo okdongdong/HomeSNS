@@ -31,8 +31,36 @@
           </v-col>
           
           <!-- 사진 -->
-
-
+          <v-col
+            v-for="(file,i) in files"
+            :key="i"
+            class="d-flex child-flex"
+            cols="4"
+          >
+            <v-img
+              :src="file.previewImage"
+              :lazy-src="`https://picsum.photos/200/300`"
+              aspect-ratio="1"
+              class="grey lighten-2"
+              @click="deleteFile(i)"
+            >
+              <template v-slot:placeholder>
+                <v-row
+                  class="fill-height ma-0"
+                  align="center"
+                  justify="center"
+                >
+                  <!-- <v-progress-circular
+                    indeterminate
+                    color="grey lighten-5"
+                  ></v-progress-circular> -->
+                </v-row>
+              </template>
+            </v-img>
+          </v-col>
+          <v-col cols="12">
+            <v-file-input multiple type="file" accept="image/*,video/*" @change="selectFile" class="form-control-file" id="profile_path" enctype="multipart/form-data"></v-file-input> 
+          </v-col>
           <!-- 장소레이블 -->
           <v-col cols="12">
             <v-combobox
@@ -222,6 +250,8 @@ import {gmapApi} from 'vue2-google-maps'
         locaLabel : null,
         locaLabels : [],
         currLocaFav : false,
+        // 사진 및 영상 들고오기
+        files : [],
       }
     },
 
@@ -328,6 +358,24 @@ import {gmapApi} from 'vue2-google-maps'
         },
         toggleCurrLocaFavBtn(){ // 현재 장소 즐겨찾기 등록 여부
           this.currLocaFav = !this.currLocaFav
+        },
+        selectFile:function(data){ 
+          for(let i=0;i<data.length;i++){
+            if(data[i].type.includes('video')){ // 나는 비디오
+              console.log('video')
+            }
+            else{
+              this.files.push({
+                content : data[i],
+                previewImage : URL.createObjectURL(data[i])
+              })
+            }
+          }
+          console.log(this.files)
+          console.log(data)
+          },
+        deleteFile(i){
+          this.files.splice(i,1)
         }
     },
     computed: {
@@ -344,5 +392,15 @@ import {gmapApi} from 'vue2-google-maps'
 
 
 <style scoped>
-
+  .preview-img {
+    display: block;
+    margin : 0px auto;
+    /* height: 70%; */
+    width: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    border-radius: 20%;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.329);
+    padding-bottom: 5%;
+  }
 </style>
