@@ -4,12 +4,29 @@
       <div class="curtain"></div>
 
       <v-main style="max-width: 450px; width: 100%">
-        <top-navbar v-if="noneNav"></top-navbar>
-        <router-view />
-        <bottom-navbar v-if="noneNav"></bottom-navbar>
+        <top-navbar
+          v-if="noneNav"
+          color="rgb(98,101,232)"
+          dark
+          absolute
+          hide-on-scroll
+          scroll-target="#scrolling-techniques-4"
+          height="80"
+          class="align-space-center"
+        ></top-navbar>
+        <v-sheet
+          id="scrolling-techniques-4"
+          class="overflow-y-auto"
+          max-height="95vh"
+        >
+          <div v-if="noneNav" style="height: 80px"></div>
+          <v-sheet>
+            <router-view />
+          </v-sheet>
+        </v-sheet>
+        <bottom-navbar v-if="noneNav" ></bottom-navbar>
       </v-main>
       <div class="curtain"></div>
-
     </div>
   </v-app>
 </template>
@@ -52,7 +69,7 @@ export default {
 }
 
 .curtain {
-  width: calc((100vw - 450px)/2);
+  width: calc((100vw - 450px) / 2);
   background-color: rgb(50, 52, 121);
   z-index: 99;
 }
