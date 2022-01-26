@@ -3,15 +3,17 @@ import axios from "axios";
 const account = {
   namespaced: true,
   state: {
-    userSeq: null,
-    username: null,
+    userSeq: 5,
+    userName: '부와아아앜',
+    userImgUrl:'https://pbs.twimg.com/media/CLVCqrsVEAAe9oo.jpg',
     isLogin: localStorage.getItem("jwt") ? true : false,
   },
   mutations: {
     LOGIN: function (state, res) {
       state.isLogin = true;
       state.userSeq = res.userSeq
-      state.userSeq = res.username
+      state.userName = res.userName
+      state.userImgUrl = res.userImgUrl
     },
     LOGOUT: function (state) {
       state.isLogin = false;
