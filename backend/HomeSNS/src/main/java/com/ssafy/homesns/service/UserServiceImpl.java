@@ -1,11 +1,13 @@
 package com.ssafy.homesns.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ssafy.homesns.dao.UserDao;
 import com.ssafy.homesns.dto.UserDto;
 import com.ssafy.homesns.dto.UserResultDto;
 
+@Service
 public class UserServiceImpl implements UserService{
 
 	

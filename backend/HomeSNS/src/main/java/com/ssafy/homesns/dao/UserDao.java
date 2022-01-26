@@ -1,7 +1,10 @@
 package com.ssafy.homesns.dao;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.ssafy.homesns.dto.UserDto;
 
+@Mapper
 public interface UserDao {
 	// userDto를 받아서 DB에 유저 정보를 저장한다
 	public int userRegister(UserDto userDto);
