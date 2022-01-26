@@ -1,6 +1,17 @@
 <template>
   <div>
-    <v-app-bar color="rgb(98,101,232)" dark>
+    <v-app-bar
+      color="rgb(98,101,232)"
+      dark
+      absolute
+      hide-on-scroll
+      scroll-target="#scrolling-techniques-4"
+      height="80"
+      class="align-space-center"
+    >
+      <v-btn text rounded @click.stop="move('Main')">
+        <img height="70" width="70" src="../../assets/logo2.png" alt="로고" />
+      </v-btn>
       <v-spacer></v-spacer>
       <v-btn rounded text @click.stop="move('FeedCreate')">추억담기 </v-btn>
 
@@ -127,25 +138,55 @@
           v-model="group"
           active-class="deep-purple--text text--accent-4"
         >
-          <v-list-item @click.stop="move('MyPage')">
-            <v-list-item-title>내 정보</v-list-item-title>
+          <v-list-item class="my-5">
+            <ProfilePhoto :size="100" :imgUrl="userImgUrl" />
+            <h1>{{ userName }}!!!!!!</h1>
+          </v-list-item>
+          <v-list-item
+            @click.stop="
+              $router.push({
+                name: 'UserPage',
+                params: { userSeq: userSeq },
+              })
+            "
+          >
+            <v-list-item-title class="d-flex align-center">
+              <v-icon class="mx-3">account_circle</v-icon>
+              <h1>내 정보</h1>
+            </v-list-item-title>
           </v-list-item>
           <v-list-item @click.stop="move('Member')">
-            <v-list-item-title>그룹원보기</v-list-item-title>
+            <v-list-item-title class="d-flex align-center">
+              <v-icon class="mx-3">groups</v-icon>
+              <h1>그룹원보기</h1>
+            </v-list-item-title>
           </v-list-item>
           <v-list-item @click.stop="move('Select')">
-            <v-list-item-title>그룹 목록</v-list-item-title>
+            <v-list-item-title class="d-flex align-center">
+              <v-icon class="mx-3">switch_account</v-icon>
+              <h1>그룹 목록</h1>
+            </v-list-item-title>
           </v-list-item>
           <v-list-item @click.stop="move('EntFeedList')">
-            <v-list-item-title>투표/미니게임</v-list-item-title>
+            <v-list-item-title class="d-flex align-center">
+              <v-icon class="mx-3">extension</v-icon>
+              <h1>투표/미니게임</h1>
+            </v-list-item-title>
           </v-list-item>
-          <v-list-item @click.stop="logout()">
-            <v-list-item-title>로그아웃</v-list-item-title>
-          </v-list-item>
+
           <v-list-item @click.stop="move('Management')">
-            <v-list-item-title>그룹관리</v-list-item-title>
+            <v-list-item-title class="d-flex align-center">
+              <v-icon class="mx-3">manage_accounts</v-icon>
+              <h1>그룹관리</h1>
+            </v-list-item-title>
           </v-list-item>
           <hr style="margin: auto; border-top: 1px solid #f0f0f0" />
+          <v-list-item @click.stop="logout()">
+            <v-list-item-title class="d-flex align-center">
+              <v-icon class="mx-3">logout</v-icon>
+              <h1>로그아웃</h1>
+            </v-list-item-title>
+          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -153,7 +194,8 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
+import ProfilePhoto from "../ProfilePhoto.vue";
 export default {
   name: "FrontendNavbar",
 
@@ -162,7 +204,9 @@ export default {
     drawer: false,
     group: null,
   }),
-
+  components: {
+    ProfilePhoto,
+  },
   watch: {
     group() {
       this.drawer = false;
@@ -172,13 +216,16 @@ export default {
   mounted() {},
 
   methods: {
-    ...mapActions(["logout"]),
+    ...mapActions("account", ["logout"]),
     feedCreate: function () {
       this.$router.push({ name: "FeedCreate" });
     },
     move(page) {
       this.$router.push({ name: page });
     },
+  },
+  computed: {
+    ...mapState("account", ["userSeq", "userImgUrl", "userName"]),
   },
 };
 </script>

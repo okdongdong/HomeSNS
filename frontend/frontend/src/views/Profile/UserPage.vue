@@ -1,24 +1,21 @@
 <template>
   <v-app>
     <div class="d-flex justify-center ma-5">
-      <v-avatar size="150px" elevation="12" color="#846543">
-        <div v-if="userInfo.imgUrl">
-          <img
-            :src="userInfo.imgUrl"
-            alt="유저프로필사진"
-            class="profile-img"
-          />
-        </div>
-        <div v-else>
-          <v-icon size="100" color="#CBCBCB">person</v-icon>
-        </div>
-      </v-avatar>
+
+    <ProfilePhoto :size='150' :imgUrl="userInfo.imgUrl"/>
     </div>
     <h2 class="text-center">{{ userInfo.name }}</h2>
+    <v-btn
+      v-if="mySeq == userSeq"
+      rounded="xl"
+      color="green"
+      @click.stop="$router.push({ name: 'MyPage' })"
+      >정보수정</v-btn
+    >
     <v-card>
       <v-toolbar color="rgb(98,101,232)" dark>
         <template v-slot>
-          <v-tabs v-model="tab" align-with-title>
+          <v-tabs v-model="tab" grow>
             <v-tabs-slider size="xl" color="white"></v-tabs-slider>
 
             <v-tab v-for="item in items" :key="item">
@@ -30,11 +27,8 @@
 
       <v-tabs-items v-model="tab">
         <v-tab-item v-for="feeds in contents" :key="feeds">
-          <v-row class='ma-1'>
-            <v-col cols="4"
-                v-for="feed in feeds"
-                :key="feed"
-            >
+          <v-row class="ma-1">
+            <v-col cols="4" v-for="feed in feeds" :key="feed">
               <v-card
                 width="150"
                 height="120"
@@ -65,11 +59,15 @@
 <script>
 import axios from "axios";
 import { mapState } from "vuex";
+import ProfilePhoto from "../../components/ProfilePhoto.vue";
 
 export default {
   name: "UserPage",
   props: {
     userSeq: Number,
+  },
+  components: {
+    ProfilePhoto,
   },
   data: function () {
     return {
@@ -264,7 +262,7 @@ export default {
     },
   },
   computed: {
-    ...mapState("account", ["userSeq"]),
+    ...mapState("account", { mySeq: (state) => state.userSeq }),
   },
 };
 </script>
@@ -279,11 +277,5 @@ export default {
   object-fit: cover;
 }
 
-.profile-img {
-  overflow: hidden;
-  width: 150px;
-  height: 150px;
-  border: 2px solid white;
-  object-fit: cover;
-}
+
 </style>
