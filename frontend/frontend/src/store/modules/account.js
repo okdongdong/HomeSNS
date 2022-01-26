@@ -55,12 +55,21 @@ const account = {
       commit("LOGOUT");
     },
     signup: function (credentials) {
+      console.log(credentials)
       axios({
         method: "POST",
-        url: `${process.env.VUE_APP_MCS_URL}/signup`,
-        data: credentials,
+        url: `${process.env.VUE_APP_MCS_URL}/register`,
+        data: {
+          userId: credentials.userId,
+          userEmail: credentials.userEmail,
+          userPassword: credentials.userPassword,
+          userName: credentials.userName,
+          userPhone: credentials.userPhone,
+          userBod: credentials.userBod,
+        },
       })
         .then((res) => {
+          
           console.log(res);
           console.log(res.data);
           this.login(credentials);

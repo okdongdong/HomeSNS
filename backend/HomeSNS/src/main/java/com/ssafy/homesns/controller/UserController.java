@@ -38,6 +38,7 @@ public class UserController {
 	// getResult()에 따라 Html코드로 등록을 성공했는지 실패했는지 return한다
 	@PostMapping(value="/register")
 	public ResponseEntity<UserResultDto> register(@RequestBody UserDto userDto) {
+		System.out.println(userDto);
 		UserResultDto userResultDto = userService.userRegister(userDto);
 		if ( userResultDto.getResult() == SUCCESS ) {
 			return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.OK);
