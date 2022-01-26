@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.ssafy.homesns.dao.LoginDao">
+
+	<select id="login" parameterType="string" resultType="com.ssafy.homesns.dto.CustomUserDetails">
+		SELECT USER_ID as ID, USER_PASSWORD as PASSWORD
+		  FROM USER 
+		 WHERE USER_ID = #{userId}
+	</select>
+	
+</mapper>

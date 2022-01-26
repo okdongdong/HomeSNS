@@ -1,7 +1,10 @@
 package com.ssafy.homesns.dao;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.ssafy.homesns.dto.UserDto;
 
+@Mapper
 public interface UserDao {
 	// userDto를 받아서 DB에 유저 정보를 저장한다
 	public int userRegister(UserDto userDto);
@@ -13,15 +16,15 @@ public interface UserDao {
 	public int userDelete(int userSeq);
 	
 	// phone을 받아서 DB에 있는 유저 정보를 가져온다.
-	public UserDto userExist(String phone);
+	public UserDto userExist(String userPhone);
 	
 	// id를 받아서 DB에 유저 정보가 있는지 확인한다
-	public int checkUserId(String id);
+	public int checkUserId(String userId);
 	
 	// email을 받아서 DB에 유저 정보가 있는지 확인한다
-	public int checkUserEmail(String email);
+	public int checkUserEmail(String userEmail);
 	
 	// phone을 받아서 DB에 유저 정보가 있는지 확인한다
-	public int checkUserPhone(String phone);
+	public int checkUserPhone(String userPhone);
 	
 }

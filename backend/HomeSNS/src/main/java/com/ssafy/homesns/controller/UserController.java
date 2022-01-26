@@ -5,19 +5,26 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.homesns.dto.UserDto;
 import com.ssafy.homesns.dto.UserResultDto;
 import com.ssafy.homesns.service.UserService;
 
+@CrossOrigin(
+		origins = "http://localhost:5500", // npm에서 5500번을 사용한다
+		allowCredentials = "true", // axios가 sessionId를 계속 다른것을 보내는데, 이것을 고정시켜준다
+		allowedHeaders = "*",
+		methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, 
+				RequestMethod.DELETE, RequestMethod.HEAD, RequestMethod.OPTIONS })
 @RestController
 public class UserController {
 	
@@ -78,10 +85,10 @@ public class UserController {
 	
 	// 중복 체크 아님 
 	// 핸드폰 번호를 받아와서 해당유저 검색후 유저정보 다 넘겨줌 -> 프런트에서 원하는대로 가공해서 쓸 수 있게 
-	@GetMapping(value="/user/{phone}")
-	public ResponseEntity<UserResultDto> exist(@PathVariable String phone){
-		System.out.println("[Exist] - " + phone);
-		UserResultDto userResultDto = userService.userExist(phone);
+	@GetMapping(value="/user/{userPhone}")
+	public ResponseEntity<UserResultDto> exist(@PathVariable String userPhone){
+		System.out.println("[Exist] - " + userPhone);
+		UserResultDto userResultDto = userService.userExist(userPhone);
 		
 		if ( userResultDto.getResult() == SUCCESS ) {
 			return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.OK);
@@ -95,31 +102,31 @@ public class UserController {
 	// 중복 체크용 코드 
 	// id, email, phone 각각 3가지 만들 것
 	
-	@GetMapping (value="/register/{id}")
-	public UserResultDto checkId(@PathVariable String id){
-		System.out.println("[isId] - " + id);
+	@GetMapping (value="/register/{userId}")
+	public UserResultDto checkId(@PathVariable String userId){
+		System.out.println("[isId] - " + userId);
 		
-		UserResultDto userResultDto = userService.checkUserId(id);
+		UserResultDto userResultDto = userService.checkUserId(userId);
 		
 		return userResultDto;
 
 	}
-	@GetMapping (value="/register/{email}")
-	public UserResultDto checkEmail(@PathVariable String email){
-		System.out.println("[isEmail] - " + email);
+	@GetMapping (value="/register/{userEmail}")
+	public UserResultDto checkEmail(@PathVariable String userEmail){
+		System.out.println("[isEmail] - " + userEmail);
 		
-		UserResultDto userResultDto = userService.checkUserEmail(email);
+		UserResultDto userResultDto = userService.checkUserEmail(userEmail);
 		
 		return userResultDto;
 
 	}
 	
 	
-	@GetMapping (value="/register/{phone}")
-	public UserResultDto checkPhone(@PathVariable String phone){
-		System.out.println("[isPhone] - " + phone);
+	@GetMapping (value="/register/{userPhone}")
+	public UserResultDto checkPhone(@PathVariable String userPhone){
+		System.out.println("[isPhone] - " + userPhone);
 		
-		UserResultDto userResultDto = userService.checkUserPhone(phone);
+		UserResultDto userResultDto = userService.checkUserPhone(userPhone);
 		
 		return userResultDto;
 

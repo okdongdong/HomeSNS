@@ -12,7 +12,10 @@
 
 	<mappers>
 		<!-- mapper가 있는 파일의 위치를 추가해서 SQL문을 가져다 쓸 수 있도록 한다 -->
-
+		<mapper resource="mapper/login_query.xml" />
+		<mapper resource="mapper/user_query.xml" />
+		<mapper resource="mapper/feed_query.xml" />
+		
 	</mappers>
 	
 </configuration>

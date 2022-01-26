@@ -1,13 +1,17 @@
 package com.ssafy.homesns.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.ssafy.homesns.dao.UserDao;
 import com.ssafy.homesns.dto.UserDto;
 import com.ssafy.homesns.dto.UserResultDto;
 
+@Service
 public class UserServiceImpl implements UserService{
 
+	private final PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	UserDao userDao;
@@ -15,11 +19,17 @@ public class UserServiceImpl implements UserService{
 	private static final int SUCCESS = 1;
 	private static final int FAIL = -1;
 	
+	public UserServiceImpl(PasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
+	
 	// userDao의 userRegister를 사용해서 DB에 insert한다
 	// 성공하면 Result를 SUCCESS로 set하고, 실패하면 Result를 FAIL로 set한다
 	@Override
 	public UserResultDto userRegister(UserDto userDto) {
+		// 권한 정보를 만들어서 넣어줘야 하지만 일단 생략
 		UserResultDto userResultDto = new UserResultDto();
+		userDto.setUserPassword(passwordEncoder.encode(userDto.getUserPassword()));
 		if ( userDao.userRegister(userDto) == 1 ) {
 			userResultDto.setResult(SUCCESS);
 		} else {
@@ -52,11 +62,11 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserResultDto userExist(String phone){
+	public UserResultDto userExist(String userPhone){
 		UserResultDto userResultDto = new UserResultDto();
 
 		try {
-			UserDto userDto =  userDao.userExist(phone);  
+			UserDto userDto =  userDao.userExist(userPhone);  
 			userResultDto.setUserDto(userDto);			
 			userResultDto.setResult(SUCCESS);
 			
@@ -72,9 +82,9 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserResultDto checkUserId(String id) {
+	public UserResultDto checkUserId(String userId) {
 		UserResultDto userResultDto = new UserResultDto();
-		if ( userDao.checkUserId(id) == 1 ) {
+		if ( userDao.checkUserId(userId) == 1 ) {
 			userResultDto.setResult(SUCCESS);
 		} else {
 			userResultDto.setResult(FAIL);
@@ -84,9 +94,9 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserResultDto checkUserEmail(String email) {
+	public UserResultDto checkUserEmail(String userEmail) {
 		UserResultDto userResultDto = new UserResultDto();
-		if ( userDao.checkUserEmail(email) == 1 ) {
+		if ( userDao.checkUserEmail(userEmail) == 1 ) {
 			userResultDto.setResult(SUCCESS);
 		} else {
 			userResultDto.setResult(FAIL);
@@ -95,9 +105,9 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserResultDto checkUserPhone(String phone) {
+	public UserResultDto checkUserPhone(String userPhone) {
 		UserResultDto userResultDto = new UserResultDto();
-		if ( userDao.checkUserPhone(phone) == 1 ) {
+		if ( userDao.checkUserPhone(userPhone) == 1 ) {
 			userResultDto.setResult(SUCCESS);
 		} else {
 			userResultDto.setResult(FAIL);

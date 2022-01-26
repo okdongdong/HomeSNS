@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.ssafy.homesns.dao.FeedDao">
+
+
+
+	<select id="feedMainPage" parameterType="map" resultType="com.ssafy.homesns.dto.FeedDto">
+		SELECT FEED_ID, GROUP_ID, FEED_AUTHOR, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION 
+  		  FROM HOME_SNS.FEED
+		 ORDER BY FEED_UPLOAD_DATE DESC
+		 LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<select id="userExist" parameterType="string" resultType="com.ssafy.homesns.dto.UserDto">
+		SELECT USER_SEQ as userSeq, USER_ID as userId, USER_PASSWORD as userPassword, USER_EMAIL as userEmail, 
+			   USER_NAME as userName, USER_NICKNAME as userNickname, USER_PHONE as userPhone, USER_BOD as userBod, 
+			   USER_PROFILE_IMAGE_URL as userProfileImageUrl,USER_REGISTER_DATE as userRegisterDate, USER_CLS as userCls
+		  FROM USER 
+		 WHERE USER_PHONE = #{userPhone}
+	</select>
+	
+	
+	<!--피드상세 조회 -->
+	
+	
+	 <!-- fileList 가져오는 SQL-->
+	<select id="fileList" parameterType="int" resultType="com.ssafy.homesns.dto.FileDto"> 
+		 SELECT FILE_ID, FEED_ID, FILE_NAME, FILE_SIZE, FILE_CONTENT_TYPE, FILE_URL, REG_DT
+		   FROM HOME_SNS.FILE
+		  WHERE FEED_ID =#{feedId}
+	</select>
+	
+	<!-- 댓글 가져오는 SQL  -->
+	<select id="commentList" parameterType="int" resultType="com.ssafy.homesns.dto.CommentDto"> 
+		SELECT COMMENT_ID, FEED_ID, COMMENT_TAG, COMMENT_AUTHOR, COMMENT_CONTENT, COMMENT_UPLOAD_DATE 
+		  FROM HOME_SNS.COMMENT
+		 WHERE FEED_ID = #{feedId}
+	</select>
+	
+	<!-- 해쉬태그 가져오는 SQL -->
+	<select id="hashtagList" parameterType="int" resultType="com.ssafy.homesns.dto.HashtagDto"> 
+		SELECT HASHTAG_SEQ, FEED_ID, HASHTAG_CONTENT
+		  FROM HOME_SNS.HASHTAG
+		 WHERE FEED_ID =#{feedId}
+	</select>
+	
+	<!-- feed table값만 가져오는 SQL -->
+	<select id="feedDetail" parameterType="int" resultType="com.ssafy.homesns.dto.FeedDto"> 
+		SELECT FEED_ID, GROUP_ID, FEED_AUTHOR, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION 
+		  FROM HOME_SNS.FEED
+		 WHERE FEED_ID = #{feedId}
+	</select>
+
+
+	
+	<!--피드 추가 -->
+
+	<insert id="feedInsert" parameterType="com.ssafy.homesns.dto.FeedDto" useGeneratedKeys="true" keyProperty="feedId">
+		
+		INSERT INTO FEED ( GROUP_ID , FEED_AUTHOR, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION )
+		            VALUES ( #{groupId}, #{author},  #{title},  #{content}, now(), #{eventDate} , #{location} )
+	</insert>
+	
+	<insert id="feedFileInsert" parameterType="com.ssafy.homesns.dto.FileDto">
+
+		INSERT INTO FILE ( FEED_ID, FILE_NAME, FILE_SIZE, FILE_CONTENT_TYPE, FILE_URL, REG_DT )
+		            VALUES ( #{feedId}, #{fileName}, #{fileSize}, #{fileContentType}, #{fileUrl}, now() )
+	</insert>
+
+	<insert id="feedHashtagInsert" parameterType="com.ssafy.homesns.dto.HashtagDto">
+		INSERT INTO HASHTAG ( FEED_ID, HASHTAG_CONTENT )
+		            VALUES ( #{feedId}, #{content})
+	</insert>
+
+	<!-- 피드 수정 -->
+	
+	<update id="feedUpdate" parameterType="com.ssafy.homesns.dto.FeedDto">
+		UPDATE HOME_SNS.FEED
+		   SET 
+			   FEED_TITLE = #{feedTitle},
+			   FEED_CONTENT = #{feedContent},
+			   FEED_EVENT_DATE = #{feedEventDate},
+			   FEED_LOCATION =  #{feedLocation}
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<select id="feedFileUrlDeleteList" parameterType="int" resultType="string">
+		SELECT FILE_URL FROM 
+		  FROM HOME_SNS.FILE 
+		 WHERE FEED_ID = #{feedId}
+	</select>
+	
+	
+	<delete id="feedFileDelete" parameterType="int">
+		DELETE FROM HOME_SNS.FILE
+		 WHERE FEED_ID = #{feedId}
+	</delete>
+	
+	
+	<!-- 피드 삭제 -->
+
+	
+	
+	
+</mapper>
