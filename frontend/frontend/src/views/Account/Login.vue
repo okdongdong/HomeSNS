@@ -27,7 +27,7 @@
             maxlength="20"
             background-color="white"
             solo
-            v-model="credentials.id"
+            v-model="credentials.userId"
             :rules="rules.idRules"
             label="아이디"
             required
@@ -38,7 +38,7 @@
             clearable
             background-color="white"
             solo
-            v-model="credentials.password"
+            v-model="credentials.userPassword"
             :rules="rules.passwordRules"
             label="비밀번호"
             type="password"
@@ -93,8 +93,8 @@ export default {
   data: () => ({
     valid: true,
     credentials: {
-      id: null,
-      password: null,
+      userId: null,
+      userPassword: null,
     },
     rules: {
       idRules: [(v) => !!v || " 아이디를 입력해주세요."],
