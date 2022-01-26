@@ -33,6 +33,7 @@
           </v-col>
         </v-row>
       </v-container>
+      <v-divider></v-divider>
     </v-card>
   </v-app>
 </template>

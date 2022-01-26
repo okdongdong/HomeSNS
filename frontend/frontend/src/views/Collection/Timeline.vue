@@ -1,29 +1,19 @@
 <template>
-  <div>
+  <v-app>
     
-  </div>
+  </v-app>
 </template>
 
 <script>
 export default {
-  name: 'S06p12e205Timeline',
+  name: 'Timeline',
 
-  data() {
-    return {
-      
-    };
-  },
-
-  mounted() {
+  data: () => ({
     
-  },
-
-  methods: {
-    
-  },
+  }),
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>
