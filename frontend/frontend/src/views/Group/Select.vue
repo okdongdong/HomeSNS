@@ -1,64 +1,95 @@
 <template>
-  <v-app class="my-background">
-    <v-spacer></v-spacer>
-    <div class="container box">
-      <div class="d-flex justify-center" style="height:20%; width=auto;">
-        <img src="@/assets/logo1.png" alt="logo">
-      </div>
-      <div>
-        <h1>그룹 생성</h1>
-      </div>
-      <v-form ref="form">
-        <v-text-field
-            clearable
-            :counter="20"
-            background-color="white"
-            solo
-            label="그룹 이름을 입력하세요."
-            required
-          ></v-text-field>
-
-        <div class="d-flex justify-center">
-          <v-btn text dark large rounded>
-            <h1>뒤로가기</h1>            
-          </v-btn>
-          <v-btn text dark large rounded>
-            <h1>생성하기</h1>
-          </v-btn>
+    <v-app class="box" style="background-color:rgba(98,101,232);">
+        <br />
+        <div class="container">
+            <v-card
+                flat
+                color="rgb(98, 101, 232)"
+            >
+                <div class="d-flex justify-center">
+                    <v-img 
+                        class="logo-img" 
+                        src="@/assets/logo1.png"
+                        alt="logo"
+                        max-width="200"
+                        max-height="200"
+                        >
+                    </v-img>
+                </div>
+                <v-card-title class="main-text justify-center text-h4 font-weight-bold">우리집SNS</v-card-title>
+                <br />
+            </v-card>
         </div>
-      </v-form>
-    </div>
-  </v-app>
+            <div class="container d-flex">
+            <!-- 그룹 추가하는 곳 -->
+            <div class="row">
+                <div class="col-6">
+                    <img src="@/assets/test1.png" alt="로고 사진입니다." class="group-img" @click="groupCreate">
+                    <h3>그룹 추가</h3>
+                </div>
+                    <!-- data받아오면 for문으로 돌리기 -->
+                <!-- <div class="col-6" v-for="" :key="">
+                    <img :src="${}" alt="그룹 사진입니다." class="group-img" @click="groupMainPage(그룹아이디넣기)">
+                    <h3 style="color:white">{{}}</h3>
+                </div> -->
+                <div class="col-6">
+                    <img src="@/assets/logo2.png" alt="그룹 사진입니다." class="group-img" @click.stop="$router.push({name:'Main'})">
+                    <h3>우가우가</h3>
+                </div>
+                <div class="col-6">
+                    <img src="@/assets/logo2.png" alt="그룹 사진입니다." class="group-img" @click.stop="$router.push({name:'Main'})">
+                    <h3>우가우가</h3>
+                </div>
+            </div>
+        </div>
+    </v-app>
 </template>
 
 <script>
 export default {
-  name: '02SubPjtSelect',
+    name: 'Select',
 
-  data() {
-    return {
-      
-    };
-  },
+    data() {
+        return {
+            
+        };
+    },
 
-  mounted() {
-    
-  },
-
-  methods: {
-    
-  },
+    methods: {
+        // 그룹 사진 클릭 시, 해당 그룹 메인페이지로 이동
+        groupMainPage : function(groupId){
+          this.$store.dispatch('getMain/getMain',groupId)
+          this.$router.push({name:'Main'})
+        },
+        groupCreate : function(){
+          this.$router.push({name:'GroupCreate'})
+        }
+    },
 };
 </script>
 
 <style scoped>
-  .my-background {
-    background-color: rgb(98, 101, 232);
-  }
-  .box {
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    color: white;
-  }
+    .box {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+    .group-img {
+        height: 80%;
+        width: 70%;
+        object-fit: cover;
+        border: 4px solid white;
+        border-radius: 20%;
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.329);
+    }
+    .main-text {
+    color: #fff;
+    }
+    h1 {
+        color : white;
+    }
+    h3 {
+        color : white;
+    }
+
 </style>
