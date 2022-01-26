@@ -104,7 +104,7 @@ export default {
   }),
 
   methods: {
-    ...mapActions(["login"]),
+    ...mapActions("account",["login"]),
     move(name) {
       this.$router.push({ name: name });
     },

@@ -1,4 +1,5 @@
 import axios from "axios";
+import router from "../../router";
 
 const account = {
   namespaced: true,
@@ -30,6 +31,8 @@ const account = {
   },
   actions: {
     login: function ({ commit }, credentials) {
+      // 로그인 임시연결
+      router.push({name:"Select"})
       axios({
         method: "POST",
         url: `${process.env.VUE_APP_MCS_URL}/login`,
@@ -46,8 +49,8 @@ const account = {
     },
     logout: function ({ commit }) {
       localStorage.removeItem("jwt");
+      router.push({name:"Login"})
       commit("LOGOUT");
-      this.$router.push("Login")
     },
     signup: function (credentials) {
       axios({
