@@ -1,9 +1,6 @@
 <template>
   <v-bottom-navigation
     height="80px"
-    hide-on-scroll
-    scroll-threshold
-    scroll-target="#scrolling-sheet"
   >
     <v-btn @click="moveToFeed">
       <span>게시물</span>
