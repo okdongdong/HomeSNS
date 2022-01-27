@@ -15,7 +15,7 @@
                     >
                 </v-img>
             </div>
-            <v-card-title class="main-text justify-center text-h4 font-weight-bold">그룹 생성</v-card-title>
+            <v-card-title class="main-text justify-center text-h4 font-weight-bold" @click="creategroup">그룹 생성</v-card-title>
             <br />
         </v-card>
     </div>
@@ -40,7 +40,7 @@
                     maxlength="20"
                     :rules="rules.groupNameRules"
                     solo
-                    v-model="credentials.groupname"
+                    v-model="groupname"
                     label="그룹 이름을 입력하세요."
                     required
                 ></v-text-field>
@@ -75,15 +75,14 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'Select',
 
     data() {
         return {
         valid :true,
-        credentials :{
-            groupname : null,
-        },
+        groupname : null,
         image:null,
         previewImage: undefined,
         rules:{
@@ -111,6 +110,25 @@ export default {
             this.image=file
             this.previewImage = URL.createObjectURL(this.image);
         },
+        creategroup : function(){
+            let data = new FormData()
+            data.append('groupName', this.groupname)
+            data.append('groupProfileImageUrl', this.image)
+            const token = localStorage.getItem('jwt')
+            axios({
+                method : 'post',
+                url : `${process.env.VUE_APP_MCS_URL}/group`,
+                data : data,
+                headers: { 
+                    'content-type': 'multipart/form-data',
+                    Authorization: `JWT ${token}` 
+                    },
+            })
+            .then(() =>{
+                console.log('123');
+            })
+
+        }
     },
 };
 </script>
