@@ -44,6 +44,7 @@
               class="grey lighten-2"
               @click="deleteFile(i)"
             >
+            
               <template v-slot:placeholder>
                 <v-row
                   class="fill-height ma-0"
