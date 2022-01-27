@@ -1,26 +1,30 @@
 <template>
   <div>
+    <v-overlay :value="nowLoading">
+      <v-progress-circular
+        :size="100"
+        :width="10"
+        color="white"
+        indeterminate
+      ></v-progress-circular>
+    </v-overlay>
+
     <div>
       <h1 class="d-inline-flex">{{ content.info.createdAt }}</h1>
       <span>{{ contentType }}</span>
     </div>
     <div class="container content-box">
-      <div>
-        <img
-          class="profile-img"
-          :src="content.info.authorPicUrl"
-          alt="유저프로필사진"
-          @click.stop="
-            $router.push({
-              name: 'UserPage',
-              params: { userSeq: this.userSeq },
-            })
-          "
+      <div class="d-inline-flex">
+        <ProfilePhoto
+          :size="50"
+          :name="content.info.author"
+          :imgUrl="content.info.authorPicUrl"
+          class="mx-3"
         />
-
-        <h3 class="d-inline-flex">{{ contentType }}</h3>
-        <span> {{ content.info.title }} </span>
-        <span> {{ content.info.author }} </span>
+        <div class="align-cneter">
+          <h3>{{ contentType }}</h3>
+          <span> {{ content.info.title }} </span>
+        </div>
       </div>
 
       <div v-if="content.type === 'vote'">
@@ -36,6 +40,7 @@
 <script>
 import GhostLeg from "./GhostLeg.vue";
 import Vote from "./Vote.vue";
+import ProfilePhoto from "../ProfilePhoto.vue";
 export default {
   name: "EntFeedContainer",
   props: {
@@ -44,7 +49,11 @@ export default {
   components: {
     GhostLeg,
     Vote,
+    ProfilePhoto,
   },
+  data: () => ({
+    nowLoading: false,
+  }),
   computed: {
     contentType() {
       if (this.content.type === "vote") {

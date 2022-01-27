@@ -15,10 +15,10 @@ const account = {
   mutations: {
     LOGIN: function (state, res) {
       state.isLogin = true;
-      state.userSeq = res.userSeq;
-      state.userName = res.userName;
-      state.userImgUrl = res.userImgUrl;
-      state.userGroups = res.userGroups;
+      state.userSeq = res.data.userSeq;
+      state.userName = res.data.userName;
+      state.userImgUrl = res.data.userProfileImageUrl;
+      state.userGroups = res.data.userGroups;
     },
     LOGOUT: function (state) {
       state.isLogin = false;
@@ -53,30 +53,6 @@ const account = {
       localStorage.removeItem("jwt");
       router.push({name:"Login"})
       commit("LOGOUT");
-    },
-    signup: function (credentials) {
-      console.log(credentials)
-      axios({
-        method: "POST",
-        url: `${process.env.VUE_APP_MCS_URL}/register`,
-        data: {
-          userId: credentials.userId,
-          userEmail: credentials.userEmail,
-          userPassword: credentials.userPassword,
-          userName: credentials.userName,
-          userPhone: credentials.userPhone,
-          userBod: credentials.userBod,
-        },
-      })
-        .then((res) => {
-          
-          console.log(res);
-          console.log(res.data);
-          this.login(credentials);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
   },
   getters: {},

@@ -17,7 +17,7 @@ import VoteCreate from '../views/Entertainment/VoteCreate.vue'
 import GhostLegCreate from '../views/Entertainment/GhostLegCreate.vue'
 
 import FeedCreate from '../views/Feed/FeedCreate.vue'
-// import Detail from '../views/Feed/Detail.vue'
+import Detail from '../views/Feed/Detail.vue'
 import Main from '../views/Feed/Main.vue'
 // import Update from '../views/Feed/Update.vue'
 
@@ -100,11 +100,11 @@ const routes = [
     name: 'FeedCreate',
     component: FeedCreate
   },
-  // {
-  //   path: '/detail',
-  //   name: 'Detail',
-  //   component: Detail
-  // },
+  {
+    path: '/detail',
+    name: 'Detail',
+    component: Detail
+  },
   {
     path: '/main',
     name: 'Main',
