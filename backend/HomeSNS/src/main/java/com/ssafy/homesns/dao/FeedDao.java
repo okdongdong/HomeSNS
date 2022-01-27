@@ -33,5 +33,9 @@ public interface FeedDao {
 	// feed수정,삭제
 	public List<String> feedFileUrlDeleteList(int feedId);
 	public int feedFileDelete(int feedId);
+	
+	// feed 삭제
+	// feed지우면 fk 테이블 자동삭제 cascade
+	public int feedDelete(int feedId);
 
 }

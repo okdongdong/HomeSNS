@@ -14,4 +14,6 @@ public interface FeedService {
 	public FeedResultDto feedInsert(FeedDto feedDto, MultipartHttpServletRequest request);
 	
 	public FeedResultDto feedUpdate(FeedDto feedDto, MultipartHttpServletRequest request);
+	
+	public FeedResultDto feedDelete(int feedId);
 }
