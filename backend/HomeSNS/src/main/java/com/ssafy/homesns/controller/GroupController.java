@@ -5,6 +5,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,9 +30,11 @@ public class GroupController {
 	// 현재 유저가 들어가 있는 그룹의 리스트를 가져온다
 	@GetMapping(value="/group")
 	public ResponseEntity<GroupResultDto> groupList(HttpSession session) {
-		UserDto userDto = (UserDto) session.getAttribute("userDto");
+		// Security Context에서 UserSeq를 구한다
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		int userSeq = Integer.parseInt(authentication.getName());
 		
-		GroupResultDto groupResultDto = groupService.groupList(userDto.getUserSeq());
+		GroupResultDto groupResultDto = groupService.groupList(userSeq);
 		
 		if (groupResultDto.getResult() == SUCCESS) {
 			return new ResponseEntity<GroupResultDto>(groupResultDto, HttpStatus.OK);
