@@ -1,125 +1,138 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Login from '../views/Account/Login.vue'
-import FindId from '../views/Account/FindId.vue'
-import FindPassword from '../views/Account/FindPassword.vue'
-import MyPage from '../views/Account/MyPage.vue'
-import SignUp from '../views/Account/SignUp.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Login from "../views/Account/Login.vue";
+import FindId from "../views/Account/FindId.vue";
+import FindPassword from "../views/Account/FindPassword.vue";
+import MyPage from "../views/Account/MyPage.vue";
+import SignUp from "../views/Account/SignUp.vue";
+import Background from "../views/Account/Background.vue";
 
 // import Location from '../views/Collection/Location.vue'
-import Schedule from '../views/Collection/Schedule.vue'
-import Timeline from '../views/Collection/Timeline.vue'
+import Schedule from "../views/Collection/Schedule.vue";
+import Timeline from "../views/Collection/Timeline.vue";
 
-import EntFeedList from '../views/Entertainment/EntFeedList.vue'
-import MiniGame from '../views/Entertainment/MiniGameList.vue'
-import VoteList from '../views/Entertainment/VoteList.vue'
-import VoteCreate from '../views/Entertainment/VoteCreate.vue'
-import GhostLegCreate from '../views/Entertainment/GhostLegCreate.vue'
+import EntFeedList from "../views/Entertainment/EntFeedList.vue";
+import MiniGame from "../views/Entertainment/MiniGameList.vue";
+import VoteList from "../views/Entertainment/VoteList.vue";
+import VoteCreate from "../views/Entertainment/VoteCreate.vue";
+import GhostLegCreate from "../views/Entertainment/GhostLegCreate.vue";
 
-import FeedCreate from '../views/Feed/FeedCreate.vue'
-import Detail from '../views/Feed/Detail.vue'
-import Main from '../views/Feed/Main.vue'
+import FeedCreate from "../views/Feed/FeedCreate.vue";
+import Detail from "../views/Feed/Detail.vue";
+import Main from "../views/Feed/Main.vue";
 // import Update from '../views/Feed/Update.vue'
 
-import GroupCreate from '../views/Group/GroupCreate.vue'
+import GroupCreate from "../views/Group/GroupCreate.vue";
 // import Management from '../views/Group/Management.vue'
 // import Member from '../views/Group/Member.vue'
-import Select from '../views/Group/Select.vue'
+import Select from "../views/Group/Select.vue";
 
-import UserPage from '../views/Profile/UserPage.vue'
-Vue.use(VueRouter)
+import UserPage from "../views/Profile/UserPage.vue";
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Login',
-    component: Login
+    path: "/",
+    name: "Background",
+    component: Background,
+    children: [
+      { path: "", name: "Login", component: Login },
+      {
+        path: "/findid",
+        name: "FindId",
+        component: FindId,
+      },
+      {
+        path: "/findpassword",
+        name: "FindPassword",
+        component: FindPassword,
+      },
+      {
+        path: "/signup",
+        name: "SignUp",
+        component: SignUp,
+      },
+      {
+        path: "/groupcreate",
+        name: "GroupCreate",
+        component: GroupCreate,
+      },
+      {
+        path: "/select",
+        name: "Select",
+        component: Select,
+      },
+    ],
   },
+
   {
-    path: '/findid',
-    name: 'FindId',
-    component: FindId
+    path: "/mypage",
+    name: "MyPage",
+    component: MyPage,
   },
-  {
-    path: '/findpassword',
-    name: 'FindPassword',
-    component: FindPassword
-  },
-  {
-    path: '/mypage',
-    name: 'MyPage',
-    component: MyPage
-  },
-  {
-    path: '/signup',
-    name: 'SignUp',
-    component: SignUp
-  },
+
   // {
   //   path: '/location',
   //   name: 'Location',
   //   component: Location
   // },
   {
-    path: '/schedule',
-    name: 'Schedule',
-    component: Schedule
+    path: "/schedule",
+    name: "Schedule",
+    component: Schedule,
   },
   {
-    path: '/timeline',
-    name: 'Timeline',
-    component: Timeline
+    path: "/timeline",
+    name: "Timeline",
+    component: Timeline,
   },
   {
-    path: '/EntFeed',
-    name: 'EntFeedList',
-    component: EntFeedList
+    path: "/EntFeed",
+    name: "EntFeedList",
+    component: EntFeedList,
   },
   {
-    path: '/minigame',
-    name: 'MiniGame',
-    component: MiniGame
+    path: "/minigame",
+    name: "MiniGame",
+    component: MiniGame,
   },
   {
-    path: '/votelist',
-    name: 'VoteList',
-    component: VoteList
+    path: "/votelist",
+    name: "VoteList",
+    component: VoteList,
   },
   {
-    path: '/votecreate',
-    name: 'VoteCreate',
-    component: VoteCreate
+    path: "/votecreate",
+    name: "VoteCreate",
+    component: VoteCreate,
   },
   {
-    path: '/ghostlegcreate',
-    name: 'GhostLegCreate',
-    component: GhostLegCreate
+    path: "/ghostlegcreate",
+    name: "GhostLegCreate",
+    component: GhostLegCreate,
   },
   {
-    path: '/feedcreate',
-    name: 'FeedCreate',
-    component: FeedCreate
+    path: "/feedcreate",
+    name: "FeedCreate",
+    component: FeedCreate,
   },
   {
-    path: '/detail',
-    name: 'Detail',
-    component: Detail
+    path: "/detail",
+    name: "Detail",
+    component: Detail,
   },
   {
-    path: '/main',
-    name: 'Main',
-    component: Main
+    path: "/main/:groupId",
+    name: "Main",
+    component: Main,
+    props: true,
   },
   // {
   //   path: '/update',
   //   name: 'Update',
   //   component: Update
   // },
-  {
-    path: '/groupcreate',
-    name: 'GroupCreate',
-    component: GroupCreate
-  },
+
   // {
   //   path: '/management',
   //   name: 'Management',
@@ -130,23 +143,19 @@ const routes = [
   //   name: 'Member',
   //   component: Member
   // },
+
   {
-    path: '/select',
-    name: 'Select',
-    component: Select
-  },
-  {
-    path: '/userpage/:userSeq',
-    name: 'UserPage',
+    path: "/userpage/:userSeq",
+    name: "UserPage",
     component: UserPage,
-    props:true
+    props: true,
   },
-]
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;

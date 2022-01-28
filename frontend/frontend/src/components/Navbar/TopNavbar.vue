@@ -3,11 +3,12 @@
     <v-app-bar
       color="rgb(98,101,232)"
       dark
-      absolute
+      fixed
       hide-on-scroll
-      scroll-target="#scrolling-sheet"
+      
       class="align-space-center"
       height="80px"
+      style="z-index:7;"
     >
       <img
         height="70"
@@ -144,7 +145,7 @@
         >
           <v-list-item class="my-5">
             <ProfilePhoto :size="100" :imgUrl="userImgUrl" />
-            <h1>{{ userName }}!!!!!!</h1>
+            <h1>{{ userName }}</h1>
           </v-list-item>
           <v-list-item
             @click.stop="

@@ -1,47 +1,49 @@
 <template>
-  <div class="pa-3">
-    <v-overlay :value="nowLoading">
-      <v-progress-circular
-        :size="100"
-        :width="10"
-        color="white"
-        indeterminate
-      ></v-progress-circular>
-    </v-overlay>
+  <div>
+    <div class="pa-3">
+      <v-overlay :value="nowLoading">
+        <v-progress-circular
+          :size="100"
+          :width="10"
+          color="white"
+          indeterminate
+        ></v-progress-circular>
+      </v-overlay>
 
-    <div class="justify-space-between d-flex align-center px-3">
-      <div>
-        <h1 class="d-inline-flex">{{ feed.title }}</h1>
-        <div class="d-inline-flex">
-          <v-icon>location_on</v-icon>{{ feed.location }}
+      <div class="justify-space-between d-flex align-center px-3">
+        <div>
+          <h1 class="d-inline-flex">{{ feed.title }}</h1>
+          <div class="d-inline-flex">
+            <v-icon>location_on</v-icon>{{ feed.location }}
+          </div>
+        </div>
+        <div>
+          <div>행사일 : {{ feed.eventDate }}</div>
+          <div>업로드 : {{ feed.uploadDate }}</div>
         </div>
       </div>
-      <div>
-        <div>행사일 : {{ feed.eventDate }}</div>
-        <div>업로드 : {{ feed.uploadDate }}</div>
+      <hr />
+      <div class="d-inline-flex align-center my-3">
+        <ProfilePhoto :size="50" />
+        <h3 class="mx-3">
+          {{ feed.author }}
+        </h3>
       </div>
     </div>
-    <hr />
-    <div class="d-inline-flex">
-      <ProfilePhoto :size="50" :name="feed.author" />
+    <div>
+      <!-- 사진 -->
+      <v-carousel height="400" hide-delimiter-background show-arrows-on-hover>
+        <v-carousel-item v-for="(imgUrl, i) in feed.imgUrls" :key="i">
+          <v-img :src="imgUrl" aspect-ratio="1"></v-img>
+        </v-carousel-item>
+      </v-carousel>
     </div>
-    <div class="container">
-      <div class="align-center d-inline-flex">
-        <div></div>
-      </div>
-      <v-tabs-items v-model="tab">
-        <v-tab-item v-for="imgUrl in feed.imgUrls" :key="imgUrl">
-          <v-container fluid>
-            <v-img :src="imgUrl" aspect-ratio="1"></v-img>
-          </v-container>
-        </v-tab-item>
-      </v-tabs-items>
+    <div class="pa-3">
       {{ feed.content }}
+      <Emotion />
+
+      <Comment v-for="comment in comments" :key="comment" :comment="comment" />
     </div>
-
-    <Emotion />
-
-    <Comment v-for="comment in comments" :key="comment" :comment="comment" />
   </div>
 </template>
 
@@ -68,9 +70,9 @@ export default {
     feed: {
       // 샘플 데이터
       author: "전광렬",
-      title: "난모룸",
+      title: "제목목",
       //author profile img 필요
-      content: "난 아무것도 모룸",
+      content: "하하하하하!",
       imgUrls: [
         "http://cdn.ggilbo.com/news/photo/202105/849179_678277_489.jpg",
         "http://cdn.ggilbo.com/news/photo/202105/849179_678292_441.jpg",
@@ -85,7 +87,7 @@ export default {
       {
         author: "할매",
         tag: "임시태그",
-        content: "댓글내용이비나",
+        content: "댓글내용",
         uploadDate: "2011-11-11",
       },
     ],

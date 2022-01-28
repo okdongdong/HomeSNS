@@ -17,22 +17,14 @@
     <!-- 투표내용 -->
     <h3>투표항목</h3>
     <div v-for="(voteItem, idx) in voteInfo.voteItems" :key="idx">
-      <div>
-        {{ voteItem.voteItemName }}
-        {{ voteItem.voteCnt }}
-        {{ idx }}
+      
+      <div class="d-flex justify-space-between align-center">
+        <v-text-field v-model="voteItem.voteItemName" hide-details solo clearable></v-text-field>
+      <v-btn @click.stop="voteDelItem(idx)" color="red" >항목삭제</v-btn>
       </div>
-      <v-btn @click.stop="voteDelItem(idx)">-</v-btn>
     </div>
     <div>
-      <v-text-field
-        solo
-        maxlength="30"
-        :rules="rules.voteItemRule"
-        v-model="tempVoteItem"
-        placeholder="항목추가하기"
-      />
-      <v-btn @click.stop="voteAddItem()">+</v-btn>
+      <v-btn @click.stop="voteAddItem()">항목추가</v-btn>
     </div>
     <v-btn @click.stop="voteCreate(voteInfo)">투표생성</v-btn>
   </v-app>
@@ -56,25 +48,22 @@ export default {
           !(v && v.length >= 20) || "투표제목은 20자 이상 입력할 수 없습니다.",
       ],
     },
-    tempVoteItem: null,
     voteInfo: {
       voteTitle: null,
       voteItems: [
-        { voteItemName: "aa", voteCnt: 1 },
-        { voteItemName: "abb", voteCnt: 3 },
+        { voteItemName: "항목1", voteCnt: 0 },
+        { voteItemName: "항목2", voteCnt: 0 },
+        { voteItemName: "항목3", voteCnt: 0 },
       ],
     },
   }),
   methods: {
     ...mapActions(["voteCreate"]),
     voteAddItem() {
-      if (this.tempVoteItem) {
-        this.voteInfo.voteItems.push({
-          voteItemName: this.tempVoteItem,
-          voteCnt: 0,
-        });
-        this.tempVoteItem = null;
-      }
+      this.voteInfo.voteItems.push({
+        voteItemName: `항목${this.voteInfo.voteItems.length + 1}`,
+        voteCnt: 0,
+      });
     },
     voteDelItem(idx) {
       this.voteInfo.voteItems.splice(idx, 1);

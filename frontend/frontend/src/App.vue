@@ -5,16 +5,9 @@
 
       <v-main style="max-width: 450px; width: 100%">
         <top-navbar v-if="noneNav"></top-navbar>
-        <v-sheet
-          id="scrolling-sheet"
-          class="overflow-y-auto"
-          :style="!noneNav ? 'max-height:100vh' : ''"
-        >
           <div v-if="noneNav" style="height: 80px"></div>
-          <v-sheet>
             <router-view />
-          </v-sheet>
-        </v-sheet>
+            
         <bottom-navbar v-if="noneNav"></bottom-navbar>
       </v-main>
       <div class="curtain"></div>
