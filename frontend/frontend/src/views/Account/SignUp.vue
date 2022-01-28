@@ -4,9 +4,9 @@
 
     <div class="container">
       <div class="d-flex justify-center">
-        <v-card flat color="rgb(98, 101, 232)">
+        <v-card flat color="rgb(0,0,0,0)">
           <div class="d-flex justify-center">
-            <v-img src="@/assets/logo1.png" alt="logo" max-width="200" max-height="200"> </v-img>
+            <v-img src="@/assets/logo3.png" alt="logo" max-width="200" max-height="200"> </v-img>
           </div>
           <v-card-title class="main-text justify-center font-weight-bold">우리집 SNS</v-card-title>
         </v-card>
@@ -202,7 +202,7 @@ export default {
 
 <style scoped>
 .my-background {
-  background-color: rgb(98, 101, 232);
+  background-color: rgba(0,0,0,0);
 }
 
 .form-data {

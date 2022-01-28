@@ -1,12 +1,12 @@
 <template>
-  <v-app class="box" style="background-color: rgba(98, 101, 232)">
+  <v-app class="box" style="background-color: rgba(0,0,0,0)">
     <br />
     <div class="container">
-      <v-card flat color="rgb(98, 101, 232)">
+      <v-card flat color="rgb(0,0,0,0)">
         <div class="d-flex justify-center">
           <v-img
             class="logo-img"
-            src="@/assets/logo1.png"
+            src="@/assets/logo3.png"
             alt="logo"
             max-width="200"
             max-height="200"

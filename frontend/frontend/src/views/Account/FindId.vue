@@ -3,11 +3,11 @@
     <div class="container">
       <v-card
         flat
-        color="rgb(98, 101, 232)"
+        color="rgb(0,0,0,0)"
       >
         <div class="d-flex justify-center">
           <v-img
-            src="@/assets/logo1.png" alt="logo"
+            src="@/assets/logo3.png" alt="logo"
             max-width="200"
             max-height="200"
           >
@@ -95,7 +95,7 @@ export default {
 
 <style scoped>
   .my-background {
-    background-color: rgb(98, 101, 232);
+    background-color: rgba(0,0,0,0);
   }
 
   .form-data {
