@@ -1,6 +1,7 @@
 <template>
   <v-bottom-navigation
     height="80px"
+    fixed
   >
     <v-btn @click="moveToFeed">
       <span>게시물</span>

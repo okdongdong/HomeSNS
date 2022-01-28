@@ -3,11 +3,12 @@
     <v-app-bar
       color="rgb(98,101,232)"
       dark
-      absolute
+      fixed
       hide-on-scroll
-      scroll-target="#scrolling-sheet"
+      
       class="align-space-center"
       height="80px"
+      style="z-index:7;"
     >
       <img
         height="70"

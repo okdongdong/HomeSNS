@@ -1,5 +1,5 @@
 <template>
-  <v-app class="box" style="background-color: rgba(0,0,0,0)">
+  <v-app class="box" style="background-color: rgba(0, 0, 0, 0)">
     <br />
     <div class="container">
       <v-card flat color="rgb(0,0,0,0)">
@@ -41,7 +41,7 @@
             class="group-img"
             @click="groupMainPage(group.groupId)"
           />
-          <h3 style="color: white">{{group.groupName}}</h3>
+          <h3 style="color: white">{{ group.groupName }}</h3>
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ export default {
     // 그룹 사진 클릭 시, 해당 그룹 메인페이지로 이동
     groupMainPage: function (groupId) {
       this.$store.dispatch("getMain/getMain", groupId);
-      this.$router.push({ name: "Main" });
+      this.$router.push({ name: "Main", params: { groupId: groupId } });
     },
     groupCreate: function () {
       this.$router.push({ name: "GroupCreate" });
