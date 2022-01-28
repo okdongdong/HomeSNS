@@ -1,6 +1,6 @@
 <template>
   <v-app class="box" style="background-color: rgba(0, 0, 0, 0)">
-    <br />
+    <v-spacer></v-spacer>
     <div class="container">
       <v-card flat color="rgb(0,0,0,0)">
         <div class="d-flex justify-center">
@@ -16,13 +16,13 @@
         <v-card-title class="main-text justify-center text-h4 font-weight-bold"
           >우리집SNS</v-card-title
         >
-        <br />
+        <v-spacer></v-spacer>
       </v-card>
     </div>
     <div class="container d-flex">
       <!-- 그룹 추가하는 곳 -->
-      <div class="row">
-        <div class="col-6">
+      <v-row class="ma-1">
+        <v-col class="pa-5" cols="6">
           <v-img
             aspect-ratio="1"
             src="@/assets/group_add.png"
@@ -30,10 +30,10 @@
             class="group-img"
             @click="groupCreate"
           />
-          <h3>그룹 추가</h3>
-        </div>
+          <h3 style="margin-top : 8px;">그룹 추가</h3>
+        </v-col>
         <!-- data받아오면 for문으로 돌리기 -->
-        <div class="col-6" v-for="group in groups" :key="group">
+        <v-col class="pa-5" cols="6" v-for="(group,i) in groups" :key="i">
           <v-img
             aspect-ratio="1"
             :src="group.groupImgUrl"
@@ -41,10 +41,12 @@
             class="group-img"
             @click="groupMainPage(group.groupId)"
           />
-          <h3 style="color: white">{{ group.groupName }}</h3>
-        </div>
-      </div>
+          <h3 style="color: white; margin-top : 8px;">{{ group.groupName }}</h3>
+        </v-col>
+      </v-row>
     </div>
+    <v-spacer></v-spacer>
+    <v-spacer></v-spacer>
   </v-app>
 </template>
 
