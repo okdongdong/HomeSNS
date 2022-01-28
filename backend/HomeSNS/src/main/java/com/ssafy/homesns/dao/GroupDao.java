@@ -13,8 +13,10 @@ public interface GroupDao {
 	public List<GroupDto> groupList(int userSeq);
 	// 특정 유저가 참여하고 있는 그룹의 수
 	public int groupListTotalCount();
+	
 	// 그룹 생성
 	public int groupCreate(GroupDto groupDto);
+	
 	// 그룹 나가기
 	public int groupDelete(GroupMemberDto groupMembetDto);
 	

@@ -265,5 +265,30 @@ public class FeedServiceImpl implements FeedService {
 		return feedResultDto;
 	}
 
+	@Override
+	public FeedResultDto feedDelete(int feedId) {
+		
+		FeedResultDto feedResultDto = new FeedResultDto();
+		
+		// file찾아서 지우기 
+		List<String> fileUrlList = feedDao.feedFileUrlDeleteList(feedId);	
+		for(String fileUrl : fileUrlList) {	
+			File file = new File(uploadPath + File.separator, fileUrl);
+			if(file.exists()) {
+				file.delete();
+			}
+		}
+	    
+		// feed지우면 file,hashtag,comment등등 fk 다 지워짐
+		if ( feedDao.feedDelete(feedId) == 1 ) {
+			feedResultDto.setResult(SUCCESS);
+		} else {
+			feedResultDto.setResult(FAIL);
+		}
+		
+		
+		return feedResultDto;
+	}
+
 
 }
