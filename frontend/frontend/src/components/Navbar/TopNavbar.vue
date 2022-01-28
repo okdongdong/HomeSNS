@@ -144,7 +144,7 @@
         >
           <v-list-item class="my-5">
             <ProfilePhoto :size="100" :imgUrl="userImgUrl" />
-            <h1>{{ userName }}!!!!!!</h1>
+            <h1>{{ userName }}</h1>
           </v-list-item>
           <v-list-item
             @click.stop="

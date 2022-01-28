@@ -77,7 +77,9 @@
             rounded
             color="black"
             class="mr-4 my-2"
-            @click.stop="move('Login')"
+            @click.stop="
+              $router.push({ name: 'UserPage', params: { userSeq: userSeq } })
+            "
             width="100%"
           >
             취소
@@ -89,7 +91,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "MyPage",
@@ -128,9 +130,9 @@ export default {
     validate() {
       this.$refs.form.validate();
     },
-    move(name) {
-      this.$router.push({ name: name });
-    },
+  },
+  computed: {
+    ...mapState("account", ["userSeq"]),
   },
 };
 </script>
@@ -140,12 +142,12 @@ export default {
   background-color: rgb(98, 101, 232);
 }
 
-  .form-data {
-    width: 80%;
-  }
+.form-data {
+  width: 80%;
+}
 
-  .main-text {
-    /* color: #fff !important; */
-    font-size: 30px;
-  }
+.main-text {
+  /* color: #fff !important; */
+  font-size: 30px;
+}
 </style>

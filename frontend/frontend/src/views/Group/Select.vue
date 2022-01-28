@@ -23,36 +23,25 @@
       <!-- 그룹 추가하는 곳 -->
       <div class="row">
         <div class="col-6">
-          <img
-            src="@/assets/test1.png"
-            alt="로고 사진입니다."
+          <v-img
+            aspect-ratio="1"
+            src="@/assets/group_add.png"
+            alt="그룹 사진입니다."
             class="group-img"
             @click="groupCreate"
           />
           <h3>그룹 추가</h3>
         </div>
         <!-- data받아오면 for문으로 돌리기 -->
-        <!-- <div class="col-6" v-for="" :key="">
-                    <img :src="${}" alt="그룹 사진입니다." class="group-img" @click="groupMainPage(그룹아이디넣기)">
-                    <h3 style="color:white">{{}}</h3>
-                </div> -->
-        <div class="col-6">
-          <img
-            src="@/assets/logo2.png"
+        <div class="col-6" v-for="group in groups" :key="group">
+          <v-img
+            aspect-ratio="1"
+            :src="group.groupImgUrl"
             alt="그룹 사진입니다."
             class="group-img"
-            @click.stop="$router.push({ name: 'Main' })"
+            @click="groupMainPage(group.groupId)"
           />
-          <h3>우가우가</h3>
-        </div>
-        <div class="col-6">
-          <img
-            src="@/assets/logo2.png"
-            alt="그룹 사진입니다."
-            class="group-img"
-            @click.stop="$router.push({ name: 'Main' })"
-          />
-          <h3>우가우가</h3>
+          <h3 style="color: white">{{group.groupName}}</h3>
         </div>
       </div>
     </div>
@@ -68,7 +57,16 @@ export default {
     return {
       groups: [
         {
-          groupId: null,
+          groupId: 1,
+          groupName: "호박고구마",
+          groupImgUrl:
+            "https://img3.yna.co.kr/etc/inner/KR/2021/08/17/AKR20210817124900005_01_i_P4.jpg",
+        },
+        {
+          groupId: 2,
+          groupName: "부리부리",
+          groupImgUrl:
+            "https://mblogthumb-phinf.pstatic.net/20151011_285/samadare_144450208049276Fwd_PNG/%C2%AF%B1%B8%BF%E8.png?type=w2",
         },
       ],
     };
@@ -82,7 +80,7 @@ export default {
         method: "GET",
         url: `${process.env.VUE_APP_MCS_URL}/group`,
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: token,
         },
       })
         .then((res) => {
@@ -115,8 +113,6 @@ export default {
   text-align: center;
 }
 .group-img {
-  height: 80%;
-  width: 70%;
   object-fit: cover;
   border: 4px solid white;
   border-radius: 20%;
