@@ -5,6 +5,7 @@ import FindId from "../views/Account/FindId.vue";
 import FindPassword from "../views/Account/FindPassword.vue";
 import MyPage from "../views/Account/MyPage.vue";
 import SignUp from "../views/Account/SignUp.vue";
+import Background from "../views/Account/Background.vue";
 
 // import Location from '../views/Collection/Location.vue'
 import Schedule from "../views/Collection/Schedule.vue";
@@ -32,29 +33,44 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Login",
-    component: Login,
+    name: "Background",
+    component: Background,
+    children: [
+      { path: "", name: "Login", component: Login },
+      {
+        path: "/findid",
+        name: "FindId",
+        component: FindId,
+      },
+      {
+        path: "/findpassword",
+        name: "FindPassword",
+        component: FindPassword,
+      },
+      {
+        path: "/signup",
+        name: "SignUp",
+        component: SignUp,
+      },
+      {
+        path: "/groupcreate",
+        name: "GroupCreate",
+        component: GroupCreate,
+      },
+      {
+        path: "/select",
+        name: "Select",
+        component: Select,
+      },
+    ],
   },
-  {
-    path: "/findid",
-    name: "FindId",
-    component: FindId,
-  },
-  {
-    path: "/findpassword",
-    name: "FindPassword",
-    component: FindPassword,
-  },
+
   {
     path: "/mypage",
     name: "MyPage",
     component: MyPage,
   },
-  {
-    path: "/signup",
-    name: "SignUp",
-    component: SignUp,
-  },
+
   // {
   //   path: '/location',
   //   name: 'Location',
@@ -116,11 +132,7 @@ const routes = [
   //   name: 'Update',
   //   component: Update
   // },
-  {
-    path: "/groupcreate",
-    name: "GroupCreate",
-    component: GroupCreate,
-  },
+
   // {
   //   path: '/management',
   //   name: 'Management',
@@ -131,11 +143,7 @@ const routes = [
   //   name: 'Member',
   //   component: Member
   // },
-  {
-    path: "/select",
-    name: "Select",
-    component: Select,
-  },
+
   {
     path: "/userpage/:userSeq",
     name: "UserPage",

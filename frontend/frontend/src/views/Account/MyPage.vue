@@ -139,7 +139,7 @@ export default {
 
 <style scoped>
 .my-background {
-  background-color: rgb(98, 101, 232);
+  background-color: rgba(0,0,0,0);
 }
 
 .form-data {
