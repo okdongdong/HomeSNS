@@ -16,6 +16,7 @@
               :lazy-src="`https://picsum.photos/200/300`"
               aspect-ratio="1"
               class="grey lighten-2"
+              @click.stop="$router.push({name:'Detail'})"
             >
               <template v-slot:placeholder>
                 <v-row

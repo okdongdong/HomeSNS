@@ -153,9 +153,9 @@ animation: AnimationName 2s ease infinite; */
 }
 .my-background {
   color: #fff;
-  background: linear-gradient(-45deg, #ee7752,#1d94c0, #c276f5, #23d5ab);
-  background-size: 800% 800%;
-  animation: AnimationName 8s ease infinite;
+  background: linear-gradient(-45deg, #1d94c0, #ab67d8, #6265e8, #1d94c0,#ab67d8, #23d5ab);
+  background-size: 400% 400%;
+  animation: AnimationName 16s ease infinite;
   width: 100%;
   height: 100vh;
   display: flex;

@@ -6,8 +6,9 @@ const account = {
   state: {
     // 샘플 데이터
     userSeq: 5,
-    userName: "부와아아앜",
-    userImgUrl: "https://pbs.twimg.com/media/CLVCqrsVEAAe9oo.jpg",
+    userName: "김영철",
+    userImgUrl:
+      "https://image.ajunews.com/content/image/2016/12/26/20161226142046950664.jpg",
     userGroups: [1, 2, 3],
     nowUserGroup: 1,
     isLogin: localStorage.getItem("jwt") ? true : false,
@@ -15,6 +16,10 @@ const account = {
   mutations: {
     LOGIN: function (state, res) {
       state.isLogin = true;
+      // state.userSeq = 5;
+      // state.userName = "김영철";
+      // state.userImgUrl =
+      //   "https://image.ajunews.com/content/image/2016/12/26/20161226142046950664.jpg";
       state.userSeq = res.data.userSeq;
       state.userName = res.data.userName;
       state.userImgUrl = res.data.userProfileImageUrl;
@@ -28,6 +33,9 @@ const account = {
       state.userGroups = null;
       state.nowUserGroup = null;
     },
+    SET_NOW_GROUP: function (state, groupId) {
+      state.nowUserGroup = groupId;
+    },
   },
   actions: {
     login: function ({ commit }, credentials) {
@@ -39,11 +47,10 @@ const account = {
         data: credentials,
       })
         .then((res) => {
-          localStorage.setItem("jwt", res.data.token);
-          commit("LOGIN", res);
+          localStorage.setItem("jwt", res.headers.authorization);
           console.log(res);
-          console.log(res.data);
-          router.push({name:"Select"})
+          commit("LOGIN", res);
+          router.push({ name: "Select" });
         })
         .catch((err) => {
           console.log(err);
@@ -51,8 +58,17 @@ const account = {
     },
     logout: function ({ commit }) {
       localStorage.removeItem("jwt");
-      router.push({name:"Login"})
+      router.push({ name: "Login" });
       commit("LOGOUT");
+    },
+    setNowGroup: function ({ commit }, groupId) {
+      commit("SET_NOW_GROUP", groupId);
+      router.push({
+        name: "Main",
+        parmas: {
+          groupId: groupId,
+        },
+      });
     },
   },
   getters: {},
