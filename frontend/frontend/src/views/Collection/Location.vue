@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'S06p12e205Location',
+  name: 'Location',
 
   data() {
     return {
