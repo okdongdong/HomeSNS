@@ -1,5 +1,6 @@
 <template>
-  <v-app class="my-background">
+  <v-app class="my-background"
+  ><v-spacer></v-spacer>
     <div class="container">
       <v-card
         flat
@@ -74,6 +75,7 @@
         </v-form>
       </v-row>
     </div>
+    <v-spacer></v-spacer>
   </v-app>
 </template>
 

@@ -6,14 +6,14 @@
       <div class="d-flex justify-center">
         <v-card flat color="rgb(0,0,0,0)">
           <div class="d-flex justify-center">
-            <v-img src="@/assets/logo3.png" alt="logo" max-width="200" max-height="200"> </v-img>
+            <v-img src="@/assets/logo3.png" alt="logo" max-width="150" max-height="150"> </v-img>
           </div>
           <v-card-title class="main-text justify-center font-weight-bold">우리집 SNS</v-card-title>
         </v-card>
       </div>
       <br />
       <v-row justify="center">
-        <v-form class="form-data" ref="form" v-model="valid" lazy-validation>
+        <v-form class="form-data" ref="form" v-model="valid" lazy-validation >
           <!-- 아이디 -->
           <v-text-field
             clearable
@@ -111,7 +111,6 @@
         </v-form>
       </v-row>
     </div>
-    <v-spacer></v-spacer>
     <v-spacer></v-spacer>
   </v-app>
 </template>
