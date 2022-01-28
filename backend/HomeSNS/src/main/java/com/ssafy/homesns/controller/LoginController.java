@@ -1,5 +1,11 @@
 package com.ssafy.homesns.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +23,7 @@ import com.ssafy.homesns.dto.LoginDto;
 import com.ssafy.homesns.dto.TokenDto;
 import com.ssafy.homesns.jwt.JwtFilter;
 import com.ssafy.homesns.jwt.TokenProvider;
+import com.ssafy.homesns.service.CustomUserDetailsService;
 
 @CrossOrigin(
 		origins = "http://localhost:5500", // npm에서 5500번을 사용한다
@@ -26,6 +33,10 @@ import com.ssafy.homesns.jwt.TokenProvider;
 				RequestMethod.DELETE, RequestMethod.HEAD, RequestMethod.OPTIONS })
 @RestController
 public class LoginController {
+	
+	@Autowired
+	CustomUserDetailsService service;
+	
 	private final TokenProvider tokenProvider;
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
@@ -35,7 +46,7 @@ public class LoginController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<TokenDto> authorize(@RequestBody LoginDto loginDto) {
+	public ResponseEntity<List<Map<String, Object>>> authorize(@RequestBody LoginDto loginDto) {
 		System.out.println("Enter /login API");
 		// userId, userPassword를 파라미터로 받아서 UsernamePasswordAuthenticationToken을 생성한다
 		UsernamePasswordAuthenticationToken authenticationToken =
@@ -51,8 +62,8 @@ public class LoginController {
 		
 		// 결과값으로 객체를 생성하고 SecurityContext에 저장한다
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		System.out.println("authentication : " + authentication);	
-
+		System.out.println("authentication : " + authentication);
+		
 		// 인증정보를 기준으로 tokenProvider의 createToken을 통해서 JWT토큰을 생성한다
 		String jwt = tokenProvider.createToken(authentication);
 		System.out.println("jwt : " + jwt);
@@ -64,8 +75,18 @@ public class LoginController {
 		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 		System.out.println("httpHeaders : " + httpHeaders);
 
-		// ResponseBody에도 넣어준다
-		return new ResponseEntity<TokenDto>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
+		// List와 Map을 이용해서 토큰과 유저정보를 함께 전송한다
+		List<Map<String, Object>> result = new ArrayList<>();
+
+		Map<String, Object> token = new HashMap<>();
+		token.put("Token", new TokenDto(jwt).getToken());
+		Map<String, Object> user = new HashMap<>();
+		user.put("UserInfo", service.getUserInfo(loginDto.getUserId()));
+
+		result.add(token);
+		result.add(user);
+		
+		return new ResponseEntity<>(result, httpHeaders, HttpStatus.OK);
 	}
 	
 	// test 용도

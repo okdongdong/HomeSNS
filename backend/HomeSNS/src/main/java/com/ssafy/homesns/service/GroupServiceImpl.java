@@ -21,6 +21,7 @@ public class GroupServiceImpl implements GroupService{
 	private static final int FAIL = -1;
 	
 	@Override
+	@Transactional
 	public GroupResultDto groupList(int userSeq) {
 		
 		GroupResultDto groupResultDto = new GroupResultDto();
@@ -31,6 +32,7 @@ public class GroupServiceImpl implements GroupService{
 			
 			groupResultDto.setGroupDtoList(list);
 			groupResultDto.setCount(count);
+			groupResultDto.setResult(SUCCESS);
 		} catch(Exception e) {
 			e.printStackTrace();
 			groupResultDto.setResult(FAIL);
