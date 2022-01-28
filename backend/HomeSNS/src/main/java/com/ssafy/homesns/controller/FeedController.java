@@ -83,18 +83,18 @@ public class FeedController {
 	}
 	
 	
-	//sdfsdf
+	
 	// feed 삭제
-//	@DeleteMapping(value="/feed/{feedId}")
-//	public ResponseEntity<FeedResultDto> feedDelete(@PathVariable int feedId){
-//		
-//		FeedResultDto feedResultDto = feedService.feedDelete(feedId);
-//		
-//		if( feedResultDto.getResult() == SUCCESS ) {
-//			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);
-//		}else {
-//			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
-//		}		
-//	}
+	@DeleteMapping(value="/feed/{feedId}")
+	public ResponseEntity<FeedResultDto> feedDelete(@PathVariable int feedId){
+		
+		FeedResultDto feedResultDto = feedService.feedDelete(feedId);
+		
+		if( feedResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+		}		
+	}
 	
 }

@@ -1,6 +1,7 @@
 package com.ssafy.homesns.dto;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -12,12 +13,29 @@ public class CustomUserDetails implements UserDetails{
 
 	private String ID;
 	private String PASSWORD;
-	// 여러 권한이 있으면, 모두 담아서 set으로 표현?
 	private String AUTHORITY;	
-	// ENABELD는 그냥 True를 리턴하는 형태로 만들었음 - 계정이 살아있는지에 대한 여부를 표현
+	// ENABELD는 그냥 True를 리턴하는 형태로 만들었음 - 계정이 살아있는지에 대한 여부를 표현?
 	private boolean ENABLED;
-	private String NAME;
+
+	private int userSeq;
+	private String userCls;
 	
+	public String getUserCls() {
+		return userCls;
+	}
+
+	public void setUserCls(String userCls) {
+		this.userCls = userCls;
+	}
+
+	public int getUserSeq() {
+		return userSeq;
+	}
+
+	public void setUserSeq(int userSeq) {
+		this.userSeq = userSeq;
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		ArrayList<GrantedAuthority> auth = new ArrayList<GrantedAuthority>();
@@ -53,14 +71,6 @@ public class CustomUserDetails implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		return true;
-	}
-
-	public String getNAME() {
-		return NAME;
-	}
-
-	public void setNAME(String NAME) {
-		this.NAME = NAME;
 	}
 	
 }

@@ -98,7 +98,11 @@
 	
 	
 	<!-- 피드 삭제 -->
-
+	<!-- cascade설정으로 딸려있는 fk 자동삭제 -->
+	<delete id="feedDelete" parameterType="int">
+		DELETE FROM HOME_SNS.FEED
+		 WHERE FEED_ID = #{feedId}
+	</delete>
 	
 	
 	
