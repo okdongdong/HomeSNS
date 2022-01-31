@@ -132,7 +132,7 @@ export default {
       axios({
         method: "get",
         url: `${process.env.VUE_APP_MCS_URL}/ghostleg`,
-        headers: { Authorization: `JWT ${token}` },
+        headers: { Authorization: `${token}` },
         params: params,
       })
         .then((res) => {
