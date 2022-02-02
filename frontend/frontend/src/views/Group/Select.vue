@@ -33,7 +33,7 @@
           <h3>그룹 추가</h3>
         </div>
         <!-- data받아오면 for문으로 돌리기 -->
-        <div class="col-6" v-for="group in groups" :key="group">
+        <div class="col-6" v-for="group in groups" :key="group.groupId">
           <v-img
             aspect-ratio="1"
             :src="group.groupImgUrl"
@@ -80,7 +80,7 @@ export default {
         method: "GET",
         url: `${process.env.VUE_APP_MCS_URL}/group`,
         headers: {
-          Authorization: token,
+          Authorization: `${token}`,
         },
       })
         .then((res) => {
@@ -89,10 +89,12 @@ export default {
         })
         .catch((err) => {
           console.log(err);
+          console.log("234");
         });
     },
     // 그룹 사진 클릭 시, 해당 그룹 메인페이지로 이동
     groupMainPage: function (groupId) {
+      console.log(groupId)
       this.$store.dispatch("getMain/getMain", groupId);
       this.$router.push({ name: "Main", params: { groupId: groupId } });
     },

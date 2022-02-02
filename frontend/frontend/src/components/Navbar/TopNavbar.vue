@@ -5,10 +5,12 @@
       dark
       fixed
       hide-on-scroll
-      
-      class="align-space-center"
+      max-width="450px"
+      width="100%"
+      class="align-space-center my-bar"
       height="80px"
-      style="z-index:7;"
+      style="z-index: 7"
+      :style="!nowMobile ? 'left :calc((100% - 450px) / 2)' : ''"
     >
       <img
         height="70"
@@ -144,7 +146,7 @@
           active-class="deep-purple--text text--accent-4"
         >
           <v-list-item class="my-5">
-            <ProfilePhoto :size="100" :imgUrl="userImgUrl" />
+            <ProfilePhoto :size="100" :imgUrl="userImgUrl" :userSeq="userSeq" />
             <h1>{{ userName }}</h1>
           </v-list-item>
           <v-list-item
@@ -231,6 +233,13 @@ export default {
   },
   computed: {
     ...mapState("account", ["userSeq", "userImgUrl", "userName"]),
+    nowMobile() {
+      if (window.innerWidth < 450) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
 };
 </script>
@@ -238,5 +247,8 @@ export default {
 <style scoped>
 .drawer-position {
   right: calc((100vw - 480px) / 2);
+}
+.my-bar {
+  left: calc((100vw - 450px) / 2);
 }
 </style>

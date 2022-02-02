@@ -51,9 +51,6 @@ export default {
 #app {
   font-family: "Gowun Dodum", sans-serif;
 }
-#scrolling-sheet {
-  max-height: calc(100vh - 80px);
-}
 .curtain {
   width: calc((100vw - 450px) / 2);
   background-color: rgb(50, 52, 121);
