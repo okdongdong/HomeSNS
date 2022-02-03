@@ -1,5 +1,6 @@
 <template>
   <v-app class="my-background">
+    <v-spacer></v-spacer>
     <div class="container">
       <v-card flat color="rgb(0,0,0,0)">
         <div class="d-flex justify-center">
@@ -15,7 +16,7 @@
         <v-card-title class="main-text justify-center text-h4 font-weight-bold"
           >그룹 생성</v-card-title
         >
-        <br />
+        <v-spacer></v-spacer>
       </v-card>
     </div>
     <div class="container">
@@ -81,6 +82,8 @@
         </v-form>
       </v-row>
     </div>
+    <v-spacer></v-spacer>
+    <v-spacer></v-spacer>
   </v-app>
 </template>
 
@@ -122,8 +125,8 @@ export default {
         url: `${process.env.VUE_APP_MCS_URL}/group`,
         data: data,
         headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `${token}`,
+          "content-type": "multipart/form-data",
+          Authorization: `JWT ${token}`,
         },
       }).then(() => {
         this.$router.push({ name: "Select" });
