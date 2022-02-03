@@ -15,7 +15,7 @@
 		<mapper resource="mapper/login_query.xml" />
 		<mapper resource="mapper/user_query.xml" />
 		<mapper resource="mapper/feed_query.xml" />
-		
+		<mapper resource="mapper/group_query.xml" />
 	</mappers>
 	
 </configuration>
