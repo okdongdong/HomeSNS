@@ -125,8 +125,8 @@ export default {
         url: `${process.env.VUE_APP_MCS_URL}/group`,
         data: data,
         headers: {
-          "content-type": "multipart/form-data",
-          Authorization: `JWT ${token}`,
+          "Content-Type": "multipart/form-data",
+          Authorization: `${token}`,
         },
       }).then(() => {
         this.$router.push({ name: "Select" });
