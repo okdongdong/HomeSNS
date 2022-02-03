@@ -58,7 +58,7 @@
 	<insert id="feedInsert" parameterType="com.ssafy.homesns.dto.FeedDto" useGeneratedKeys="true" keyProperty="feedId">
 		
 		INSERT INTO FEED ( GROUP_ID , FEED_AUTHOR, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION )
-		            VALUES ( #{groupId}, #{author},  #{title},  #{content}, now(), #{eventDate} , #{location} )
+		            VALUES ( #{groupId}, #{feedAuthor},  #{feedTitle},  #{feedContent}, now(), #{feedEventDate} , #{feedLocation} )
 	</insert>
 	
 	<insert id="feedFileInsert" parameterType="com.ssafy.homesns.dto.FileDto">
@@ -69,7 +69,7 @@
 
 	<insert id="feedHashtagInsert" parameterType="com.ssafy.homesns.dto.HashtagDto">
 		INSERT INTO HASHTAG ( FEED_ID, HASHTAG_CONTENT )
-		            VALUES ( #{feedId}, #{content})
+		            VALUES ( #{feedId}, #{hashtagContent})
 	</insert>
 
 	<!-- 피드 수정 -->

@@ -1,17 +1,24 @@
 package com.ssafy.homesns.dto;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class FeedDto {
 	
 	private int feedId;
 	private int groupId;
+	private int feedAuthorSeq;
 	private String feedAuthor;
 	private String feedTitle; 
 	private String feedContent;
 	private Date feedUploadDate;
-	private Date feedEventDate;
+	
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate feedEventDate;
+    
 	private String feedLocation;
 	
 	private int good;
@@ -35,6 +42,15 @@ public class FeedDto {
 	}
 	public void setGroupId(int groupId) {
 		this.groupId = groupId;
+	}
+	
+
+	
+	public int getFeedAuthorSeq() {
+		return feedAuthorSeq;
+	}
+	public void setFeedAuthorSeq(int feedAuthorSeq) {
+		this.feedAuthorSeq = feedAuthorSeq;
 	}
 	public String getFeedAuthor() {
 		return feedAuthor;
@@ -60,10 +76,10 @@ public class FeedDto {
 	public void setFeedUploadDate(Date feedUploadDate) {
 		this.feedUploadDate = feedUploadDate;
 	}
-	public Date getFeedEventDate() {
+	public LocalDate getFeedEventDate() {
 		return feedEventDate;
 	}
-	public void setFeedEventDate(Date feedEventDate) {
+	public void setFeedEventDate(LocalDate feedEventDate) {
 		this.feedEventDate = feedEventDate;
 	}
 	public String getFeedLocation() {

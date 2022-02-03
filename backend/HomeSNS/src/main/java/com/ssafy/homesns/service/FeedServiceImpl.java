@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -37,14 +38,11 @@ public class FeedServiceImpl implements FeedService {
 	// F:\SSAFY\ssafy5\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\BoardWebFileUpload\
 	
 	/* for eclipse development code */
-	String uploadPath = "C:" + File.separator + "SSAFY" + File.separator + "ssafy6_sts3_boot_live" 
-			+ File.separator + "fianlSpringBootVue" 
-			+ File.separator + "src" 
-			+ File.separator + "main"
-			+ File.separator + "resources"
-			+ File.separator + "static";
+	String uploadPath = "/Users" + File.separator + "sac" + File.separator + "ssafy" + File.separator + "2nd";
 
-	
+
+
+
 	private static final int SUCCESS = 1;
 	private static final int FAIL = -1;
 	
@@ -131,6 +129,7 @@ public class FeedServiceImpl implements FeedService {
 	// file List 추가
 	
 	@Override
+	@Transactional
 	public FeedResultDto feedInsert(FeedDto feedDto, MultipartHttpServletRequest request) {
 		
 		FeedResultDto feedResultDto = new FeedResultDto();
@@ -140,6 +139,7 @@ public class FeedServiceImpl implements FeedService {
 			//feed table 추가
 			feedDao.feedInsert(feedDto);
 			int feedId = feedDto.getFeedId();
+			System.out.println(feedDto);
 
 			// hashtag 추가 
 			List<HashtagDto> hashtagDtoList = feedDto.getHashtagList();
@@ -149,11 +149,10 @@ public class FeedServiceImpl implements FeedService {
 				feedDao.feedHashtagInsert(hashtagDto);
 			}
 			
-			
 			List<MultipartFile> fileList = request.getFiles("file");
-			
 			File uploadDir = new File(uploadPath + File.separator + uploadFolder);
 			if (!uploadDir.exists()) uploadDir.mkdir();
+
 	
 			for (MultipartFile part : fileList) {
 	
