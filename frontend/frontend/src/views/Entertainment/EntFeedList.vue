@@ -78,6 +78,7 @@ export default {
           voteId: 1,
           title: "12312312312",
           author: "작성자",
+          authorId: 2,
           authorPicUrl:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVxb9s4l1TQIf3ZGk-aajm_mSgC8oqx4jmCQ&usqp=CAU",
           createdAt: "2020.02.02",
@@ -132,7 +133,7 @@ export default {
       axios({
         method: "get",
         url: `${process.env.VUE_APP_MCS_URL}/ghostleg`,
-        headers: { Authorization: `JWT ${token}` },
+        headers: { Authorization: `${token}` },
         params: params,
       })
         .then((res) => {
