@@ -9,8 +9,8 @@
       width="100%"
       class="align-space-center my-bar"
       height="80px"
-      style="z-index: 7"
-      :style="!nowMobile ? 'left :calc((100% - 450px) / 2)' : ''"
+      style="z-index: 7; left :calc(max(((100% - 450px) / 2), 0px))"
+      
     >
       <img
         height="70"
