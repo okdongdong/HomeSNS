@@ -23,7 +23,7 @@ const account = {
       state.userSeq = res.data.userSeq;
       state.userName = res.data.userName;
       state.userImgUrl = res.data.userProfileImageUrl;
-      state.userGroups = res.data.userGroups;
+      state.userGroups = res.data.userSeq;
     },
     LOGOUT: function (state) {
       state.isLogin = false;

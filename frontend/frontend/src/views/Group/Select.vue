@@ -55,20 +55,7 @@ export default {
 
   data() {
     return {
-      groups: [
-        {
-          groupId: 1,
-          groupName: "호박고구마",
-          groupImgUrl:
-            "https://img3.yna.co.kr/etc/inner/KR/2021/08/17/AKR20210817124900005_01_i_P4.jpg",
-        },
-        {
-          groupId: 2,
-          groupName: "부리부리",
-          groupImgUrl:
-            "https://mblogthumb-phinf.pstatic.net/20151011_285/samadare_144450208049276Fwd_PNG/%C2%AF%B1%B8%BF%E8.png?type=w2",
-        },
-      ],
+      groups: [],
     };
   },
 
@@ -80,10 +67,11 @@ export default {
         method: "GET",
         url: `${process.env.VUE_APP_MCS_URL}/group`,
         headers: {
-          Authorization: `${token}`,
+          Authorization: token,
         },
       })
         .then((res) => {
+          this.groups = res.data.groupDtoList
           console.log(res);
           console.log("123");
         })
@@ -95,7 +83,7 @@ export default {
     // 그룹 사진 클릭 시, 해당 그룹 메인페이지로 이동
     groupMainPage: function (groupId) {
       console.log(groupId)
-      this.$store.dispatch("getMain/getMain", groupId);
+      this.$store.dispatch("account/setNowGroup", groupId);
       this.$router.push({ name: "Main", params: { groupId: groupId } });
     },
     groupCreate: function () {
