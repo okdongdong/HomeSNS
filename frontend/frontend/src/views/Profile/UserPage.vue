@@ -7,7 +7,7 @@
     <h2 class="text-center">{{ userInfo.name }}</h2>
     <v-btn
       v-if="mySeq == userSeq"
-      rounded="xl"
+      rounded
       color="green"
       @click.stop="$router.push({ name: 'MyPage' })"
       >정보수정</v-btn
@@ -26,9 +26,9 @@
       </v-toolbar>
 
       <v-tabs-items v-model="tab">
-        <v-tab-item v-for="feeds in contents" :key="feeds">
+        <v-tab-item v-for="(feeds,idx) in contents" :key="idx">
           <v-row class="ma-1">
-            <v-col cols="4" v-for="feed in feeds" :key="feed">
+            <v-col cols="4" v-for="feed in feeds" :key="feed.id">
               <v-card
                 width="150"
                 height="120"
@@ -42,8 +42,8 @@
                   alt="피드사진"
                   @click.stop="
                     $router.push({
-                      name: 'FeedDetail',
-                      params: { feedId: this.feed.Id },
+                      name: 'Detail',
+                      params: { feedId: feed.Id },
                     })
                   "
                 />
@@ -64,7 +64,7 @@ import ProfilePhoto from "../../components/ProfilePhoto.vue";
 export default {
   name: "UserPage",
   props: {
-    userSeq: Number,
+    userSeq: String,
   },
   components: {
     ProfilePhoto,
@@ -83,60 +83,11 @@ export default {
               "http://ojsfile.ohmynews.com/STD_IMG_FILE/2022/0106/IE002921895_STD.jpg",
           },
           {
-            id: 1,
+            id: 2,
             imgUrl:
               "http://ojsfile.ohmynews.com/STD_IMG_FILE/2022/0106/IE002921895_STD.jpg",
           },
-          {
-            id: 1,
-            imgUrl:
-              "http://ojsfile.ohmynews.com/STD_IMG_FILE/2022/0106/IE002921895_STD.jpg",
-          },
-          {
-            id: 1,
-            imgUrl:
-              "http://ojsfile.ohmynews.com/STD_IMG_FILE/2022/0106/IE002921895_STD.jpg",
-          },
-          {
-            id: 1,
-            imgUrl:
-              "http://ojsfile.ohmynews.com/STD_IMG_FILE/2022/0106/IE002921895_STD.jpg",
-          },
-          {
-            id: 1,
-            imgUrl:
-              "http://ojsfile.ohmynews.com/STD_IMG_FILE/2022/0106/IE002921895_STD.jpg",
-          },
-          {
-            id: 1,
-            imgUrl:
-              "http://ojsfile.ohmynews.com/STD_IMG_FILE/2022/0106/IE002921895_STD.jpg",
-          },
-          {
-            id: 1,
-            imgUrl:
-              "http://ojsfile.ohmynews.com/STD_IMG_FILE/2022/0106/IE002921895_STD.jpg",
-          },
-          {
-            id: 1,
-            imgUrl:
-              "http://ojsfile.ohmynews.com/STD_IMG_FILE/2022/0106/IE002921895_STD.jpg",
-          },
-          {
-            id: 1,
-            imgUrl:
-              "http://ojsfile.ohmynews.com/STD_IMG_FILE/2022/0106/IE002921895_STD.jpg",
-          },
-          {
-            id: 1,
-            imgUrl:
-              "http://ojsfile.ohmynews.com/STD_IMG_FILE/2022/0106/IE002921895_STD.jpg",
-          },
-          {
-            id: 1,
-            imgUrl:
-              "http://ojsfile.ohmynews.com/STD_IMG_FILE/2022/0106/IE002921895_STD.jpg",
-          },
+          
         ],
         scraps: [
           {
@@ -144,49 +95,10 @@ export default {
             imgUrl: "https://t1.daumcdn.net/cfile/tistory/99E88C335A33A50433",
           },
           {
-            id: 1,
+            id: 2,
             imgUrl: "https://t1.daumcdn.net/cfile/tistory/99E88C335A33A50433",
           },
-          {
-            id: 1,
-            imgUrl: "https://t1.daumcdn.net/cfile/tistory/99E88C335A33A50433",
-          },
-          {
-            id: 1,
-            imgUrl: "https://t1.daumcdn.net/cfile/tistory/99E88C335A33A50433",
-          },
-          {
-            id: 1,
-            imgUrl: "https://t1.daumcdn.net/cfile/tistory/99E88C335A33A50433",
-          },
-          {
-            id: 1,
-            imgUrl: "https://t1.daumcdn.net/cfile/tistory/99E88C335A33A50433",
-          },
-          {
-            id: 1,
-            imgUrl: "https://t1.daumcdn.net/cfile/tistory/99E88C335A33A50433",
-          },
-          {
-            id: 1,
-            imgUrl: "https://t1.daumcdn.net/cfile/tistory/99E88C335A33A50433",
-          },
-          {
-            id: 1,
-            imgUrl: "https://t1.daumcdn.net/cfile/tistory/99E88C335A33A50433",
-          },
-          {
-            id: 1,
-            imgUrl: "https://t1.daumcdn.net/cfile/tistory/99E88C335A33A50433",
-          },
-          {
-            id: 1,
-            imgUrl: "https://t1.daumcdn.net/cfile/tistory/99E88C335A33A50433",
-          },
-          {
-            id: 1,
-            imgUrl: "https://t1.daumcdn.net/cfile/tistory/99E88C335A33A50433",
-          },
+          
         ],
       },
       userInfo: {
