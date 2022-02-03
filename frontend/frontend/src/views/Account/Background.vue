@@ -75,7 +75,7 @@ animation: AnimationName 2s ease infinite; */
   background-size: 400% 400%;
   animation: AnimationName 16s ease infinite;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
