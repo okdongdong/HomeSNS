@@ -5,11 +5,11 @@
     <div class="container justify-space-around d-flex flex-wrap">
       <ProfilePhoto
         v-for="member in members"
-        :key="member.id"
-        :name="member.memberName"
+        :key="member.userId"
+        :name="member.userName"
         :size="100"
-        :imgUrl="member.memberImgUrl"
-        :userSeq="member.memberId"
+        :imgUrl="member.userImgUrl"
+        :userSeq="member.userId"
       />
 
       <!-- 3의 배수가 아닐 경우 왼쪽으로 밀기용 -->
@@ -21,74 +21,38 @@
 
 <script>
 import axios from "axios";
-// import {mapState} from 'vuex'
 import ProfilePhoto from "../../components/ProfilePhoto.vue";
+import { mapState } from "vuex";
+
 export default {
   components: { ProfilePhoto },
   name: "Member",
   data: () => ({
-    members: [
-      {
-        memberId: 1,
-        memberName: "아아아",
-        memberImgUrl:
-          "https://t1.daumcdn.net/cfile/blog/210DC14053A3908119?original",
-      },
-      {
-        memberId: 2,
-        memberName: "아아아",
-        memberImgUrl:
-          "https://t1.daumcdn.net/cfile/blog/210DC14053A3908119?original",
-      },
-      {
-        memberId: 3,
-        memberName: "아아아",
-        memberImgUrl:
-          "https://t1.daumcdn.net/cfile/blog/210DC14053A3908119?original",
-      },
-      {
-        memberId: 4,
-        memberName: "아아아",
-        memberImgUrl:
-          "https://t1.daumcdn.net/cfile/blog/210DC14053A3908119?original",
-      },
-      {
-        memberId: 5,
-        memberName: "아아아",
-        memberImgUrl:
-          "https://t1.daumcdn.net/cfile/blog/210DC14053A3908119?original",
-      },
-      {
-        memberId: 6,
-        memberName: "아아아",
-        memberImgUrl:
-          "https://t1.daumcdn.net/cfile/blog/210DC14053A3908119?original",
-      },
-      {
-        memberId: 7,
-        memberName: "아아아",
-        memberImgUrl:
-          "https://t1.daumcdn.net/cfile/blog/210DC14053A3908119?original",
-      },
-    ],
+    members: [],
   }),
+  created() {
+    this.getMembers();
+  },
   methods: {
     getMembers() {
       const token = localStorage.getItem("jwt");
       axios({
         method: "get",
-        url: `${process.env.VUE_APP_MCS_URL}/group`,
+        url: `${process.env.VUE_APP_MCS_URL}/group/member/${this.nowUserGroup}`,
         headers: { Authorization: token },
         // params: params,
       })
         .then((res) => {
           console.log(res);
-          // this.members = res.data;
+          this.members = res.data.userDtoList;
         })
         .catch((err) => {
           console.log(err);
         });
     },
+  },
+  computed: {
+    ...mapState("account", ["nowUserGroup"]),
   },
 };
 </script>
