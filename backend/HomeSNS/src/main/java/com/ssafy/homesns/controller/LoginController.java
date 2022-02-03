@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.homesns.dto.LoginDto;
 import com.ssafy.homesns.dto.TokenDto;
+import com.ssafy.homesns.dto.UserDto;
 import com.ssafy.homesns.jwt.JwtFilter;
 import com.ssafy.homesns.jwt.TokenProvider;
 import com.ssafy.homesns.service.CustomUserDetailsService;
@@ -46,7 +47,7 @@ public class LoginController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<List<Map<String, Object>>> authorize(@RequestBody LoginDto loginDto) {
+	public ResponseEntity<UserDto> authorize(@RequestBody LoginDto loginDto) {
 		System.out.println("Enter /login API");
 		// userId, userPassword를 파라미터로 받아서 UsernamePasswordAuthenticationToken을 생성한다
 		UsernamePasswordAuthenticationToken authenticationToken =
@@ -60,7 +61,7 @@ public class LoginController {
 		// 토큰으로 Authentication 객체를 생성하려고 authentication 메소드가 실행 될 때, loadUserByUsername 메소드가 실행된다
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 		
-		// 결과값으로 객체를 생성하고 SecurityContext에 저장한다
+		// 결과값으로 생성된 객체를 SecurityContext에 저장한다
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		System.out.println("authentication : " + authentication);
 		
@@ -74,19 +75,11 @@ public class LoginController {
 		httpHeaders.add("Access-Control-Expose-Headers", "AUTHORIZATION");
 		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 		System.out.println("httpHeaders : " + httpHeaders);
-
-		// List와 Map을 이용해서 토큰과 유저정보를 함께 전송한다
-		List<Map<String, Object>> result = new ArrayList<>();
-
-		Map<String, Object> token = new HashMap<>();
-		token.put("Token", new TokenDto(jwt).getToken());
-		Map<String, Object> user = new HashMap<>();
-		user.put("UserInfo", service.getUserInfo(loginDto.getUserId()));
-
-		result.add(token);
-		result.add(user);
 		
-		return new ResponseEntity<>(result, httpHeaders, HttpStatus.OK);
+		// 유저 정보를 DB에서 받아온다
+		UserDto userDto = service.getUserInfo(loginDto.getUserId());
+		
+		return new ResponseEntity<>(userDto, httpHeaders, HttpStatus.OK);
 	}
 	
 	// test 용도
@@ -95,6 +88,6 @@ public class LoginController {
 		System.out.println("Enter Hello");
 		System.out.println(loginDto.getUserId());
 		System.out.println(loginDto.getUserPassword());
-		return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+		return new ResponseEntity<String>("HELLO!!!", HttpStatus.OK);
 	}
 }
