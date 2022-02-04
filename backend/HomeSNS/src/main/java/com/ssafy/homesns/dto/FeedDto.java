@@ -19,8 +19,8 @@ public class FeedDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate feedEventDate;
     
-	private String feedLocation;
-	
+    private String feedLocation;
+    
 	private int good;
 	private int sad;
 	private int check; 
@@ -30,6 +30,11 @@ public class FeedDto {
 	private List<FileDto> fileList;
 	private List<CommentDto> commentList;
 	private List<HashtagDto> hashtagList;
+	
+	private LocationDto locationDto;
+	private List<UserDto> userList;
+	
+	
 	
 	public int getFeedId() {
 		return feedId;
@@ -45,6 +50,27 @@ public class FeedDto {
 	}
 	
 
+	
+
+	
+	public String getFeedLocation() {
+		return feedLocation;
+	}
+	public void setFeedLocation(String feedLocation) {
+		this.feedLocation = feedLocation;
+	}
+	public LocationDto getLocationDto() {
+		return locationDto;
+	}
+	public void setLocationDto(LocationDto locationDto) {
+		this.locationDto = locationDto;
+	}
+	public List<UserDto> getUserList() {
+		return userList;
+	}
+	public void setUserList(List<UserDto> userList) {
+		this.userList = userList;
+	}
 	
 	public int getFeedAuthorSeq() {
 		return feedAuthorSeq;
@@ -82,12 +108,7 @@ public class FeedDto {
 	public void setFeedEventDate(LocalDate feedEventDate) {
 		this.feedEventDate = feedEventDate;
 	}
-	public String getFeedLocation() {
-		return feedLocation;
-	}
-	public void setFeedLocation(String feedLocation) {
-		this.feedLocation = feedLocation;
-	}
+
 	public int getGood() {
 		return good;
 	}
@@ -136,17 +157,15 @@ public class FeedDto {
 	public void setHashtagList(List<HashtagDto> hashtagList) {
 		this.hashtagList = hashtagList;
 	}
+	
 	@Override
 	public String toString() {
-		return "FeedDto [feedId=" + feedId + ", groupId=" + groupId + ", feedAuthor=" + feedAuthor + ", feedTitle="
-				+ feedTitle + ", feedContent=" + feedContent + ", feedUploadDate=" + feedUploadDate + ", feedEventDate="
-				+ feedEventDate + ", feedLocation=" + feedLocation + ", good=" + good + ", sad=" + sad + ", check="
-				+ check + ", fun=" + fun + ", amaze=" + amaze + ", fileList=" + fileList + ", commentList="
-				+ commentList + ", hashtagList=" + hashtagList + "]";
+		return "FeedDto [feedId=" + feedId + ", groupId=" + groupId + ", feedAuthorSeq=" + feedAuthorSeq
+				+ ", feedAuthor=" + feedAuthor + ", feedTitle=" + feedTitle + ", feedContent=" + feedContent
+				+ ", feedUploadDate=" + feedUploadDate + ", feedEventDate=" + feedEventDate + ", feedLocation="
+				+ feedLocation + ", good=" + good + ", sad=" + sad + ", check=" + check + ", fun=" + fun + ", amaze="
+				+ amaze + ", fileList=" + fileList + ", commentList=" + commentList + ", hashtagList=" + hashtagList
+				+ ", locationDto=" + locationDto + ", userList=" + userList + "]";
 	}
 	
-	
-	
-	
-
 }

@@ -30,7 +30,7 @@ public class FeedController {
 	// 현재 그룹의 feedList를 가져온다. -> mainPage 
 	// 파라미터로 받은 groupId를 feedMainPage로 넘겨주고 feedResultDto 값을 넘겨받는다. 
 	// feedResultDto에 feedList를 담아 리턴한다. 
-	@GetMapping(value="/main/{gropId}") // feedParamDto로 변경해야함! 
+	@GetMapping(value="/main/{groupId}") // feedParamDto로 변경해야함! 
 	public ResponseEntity<FeedResultDto> mainPage(@PathVariable int groupId, HttpSession session){
 		
 		FeedResultDto feedResultDto = feedService.feedMainPage(groupId);
@@ -59,7 +59,6 @@ public class FeedController {
 	
 	// feed추가
 	// 참석자 관련 코드추가 필요
-	// 
 	@PostMapping(consumes = MediaType.ALL_VALUE, value="/feed")
 	public ResponseEntity<FeedResultDto> feedInsert(
 			@RequestPart(value="feedDto") FeedDto feedDto, FeedDto feedEventDate,

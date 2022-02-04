@@ -5,7 +5,7 @@
 
 
 	<select id="feedMainPage" parameterType="map" resultType="com.ssafy.homesns.dto.FeedDto">
-		SELECT FEED_ID, GROUP_ID, FEED_AUTHOR, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION 
+		SELECT FEED_ID, GROUP_ID, FEED_AUTHOR as feedAuthorSeq, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION 
   		  FROM HOME_SNS.FEED
 		 ORDER BY FEED_UPLOAD_DATE DESC
 		 LIMIT #{limit} OFFSET #{offset}
@@ -44,6 +44,30 @@
 		 WHERE FEED_ID =#{feedId}
 	</select>
 	
+	<!-- 참가인원 가져오는 SQL -->
+	<select id="eventMemberList" parameterType="int" resultType="com.ssafy.homesns.dto.UserDto"> 
+		SELECT USER.USER_SEQ as userSeq, USER_ID as userId, USER_EMAIL as userEmail, 
+			   USER_NAME as userName, USER_NICKNAME as userNickname, USER_PHONE as userPhone
+		  FROM EVENT_MEMBER JOIN USER
+		    ON EVENT_MEMBER.USER_SEQ = USER.USER_SEQ
+		 WHERE FEED_ID =#{feedId}
+	</select>
+	
+	<!-- 장소 가져오는 SQL -->
+	<select id="locationSearch" parameterType="int" resultType="com.ssafy.homesns.dto.LocationDto"> 
+		SELECT LOCATION_ID, GROUP_ID, LOCATION_NAME, LAT, LNG
+		  FROM LOCATION
+		 WHERE FEED_ID =#{feedId}
+	</select>
+	
+	<!-- 장소 즐겨찾기 가져오는 SQL -->
+	<select id="locationFavoriteSearch" parameterType="int" resultType="com.ssafy.homesns.dto.LocationFavoriteDto"> 
+		SELECT LOCATION_ID, USER_SEQ
+		  FROM LOCATION_FAVORITE
+		 WHERE USER_SEQ =#{userSeq}
+	</select>
+	
+	
 	<!-- feed table값만 가져오는 SQL -->
 	<select id="feedDetail" parameterType="int" resultType="com.ssafy.homesns.dto.FeedDto"> 
 		SELECT FEED_ID, GROUP_ID, FEED_AUTHOR, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION 
@@ -71,6 +95,26 @@
 		INSERT INTO HASHTAG ( FEED_ID, HASHTAG_CONTENT )
 		            VALUES ( #{feedId}, #{hashtagContent})
 	</insert>
+	
+	<insert id="feedEventMemberInsert" parameterType="com.ssafy.homesns.dto.EventMemberDto" >
+		
+		INSERT INTO EVENT_MEMBER (  FEED_ID ,   USER_SEQ    )
+		                  VALUES (  #{groupId}, #{userSeq}  )
+	</insert>
+	
+	<insert id="feedLocationInsert" parameterType="com.ssafy.homesns.dto.LocationDto" useGeneratedKeys="true" keyProperty="locationId">
+		
+		INSERT INTO LOCATION ( GROUP_ID ,  LOCATION_NAME,   LAT,     LNG,    )
+		              VALUES ( #{groupId}, #{locationName}, #{lat},  #{lng}  )
+	</insert>
+	
+	<insert id="feedLocationFavoriteInsert" parameterType="com.ssafy.homesns.dto.LocationFavoriteDto" >
+		
+		INSERT INTO LOCATION_FAVORITE ( LOCATION_ID ,  USER_SEQ   )
+		                       VALUES ( #{locationId}, #{userSeq} )
+	</insert>
+	
+	
 
 	<!-- 피드 수정 -->
 	
