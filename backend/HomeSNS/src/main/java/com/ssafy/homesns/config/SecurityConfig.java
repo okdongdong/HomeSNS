@@ -71,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 토큰이 없는 상태에서 할 수 있는 행동에 대해서 열어준다
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/register").permitAll()
                 
