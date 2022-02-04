@@ -1,22 +1,27 @@
 package com.ssafy.homesns.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.ssafy.homesns.dto.FeedDto;
 import com.ssafy.homesns.dto.FeedResultDto;
+import com.ssafy.homesns.dto.HashtagDto;
 import com.ssafy.homesns.service.FeedService;
 
 @RestController
@@ -31,7 +36,7 @@ public class FeedController {
 	// 파라미터로 받은 groupId를 feedMainPage로 넘겨주고 feedResultDto 값을 넘겨받는다. 
 	// feedResultDto에 feedList를 담아 리턴한다. 
 	@GetMapping(value="/main/{groupId}") // feedParamDto로 변경해야함! 
-	public ResponseEntity<FeedResultDto> mainPage(@PathVariable int groupId, HttpSession session){
+	public ResponseEntity<FeedResultDto> mainPage(@PathVariable int groupId){
 		
 		FeedResultDto feedResultDto = feedService.feedMainPage(groupId);
 		
@@ -46,7 +51,7 @@ public class FeedController {
 	//feedId로 해당 feed 상세조회
 	// author항목에 들어있는 userSeq를 user테이블과 join하여 사용자이름을 받아올 것
 	@GetMapping(value="/feed/{feedId}")
-	public ResponseEntity<FeedResultDto> feedDetail(@PathVariable int feedId, HttpSession session){
+	public ResponseEntity<FeedResultDto> feedDetail(@PathVariable int feedId){
 		
 		FeedResultDto feedResultDto = feedService.feedDetail(feedId);
 		
@@ -60,15 +65,29 @@ public class FeedController {
 	// feed추가
 	// 참석자 관련 코드추가 필요
 	@PostMapping(consumes = MediaType.ALL_VALUE, value="/feed")
-	public ResponseEntity<FeedResultDto> feedInsert(
-			@RequestPart(value="feedDto") FeedDto feedDto, FeedDto feedEventDate,
+	public ResponseEntity<FeedResultDto> feedInsert(FeedDto feedDto, 
+//			@RequestParam List<HashtagDto> hashtagList,
 			MultipartHttpServletRequest request) {
 		
 		// 프런트에서 넘겨줄때 feedDto에 groupId를 넘겨주면 필요없는 코드
 		// feedDto.setGroupId( ((GroupDto) request.getSession().getAttribute("groupDto")).getGroupId());
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		int authorSeq = Integer.parseInt(authentication.getName());
+		
+//		feedDto.setHashtagList(hashtagList);
+		
+		
+		
 		System.out.println("feedDto --------- ");
 		System.out.println(feedDto);
-		feedDto.setFeedEventDate(feedEventDate.getFeedEventDate());
+		
+		
+		
+		
+		
+//		feedDto.setFeedEventDate(feedEventDate.getFeedEventDate());
+		feedDto.setFeedAuthorSeq(authorSeq);
 		FeedResultDto feedResultDto = feedService.feedInsert(feedDto, request);
 		
 		if( feedResultDto.getResult() == SUCCESS ) {

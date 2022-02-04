@@ -154,11 +154,15 @@ public class FeedServiceImpl implements FeedService {
 			System.out.println(feedDto);
 
 			// hashtag 추가 
+		
 			List<HashtagDto> hashtagDtoList = feedDto.getHashtagList();
 
-			for (HashtagDto hashtagDto : hashtagDtoList) {
-				hashtagDto.setFeedId(feedId);
-				feedDao.feedHashtagInsert(hashtagDto);
+			if(hashtagDtoList != null) {
+				
+				for (HashtagDto hashtagDto : hashtagDtoList) {
+					hashtagDto.setFeedId(feedId);
+					feedDao.feedHashtagInsert(hashtagDto);
+				}
 			}
 
 			// 참가 인원 추가
