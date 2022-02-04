@@ -1,19 +1,26 @@
 package com.ssafy.homesns.dto;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class FeedDto {
 	
 	private int feedId;
 	private int groupId;
+	private int feedAuthorSeq;
 	private String feedAuthor;
 	private String feedTitle; 
 	private String feedContent;
 	private Date feedUploadDate;
-	private Date feedEventDate;
-	private String feedLocation;
 	
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate feedEventDate;
+    
+    private String feedLocation;
+    
 	private int good;
 	private int sad;
 	private int check; 
@@ -23,6 +30,11 @@ public class FeedDto {
 	private List<FileDto> fileList;
 	private List<CommentDto> commentList;
 	private List<HashtagDto> hashtagList;
+	
+	private LocationDto locationDto;
+	private List<UserDto> userList;
+	
+	
 	
 	public int getFeedId() {
 		return feedId;
@@ -35,6 +47,36 @@ public class FeedDto {
 	}
 	public void setGroupId(int groupId) {
 		this.groupId = groupId;
+	}
+	
+
+	
+
+	
+	public String getFeedLocation() {
+		return feedLocation;
+	}
+	public void setFeedLocation(String feedLocation) {
+		this.feedLocation = feedLocation;
+	}
+	public LocationDto getLocationDto() {
+		return locationDto;
+	}
+	public void setLocationDto(LocationDto locationDto) {
+		this.locationDto = locationDto;
+	}
+	public List<UserDto> getUserList() {
+		return userList;
+	}
+	public void setUserList(List<UserDto> userList) {
+		this.userList = userList;
+	}
+	
+	public int getFeedAuthorSeq() {
+		return feedAuthorSeq;
+	}
+	public void setFeedAuthorSeq(int feedAuthorSeq) {
+		this.feedAuthorSeq = feedAuthorSeq;
 	}
 	public String getFeedAuthor() {
 		return feedAuthor;
@@ -60,18 +102,13 @@ public class FeedDto {
 	public void setFeedUploadDate(Date feedUploadDate) {
 		this.feedUploadDate = feedUploadDate;
 	}
-	public Date getFeedEventDate() {
+	public LocalDate getFeedEventDate() {
 		return feedEventDate;
 	}
-	public void setFeedEventDate(Date feedEventDate) {
+	public void setFeedEventDate(LocalDate feedEventDate) {
 		this.feedEventDate = feedEventDate;
 	}
-	public String getFeedLocation() {
-		return feedLocation;
-	}
-	public void setFeedLocation(String feedLocation) {
-		this.feedLocation = feedLocation;
-	}
+
 	public int getGood() {
 		return good;
 	}
@@ -120,17 +157,15 @@ public class FeedDto {
 	public void setHashtagList(List<HashtagDto> hashtagList) {
 		this.hashtagList = hashtagList;
 	}
+	
 	@Override
 	public String toString() {
-		return "FeedDto [feedId=" + feedId + ", groupId=" + groupId + ", feedAuthor=" + feedAuthor + ", feedTitle="
-				+ feedTitle + ", feedContent=" + feedContent + ", feedUploadDate=" + feedUploadDate + ", feedEventDate="
-				+ feedEventDate + ", feedLocation=" + feedLocation + ", good=" + good + ", sad=" + sad + ", check="
-				+ check + ", fun=" + fun + ", amaze=" + amaze + ", fileList=" + fileList + ", commentList="
-				+ commentList + ", hashtagList=" + hashtagList + "]";
+		return "FeedDto [feedId=" + feedId + ", groupId=" + groupId + ", feedAuthorSeq=" + feedAuthorSeq
+				+ ", feedAuthor=" + feedAuthor + ", feedTitle=" + feedTitle + ", feedContent=" + feedContent
+				+ ", feedUploadDate=" + feedUploadDate + ", feedEventDate=" + feedEventDate + ", feedLocation="
+				+ feedLocation + ", good=" + good + ", sad=" + sad + ", check=" + check + ", fun=" + fun + ", amaze="
+				+ amaze + ", fileList=" + fileList + ", commentList=" + commentList + ", hashtagList=" + hashtagList
+				+ ", locationDto=" + locationDto + ", userList=" + userList + "]";
 	}
 	
-	
-	
-	
-
 }
