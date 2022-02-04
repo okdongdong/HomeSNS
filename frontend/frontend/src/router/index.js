@@ -7,7 +7,7 @@ import MyPage from "../views/Account/MyPage.vue";
 import SignUp from "../views/Account/SignUp.vue";
 import Background from "../views/Account/Background.vue";
 
-// import Location from '../views/Collection/Location.vue'
+import Location from '../views/Collection/Location.vue'
 import Schedule from "../views/Collection/Schedule.vue";
 import Timeline from "../views/Collection/Timeline.vue";
 
@@ -70,11 +70,11 @@ const routes = [
     component: MyPage,
   },
 
-  // {
-  //   path: '/location',
-  //   name: 'Location',
-  //   component: Location
-  // },
+  {
+    path: '/location',
+    name: 'Location',
+    component: Location
+  },
   {
     path: "/schedule",
     name: "Schedule",
