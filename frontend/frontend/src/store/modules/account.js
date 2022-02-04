@@ -5,11 +5,14 @@ const account = {
   namespaced: true,
   state: {
     // 샘플 데이터
-    userSeq: 5,
-    userName: "김영철",
-    userImgUrl:
-      "https://image.ajunews.com/content/image/2016/12/26/20161226142046950664.jpg",
-    nowUserGroup: 1,
+    userSeq: null,
+    userName: null,
+    userImgUrl: null,
+    nowGroup: {
+      groupId: null,
+      groupName: null,
+      groupProfileImageUrl: null,
+    },
     isLogin: localStorage.getItem("jwt") ? true : false,
   },
   mutations: {
@@ -24,10 +27,10 @@ const account = {
       state.userSeq = null;
       state.userName = null;
       state.userImgUrl = null;
-      state.nowUserGroup = null;
+      state.nowGroup = null;
     },
-    SET_NOW_GROUP: function (state, groupId) {
-      state.nowUserGroup = groupId;
+    SET_NOW_GROUP: function (state, groupInfo) {
+      state.nowGroup = groupInfo;
     },
   },
   actions: {
@@ -54,14 +57,8 @@ const account = {
       router.push({ name: "Login" });
       commit("LOGOUT");
     },
-    setNowGroup: function ({ commit }, groupId) {
-      commit("SET_NOW_GROUP", groupId);
-      router.push({
-        name: "Main",
-        parmas: {
-          groupId: groupId,
-        },
-      });
+    setNowGroup: function ({ commit }, groupInfo) {
+      commit("SET_NOW_GROUP", groupInfo);
     },
   },
   getters: {},

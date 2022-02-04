@@ -162,10 +162,10 @@
               <h1>내 정보</h1>
             </v-list-item-title>
           </v-list-item>
-          <v-list-item @click.stop="move('Member')">
+          <v-list-item @click.stop="move('GroupProfile')">
             <v-list-item-title class="d-flex align-center">
               <v-icon class="mx-3">groups</v-icon>
-              <h1>그룹원보기</h1>
+              <h1>그룹 프로필</h1>
             </v-list-item-title>
           </v-list-item>
           <v-list-item @click.stop="move('Select')">

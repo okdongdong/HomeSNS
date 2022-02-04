@@ -69,7 +69,7 @@ export default {
       const token = localStorage.getItem("jwt");
       axios({
         method: "GET",
-        url: `${process.env.VUE_APP_MCS_URL}/main/${this.nowUserGroup}`,
+        url: `${process.env.VUE_APP_MCS_URL}/main/${this.nowGroup.groupId}`,
         headers: { Authorization: token },
       })
         .then((res) => {
@@ -81,7 +81,7 @@ export default {
     },
   },
   computed: {
-    ...mapState("account", ["nowUserGroup"]),
+    ...mapState("account", ["nowGroup"]),
   },
 };
 </script>
