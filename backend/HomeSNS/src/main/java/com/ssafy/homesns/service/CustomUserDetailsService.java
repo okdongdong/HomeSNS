@@ -29,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(final String username) {
 		CustomUserDetails user = loginDao.login(username);
-		System.out.println("lodaUserByUsername에서 DAO를 갔다와서 찍은 DB에 있는 유저정보");
+		System.out.println("lodaUserByUsername(Service) 에서 DAO를 갔다와서 찍은 DB에 있는 유저정보");
 		System.out.println(user.getUserSeq());
 		System.out.println(user.getUsername());
 		System.out.println(user.getPassword());

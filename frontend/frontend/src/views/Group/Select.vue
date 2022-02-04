@@ -30,18 +30,23 @@
             class="group-img"
             @click="groupCreate"
           />
-          <h3 style="margin-top : 8px;">그룹 추가</h3>
+          <h3 style="margin-top: 8px">그룹 추가</h3>
         </v-col>
         <!-- data받아오면 for문으로 돌리기 -->
-        <v-col class="pa-5" v-for="group in groups" :key="group.groupId" cols="6">
+        <v-col
+          class="pa-5"
+          v-for="group in groups"
+          :key="group.groupId"
+          cols="6"
+        >
           <v-img
             aspect-ratio="1"
-            :src="group.groupImgUrl"
+            :src="group.groupProfileImageUrl"
             alt="그룹 사진입니다."
             class="group-img"
-            @click="groupMainPage(group.groupId)"
+            @click="groupMainPage(group)"
           />
-          <h3 style="color: white; margin-top : 8px;">{{ group.groupName }}</h3>
+          <h3 style="color: white; margin-top: 8px">{{ group.groupName }}</h3>
         </v-col>
       </v-row>
     </div>
@@ -73,7 +78,7 @@ export default {
         },
       })
         .then((res) => {
-          this.groups = res.data.groupDtoList
+          this.groups = res.data.groupDtoList;
           console.log(res);
           console.log("123");
         })
@@ -83,10 +88,12 @@ export default {
         });
     },
     // 그룹 사진 클릭 시, 해당 그룹 메인페이지로 이동
-    groupMainPage: function (groupId) {
-      console.log(groupId)
-      this.$store.dispatch("account/setNowGroup", groupId);
-      this.$router.push({ name: "Main", params: { groupId: groupId } });
+    groupMainPage: function (groupInfo) {
+      this.$store.dispatch("account/setNowGroup", groupInfo);
+      this.$router.push({
+        name: "Main",
+        params: { groupId: groupInfo.groupId },
+      });
     },
     groupCreate: function () {
       this.$router.push({ name: "GroupCreate" });

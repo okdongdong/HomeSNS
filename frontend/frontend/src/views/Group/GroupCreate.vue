@@ -55,6 +55,7 @@
             label="그룹 이름"
             required
           ></v-text-field>
+          <!--  비밀번호 -->
           <v-text-field
             clearable
             solo
@@ -63,6 +64,17 @@
             v-model="password"
             maxlength="20"
             label="비밀번호"
+            type="password"
+            required
+          ></v-text-field>
+          <!-- 비밀번호 확인 -->
+           <v-text-field
+            clearable
+            background-color="white"
+            solo
+            v-model="passwordConfirmation"
+            :rules="rules.passwordConfirmationRules"
+            label="비밀번호 확인"
             type="password"
             required
           ></v-text-field>
@@ -110,6 +122,7 @@ export default {
       image: null,
       previewImage: undefined,
       password : null,
+      passwordConfirmation : null,
       rules: {
         groupNameRules: [
           (v) => !!v || "그룹명을 입력해주세요.",
@@ -119,6 +132,9 @@ export default {
         passwordRules: [
         (v) => !!v || " 비밀번호를 입력해주세요.",
         (v) => !(v && v.length >= 20) || "패스워드는 20자 이상 입력할 수 없습니다.",
+      ],
+      passwordConfirmationRules: [
+        (v) => v === this.password || "패스워드가 일치하지 않습니다.",
       ],
       },
     };
