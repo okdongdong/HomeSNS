@@ -24,7 +24,7 @@ import Main from "../views/Feed/Main.vue";
 
 import GroupCreate from "../views/Group/GroupCreate.vue";
 // import Management from '../views/Group/Management.vue'
-import Member from "../views/Group/Member.vue";
+import GroupProfile from "../views/Group/GroupProfile.vue";
 import Select from "../views/Group/Select.vue";
 
 import UserPage from "../views/Profile/UserPage.vue";
@@ -139,9 +139,9 @@ const routes = [
   //   component: Management
   // },
   {
-    path: "/member",
-    name: "Member",
-    component: Member,
+    path: "/groupprofile",
+    name: "GroupProfile",
+    component: GroupProfile,
   },
 
   {
