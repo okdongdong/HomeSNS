@@ -159,8 +159,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(to);
-  console.log(from);
+  // console.log(to);
+  // console.log(from);
   const token = localStorage.getItem("jwt");
   if (token && to.name == "Login") {
     next({ name: "Select" });
