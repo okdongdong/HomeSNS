@@ -52,7 +52,18 @@
             :rules="rules.groupNameRules"
             solo
             v-model="groupname"
-            label="그룹 이름을 입력하세요."
+            label="그룹 이름"
+            required
+          ></v-text-field>
+          <v-text-field
+            clearable
+            solo
+            background-color="white"
+            :rules="rules.passwordRules"
+            v-model="password"
+            maxlength="20"
+            label="비밀번호"
+            type="password"
             required
           ></v-text-field>
           <v-btn
@@ -98,12 +109,17 @@ export default {
       groupname: null,
       image: null,
       previewImage: undefined,
+      password : null,
       rules: {
         groupNameRules: [
           (v) => !!v || "그룹명을 입력해주세요.",
           (v) =>
             !(v && v.length >= 20) || "그룹명은 20자 이상 입력할 수 없습니다.",
         ],
+        passwordRules: [
+        (v) => !!v || " 비밀번호를 입력해주세요.",
+        (v) => !(v && v.length >= 20) || "패스워드는 20자 이상 입력할 수 없습니다.",
+      ],
       },
     };
   },
@@ -116,17 +132,21 @@ export default {
       this.previewImage = URL.createObjectURL(this.image);
     },
     createGroup: function () {
-      let data = new FormData();
-      data.append("groupName", this.groupname);
-      data.append("groupProfileImageUrl", this.image);
+      // let data = new FormData();
+      // data.append("groupName", this.groupname);
+      // data.append("groupProfileImageUrl", this.image);
+      let data ={
+        groupName : this.groupname,
+        groupPassword : this.password,
+      }
       const token = localStorage.getItem("jwt");
       axios({
         method: "post",
         url: `${process.env.VUE_APP_MCS_URL}/group`,
         data: data,
         headers: {
-          "content-type": "multipart/form-data",
-          Authorization: `JWT ${token}`,
+          // "content-type": "multipart/form-data",
+          Authorization: `${token}`,
         },
       }).then(() => {
         this.$router.push({ name: "Select" });
