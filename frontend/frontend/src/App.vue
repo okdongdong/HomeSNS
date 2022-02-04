@@ -3,18 +3,13 @@
     <div class="d-flex justify-center">
       <div class="curtain"></div>
 
+      <!-- 상단 내비바 높이맞추기 위한 태그 -->
       <v-main style="max-width: 450px; width: 100%">
         <top-navbar v-if="noneNav"></top-navbar>
-        <v-sheet
-          id="scrolling-sheet"
-          class="overflow-y-auto"
-          :style="!noneNav ? 'max-height:100vh' : ''"
-        >
-          <div v-if="noneNav" style="height: 80px"></div>
-          <v-sheet>
-            <router-view />
-          </v-sheet>
-        </v-sheet>
+        <div v-if="noneNav" style="height: 80px"></div>
+        <router-view />
+        <!-- 하단 내비바 높이맞추기 위한 태그 -->
+        <div v-if="noneNav" style="height: 80px"></div>
         <bottom-navbar v-if="noneNav"></bottom-navbar>
       </v-main>
       <div class="curtain"></div>
@@ -57,9 +52,6 @@ export default {
 
 #app {
   font-family: "Gowun Dodum", sans-serif;
-}
-#scrolling-sheet {
-  max-height: calc(100vh - 80px);
 }
 .curtain {
   width: calc((100vw - 450px) / 2);

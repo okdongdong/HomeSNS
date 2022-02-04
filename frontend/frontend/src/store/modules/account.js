@@ -6,27 +6,28 @@ const account = {
   state: {
     // 샘플 데이터
     userSeq: 5,
-    userName: "부와아아앜",
-    userImgUrl: "https://pbs.twimg.com/media/CLVCqrsVEAAe9oo.jpg",
-    userGroups: [1, 2, 3],
+    userName: "김영철",
+    userImgUrl:
+      "https://image.ajunews.com/content/image/2016/12/26/20161226142046950664.jpg",
     nowUserGroup: 1,
     isLogin: localStorage.getItem("jwt") ? true : false,
   },
   mutations: {
     LOGIN: function (state, res) {
       state.isLogin = true;
-      state.userSeq = res.userSeq;
-      state.userName = res.userName;
-      state.userImgUrl = res.userImgUrl;
-      state.userGroups = res.userGroups;
+      state.userSeq = res.data.userSeq;
+      state.userName = res.data.userName;
+      state.userImgUrl = res.data.userProfileImageUrl;
     },
     LOGOUT: function (state) {
       state.isLogin = false;
       state.userSeq = null;
       state.userName = null;
       state.userImgUrl = null;
-      state.userGroups = null;
       state.nowUserGroup = null;
+    },
+    SET_NOW_GROUP: function (state, groupId) {
+      state.nowUserGroup = groupId;
     },
   },
   actions: {
@@ -39,11 +40,10 @@ const account = {
         data: credentials,
       })
         .then((res) => {
-          localStorage.setItem("jwt", res.data.token);
-          commit("LOGIN", res);
+          localStorage.setItem("jwt", res.headers.authorization);
           console.log(res);
-          console.log(res.data);
-          router.push({name:"Select"})
+          commit("LOGIN", res);
+          router.push({ name: "Select" });
         })
         .catch((err) => {
           console.log(err);
@@ -51,32 +51,17 @@ const account = {
     },
     logout: function ({ commit }) {
       localStorage.removeItem("jwt");
-      router.push({name:"Login"})
+      router.push({ name: "Login" });
       commit("LOGOUT");
     },
-    signup: function (credentials) {
-      console.log(credentials)
-      axios({
-        method: "POST",
-        url: `${process.env.VUE_APP_MCS_URL}/register`,
-        data: {
-          userId: credentials.userId,
-          userEmail: credentials.userEmail,
-          userPassword: credentials.userPassword,
-          userName: credentials.userName,
-          userPhone: credentials.userPhone,
-          userBod: credentials.userBod,
+    setNowGroup: function ({ commit }, groupId) {
+      commit("SET_NOW_GROUP", groupId);
+      router.push({
+        name: "Main",
+        parmas: {
+          groupId: groupId,
         },
-      })
-        .then((res) => {
-          
-          console.log(res);
-          console.log(res.data);
-          this.login(credentials);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      });
     },
   },
   getters: {},

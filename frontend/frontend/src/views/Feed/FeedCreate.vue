@@ -12,7 +12,7 @@
             <v-text-field
               clearable
               single-line
-              v-model="form.bod"
+              v-model="form.date"
               label="생년월일"
               type="date"
             ></v-text-field>
@@ -32,18 +32,28 @@
           
           <!-- 사진 -->
           <v-col
-            v-for="(file,i) in files"
+            v-for="(file,i) in form.files"
             :key="i"
             class="d-flex child-flex"
             cols="4"
           >
+            <video 
+              v-if="file.type == 'video'"
+              autoplay
+              muted
+              :src="file.previewImage"
+              @click="deleteFile(i)"
+              >
+            </video>
             <v-img
+              v-else
               :src="file.previewImage"
               :lazy-src="`https://picsum.photos/200/300`"
               aspect-ratio="1"
               class="grey lighten-2"
               @click="deleteFile(i)"
             >
+            
               <template v-slot:placeholder>
                 <v-row
                   class="fill-height ma-0"
@@ -62,21 +72,20 @@
             <v-file-input multiple type="file" accept="image/*,video/*" @change="selectFile" class="form-control-file" id="profile_path" enctype="multipart/form-data"></v-file-input> 
           </v-col>
           <!-- 장소레이블 -->
-          <v-col cols="12">
+          <v-col cols="11">
             <v-combobox
-              v-model="locaLabel"
+              v-model="form.locaLabel"
               :items="locaLabels"
               label="장소 이름"
-              @keyup.enter="addLocaLabel"
             >
             <v-btn 
               slot="append"
               icon
               @click.stop="toggleCurrLocaFavBtn()"
-              v-bind:color="currLocaFav ? 'orange' : 'gray'"
+              v-bind:color="form.currLocaFav ? 'orange' : 'gray'"
               >
               <v-icon>mdi-star</v-icon>
-            </v-btn>
+              </v-btn>
               <template slot="item" slot-scope="data">
                   <v-btn
                     icon
@@ -89,31 +98,24 @@
                     {{data.item.item}}
                   </v-col>
               </template>
-            
             </v-combobox>
           </v-col>
-          <!-- 구글 api -->
-          <v-col cols="12">
-            <v-text-field
-              label="Append outer"
-              append-outer-icon="mdi-map-marker"
-              @click="show = true"
-            ></v-text-field>  
+          <v-col cols="1" class="d-flex align-center" style="padding:0px">
+            <v-btn icon @click="show = !show">
+              <v-icon large>room</v-icon>
+            </v-btn>
           </v-col>
-          <v-dialog v-model="show" width="50%" max-width="450px">
-            <v-card>
-              <v-card-title>
-                장소 찍기
-              </v-card-title>
-              <div style="text-align:right">
+          <!-- 구글 api -->
+          <v-col :style=" show? 'padding:12px':'padding:0px'">
+            <v-expand-transition >
+              <v-card v-show="show">
                 <v-btn
                   small    
                   @click="getCurrLocation()"
-                >현재위치 가지고오기</v-btn>
-              </div>
-              <v-col>
-                <div>
-                  <h2>Search and add a pin</h2>
+                >현재위치 가지고오기
+                </v-btn>
+
+                  <div class="d-flex justify-center">
                     <GmapAutocomplete
                       @place_changed='setPlace'
                     />
@@ -122,37 +124,33 @@
                     >
                       Add
                     </button>
-                </div>
-              <br>
-                <div> 
-                  <GmapMap
-                    :center='center'
-                    :zoom='12'
-                    style='width:100%;  height: 400px;'
-                    @click="mark"
-                  >
-                  <GmapMarker
-                    :key="index"
-                    v-for="(m, index) in markers"
-                    :position="m.position"
-                    @click="center=m.position"
-                    :clickable="true"
-                    :draggable="true"
-                    @drag="updateMarker(index,$event.latLng)"
-                  />
-                  </GmapMap>
-                </div>
-              </v-col>
-              <v-card-actions>
-                <v-btn text>확인</v-btn>
-                <v-btn text @click.stop="show=false">취소</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+                  </div>
+                  <div> 
+                    <GmapMap
+                      :center='center'
+                      :zoom='12'
+                      style='width:100%;  height: 400px;'
+                      @click="mark"
+                      >
+                    <GmapMarker
+                      :key="index"
+                      v-for="(m, index) in markers"
+                      :position="m.position"
+                      @click="center=m.position"
+                      :clickable="true"
+                      :draggable="true"
+                      @drag="updateMarker(index,$event.latLng)"
+                      />
+                      </GmapMap>
+                    </div>
+                    <br><br>
+                </v-card>
+              </v-expand-transition>
+            </v-col>
           <!-- 참석자 명단-->
           <v-col cols="12">
             <v-combobox
-              v-model="attendPeople"
+              v-model="form.attendPeople"
               :items="items"
               label="참석자 명단"
               multiple
@@ -195,7 +193,7 @@
       <v-card-actions>
         <v-btn
           text
-          @click="resetForm"
+          @click="$router.go(-1)"
         >
           Cancel
         </v-btn>
@@ -204,7 +202,7 @@
           :disabled="!formIsValid"
           text
           color="primary"
-          type="submit"
+          @click="submitFeed"
         >
           Register
         </v-btn>
@@ -214,53 +212,73 @@
 </template>
 
 <script>
+import axios from 'axios'
 import {gmapApi} from 'vue2-google-maps'
   export default {
     name: 'Feedcreate',
     data () {
-      const defaultForm = Object.freeze({
-        title: null,
-        content: null,
-        hashtag:[],
-      })
-      
       return {
-        form: Object.assign({}, defaultForm),
+        form :{
+          date : null, // 날짜
+          title: null, // 제목
+          files : [], // 사진/ 영상
+          locaLabel : null, // 장소 이름
+          currLocaFav : false, // 장소 즐겨찾기
+          //장소위도 -> markers에 있다
+          //장소경도 -> markers에 있다.
+          attendPeople : [], // 참석한 사람
+          content: null, // 내용
+          hashtag:[], // 해시태그
+          
+        },
         rules: {
           name: [val => (val || '').length > 0 || '제목을 입력해주세요'],
         },
         tmphashtag:null,
         snackbar: false,
-        defaultForm,
-        items: [
+        items: [ // 그룹 명단
           '강동옥',
           '김태현',
           '박상준',
           '임창현',
           '최이삭',
         ],
-        attendPeople : [],
         show : false,
         // 구글 맵
-        center: { lat: 37.5642135, lng: 127.0016985 },
-        currentPlace: null,
+        center: { lat: 37.5642135, lng: 127.0016985 }, // 처음 센터 값 (서울)
+        currentPlace: null, // 현재위치
         markers: [],
-        places: [],
+        // places: [],
+        geocodingService : {},
         // 장소레이블
-        locaLabel : null,
-        locaLabels : [],
-        currLocaFav : false,
-        // 사진 및 영상 들고오기
-        files : [],
+        locaLabels : [
+          {
+            item : '내 집',
+            fav : true,
+            idx : 0
+          },
+          {
+            item : '학교',
+            fav : true,
+            idx : 1
+          },
+          {
+            item : '울산바위',
+            fav : false,
+            idx : 2
+          },
+          {
+            item : '대구존맛막창집',
+            fav : false,
+            idx : 3
+          },
+
+        ],
       }
     },
 
 
     methods: {
-      resetForm () {
-        this.form = Object.assign({}, this.defaultForm)
-        this.$refs.form.reset()
-      },
       submit () {
         this.snackbar = true
         this.resetForm()
@@ -284,7 +302,7 @@ import {gmapApi} from 'vue2-google-maps'
         }
         this.tmphashtag = null
       },
-      remove (id){
+      remove (id){ // 해시태그 없애기
         let idx = this.form.hashtag.indexOf(id)
         this.form.hashtag.splice(idx,1)
         this.form.hashtag = [...this.form.hashtag]
@@ -300,7 +318,7 @@ import {gmapApi} from 'vue2-google-maps'
           this.markers=[{ position: currLocation }]
           });
         },
-        setPlace(place) { // 검색해서 찾은 것
+        setPlace(place) {
           this.currentPlace = place
         },
         addMarker() {
@@ -310,72 +328,102 @@ import {gmapApi} from 'vue2-google-maps'
               lng: this.currentPlace.geometry.location.lng(),
             };
             this.markers=[{ position: marker }]
-            this.places = [this.currentPlace]
+            // this.places = [this.currentPlace]
             this.center = marker
             // this.currentPlace = null;
           }
-          console.log(this.markers)
-          console.log(this.places)
         },
         mark (event){
-          console.log(event)
-          console.log(event.latLng.lat())
-          console.log(event.latLng.lng())
           const marker = {
             lat : event.latLng.lat(),
             lng : event.latLng.lng()
           }
           this.markers=[{ position: marker }]
-            this.places = [this.currentPlace]
+            // this.places = [this.currentPlace]
             this.center = marker
         },
         updateMarker(index,location){
-          console.log(location)
           const marker ={
             lat: location.lat(),
             lng: location.lng()
           }
           this.markers=[{ position: marker }]
-          this.places = [this.currentPlace]
-          // this.center = marker
+          // this.places = [this.currentPlace]
         },
-        addLocaLabel(){
-          if (this.locaLabel){
-            this.locaLabels.push({
-              item : this.locaLabel,
-              fav : false,
-              idx : this.locaLabels.length
-              })
+        toggleFavBtn(data){ // 목록에 있는 데이터 즐겨찾기 토글
+          this.locaLabels[data.item.idx].fav = !this.locaLabels[data.item.idx].fav
+          if(this.form.locaLabel === data.item.item){
+            this.form.currLocaFav = this.locaLabels[data.item.idx].fav
           }
         },
-        toggleFavBtn(data){
-          // console.log(this.locaLabels[data.item.idx].fav)
-          // console.log(data)
-          this.locaLabels[data.item.idx].fav = !this.locaLabels[data.item.idx].fav
-        },
-        selectFavLoca(data){
-          this.locaLabel = data.item.item
+        selectFavLoca(data){ // 목록에 있는 데이터를 장소정보로 쓸려고할때
+          this.form.locaLabel = data.item.item
+          this.form.currLocaFav = data.item.fav
         },
         toggleCurrLocaFavBtn(){ // 현재 장소 즐겨찾기 등록 여부
-          this.currLocaFav = !this.currLocaFav
+          this.form.currLocaFav = !this.form.currLocaFav
         },
         selectFile:function(data){ 
           for(let i=0;i<data.length;i++){
             if(data[i].type.includes('video')){ // 나는 비디오
-              console.log('video')
+              this.form.files.push({
+                type : 'video',
+                content : data[i],
+                previewImage : URL.createObjectURL(data[i])
+              })
             }
             else{
-              this.files.push({
+              this.form.files.push({
+                type : 'img',
                 content : data[i],
                 previewImage : URL.createObjectURL(data[i])
               })
             }
           }
-          console.log(this.files)
-          console.log(data)
           },
         deleteFile(i){
-          this.files.splice(i,1)
+          this.form.files.splice(i,1)
+        },
+
+        //데이터 쏘기
+        submitFeed(){
+          const token = localStorage.getItem('jwt')
+          let data = new FormData()
+          data.append('feedTitle',this.form.title)
+          data.append('feedEventDate', this.form.date)
+          let file = []
+          for(let i = 0; i<this.form.files.length ;i++){
+            file.push(this.form.files.content)
+          }
+          data.append('fileList',file)
+          if(this.form.localLabel === 0 || this.markers.length === 0){
+            data.append('feedLocation', null)// front에서 그냥 넘겨주기때문에 back에서 목록에 원래 있는건지 확인하고 값 넣기
+            data.append('Lat', null)
+            data.append('Lng',null)
+            data.append('Fav',false) // 장소 즐겨찾기 여부
+          }
+          else{
+            data.append('feedLocation', this.form.locaLabel)
+            data.append('Lat', this.markers[0].lat) // 위도
+            data.append('Lng',this.markers[0].lng) // 경도
+            data.append('Fav',this.form.currLocaFav) // 장소 즐겨찾기 여부
+          }
+          data.append('attendPpl',this.form.attendPeople) // 참석인 변수 모룸,,
+          data.append('feedContent', this.form.content)
+          data.append('hashtagList', this.form.hashtagList)
+          axios({
+            method : 'POST',
+            url : `${process.env.VUE_APP_MCS_URL}/feed`,
+            data : data,
+            headers : { Authorization : `JWT ${token}`}
+          })
+          .then(()=>{
+            console.log('피드작성 성공')
+            this.$router.go(-1) // 이전 페이지로 보내기
+          })
+          .catch((err)=>{
+            console.log(err)
+          })
         }
     },
     computed: {

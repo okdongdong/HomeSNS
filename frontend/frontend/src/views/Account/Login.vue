@@ -1,22 +1,14 @@
 <template>
-  <v-app class="my-background">
+  <v-app class="my-background" fluid>
     <v-spacer></v-spacer>
     <div class="container">
       <div class="d-flex justify-center">
-        <v-card
-        flat
-        color="rgb(98, 101, 232)"
-      >
-        <div class="d-flex justify-center">
-          <v-img
-            src="@/assets/logo1.png" alt="logo"
-            max-width="200"
-            max-height="200"
-          >
-          </v-img>
-        </div>
-        <v-card-title class="main-text justify-center font-weight-bold">우리집 SNS</v-card-title>
-      </v-card>
+        <v-card flat color="rgba(0,0,0,0)">
+          <div class="d-flex justify-center">
+            <v-img src="@/assets/logo3.png" alt="logo" max-width="200" max-height="200"> </v-img>
+          </div>
+          <v-card-title class="main-text justify-center font-weight-bold">우리집 SNS</v-card-title>
+        </v-card>
       </div>
       <br />
       <v-row justify="center">
@@ -27,7 +19,7 @@
             maxlength="20"
             background-color="white"
             solo
-            v-model="credentials.id"
+            v-model="credentials.userId"
             :rules="rules.idRules"
             label="아이디"
             required
@@ -38,7 +30,7 @@
             clearable
             background-color="white"
             solo
-            v-model="credentials.password"
+            v-model="credentials.userPassword"
             :rules="rules.passwordRules"
             label="비밀번호"
             type="password"
@@ -69,13 +61,9 @@
             회원가입
           </v-btn>
           <div class="d-flex justify-center">
-            <v-btn text dark large rounded @click="move('FindId')">
-              아이디 찾기
-            </v-btn>
+            <v-btn text dark large rounded @click="move('FindId')"> 아이디 찾기 </v-btn>
             <v-btn text dark large disabled> | </v-btn>
-            <v-btn text dark large rounded @click="move('FindPassword')">
-              비밀번호 찾기
-            </v-btn>
+            <v-btn text dark large rounded @click="move('FindPassword')"> 비밀번호 찾기 </v-btn>
           </div>
         </v-form>
       </v-row>
@@ -93,8 +81,8 @@ export default {
   data: () => ({
     valid: true,
     credentials: {
-      id: null,
-      password: null,
+      userId: null,
+      userPassword: null,
     },
     rules: {
       idRules: [(v) => !!v || " 아이디를 입력해주세요."],
@@ -104,7 +92,7 @@ export default {
   }),
 
   methods: {
-    ...mapActions("account",["login"]),
+    ...mapActions("account", ["login"]),
     move(name) {
       this.$router.push({ name: name });
     },
@@ -113,16 +101,15 @@ export default {
 </script>
 
 <style scoped>
-  .my-background {
-    background-color: rgb(98, 101, 232);
-  }
+.my-background {
+  background-color: rgba(0,0,0,0);
+}
+.form-data {
+  width: 80%;
+}
 
-  .form-data {
-    width: 80%;
-  }
-
-  .main-text {
-    color: #fff !important;
-    font-size: 30px;
-  }
+.main-text {
+  color: #fff !important;
+  font-size: 30px;
+}
 </style>
