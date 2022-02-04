@@ -1,5 +1,12 @@
 <template>
-  <div>
+  <div
+    @click.stop="
+      $router.push({
+        name: 'UserPage',
+        params: { userSeq: userSeq },
+      })
+    "
+  >
     <div class="justify-center d-flex">
       <v-avatar :size="size + 'px'" elevation="12" color="#846543">
         <div v-if="imgUrl">
@@ -25,6 +32,7 @@
 export default {
   name: "FrontendProfilephoto",
   props: {
+    userSeq:Number,
     size: Number,
     imgUrl: String,
     name: String,

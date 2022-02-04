@@ -9,28 +9,21 @@ const account = {
     userName: "김영철",
     userImgUrl:
       "https://image.ajunews.com/content/image/2016/12/26/20161226142046950664.jpg",
-    userGroups: [1, 2, 3],
     nowUserGroup: 1,
     isLogin: localStorage.getItem("jwt") ? true : false,
   },
   mutations: {
     LOGIN: function (state, res) {
       state.isLogin = true;
-      // state.userSeq = 5;
-      // state.userName = "김영철";
-      // state.userImgUrl =
-      //   "https://image.ajunews.com/content/image/2016/12/26/20161226142046950664.jpg";
       state.userSeq = res.data.userSeq;
       state.userName = res.data.userName;
       state.userImgUrl = res.data.userProfileImageUrl;
-      state.userGroups = res.data.userGroups;
     },
     LOGOUT: function (state) {
       state.isLogin = false;
       state.userSeq = null;
       state.userName = null;
       state.userImgUrl = null;
-      state.userGroups = null;
       state.nowUserGroup = null;
     },
     SET_NOW_GROUP: function (state, groupId) {

@@ -18,6 +18,7 @@
         <ProfilePhoto
           :size="50"
           :name="content.info.author"
+          :userSeq="content.info.authorId"
           :imgUrl="content.info.authorPicUrl"
           class="mx-3"
         />

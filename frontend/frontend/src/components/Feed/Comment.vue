@@ -6,6 +6,7 @@
           :size="50"
           :imgUrl="comment.userImgUrl"
           :name="comment.author"
+          :userSeq="comment.authorId"
         />
       </div>
       <div>
