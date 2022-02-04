@@ -33,7 +33,7 @@
           <h3 style="margin-top : 8px;">그룹 추가</h3>
         </v-col>
         <!-- data받아오면 for문으로 돌리기 -->
-        <div class="col-6" v-for="group in groups" :key="group.groupId">
+        <v-col class="pa-5" v-for="group in groups" :key="group.groupId" cols="6">
           <v-img
             aspect-ratio="1"
             :src="group.groupImgUrl"
