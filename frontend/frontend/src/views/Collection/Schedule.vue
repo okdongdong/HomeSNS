@@ -1,13 +1,12 @@
 <template>
 <v-app class="pa-5">
     <v-row>
-      <v-col cols="6">
+      <v-col>
         <v-menu
           ref="dateOpen"
           v-model="dateOpen"
           :close-on-content-click="false"
           :return-value.sync="start"
-          offset-y
         >
           <template v-slot:activator="{ on }">
             <v-text-field
@@ -32,7 +31,7 @@
         </v-menu>
       </v-col>
 
-      <v-col cols="6">
+      <v-col>
         <v-select
           v-model="type"
           :items="typeOptions"
@@ -45,31 +44,52 @@
       </v-col>
     </v-row>
     <div class="text-center mb-3 display-1">
-    {{start | moment('YYYY MMMM')}}
+      {{start | moment('YYYY MMMM')}}
     </div>
     <v-sheet height="500">
       <v-calendar
         ref="calendar"
         v-model="start"
+        @click:date="open"
         :type="type"
       ></v-calendar>
     </v-sheet>
-
+    <event></event>
 </v-app>
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+import Event from '@/components/Event.vue'
+
+
 export default {
+  name: 'Schedule',
+  components: {
+    Event
+  },
+
   data() {
     return {
       dateOpen: false,
-      start: '',
+      start: this.$moment(new Date()).format('YYYY-MM-DD'),
       type: 'month',
       typeOptions: [
         {text: 'Day', value: 'day'},
         {text: 'Week', value: 'week'},
         {text: 'Month', value: 'month'},
       ],
+    }
+  },
+
+  methods: {
+    
+    
+    ...mapMutations('addEvent', ['OPEN_CALENDAR_DIALOG']),
+
+    open(date) {
+      this.OPEN_CALENDAR_DIALOG(date)
+
     }
   },
 }
