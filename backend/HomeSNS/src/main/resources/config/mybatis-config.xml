@@ -17,6 +17,8 @@
 		<mapper resource="mapper/feed_query.xml" />
 		<mapper resource="mapper/group_query.xml" />
 		<mapper resource="mapper/schedule_query.xml" />
+		<mapper resource="mapper/notice_query.xml" />
+
 	</mappers>
 	
 </configuration>

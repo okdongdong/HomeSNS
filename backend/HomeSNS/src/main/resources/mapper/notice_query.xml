@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.homesns.dao.NoticeDao">
+
+    <!-- 알림 생성 -->
+    <insert id="noticeCreate" parameterType="com.ssafy.homesns.dto.NoticeDto">
+        INSERT INTO NOTICE (USER_SEQ, TARGET_USER_SEQ, TARGET_USER_GROUP_ID, NOTICE_TYPE, NOTICE_CONTENT_ID,
+                            NOTICE_READ_YN, NOTICE_TIME)
+        VALUES (#{userSeq}, #{targetUserSeq}, #{targetUserGroupId}, #{noticeType}, #{noticeContentId}, "n", now())
+    </insert>
+
+    <!-- 알림 읽음 -->
+    <update id="noticeRead" parameterType="int">
+        UPDATE HOME_SNS.NOTICE
+        SET NOTICE_READ_YN = "y",
+            WHERE NOTICE_ID = #{noticeId}
+    </update>
+
+    <!-- 알림 조회 -->
+    <select id="noticeListSearch" parameterType="int" resultType="com.ssafy.homesns.dto.NoticeDto">
+        SELECT NOTICE_ID            as noticeId,
+               USER_SEQ             as userSeq,
+               NOTICE_TYPE          as noticeType,
+               NOTICE_CONTENT_ID    as noticeContentId,
+               NOTICE_READ_YN       as noticeReadYn,
+               TARGET_USER_SEQ      as targetUserSeq,
+               TARGET_USER_GROUP_ID as targetUserGroupId,
+               NOTICE_TIME          as noticeTime
+        FROM NOTICE
+        WHERE TARGET_USER_SEQ = #{targetUserSeq}
+          And TARGET_USER_GROUP_ID = #{targetUserGroupId}
+        ORDER BY NOTICE_TIME DESC LIMIT #{start}, #{end};
+
+    </select>
+
+    <select id="noticeCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM NOTICE
+        WHERE TARGET_USER_SEQ = #{targetUserSeq}
+          And TARGET_USER_GROUP_ID = #{targetUserGroupId}
+          AND NOTICE_READ_YN = "n"
+    </select>
+
+</mapper>
