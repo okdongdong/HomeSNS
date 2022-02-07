@@ -99,7 +99,7 @@
 	<insert id="feedEventMemberInsert" parameterType="com.ssafy.homesns.dto.EventMemberDto" >
 		
 		INSERT INTO EVENT_MEMBER (  FEED_ID ,   USER_SEQ    )
-		                  VALUES (  #{groupId}, #{userSeq}  )
+		                  VALUES (  #{feedId}, #{userSeq}  )
 	</insert>
 	
 	<insert id="feedLocationInsert" parameterType="com.ssafy.homesns.dto.LocationDto" useGeneratedKeys="true" keyProperty="locationId">

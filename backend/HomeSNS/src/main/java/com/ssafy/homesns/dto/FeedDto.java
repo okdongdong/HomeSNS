@@ -15,12 +15,13 @@ public class FeedDto {
 	private String feedTitle; 
 	private String feedContent;
 	private String feedHashtags;
+	private String feedAttendees;
+	private String feedLocation;
 	private Date feedUploadDate;
-	
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate feedEventDate;
-    
-    private String feedLocation;
+ 
     
 	private int good;
 	private int sad;
@@ -34,6 +35,7 @@ public class FeedDto {
 	
 	private LocationDto locationDto;
 	private List<UserDto> userList;
+	
 	public int getFeedId() {
 		return feedId;
 	}
@@ -87,6 +89,13 @@ public class FeedDto {
 	}
 	public void setFeedEventDate(LocalDate feedEventDate) {
 		this.feedEventDate = feedEventDate;
+	}
+	
+	public String getFeedAttendees() {
+		return feedAttendees;
+	}
+	public void setFeedAttendees(String feedAttendees) {
+		this.feedAttendees = feedAttendees;
 	}
 	public String getFeedLocation() {
 		return feedLocation;
@@ -158,12 +167,13 @@ public class FeedDto {
 	public String toString() {
 		return "FeedDto [feedId=" + feedId + ", groupId=" + groupId + ", feedAuthorSeq=" + feedAuthorSeq
 				+ ", feedAuthor=" + feedAuthor + ", feedTitle=" + feedTitle + ", feedContent=" + feedContent
-				+ ", feedHashtags=" + feedHashtags + ", feedUploadDate=" + feedUploadDate + ", feedEventDate="
-				+ feedEventDate + ", feedLocation=" + feedLocation + ", good=" + good + ", sad=" + sad + ", check="
-				+ check + ", fun=" + fun + ", amaze=" + amaze + ", fileList=" + fileList + ", commentList="
-				+ commentList + ", hashtagList=" + hashtagList + ", locationDto=" + locationDto + ", userList="
-				+ userList + "]";
+				+ ", feedHashtags=" + feedHashtags + ", feedAttendees=" + feedAttendees + ", feedLocation="
+				+ feedLocation + ", feedUploadDate=" + feedUploadDate + ", feedEventDate=" + feedEventDate + ", good="
+				+ good + ", sad=" + sad + ", check=" + check + ", fun=" + fun + ", amaze=" + amaze + ", fileList="
+				+ fileList + ", commentList=" + commentList + ", hashtagList=" + hashtagList + ", locationDto="
+				+ locationDto + ", userList=" + userList + "]";
 	}
+	
 	
 	
 	
