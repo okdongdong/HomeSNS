@@ -1,17 +1,43 @@
 package com.ssafy.homesns.dto;
 
-import lombok.Getter;
-import lombok.Setter;
 
 public class NoticePageDto {
-    @Getter @Setter
+
     private int targetUserSeq;
 
-    @Getter @Setter
     private String noticeType;
 
-    @Getter @Setter
     private int noticeContentId;
+
+	public int getTargetUserSeq() {
+		return targetUserSeq;
+	}
+
+	public void setTargetUserSeq(int targetUserSeq) {
+		this.targetUserSeq = targetUserSeq;
+	}
+
+	public String getNoticeType() {
+		return noticeType;
+	}
+
+	public void setNoticeType(String noticeType) {
+		this.noticeType = noticeType;
+	}
+
+	public int getNoticeContentId() {
+		return noticeContentId;
+	}
+
+	public void setNoticeContentId(int noticeContentId) {
+		this.noticeContentId = noticeContentId;
+	}
+
+	@Override
+	public String toString() {
+		return "NoticePageDto [targetUserSeq=" + targetUserSeq + ", noticeType=" + noticeType + ", noticeContentId="
+				+ noticeContentId + "]";
+	}
 
 
 }
