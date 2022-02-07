@@ -1,7 +1,20 @@
 package com.ssafy.homesns.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.ssafy.homesns.dto.ScheduleDto;
+import com.ssafy.homesns.dto.ScheduleResultDto;
+import com.ssafy.homesns.service.ScheduleService;
 
 @CrossOrigin(
 		origins = "http://localhost:5500", // npm에서 5500번을 사용한다
@@ -10,5 +23,64 @@ import org.springframework.web.bind.annotation.RequestMethod;
 		methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, 
 				RequestMethod.DELETE, RequestMethod.HEAD, RequestMethod.OPTIONS })
 public class ScheduleController {
+
+	@Autowired
+	ScheduleService scheduleService;
+
+	private static final int SUCCESS = 1;
+
+	@PostMapping(value="/schedule")
+	public ResponseEntity<ScheduleResultDto> scheduleCreate(@RequestBody ScheduleDto scheduleDto) {
+
+		System.out.println(scheduleDto);
+
+		ScheduleResultDto scheduleResultDto = scheduleService.scheduleCreate(scheduleDto);
+
+		if ( scheduleResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@GetMapping(value="/schedule/{groupId}")
+	public ResponseEntity<ScheduleResultDto> scheduleSearch(@PathVariable(value="groupId") int groupId) {
+
+		ScheduleResultDto scheduleResultDto = scheduleService.scheduleSearch(groupId);
+
+		if ( scheduleResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@PutMapping(value="/schedule")
+	public ResponseEntity<ScheduleResultDto> scheduleUpdate(@RequestBody ScheduleDto scheduleDto) {
+		
+		ScheduleResultDto scheduleResultDto = scheduleService.scheduleUpdate(scheduleDto);
+
+		if ( scheduleResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 	
+	@DeleteMapping(value="/schedule/{groupId}")
+	public ResponseEntity<ScheduleResultDto> scheduleDelete(@PathVariable(value="groupId") int groupId) {
+		
+		ScheduleResultDto scheduleResultDto = scheduleService.scheduleDelete(groupId);
+
+		if ( scheduleResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }
+
+
+
+
+
+
+
+
+
