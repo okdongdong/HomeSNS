@@ -419,7 +419,8 @@ import {gmapApi} from 'vue2-google-maps'
         submitFeed(){
           const token = localStorage.getItem('jwt')
           let data = new FormData()
-          data.append('feedTitle',this.form.title)
+          let feedDto = {}
+          feedDto['feedTitle'] = this.form.title
           data.append('feedEventDate', this.form.date)
           let file = []
           for(let i = 0; i<this.form.files.length ;i++){
@@ -427,10 +428,10 @@ import {gmapApi} from 'vue2-google-maps'
           }
           data.append('fileList',file)
           if(this.form.localLabel === 0 || this.markers.length === 0){
-            data.append('feedLocation', null)// front에서 그냥 넘겨주기때문에 back에서 목록에 원래 있는건지 확인하고 값 넣기
-            data.append('Lat', null)
-            data.append('Lng',null)
-            data.append('Fav',false) // 장소 즐겨찾기 여부
+            feedDto['feedLocation'] =  null// front에서 그냥 넘겨주기때문에 back에서 목록에 원래 있는건지 확인하고 값 넣기
+            // data.append('Lat', null)
+            // data.append('Lng',null)
+            // data.append('Fav',false) // 장소 즐겨찾기 여부
           }
           else{
             data.append('feedLocation', this.form.locaLabel)
@@ -469,7 +470,7 @@ import {gmapApi} from 'vue2-google-maps'
             method : 'POST',
             url : `${process.env.VUE_APP_MCS_URL}/feed`,
             data : data,
-            headers : { Authorization : `JWT ${token}`}
+            headers : { Authorization : token, "content-type": "multipart/form-data",}
           })
           .then(()=>{
             console.log('피드작성 성공')
