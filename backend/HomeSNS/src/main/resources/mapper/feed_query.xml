@@ -104,7 +104,7 @@
 	
 	<insert id="feedLocationInsert" parameterType="com.ssafy.homesns.dto.LocationDto" useGeneratedKeys="true" keyProperty="locationId">
 		
-		INSERT INTO LOCATION ( GROUP_ID ,  LOCATION_NAME,   LAT,     LNG,    )
+		INSERT INTO LOCATION ( GROUP_ID ,  LOCATION_NAME,   LAT,     LNG    )
 		              VALUES ( #{groupId}, #{locationName}, #{lat},  #{lng}  )
 	</insert>
 	

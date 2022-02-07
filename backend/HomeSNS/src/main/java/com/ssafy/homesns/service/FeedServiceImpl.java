@@ -141,7 +141,6 @@ public class FeedServiceImpl implements FeedService {
 	// feed 추가
 	// hashtag List추가 
 	// file List 추가
-
 	@Override
 	@Transactional
 	public FeedResultDto feedInsert(FeedDto feedDto, MultipartHttpServletRequest request) {
@@ -153,7 +152,6 @@ public class FeedServiceImpl implements FeedService {
 			//feed table 추가
 			feedDao.feedInsert(feedDto);
 			int feedId = feedDto.getFeedId();
-			
 
 			// hashtag 추가 
 			String hashtagStr = feedDto.getFeedHashtags();
@@ -187,12 +185,19 @@ public class FeedServiceImpl implements FeedService {
 				
 			}
 			// 장소 추가
-			LocationDto locationDto = feedDto.getLocationDto();
-			if(locationDto != null) {
+			String locationStr = feedDto.getFeedLocationStr();
+			if(locationStr != null) {
+				ObjectMapper objectMapper = new ObjectMapper(); 
+				LocationDto locationDto = objectMapper.readValue(locationStr, LocationDto.class);
+//				Map<String, LocationDto> locationDto = objectMapper.readValue(locationStr, LocationDto.class);
+				locationDto.setGroupId(feedDto.getGroupId());
 				feedDao.feedLocationInsert(locationDto);
+				
+				System.out.println("locationDto-----:" + locationDto );
+			
 			
 			// 장소 즐겨찾기 추가
-				if ( locationDto.isFavorite() ) {
+				if ( locationDto.getFavorite() ) {
 					LocationFavoriteDto locationFavoriteDto = new LocationFavoriteDto();
 					locationFavoriteDto.setLocationId(locationDto.getLocationId());
 					locationFavoriteDto.setUserSeq(feedDto.getFeedAuthorSeq());
@@ -244,10 +249,12 @@ public class FeedServiceImpl implements FeedService {
 			System.out.println("Service feedDto --------- ");
 			System.out.println(feedDto);
 			feedResultDto.setResult(SUCCESS);
+			feedResultDto.setFeedId(feedId);
 
 		}catch(IOException e) {
 			e.printStackTrace();
 			feedResultDto.setResult(FAIL);
+			
 		}
 		return feedResultDto;
 	}

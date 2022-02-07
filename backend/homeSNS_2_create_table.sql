@@ -110,7 +110,7 @@ CREATE TABLE `scrap` (
 );
 
 CREATE TABLE `location` (
-	`location_id`	int	NOT NULL PRIMARY KEY,
+	`location_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`group_id`	int	NOT NULL,
 	`location_name`	varchar(20)	NULL,
 	`lat`	float	NULL,
