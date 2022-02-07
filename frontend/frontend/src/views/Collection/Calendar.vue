@@ -67,7 +67,7 @@
 
 <script>
 import EventDialog from '@/components/EventDialog.vue'
-
+// 1
 
 export default {
   name: 'Calendar',
