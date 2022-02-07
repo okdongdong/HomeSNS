@@ -1,8 +1,11 @@
 package com.ssafy.homesns.service;
 
+import com.ssafy.homesns.dao.CommentDao;
+import com.ssafy.homesns.dao.FeedDao;
 import com.ssafy.homesns.dao.GroupDao;
 import com.ssafy.homesns.dao.NoticeDao;
 import com.ssafy.homesns.dto.NoticeDto;
+import com.ssafy.homesns.dto.NoticeResultDto;
 import com.ssafy.homesns.dto.NoticeResultListDto;
 import com.ssafy.homesns.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,12 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Autowired
     GroupDao groupDao;
+
+    @Autowired
+    FeedDao feedDao;
+
+    @Autowired
+    CommentDao commentDao;
 
     private static final int SUCCESS = 1;
     private static final int FAIL = -1;
@@ -91,16 +100,78 @@ public class NoticeServiceImpl implements NoticeService {
         NoticeResultListDto noticeResultListDto = new NoticeResultListDto();
 
         try {
-            noticeResultListDto.setNoticeDtoList(noticeDao.noticeListSearch(userSeq, groupId, start, end));
+            noticeResultListDto.setNoticeResultDtoList(noticeDao.noticeListSearch(userSeq, groupId, start, end));
+            for (int i = 0; i < noticeResultListDto.getNoticeResultDtoList().size(); i++) {
+                NoticeResultDto nowNoticeResultDto = noticeResultListDto.getNoticeResultDtoList().get(i);
+                String nowNoticeType = nowNoticeResultDto.getNoticeType();
+                int nowContentId = nowNoticeResultDto.getNoticeContentId();
+
+                if (nowNoticeType == "feed") {
+                    nowNoticeResultDto.setNoticeContentTitle(feedDao.feedDetail(nowContentId).getFeedTitle());
+                    nowNoticeResultDto.setNoticeContentContent(feedDao.feedDetail(nowContentId).getFeedContent());
+                } else if (nowNoticeType == "comment") {
+                    continue;
+//                    nowNoticeResultDto.setNoticeContentTitle(commentDao.feedDetail(nowContentId).getFeedTitle());
+//                    nowNoticeResultDto.setNoticeContentContent(commentDao.feedDetail(nowContentId).getFeedContent());
+                } else if (nowNoticeType == "emotion") {
+                    continue;
+//                    nowNoticeResultDto.setNoticeContentTitle(feedDao.feedDetail(nowContentId).getFeedTitle());
+//                    nowNoticeResultDto.setNoticeContentContent(feedDao.feedDetail(nowContentId).getFeedContent());
+                } else if (nowNoticeType == "share") {
+                    continue;
+//                    nowNoticeResultDto.setNoticeContentTitle(feedDao.feedDetail(nowContentId).getFeedTitle());
+//                    nowNoticeResultDto.setNoticeContentContent(feedDao.feedDetail(nowContentId).getFeedContent());
+                } else if (nowNoticeType == "vote") {
+                    continue;
+//                    nowNoticeResultDto.setNoticeContentTitle(feedDao.feedDetail(nowContentId).getFeedTitle());
+//                    nowNoticeResultDto.setNoticeContentContent(feedDao.feedDetail(nowContentId).getFeedContent());
+                } else if (nowNoticeType == "ghostleg") {
+                    continue;
+//                    nowNoticeResultDto.setNoticeContentTitle(feedDao.feedDetail(nowContentId).getFeedTitle());
+//                    nowNoticeResultDto.setNoticeContentContent(feedDao.feedDetail(nowContentId).getFeedContent());
+                } else {
+                    continue;
+
+
+                }
+            }
+
+
             noticeResultListDto.setCount(noticeDao.noticeCount(userSeq, groupId));
             noticeResultListDto.setResult(SUCCESS);
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             noticeResultListDto.setResult(FAIL);
 
         }
 
         return noticeResultListDto;
+    }
+
+    @Override
+    @Transactional
+    public int noticeRead(int noticeId) {
+        try {
+            noticeDao.noticeRead(noticeId);
+            return SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return FAIL;
+    }
+
+    @Override
+    @Transactional
+    public int noticeReadAll(int groupId, int userSeq) {
+        try {
+            noticeDao.noticeReadAll(groupId, userSeq);
+            return SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return FAIL;
     }
 }
