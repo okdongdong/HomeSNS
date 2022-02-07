@@ -11,22 +11,31 @@
 
     <!-- 알림 읽음 -->
     <update id="noticeRead" parameterType="int">
-        UPDATE HOME_SNS.NOTICE
-        SET NOTICE_READ_YN = "y",
-            WHERE NOTICE_ID = #{noticeId}
+        UPDATE NOTICE
+        SET NOTICE_READ_YN = "y"
+        WHERE NOTICE_ID = #{noticeId}
+    </update>
+
+    <!-- 알림 모두 읽음 -->
+    <update id="noticeReadAll" parameterType="int">
+        UPDATE NOTICE
+        SET NOTICE_READ_YN = "y"
+        WHERE TARGET_USER_GROUP_ID = #{groupId}
+        AND TARGET_USER_SEQ = #{userSeq}
     </update>
 
     <!-- 알림 조회 -->
-    <select id="noticeListSearch" parameterType="int" resultType="com.ssafy.homesns.dto.NoticeDto">
-        SELECT NOTICE_ID            as noticeId,
-               USER_SEQ             as userSeq,
-               NOTICE_TYPE          as noticeType,
-               NOTICE_CONTENT_ID    as noticeContentId,
-               NOTICE_READ_YN       as noticeReadYn,
-               TARGET_USER_SEQ      as targetUserSeq,
-               TARGET_USER_GROUP_ID as targetUserGroupId,
-               NOTICE_TIME          as noticeTime
+    <select id="noticeListSearch" parameterType="int" resultType="com.ssafy.homesns.dto.NoticeResultDto">
+        SELECT NOTICE_ID              as noticeId,
+               NOTICE.USER_SEQ        as userSeq,
+               USER_NAME              as userName,
+               USER_PROFILE_IMAGE_URL as userProfileImageUrl,
+               NOTICE_TYPE            as noticeType,
+               NOTICE_CONTENT_ID      as noticeContentId,
+               NOTICE_READ_YN         as noticeReadYn,
+               NOTICE_TIME            as noticeTime
         FROM NOTICE
+                 LEFT JOIN USER ON USER.USER_SEQ = NOTICE.USER_SEQ
         WHERE TARGET_USER_SEQ = #{targetUserSeq}
           And TARGET_USER_GROUP_ID = #{targetUserGroupId}
         ORDER BY NOTICE_TIME DESC LIMIT #{start}, #{end};

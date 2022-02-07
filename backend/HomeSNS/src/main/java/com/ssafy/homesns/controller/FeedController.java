@@ -79,18 +79,7 @@ public class FeedController {
 		// 작성자 셋팅
 		feedDto.setFeedAuthorSeq(authorSeq);
 		
-		
-
-		
-		
-		System.out.println("Controller feedDto --------- ");
-		System.out.println(feedDto);
- 
-				
-		
-//		feedDto.setFeedEventDate(feedEventDate.getFeedEventDate());
 		FeedResultDto feedResultDto = feedService.feedInsert(feedDto, request);
-		
 		if( feedResultDto.getResult() == SUCCESS ) {
 			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);
 		}else {

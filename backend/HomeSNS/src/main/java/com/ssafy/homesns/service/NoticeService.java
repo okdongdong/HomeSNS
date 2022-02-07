@@ -8,4 +8,6 @@ public interface NoticeService {
 
     NoticeResultListDto noticeCreate(NoticeDto noticeDto);
     NoticeResultListDto noticeListSearch(int userSeq, int groupId, int start, int end);
+    int noticeRead(int noticeId);
+    int noticeReadAll(int groupId, int userSeq);
 }

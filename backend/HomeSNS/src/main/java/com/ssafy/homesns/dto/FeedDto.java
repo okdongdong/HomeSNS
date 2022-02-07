@@ -19,6 +19,8 @@ public class FeedDto {
 	private String feedLocation;
 	private Date feedUploadDate;
 
+	private String feedLocationStr; 
+	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate feedEventDate;
  
@@ -163,19 +165,24 @@ public class FeedDto {
 	public void setUserList(List<UserDto> userList) {
 		this.userList = userList;
 	}
+	
+	
+	public String getFeedLocationStr() {
+		return feedLocationStr;
+	}
+	public void setFeedLocationStr(String feedLocationStr) {
+		this.feedLocationStr = feedLocationStr;
+	}
 	@Override
 	public String toString() {
 		return "FeedDto [feedId=" + feedId + ", groupId=" + groupId + ", feedAuthorSeq=" + feedAuthorSeq
 				+ ", feedAuthor=" + feedAuthor + ", feedTitle=" + feedTitle + ", feedContent=" + feedContent
 				+ ", feedHashtags=" + feedHashtags + ", feedAttendees=" + feedAttendees + ", feedLocation="
-				+ feedLocation + ", feedUploadDate=" + feedUploadDate + ", feedEventDate=" + feedEventDate + ", good="
-				+ good + ", sad=" + sad + ", check=" + check + ", fun=" + fun + ", amaze=" + amaze + ", fileList="
-				+ fileList + ", commentList=" + commentList + ", hashtagList=" + hashtagList + ", locationDto="
-				+ locationDto + ", userList=" + userList + "]";
+				+ feedLocation + ", feedUploadDate=" + feedUploadDate + ", feedLocationStr=" + feedLocationStr
+				+ ", feedEventDate=" + feedEventDate + ", good=" + good + ", sad=" + sad + ", check=" + check + ", fun="
+				+ fun + ", amaze=" + amaze + ", fileList=" + fileList + ", commentList=" + commentList
+				+ ", hashtagList=" + hashtagList + ", locationDto=" + locationDto + ", userList=" + userList + "]";
 	}
-	
-	
-	
 	
 	
 	

@@ -8,7 +8,7 @@ public class LocationDto {
 	private float lat;
 	private float lng;
 	
-	private boolean isFavorite;
+	private boolean favorite;
 
 	
 	public int getLocationId() {
@@ -51,18 +51,19 @@ public class LocationDto {
 		this.lng = lng;
 	}
 
-	public boolean isFavorite() {
-		return isFavorite;
+
+	public boolean getFavorite() {
+		return favorite;
 	}
 
-	public void setFavorite(boolean isFavorite) {
-		this.isFavorite = isFavorite;
+	public void setFavorite(boolean favorite) {
+		this.favorite = favorite;
 	}
 
 	@Override
 	public String toString() {
 		return "LocationDto [locationId=" + locationId + ", groupId=" + groupId + ", locationName=" + locationName
-				+ ", lat=" + lat + ", lng=" + lng + ", isFavorite=" + isFavorite + "]";
+				+ ", lat=" + lat + ", lng=" + lng + ", favorite=" + favorite + "]";
 	}
 	
 	

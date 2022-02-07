@@ -24,6 +24,7 @@ public class NoticeController {
     @Autowired
     NoticeService noticeService;
     private static final int SUCCESS = 1;
+    private static final int FAIL = -1;
 
     // receive를 메시지를 받을 endpoint로 설정합니다.
     @MessageMapping("/notice/receive/{groupId}")
@@ -44,7 +45,7 @@ public class NoticeController {
             @RequestParam("groupId") int groupId,
             @RequestParam("start") int start
     ) {
-        int end = start+20;
+        int end = start + 20;
         // Security Context에서 UserSeq를 구한다
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         int userSeq = Integer.parseInt(authentication.getName());
@@ -55,6 +56,26 @@ public class NoticeController {
             return new ResponseEntity<NoticeResultListDto>(noticeResultListDto, HttpStatus.OK);
         }
         return new ResponseEntity<NoticeResultListDto>(noticeResultListDto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @PutMapping(value = "/noticeread/{noticeId}")
+    @ResponseBody
+    public ResponseEntity noticeRead(@PathVariable int noticeId) {
+        if (noticeService.noticeRead(noticeId) == SUCCESS) {
+            return new ResponseEntity(SUCCESS, HttpStatus.OK);
+        }
+        return new ResponseEntity(FAIL, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @PutMapping(value = "/noticelist/{groupId}")
+    @ResponseBody
+    public ResponseEntity noticeReadAll(@PathVariable int groupId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        int userSeq = Integer.parseInt(authentication.getName());
+        if (noticeService.noticeReadAll(groupId, userSeq) == SUCCESS) {
+            return new ResponseEntity(SUCCESS, HttpStatus.OK);
+        }
+        return new ResponseEntity(FAIL, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
 
