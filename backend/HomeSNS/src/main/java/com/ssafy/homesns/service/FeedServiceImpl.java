@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.homesns.dao.FeedDao;
 import com.ssafy.homesns.dto.CommentDto;
 import com.ssafy.homesns.dto.EventMemberDto;
@@ -22,7 +24,6 @@ import com.ssafy.homesns.dto.HashtagDto;
 import com.ssafy.homesns.dto.LocationDto;
 import com.ssafy.homesns.dto.LocationFavoriteDto;
 import com.ssafy.homesns.dto.UserDto;
-import com.ssafy.homesns.util.Utils;
 
 @Service
 public class FeedServiceImpl implements FeedService {
@@ -140,7 +141,6 @@ public class FeedServiceImpl implements FeedService {
 	// feed 추가
 	// hashtag List추가 
 	// file List 추가
-
 	@Override
 	@Transactional
 	public FeedResultDto feedInsert(FeedDto feedDto, MultipartHttpServletRequest request) {
@@ -152,43 +152,52 @@ public class FeedServiceImpl implements FeedService {
 			//feed table 추가
 			feedDao.feedInsert(feedDto);
 			int feedId = feedDto.getFeedId();
-			System.out.println(feedDto);
 
 			// hashtag 추가 
 			String hashtagStr = feedDto.getFeedHashtags();
 			if(hashtagStr !=null) {				
-				List<String> hashtags = Utils.tagParser(hashtagStr);	
-				int len = hashtags.size();
+
+				//JSON포맷의  String hashtag를 자동으로 JSON으로 변환시킨후 HashtagDto에 Mapping 
+				ObjectMapper objectMapper = new ObjectMapper(); 
+				List<HashtagDto> hashtagList = objectMapper.readValue(hashtagStr, new TypeReference<List<HashtagDto>>() {});
+
+				int len = hashtagList.size();
 				for(int i = 0 ; i < len ; i++) {
-					HashtagDto hashtagDto = new HashtagDto();
-					hashtagDto.setHashtagContent(hashtags.get(i));
-					hashtagDto.setFeedId(feedId);
-					feedDao.feedHashtagInsert(hashtagDto);
-				}
+					hashtagList.get(i).setFeedId(feedId);
+					feedDao.feedHashtagInsert(hashtagList.get(i));
+				}				
 			}
 
-			
-	 
 
+	
 			// 참가 인원 추가
+			String attendeeStr = feedDto.getFeedAttendees();
 
-			List<UserDto> userDtoList = feedDto.getUserList();
-
-			if(userDtoList != null) {
-				for (UserDto userDto : userDtoList) {
-					EventMemberDto eventMemberDto = new EventMemberDto();
-					eventMemberDto.setUserSeq(userDto.getUserSeq());
-					eventMemberDto.setFeedId(feedId);
-					feedDao.feedEventMemberInsert(eventMemberDto);
-				}
+			if(attendeeStr != null) {
+				ObjectMapper objectMapper = new ObjectMapper(); 
+				List<EventMemberDto> attendeeList = objectMapper.readValue(attendeeStr, new TypeReference<List<EventMemberDto>>() {});
+			
+				int len = attendeeList.size();
+				for(int i = 0 ; i < len ; i++) {
+					attendeeList.get(i).setFeedId(feedId);
+					feedDao.feedEventMemberInsert(attendeeList.get(i));
+				}		
+				
 			}
 			// 장소 추가
-			LocationDto locationDto = feedDto.getLocationDto();
-			if(locationDto != null) {
+			String locationStr = feedDto.getFeedLocationStr();
+			if(locationStr != null) {
+				ObjectMapper objectMapper = new ObjectMapper(); 
+				LocationDto locationDto = objectMapper.readValue(locationStr, LocationDto.class);
+//				Map<String, LocationDto> locationDto = objectMapper.readValue(locationStr, LocationDto.class);
+				locationDto.setGroupId(feedDto.getGroupId());
 				feedDao.feedLocationInsert(locationDto);
+				
+				System.out.println("locationDto-----:" + locationDto );
+			
 			
 			// 장소 즐겨찾기 추가
-				if ( locationDto.isFavorite() ) {
+				if ( locationDto.getFavorite() ) {
 					LocationFavoriteDto locationFavoriteDto = new LocationFavoriteDto();
 					locationFavoriteDto.setLocationId(locationDto.getLocationId());
 					locationFavoriteDto.setUserSeq(feedDto.getFeedAuthorSeq());
@@ -240,10 +249,12 @@ public class FeedServiceImpl implements FeedService {
 			System.out.println("Service feedDto --------- ");
 			System.out.println(feedDto);
 			feedResultDto.setResult(SUCCESS);
+			feedResultDto.setFeedId(feedId);
 
 		}catch(IOException e) {
 			e.printStackTrace();
 			feedResultDto.setResult(FAIL);
+			
 		}
 		return feedResultDto;
 	}

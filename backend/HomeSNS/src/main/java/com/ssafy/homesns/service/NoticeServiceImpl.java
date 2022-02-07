@@ -91,7 +91,7 @@ public class NoticeServiceImpl implements NoticeService {
 
         return noticeResultListDto;
     }
-
+    
     // 모든알림을 받아와서 반환
     @Override
     @Transactional
