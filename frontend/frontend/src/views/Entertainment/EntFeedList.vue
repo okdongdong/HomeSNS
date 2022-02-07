@@ -121,7 +121,7 @@ export default {
 
       axios({
         method: "get",
-        url: `${process.env.VUE_APP_MCS_URL}/entfeedlist}`,
+        url: `${process.env.VUE_APP_MCS_URL}/entfeedlist`,
         headers: { Authorization: token },
         params: {
           groupId: this.nowGroup.groupId,
