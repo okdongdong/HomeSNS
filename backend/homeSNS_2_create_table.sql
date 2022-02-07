@@ -20,8 +20,8 @@ CREATE TABLE `feed` (
 	`feed_author`	int	NULL,
 	`feed_title`	varchar(20)	NULL,
 	`feed_content`	varchar(200)	NULL,
-	`feed_upload_date`	date	NULL,
-	`feed_event_date`	date	NULL,
+	`feed_upload_date`	timestamp	NULL,
+	`feed_event_date`	datetime	NULL,
 	`feed_location`	varchar(20)	NULL
 );
 
@@ -48,7 +48,7 @@ CREATE TABLE `group_list` (
 	`group_name`	varchar(20)	NULL,
 	`group_profile_image_url`	varchar(100)	NULL DEFAULT "image/nogroupimage.png",
 	`group_leader_seq`	varchar(20)	NOT NULL,
-	`group_password`	varchar(20)	NULL
+	`group_password`	varchar(100)	NULL
 );
 
 CREATE TABLE `group_member` (
@@ -162,7 +162,7 @@ CREATE TABLE `comment_emotion_user_use` (
 ALTER TABLE `feed` ADD CONSTRAINT `FK_group_TO_feed_1` FOREIGN KEY (
 	`group_id`
 )
-REFERENCES `group` (
+REFERENCES `group_list` (
 	`group_id`
 );
 
@@ -184,7 +184,7 @@ ON DELETE CASCADE;
 ALTER TABLE `group_member` ADD CONSTRAINT `FK_group_TO_group_member_1` FOREIGN KEY (
 	`group_id`
 )
-REFERENCES `group` (
+REFERENCES `group_list` (
 	`group_id`
 );
 
@@ -198,7 +198,7 @@ REFERENCES `user` (
 ALTER TABLE `schedule` ADD CONSTRAINT `FK_group_TO_schedule_1` FOREIGN KEY (
 	`group_id`
 )
-REFERENCES `group` (
+REFERENCES `group_list` (
 	`group_id`
 );
 
@@ -252,7 +252,7 @@ ON DELETE CASCADE;
 ALTER TABLE `location` ADD CONSTRAINT `FK_group_TO_location_1` FOREIGN KEY (
 	`group_id`
 )
-REFERENCES `group` (
+REFERENCES `group_list` (
 	`group_id`
 );
 
@@ -273,7 +273,7 @@ REFERENCES `user` (
 ALTER TABLE `vote` ADD CONSTRAINT `FK_group_TO_vote_1` FOREIGN KEY (
 	`group_id`
 )
-REFERENCES `group` (
+REFERENCES `group_list` (
 	`group_id`
 );
 

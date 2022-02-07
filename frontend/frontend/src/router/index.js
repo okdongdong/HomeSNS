@@ -26,7 +26,7 @@ import Main from "../views/Feed/Main.vue";
 
 import GroupCreate from "../views/Group/GroupCreate.vue";
 // import Management from '../views/Group/Management.vue'
-import Member from "../views/Group/Member.vue";
+import GroupProfile from "../views/Group/GroupProfile.vue";
 import Select from "../views/Group/Select.vue";
 
 import UserPage from "../views/Profile/UserPage.vue";
@@ -73,9 +73,9 @@ const routes = [
   },
 
   {
-    path: '/location',
-    name: 'Location',
-    component: Location
+    path: "/location",
+    name: "Location",
+    component: Location,
   },
   //test
   {
@@ -143,9 +143,9 @@ const routes = [
   //   component: Management
   // },
   {
-    path: "/member",
-    name: "Member",
-    component: Member,
+    path: "/groupprofile",
+    name: "GroupProfile",
+    component: GroupProfile,
   },
 
   {
@@ -162,17 +162,21 @@ const router = new VueRouter({
   routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//   // console.log(to);
-//   // console.log(from);
-//   const token = localStorage.getItem("jwt");
-//   if (token && to.name == "Login") {
-//     next({ name: "Select" });
-//   } else if (!token && to.name != "Login") {
-//     next({ name: "Login" });
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  // console.log(to);
+  // console.log(from);
+  const token = localStorage.getItem("jwt");
+  if (token && (to.name == "Login" || to.name == "SignUp")) {
+    next({ name: "Select" });
+  } else if (!token && to.name != "Login") {
+    if (to.name == "SignUp" || to.name ==  "FindId" || to.name ==  "FindPassword") {
+      next();
+    } else {
+      next({ name: "Login" });
+    }
+  } else {
+    next();
+  }
+});
 
 export default router;
