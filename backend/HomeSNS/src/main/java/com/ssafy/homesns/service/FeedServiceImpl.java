@@ -170,8 +170,6 @@ public class FeedServiceImpl implements FeedService {
 				}				
 			}
 
-			
-
 
 	
 			// 참가 인원 추가
