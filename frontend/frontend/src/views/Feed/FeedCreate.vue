@@ -77,6 +77,7 @@
               v-model="form.locaLabel"
               :items="locaLabels"
               label="장소 이름"
+              @change="locaLabelInput"
             >
             <v-btn 
               slot="append"
@@ -101,7 +102,7 @@
             </v-combobox>
           </v-col>
           <v-col cols="1" class="d-flex align-center" style="padding:0px">
-            <v-btn icon @click="show = !show">
+            <v-btn icon @click="show = !show" :disabled="roomAbled">
               <v-icon large>room</v-icon>
             </v-btn>
           </v-col>
@@ -152,9 +153,11 @@
             <v-combobox
               v-model="form.attendPeople"
               :items="items"
+              item-text="name"
               label="참석자 명단"
               multiple
               chips
+              return-object
             ></v-combobox>
           </v-col>
           <!-- 내용 -->
@@ -183,7 +186,7 @@
             >
             <template v-slot:prepend-inner>
               <div v-for="(tag , index) in form.hashtag" :key="index">
-                <v-chip class="ma-1" close @click:close="remove(tag)">{{tag}}</v-chip>
+                <v-chip class="ma-1" close @click:close="remove(tag)">{{tag.hashtagContent}}</v-chip>
               </div>
             </template>
             </v-text-field>
@@ -212,6 +215,7 @@
 </template>
 
 <script>
+
 import axios from 'axios'
 import {gmapApi} from 'vue2-google-maps'
   export default {
@@ -237,13 +241,14 @@ import {gmapApi} from 'vue2-google-maps'
         tmphashtag:null,
         snackbar: false,
         items: [ // 그룹 명단
-          '강동옥',
-          '김태현',
-          '박상준',
-          '임창현',
-          '최이삭',
+          {userSeq: 1, name:'강동옥'},
+          {userSeq: 2,name : '김태현'},
+          {userSeq: 3,name : '박상준'},
+          {userSeq: 4,name : '임창현'},
+          {userSeq: 5,name : '최이삭'},
         ],
         show : false,
+        roomAbled : false,
         // 구글 맵
         center: { lat: 37.5642135, lng: 127.0016985 }, // 처음 센터 값 (서울)
         currentPlace: null, // 현재위치
@@ -283,20 +288,30 @@ import {gmapApi} from 'vue2-google-maps'
         this.snackbar = true
         this.resetForm()
       },
+      locaLabelInput(value){
+        if (value === null){
+          if(this.locaLabel !== null){
+            value = true
+          }
+        }
+        // else{
+          
+        // }
+      },
       addHashTag () { // 해시태그 많아지면 옆으로 넘어가게 하고싶은데 ..
         let flag = 0
         if (this.tmphashtag !== null) {
           if(this.form.hashtag.length === 0){
-            this.form.hashtag.push(this.tmphashtag)
+            this.form.hashtag.push({hashtagContent : this.tmphashtag})
           }
           else {
             for(let i=0;i<this.form.hashtag.length; i++){
-            if (this.form.hashtag[i] === this.tmphashtag){
+            if (this.form.hashtag[i].hashtagContent === this.tmphashtag){
               flag = 1
               }
             }
             if(flag === 0){
-              this.form.hashtag.push(this.tmphashtag)
+              this.form.hashtag.push({hashtagContent : this.tmphashtag})
             }
           }
         }
@@ -340,7 +355,22 @@ import {gmapApi} from 'vue2-google-maps'
           }
           this.markers=[{ position: marker }]
             // this.places = [this.currentPlace]
-            this.center = marker
+          this.center = marker
+          axios({
+            method:'GET',
+            // url: `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${event.latLng.lat()},${event.latLng.lng()}&sourcecrs=epsg:3857&orders=addr,roadaddr&output=json`,
+            url : `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc`,
+            headers : {
+              'X-NCP-APIGW-API-KEY-ID' : `${process.env.VUE_APP_NAVER_CLIENT_ID}`,
+              'X-NCP-APIGW-API-KEY' : `${process.env.VUE_APP_NAVER_CLIENT_SECRET}`
+            }
+          })
+          .then((res)=>{
+            console.log(res)
+          })
+          .catch((error)=>{
+            console.log(error)
+          })
         },
         updateMarker(index,location){
           const marker ={
@@ -393,7 +423,7 @@ import {gmapApi} from 'vue2-google-maps'
           data.append('feedEventDate', this.form.date)
           let file = []
           for(let i = 0; i<this.form.files.length ;i++){
-            file.push(this.form.files.content)
+            file.push(this.form.files[i].content)
           }
           data.append('fileList',file)
           if(this.form.localLabel === 0 || this.markers.length === 0){
@@ -404,13 +434,37 @@ import {gmapApi} from 'vue2-google-maps'
           }
           else{
             data.append('feedLocation', this.form.locaLabel)
-            data.append('Lat', this.markers[0].lat) // 위도
-            data.append('Lng',this.markers[0].lng) // 경도
+            data.append('Lat', this.markers[0].position.lat) // 위도
+            data.append('Lng',this.markers[0].position.lng) // 경도
             data.append('Fav',this.form.currLocaFav) // 장소 즐겨찾기 여부
           }
-          data.append('attendPpl',this.form.attendPeople) // 참석인 변수 모룸,,
+          // 참석인이 있는 경우
+          let attendeeList = []
+          if(this.form.attendPeople.length>0){
+            for(let i = 0; i<this.form.attendPeople.length ;i++){
+              console.log(this.form.attendPeople[i].seq)
+              attendeeList.push({userSeq: this.form.attendPeople[i].userSeq})
+            }
+          }
+          data.append('feedAttendees',JSON.stringify(attendeeList))
           data.append('feedContent', this.form.content)
-          data.append('hashtagList', this.form.hashtagList)
+          data.append('hashtagList', JSON.stringify(this.form.hashtag))
+
+          console.log(data.fileList)
+          console.log(this.form.hashtag)
+          for (let [key,value] of data) {
+            console.log(key);
+            console.log(value);
+          }
+
+          // let json_data = {}
+          // for(let [key,value] of data){
+          //   json_data[key]=value;
+          // }
+          // console.log(json_data)
+
+
+
           axios({
             method : 'POST',
             url : `${process.env.VUE_APP_MCS_URL}/feed`,
