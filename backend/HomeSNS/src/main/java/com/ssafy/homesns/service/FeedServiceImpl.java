@@ -22,6 +22,7 @@ import com.ssafy.homesns.dto.HashtagDto;
 import com.ssafy.homesns.dto.LocationDto;
 import com.ssafy.homesns.dto.LocationFavoriteDto;
 import com.ssafy.homesns.dto.UserDto;
+import com.ssafy.homesns.util.Utils;
 
 @Service
 public class FeedServiceImpl implements FeedService {
@@ -154,41 +155,51 @@ public class FeedServiceImpl implements FeedService {
 			System.out.println(feedDto);
 
 			// hashtag 추가 
-		
-			List<HashtagDto> hashtagDtoList = feedDto.getHashtagList();
-
-			if(hashtagDtoList != null) {
-				
-				for (HashtagDto hashtagDto : hashtagDtoList) {
+			String hashtagStr = feedDto.getFeedHashtags();
+			if(hashtagStr !=null) {				
+				List<String> hashtags = Utils.tagParser(hashtagStr);	
+				int len = hashtags.size();
+				for(int i = 0 ; i < len ; i++) {
+					HashtagDto hashtagDto = new HashtagDto();
+					hashtagDto.setHashtagContent(hashtags.get(i));
 					hashtagDto.setFeedId(feedId);
 					feedDao.feedHashtagInsert(hashtagDto);
 				}
 			}
 
+			
+	 
+
 			// 참가 인원 추가
+
 			List<UserDto> userDtoList = feedDto.getUserList();
 
-			for (UserDto userDto : userDtoList) {
-				EventMemberDto eventMemberDto = new EventMemberDto();
-				eventMemberDto.setUserSeq(userDto.getUserSeq());
-				eventMemberDto.setFeedId(feedId);
-				feedDao.feedEventMemberInsert(eventMemberDto);
+			if(userDtoList != null) {
+				for (UserDto userDto : userDtoList) {
+					EventMemberDto eventMemberDto = new EventMemberDto();
+					eventMemberDto.setUserSeq(userDto.getUserSeq());
+					eventMemberDto.setFeedId(feedId);
+					feedDao.feedEventMemberInsert(eventMemberDto);
+				}
 			}
-
 			// 장소 추가
 			LocationDto locationDto = feedDto.getLocationDto();
-			feedDao.feedLocationInsert(locationDto);
-
+			if(locationDto != null) {
+				feedDao.feedLocationInsert(locationDto);
+			
 			// 장소 즐겨찾기 추가
-			if ( locationDto.isFavorite() ) {
-				LocationFavoriteDto locationFavoriteDto = new LocationFavoriteDto();
-				locationFavoriteDto.setLocationId(locationDto.getLocationId());
-				locationFavoriteDto.setUserSeq(feedDto.getFeedAuthorSeq());
-				feedDao.feedLocationFavoriteInsert(locationFavoriteDto);
+				if ( locationDto.isFavorite() ) {
+					LocationFavoriteDto locationFavoriteDto = new LocationFavoriteDto();
+					locationFavoriteDto.setLocationId(locationDto.getLocationId());
+					locationFavoriteDto.setUserSeq(feedDto.getFeedAuthorSeq());
+					feedDao.feedLocationFavoriteInsert(locationFavoriteDto);
+				}
 			}
 
 
 			List<MultipartFile> fileList = request.getFiles("file");
+			if(fileList != null) {
+				
 			File uploadDir = new File(uploadPath + File.separator + uploadFolder);
 			if (!uploadDir.exists()) uploadDir.mkdir();
 
@@ -222,8 +233,12 @@ public class FeedServiceImpl implements FeedService {
 
 				//file 추가 
 				feedDao.feedFileInsert(fileDto);
+				}
 			}
 
+			
+			System.out.println("Service feedDto --------- ");
+			System.out.println(feedDto);
 			feedResultDto.setResult(SUCCESS);
 
 		}catch(IOException e) {
