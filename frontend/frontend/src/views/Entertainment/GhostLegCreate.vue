@@ -228,16 +228,19 @@ export default {
         resultNames: [],
       };
       data.playerNum = this.playerNum;
-      for (let i = 1; i <= this.playerNum; i++) {
-        data.isEdge.push(this.isEdge[i]);
-        data.playerNames.push(this.playerNames[i]);
-        data.resultNames.push(this.resultNames[i]);
-      }
+      this.isEdge.forEach((arr) => {
+        data.isEdge.push(arr.join());
+      });
+      data.isEdge = data.isEdge.join("+");
+      data.playerNames = this.playerNames.join();
+
+      console.log(data)
+
       const token = localStorage.getItem("jwt");
       axios({
         method: "POST",
         url: `${process.env.VUE_APP_MCS_URL}/ghostleg`,
-        headers: { Authorization: `JWT ${token}` },
+        headers: { Authorization: token },
         data: data,
       })
         .then((res) => {
