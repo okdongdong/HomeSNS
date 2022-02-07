@@ -48,25 +48,31 @@
     </div>
     <v-sheet height="500">
       <v-calendar
+        :event-color="getEventColor"
+        :events="events"
+        :start="start"
+        :type="type"
+        @click:date="open"
+        @click:event="showEvent"
+        @click:more="moreEvent"
+        @click:time="open"
         ref="calendar"
         v-model="start"
-        @click:date="open"
-        :type="type"
+        
       ></v-calendar>
     </v-sheet>
-    <event></event>
+    <EventDialog></EventDialog>
 </v-app>
 </template>
 
 <script>
-import { mapMutations } from "vuex";
-import Event from '@/components/Event.vue'
+import EventDialog from '@/components/EventDialog.vue'
 
 
 export default {
-  name: 'Schedule',
+  name: 'Calendar',
   components: {
-    Event
+    EventDialog
   },
 
   data() {
@@ -83,13 +89,9 @@ export default {
   },
 
   methods: {
-    
-    
-    ...mapMutations('addEvent', ['OPEN_CALENDAR_DIALOG']),
-
     open(date) {
-      this.OPEN_CALENDAR_DIALOG(date)
-
+      console.log('1')
+      this.$store.commit('OPEN_CALENDAR_DIALOG', date)
     }
   },
 }

@@ -42,7 +42,7 @@ export default {
       this.$router.push({ name: "Timeline" });
     },
     moveToSchedule() {
-      this.$router.push({ name: "Schedule" });
+      this.$router.push({ name: "Calendar" });
     },
   },
 };

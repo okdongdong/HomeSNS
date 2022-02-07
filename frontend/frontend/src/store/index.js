@@ -6,7 +6,7 @@ import account from "./modules/account";
 import vote from "./modules/vote";
 import getMain from "./modules/getMain";
 import minigame from "./modules/minigame";
-import addEvent from "./modules/addEvent";
+import calendar from "./modules/calendar";
 
 Vue.use(Vuex);
 
@@ -16,7 +16,7 @@ export default new Vuex.Store({
     vote,
     getMain,
     minigame,
-    addEvent,
+    calendar,
   },
   plugins: [createPersistedState({ paths: ["account"] })],
 });
