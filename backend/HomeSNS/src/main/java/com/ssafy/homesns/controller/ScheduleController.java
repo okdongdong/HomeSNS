@@ -3,25 +3,19 @@ package com.ssafy.homesns.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.homesns.dto.ScheduleDto;
 import com.ssafy.homesns.dto.ScheduleResultDto;
 import com.ssafy.homesns.service.ScheduleService;
 
 @CrossOrigin(
-		origins = "http://localhost:5500", // npm에서 5500번을 사용한다
+		origins = {"http://localhost:5500", "http://192.168.0.100:5500/"}, // npm에서 5500번을 사용한다
 		allowCredentials = "true", // axios가 sessionId를 계속 다른것을 보내는데, 이것을 고정시켜준다
 		allowedHeaders = "*",
 		methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, 
 				RequestMethod.DELETE, RequestMethod.HEAD, RequestMethod.OPTIONS })
+@RestController
 public class ScheduleController {
 
 	@Autowired
