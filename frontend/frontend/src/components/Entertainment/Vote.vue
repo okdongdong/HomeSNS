@@ -13,7 +13,7 @@
             height="30"
             :color="info.myVoteItem === idx ? 'rgb(98,101,232)' : '#ABABAB'"
             :value="votePercent(voteItem.voteCnt)"
-            @click.stop="info.nowVote ? myVote(idx) : pass"
+            @click.stop="info.nowVote ? myVote(idx) : ''"
             ><div class="d-flex justify-space-between container">
               <div>
                 {{ voteItem.voteItemName }}
@@ -34,11 +34,15 @@
               flat
               color="#00000000"
             >
-              <v-radio
-                :value="idx"
+              <v-icon
                 @click.stop="myVote(idx)"
-                :checked="info.myVoteItem === idx"
-              ></v-radio>
+                :color="info.myVoteItem === idx ? 'rgb(98,101,232)' : '#ABABAB'"
+                >{{
+                  info.myVoteItem === idx
+                    ? "radio_button_checked"
+                    : "radio_button_unchecked"
+                }}</v-icon
+              >
             </v-card>
           </v-expand-x-transition>
         </div>
