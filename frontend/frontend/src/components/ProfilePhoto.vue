@@ -4,12 +4,13 @@
       $router.push({
         name: 'UserPage',
         params: { userSeq: userSeq },
-      })
+      }),
+      clicked()
     "
   >
     <div class="justify-center d-flex">
       <v-avatar :size="size + 'px'" elevation="12" color="#846543">
-        <div v-if="imgUrl">
+        <div v-if="imgUrl && imgUrl!=null">
           <img
             :src="imgUrl"
             :style="'width:' + size + 'px;height:' + size + 'px'"
@@ -39,7 +40,11 @@ export default {
   },
   mounted() {},
 
-  methods: {},
+  methods: {
+    clicked(){
+      this.$emit('clicked')
+    }
+  },
 };
 </script>
 
