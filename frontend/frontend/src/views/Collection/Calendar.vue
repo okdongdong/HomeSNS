@@ -89,8 +89,13 @@ export default {
 
   methods: {
     open(date) {
-      console.log('1')
       this.$store.commit('OPEN_CALENDAR_DIALOG', date)
+    }
+  },
+
+  computed: {
+    events() {
+      return this.$store.state.calendar.events;
     }
   },
 }
