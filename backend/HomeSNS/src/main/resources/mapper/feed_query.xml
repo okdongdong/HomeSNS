@@ -118,7 +118,7 @@
 	
 	<!-- 피드추가페이지 로딩시 프런트가 가지고 있어야하는 내용리턴  -->
 	<!-- favorite표시한 장소 담기 -->
-	<select id="userLocationList" parameterType="int" resultType="com.ssafy.homesns.dto.LocationDto">
+	<select id="userLocationList" parameterType="map" resultType="com.ssafy.homesns.dto.LocationDto">
 		SELECT LOCATION_NAME, LAT, LNG, (SELECT 	
    
 										   CASE WHEN LF.USER_SEQ IS NULL 
@@ -127,10 +127,10 @@
 												END
 						
 										FROM home_sns.location_favorite
-										where user_seq = 1) as FAVORITE
+										where user_seq = #{userSeq}) as FAVORITE
 		  FROM LOCATION L LEFT JOIN location_favorite LF
 		  ON L.LOCATION_ID = LF.LOCATION_ID
-		  WHERE GROUP_ID = 1
+		  WHERE GROUP_ID = #{groupId}
 		  ORDER BY favorite DESC;
   
 	</select>

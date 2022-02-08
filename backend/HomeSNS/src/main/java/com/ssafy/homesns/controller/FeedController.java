@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -21,6 +20,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.ssafy.homesns.dto.FeedDto;
 import com.ssafy.homesns.dto.FeedParamDto;
 import com.ssafy.homesns.dto.FeedResultDto;
+import com.ssafy.homesns.dto.GroupMemberDto;
 import com.ssafy.homesns.service.FeedService;
 
 @CrossOrigin(
@@ -42,7 +42,7 @@ public class FeedController {
 	// 파라미터로 받은 groupId를 feedMainPage로 넘겨주고 feedResultDto 값을 넘겨받는다. 
 	// feedResultDto에 feedList를 담아 리턴한다. 
 	@GetMapping(value="/main") 
-	public ResponseEntity<FeedResultDto> mainPage(@RequestBody FeedParamDto feedParamDto){
+	public ResponseEntity<FeedResultDto> mainPage(FeedParamDto feedParamDto){
 		
 		FeedResultDto feedResultDto = feedService.feedMainPage(feedParamDto);
 		
@@ -98,7 +98,11 @@ public class FeedController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		int userSeq = Integer.parseInt(authentication.getName());
 		
-		FeedResultDto feedResultDto = feedService.feedCreateInfo(groupId,userSeq);
+		GroupMemberDto params = new GroupMemberDto();
+		params.setUserSeq(userSeq);
+		params.setGroupId(groupId);
+		
+		FeedResultDto feedResultDto = feedService.feedCreateInfo(params);
 
 		
 		if( feedResultDto.getResult() == SUCCESS ) {
