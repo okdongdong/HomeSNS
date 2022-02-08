@@ -1,66 +1,104 @@
 package com.ssafy.homesns.dto;
 
-import java.sql.Date;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class ScheduleDto {
 	private int scheduleId;
 	private int groupId;
 	private String scheduleTitle;
 	private String scheduleContent;
-	private Date scheduleDate;
-	private Time scheduleTime;
-	private String scheduleLocation;
-	
+
+	// 연-월-일까지만
+//	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private String scheduleDateStart;
+//	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private String scheduleDateEnd;
+
+	// 시:분
+//	@DateTimeFormat(pattern = "HH:mm")
+	private String scheduleTimeStart;
+//	@DateTimeFormat(pattern = "HH:mm")
+	private String scheduleTimeEnd;
+
+	// 장소는 일단 보류
+//	private String scheduleLocation;
+
+
 	public int getScheduleId() {
 		return scheduleId;
 	}
-	public void setScheduleId(int scheduleId) {
-		this.scheduleId = scheduleId;
-	}
+
 	public int getGroupId() {
 		return groupId;
 	}
+
 	public void setGroupId(int groupId) {
 		this.groupId = groupId;
 	}
+
 	public String getScheduleTitle() {
 		return scheduleTitle;
 	}
+
 	public void setScheduleTitle(String scheduleTitle) {
 		this.scheduleTitle = scheduleTitle;
 	}
+
 	public String getScheduleContent() {
 		return scheduleContent;
 	}
+
 	public void setScheduleContent(String scheduleContent) {
 		this.scheduleContent = scheduleContent;
 	}
-	public Date getScheduleDate() {
-		return scheduleDate;
+
+	public String getScheduleDateStart() {
+		return scheduleDateStart;
 	}
-	public void setScheduleDate(Date scheduleDate) {
-		this.scheduleDate = scheduleDate;
+
+	public void setScheduleDateStart(String scheduleDateStart) {
+		this.scheduleDateStart = scheduleDateStart;
 	}
-	public Time getScheduleTime() {
-		return scheduleTime;
+
+	public String getScheduleDateEnd() {
+		return scheduleDateEnd;
 	}
-	public void setScheduleTime(Time scheduleTime) {
-		this.scheduleTime = scheduleTime;
+
+	public void setScheduleDateEnd(String scheduleDateEnd) {
+		this.scheduleDateEnd = scheduleDateEnd;
 	}
-	public String getScheduleLocation() {
-		return scheduleLocation;
+
+	public String getScheduleTimeStart() {
+		return scheduleTimeStart;
 	}
-	public void setScheduleLocation(String scheduleLocation) {
-		this.scheduleLocation = scheduleLocation;
+
+	public void setScheduleTimeStart(String scheduleTimeStart) {
+		this.scheduleTimeStart = scheduleTimeStart;
 	}
-	
+
+	public String getScheduleTimeEnd() {
+		return scheduleTimeEnd;
+	}
+
+	public void setScheduleTimeEnd(String scheduleTimeEnd) {
+		this.scheduleTimeEnd = scheduleTimeEnd;
+	}
+
 	@Override
 	public String toString() {
-		return "ScheduleDto [scheduleId=" + scheduleId + ", groupId=" + groupId + ", scheduleTitle=" + scheduleTitle
-				+ ", scheduleContent=" + scheduleContent + ", scheduleDate=" + scheduleDate + ", scheduleTime="
-				+ scheduleTime + ", scheduleLocation=" + scheduleLocation + "]";
+		return "ScheduleDto{" +
+				"scheduleId=" + scheduleId +
+				", groupId=" + groupId +
+				", scheduleTitle='" + scheduleTitle + '\'' +
+				", scheduleContent='" + scheduleContent + '\'' +
+				", scheduleDateStart=" + scheduleDateStart +
+				", scheduleDateEnd=" + scheduleDateEnd +
+				", scheduleTimeStart=" + scheduleTimeStart +
+				", scheduleTimeEnd=" + scheduleTimeEnd +
+				'}';
 	}
-	
-	
 }
