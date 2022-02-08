@@ -79,7 +79,7 @@ const routes = [
   },
   //test
   {
-    path: "/Calendar",
+    path: "/calendar",
     name: "Calendar",
     component: Calendar,
   },
