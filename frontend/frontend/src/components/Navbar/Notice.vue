@@ -35,12 +35,6 @@ export default {
   },
   methods: {
     ...mapActions("notice", ["send"]),
-    sendMessage(e) {
-      if (e.keyCode === 13 && this.userName !== "" && this.message !== "") {
-        this.send();
-        this.message = "";
-      }
-    },
   },
   computed: {
     ...mapState("account", ["nowGroup", "userSeq"]),
