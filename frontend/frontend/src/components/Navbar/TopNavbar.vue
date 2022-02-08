@@ -34,7 +34,9 @@
         width="70"
         src="../../assets/logo2.png"
         alt="로고"
-        @click.stop="move('Main')"
+        @click.stop="
+          $router.push({ name: 'Main', params: { groupId: nowGroup.groupId } })
+        "
       />
       <v-spacer></v-spacer>
       <v-btn rounded text @click.stop="move('FeedCreate')">추억담기 </v-btn>
