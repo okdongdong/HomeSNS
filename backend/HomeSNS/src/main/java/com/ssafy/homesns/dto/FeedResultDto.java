@@ -6,7 +6,7 @@ public class FeedResultDto {
 	private int result;
 	private FeedDto feedDto;
 	private List<FeedDto> feedList;
-	
+	private int feedId;
 	
 	public int getResult() {
 		return result;
@@ -35,6 +35,16 @@ public class FeedResultDto {
 
 	public void setFeedList(List<FeedDto> feedList) {
 		this.feedList = feedList;
+	}
+
+
+	public int getFeedId() {
+		return feedId;
+	}
+
+
+	public void setFeedId(int feedId) {
+		this.feedId = feedId;
 	}
 
 
