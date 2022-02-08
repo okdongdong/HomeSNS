@@ -4,9 +4,11 @@
       <h1>ENTERTAINMENT</h1>
       <EntCreatePopup :dialog="dialog" />
     </div>
-    <div v-for="content in contentData" :key="content">
+    <div v-for="(content, idx) in contentDataList" :key="idx">
       <EntFeedContainer :content="content" />
     </div>
+            <infinite-loading @infinite="getContent"></infinite-loading>
+
   </div>
 </template>
 
@@ -14,12 +16,14 @@
 import EntFeedContainer from "../../components/Entertainment/EntFeedContainer.vue";
 import EntCreatePopup from "../../components/Entertainment/EntCreatePopup.vue";
 import axios from "axios";
+import { mapState } from "vuex";
 
 export default {
   name: "EntFeedList",
   data: () => ({
     dialog: false,
-    contentData: [
+    start: 0,
+    contentDataList: [
       {
         type: "ghost",
         info: {
@@ -110,39 +114,59 @@ export default {
   created() {
     this.getContent();
   },
-  beforeUpdate() {
-    this.getContent();
-  },
+  beforeUpdate() {},
   methods: {
-    getContent() {
-      // 임시용 경로변경
-      this.$router.push({ name: "EntFeedList" });
+    getContent($state) {
       const token = localStorage.getItem("jwt");
-      const params = {
-        playerNum: 0,
-        isEdge: [],
-        playerNames: [],
-        resultNames: [],
-      };
-      params.playerNum = this.playerNum;
-      for (let i = 1; i <= this.playerNum; i++) {
-        params.isEdge.push(this.isEdge[i]);
-        params.playerNames.push(this.playerNames[i]);
-        params.resultNames.push(this.resultNames[i]);
-      }
+
       axios({
         method: "get",
-        url: `${process.env.VUE_APP_MCS_URL}/ghostleg`,
-        headers: { Authorization: `${token}` },
-        params: params,
+        url: `${process.env.VUE_APP_MCS_URL}/entfeedlist}`,
+        headers: { Authorization: token },
+        params: {
+          groupId: this.nowGroup.groupId,
+          start: this.start
+        }
       })
         .then((res) => {
-          this.contentData = res.data;
+          if(res.data.length) {
+          res.data.forEach((contentData) => {
+            if (contentData.type == "ghost") {
+              const tempEdge = [];
+              contentData.isEdge.split("+").forEach((arr) => {
+                tempEdge.push(arr.aplit(","));
+              });
+              const tempPlayerNames = contentData.playerNames.split(",");
+              const tempResultNamse = contentData.resultNames.split(",");
+              this.contentDataList.push({
+                type: "ghost",
+                title: contentData.title,
+                author: contentData.author,
+                authorPicUrl: contentData.authorPicUrl,
+                createdAt: contentData.createdAt,
+                playerNum: contentData.playerNum,
+                isEdge: tempEdge,
+                playerNames: tempPlayerNames,
+                resultNames: tempResultNamse,
+              });
+            } else {
+              this.contentDataList.push({
+                ...contentData,
+              });
+            }
+            this.start+=20
+            $state.loaded();
+          });} else {
+            $state.complete();
+          }
         })
         .catch((err) => {
           console.log(err);
         });
     },
+  },
+  computed: {
+    ...mapState("account", ["nowGroup"]),
   },
 };
 </script>

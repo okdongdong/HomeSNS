@@ -8,7 +8,9 @@ import SignUp from "../views/Account/SignUp.vue";
 import Background from "../views/Account/Background.vue";
 
 import Location from '../views/Collection/Location.vue'
-import Schedule from "../views/Collection/Schedule.vue";
+//test
+import Calendar from "../views/Collection/Calendar.vue";
+//test
 import Timeline from "../views/Collection/Timeline.vue";
 
 import EntFeedList from "../views/Entertainment/EntFeedList.vue";
@@ -71,15 +73,17 @@ const routes = [
   },
 
   {
-    path: '/location',
-    name: 'Location',
-    component: Location
+    path: "/location",
+    name: "Location",
+    component: Location,
   },
+  //test
   {
-    path: "/schedule",
-    name: "Schedule",
-    component: Schedule,
+    path: "/Calendar",
+    name: "Calendar",
+    component: Calendar,
   },
+  //test
   {
     path: "/timeline",
     name: "Timeline",
@@ -162,10 +166,14 @@ router.beforeEach((to, from, next) => {
   // console.log(to);
   // console.log(from);
   const token = localStorage.getItem("jwt");
-  if (token && to.name == "Login") {
+  if (token && (to.name == "Login" || to.name == "SignUp")) {
     next({ name: "Select" });
   } else if (!token && to.name != "Login") {
-    next({ name: "Login" });
+    if (to.name == "SignUp" || to.name ==  "FindId" || to.name ==  "FindPassword") {
+      next();
+    } else {
+      next({ name: "Login" });
+    }
   } else {
     next();
   }
