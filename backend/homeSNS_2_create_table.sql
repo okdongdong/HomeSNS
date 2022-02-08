@@ -58,14 +58,16 @@ CREATE TABLE `group_member` (
 );
 
 CREATE TABLE `schedule` (
-	`schedule_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`group_id`	int	NOT NULL,
-	`schedule_title`	varchar(30)	NULL,
-	`schedule_content`	varchar(100)	NULL,
-	`schedule_date`	date	NOT NULL,
-	`schedule_time`	time	NULL,
-	`schedule_location`	varchar(50)	NULL
+    `schedule_id`    int    NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `group_id`    int    NOT NULL,
+    `schedule_title`    varchar(30)    NULL,
+    `schedule_content`    varchar(100)    NULL,
+    `schedule_date_start`    date    NOT NULL,
+    `schedule_date_end`    date    NOT NULL,
+    `schedule_time_start`    time    NULL,
+    `schedule_time_end`    time    NULL
 );
+
 
 CREATE TABLE `comment` (
 	`comment_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,

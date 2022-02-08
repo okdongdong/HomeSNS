@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.ssafy.homesns.dto.FeedDto;
+import com.ssafy.homesns.dto.FeedParamDto;
 import com.ssafy.homesns.dto.FeedResultDto;
 import com.ssafy.homesns.service.FeedService;
 
@@ -39,10 +41,10 @@ public class FeedController {
 	// 현재 그룹의 feedList를 가져온다. -> mainPage 
 	// 파라미터로 받은 groupId를 feedMainPage로 넘겨주고 feedResultDto 값을 넘겨받는다. 
 	// feedResultDto에 feedList를 담아 리턴한다. 
-	@GetMapping(value="/main/{groupId}") // feedParamDto로 변경해야함! 
-	public ResponseEntity<FeedResultDto> mainPage(@PathVariable int groupId){
+	@GetMapping(value="/main") 
+	public ResponseEntity<FeedResultDto> mainPage(@RequestBody FeedParamDto feedParamDto){
 		
-		FeedResultDto feedResultDto = feedService.feedMainPage(groupId);
+		FeedResultDto feedResultDto = feedService.feedMainPage(feedParamDto);
 		
 		if(feedResultDto.getResult() == SUCCESS) {
 			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);
@@ -67,8 +69,8 @@ public class FeedController {
 	}
 	
 	// feed추가
-	// 참석자 관련 코드추가 필요
-	@PostMapping(consumes = MediaType.ALL_VALUE, value="/feed")
+	// file받을때 미디어 타입을 모두 받는다는 코드.. 
+	@PostMapping(consumes = MediaType.ALL_VALUE, value="/feed") 
 	public ResponseEntity<FeedResultDto> feedInsert(
 			@ModelAttribute FeedDto feedDto, 
 			MultipartHttpServletRequest request) {
@@ -86,6 +88,28 @@ public class FeedController {
 			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 		}		 
 	}
+	
+	// feed 추가 
+	// 추가시 프런트에서 필요한 데이터넘겨줌 
+	@GetMapping(value="/feed/info/{groupId}")
+	public ResponseEntity<FeedResultDto> feedCreateInfo(@PathVariable int groupId){
+			
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		int userSeq = Integer.parseInt(authentication.getName());
+		
+		FeedResultDto feedResultDto = feedService.feedCreateInfo(groupId,userSeq);
+
+		
+		if( feedResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+		}		 
+	}
+	
+	
+	
 	
 	// feed 수정
 	@PutMapping(value="/feed")
