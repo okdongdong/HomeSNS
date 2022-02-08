@@ -18,8 +18,10 @@ import com.ssafy.homesns.dao.FeedDao;
 import com.ssafy.homesns.dto.CommentDto;
 import com.ssafy.homesns.dto.EventMemberDto;
 import com.ssafy.homesns.dto.FeedDto;
+import com.ssafy.homesns.dto.FeedParamDto;
 import com.ssafy.homesns.dto.FeedResultDto;
 import com.ssafy.homesns.dto.FileDto;
+import com.ssafy.homesns.dto.GroupMemberDto;
 import com.ssafy.homesns.dto.HashtagDto;
 import com.ssafy.homesns.dto.LocationDto;
 import com.ssafy.homesns.dto.LocationFavoriteDto;
@@ -57,7 +59,7 @@ public class FeedServiceImpl implements FeedService {
 
 	// feedParamDto로 해야겠다.
 	@Override
-	public FeedResultDto feedMainPage(int groupId) {
+	public FeedResultDto feedMainPage(FeedParamDto feedParamDto) {
 
 
 		FeedResultDto feedResultDto = new FeedResultDto();
@@ -65,7 +67,7 @@ public class FeedServiceImpl implements FeedService {
 
 		try {
 
-			List<FeedDto> feedList = feedDao.feedMainPage(groupId);
+			List<FeedDto> feedList = feedDao.feedMainPage(feedParamDto);
 
 
 			// 5개만가져온다치면 들고온 게시물만 id받아와서 그걸로 다시 db 들려서 댓글, 해시태그, 사진 가져오는 방법
@@ -73,18 +75,21 @@ public class FeedServiceImpl implements FeedService {
 			for(int i = 0 ; i < feedList.size(); i++) {
 
 				int feedId = feedList.get(i).getFeedId();
+				System.out.println("feedId - " +feedId);
 				List<FileDto> fileList = feedDao.fileList(feedId);
-				List<HashtagDto> hashtagList = feedDao.hashtagList(feedId);
-				List<UserDto> userList = feedDao.eventMemberList(feedId);
-				LocationDto locationDto = feedDao.locationSearch(feedId);
+				
+				System.out.println("fileList  - " +fileList);
+//				List<HashtagDto> hashtagList = feedDao.hashtagList(feedId);
+//				List<UserDto> userList = feedDao.eventMemberList(feedId);
+//				LocationDto locationDto = feedDao.locationSearch(feedId);
 
 				//댓글은 상세보기에서만있으면 되지 않을까??
 				//				List<CommentDto> commentList = feedDao.commentList(feedId);
 				//				feedList.get(i).setCommentList(commentList);
 				feedList.get(i).setFileList(fileList);
-				feedList.get(i).setHashtagList(hashtagList);
-				feedList.get(i).setUserList(userList);
-				feedList.get(i).setLocationDto(locationDto);
+//				feedList.get(i).setHashtagList(hashtagList);
+//				feedList.get(i).setUserList(userList);
+//				feedList.get(i).setLocationDto(locationDto);
 			}
 
 			feedResultDto.setFeedList(feedList);
@@ -259,6 +264,34 @@ public class FeedServiceImpl implements FeedService {
 		return feedResultDto;
 	}
 
+	
+	
+	@Override
+	public FeedResultDto feedCreateInfo(int groupId, int userSeq) {
+		
+		FeedResultDto feedResultDto = new FeedResultDto(); 
+		
+		// 해당유저에 해당하는 장소 담기 (즐겨찾기 & 그룹 )
+		// locationName , lng, lat, favorite만
+		List<LocationDto> userLocationList = feedDao.userLocationList(userSeq, groupId);
+		
+		// userName하고 userSeq만 필요
+		List<GroupMemberDto> memberList = feedDao.groupMemberList(groupId); 
+		
+		
+		feedResultDto.setLocations(userLocationList);
+		feedResultDto.setMembers(memberList);
+		feedResultDto.setResult(SUCCESS);
+		
+		return feedResultDto;
+		
+	}
+	
+	
+	
+	
+	
+	
 	@Override
 	public FeedResultDto feedUpdate(FeedDto feedDto, MultipartHttpServletRequest request) {
 

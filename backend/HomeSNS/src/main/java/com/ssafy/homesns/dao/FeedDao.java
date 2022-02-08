@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.Mapper;
 import com.ssafy.homesns.dto.CommentDto;
 import com.ssafy.homesns.dto.EventMemberDto;
 import com.ssafy.homesns.dto.FeedDto;
+import com.ssafy.homesns.dto.FeedParamDto;
 import com.ssafy.homesns.dto.FileDto;
+import com.ssafy.homesns.dto.GroupMemberDto;
 import com.ssafy.homesns.dto.HashtagDto;
 import com.ssafy.homesns.dto.LocationDto;
 import com.ssafy.homesns.dto.LocationFavoriteDto;
@@ -17,7 +19,7 @@ import com.ssafy.homesns.dto.UserDto;
 public interface FeedDao {
 
 	//groupId에 맞는 feed를 DB에서 찾아온다.
-	public List<FeedDto> feedMainPage(int groupId);
+	public List<FeedDto> feedMainPage(FeedParamDto feedParamDto);
 
 	public List<FileDto> fileList(int feedId);
 	public List<CommentDto> commentList(int feedId);
@@ -35,6 +37,11 @@ public interface FeedDao {
 	public int feedEventMemberInsert(EventMemberDto eventMemberDto);
 	public int feedLocationInsert(LocationDto locationDto);
 	public int feedLocationFavoriteInsert(LocationFavoriteDto locationFavoriteDto);
+	
+	// feed추가할때 프런트에서 가지고 있어야 하는 정보리턴
+	public List<LocationDto> userLocationList(int userSeq, int groupId); 	
+	public List<GroupMemberDto> groupMemberList(int groupId); 
+	
 	
 	// feed수정
 	public int feedUpdate(FeedDto feedDto);

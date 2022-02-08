@@ -7,6 +7,7 @@
 	<select id="feedMainPage" parameterType="map" resultType="com.ssafy.homesns.dto.FeedDto">
 		SELECT FEED_ID, GROUP_ID, FEED_AUTHOR as feedAuthorSeq, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION 
   		  FROM HOME_SNS.FEED
+  		 WHERE GROUP_ID = #{groupId}
 		 ORDER BY FEED_UPLOAD_DATE DESC
 		 LIMIT #{limit} OFFSET #{offset}
 	</select>
@@ -115,7 +116,36 @@
 	</insert>
 	
 	
-
+	<!-- 피드추가페이지 로딩시 프런트가 가지고 있어야하는 내용리턴  -->
+	<!-- favorite표시한 장소 담기 -->
+	<select id="userLocationList" parameterType="int" resultType="com.ssafy.homesns.dto.LocationDto">
+		SELECT LOCATION_NAME, LAT, LNG, (SELECT 	
+   
+										   CASE WHEN LF.USER_SEQ IS NULL 
+												THEN false
+												ELSE true 
+												END
+						
+										FROM home_sns.location_favorite
+										where user_seq = 1) as FAVORITE
+		  FROM LOCATION L LEFT JOIN location_favorite LF
+		  ON L.LOCATION_ID = LF.LOCATION_ID
+		  WHERE GROUP_ID = 1
+		  ORDER BY favorite DESC;
+  
+	</select>
+	
+	
+	<select id="groupMemberList" parameterType="int" resultType="com.ssafy.homesns.dto.GroupMemberDto">
+		SELECT user_name, g.user_seq 
+	  	  FROM group_member g JOIN  user u
+	 	    ON g.user_seq = u.user_seq
+	 	 WHERE group_id = #{groupId}; 
+	</select>
+	
+	
+	
+	
 	<!-- 피드 수정 -->
 	
 	<update id="feedUpdate" parameterType="com.ssafy.homesns.dto.FeedDto">
