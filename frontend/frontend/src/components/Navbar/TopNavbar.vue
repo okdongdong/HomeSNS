@@ -2,7 +2,7 @@
   <div>
     <v-card class="rounded-xl justify-center d-flex">
       <v-alert
-        v-show="noticeAlarm"
+        v-show="noticeAlarm && !dialog"
         transition="slide-y-transition"
         class="alert"
         close-icon
@@ -42,7 +42,14 @@
       <v-dialog v-model="dialog" scrollable max-width="400px">
         <template v-slot:activator="{ on, attrs }">
           <v-btn v-bind="attrs" v-on="on" icon>
-            <v-icon>notifications_none</v-icon>
+            <v-badge
+              v-if="unreadNoticeCount"
+              color="red"
+              :content="unreadNoticeCount"
+            >
+              <v-icon>notifications_none</v-icon>
+            </v-badge>
+            <v-icon v-else>notifications_none</v-icon>
           </v-btn>
         </template>
         <v-card class="rounded-xl">
@@ -183,7 +190,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import { mapState, mapActions } from "vuex";
 import ProfilePhoto from "../ProfilePhoto.vue";
 export default {
@@ -193,9 +199,6 @@ export default {
     dialog: false,
     drawer: false,
     group: null,
-    unreadNoticeCount: 0,
-    noticeList: [],
-    start: 0,
   }),
   components: {
     ProfilePhoto,
@@ -204,10 +207,14 @@ export default {
     group() {
       this.drawer = false;
     },
+    dialog() {
+      this.setDialog();
+    },
   },
 
   mounted() {
     this.connect();
+    this.getNoticeList();
   },
   beforeDestroy() {
     this.disconnect();
@@ -215,113 +222,30 @@ export default {
 
   methods: {
     ...mapActions("account", ["logout"]),
-    ...mapActions("notice", ["connect", "disconnect", "send"]),
-    noticeReadAll() {
-      const token = localStorage.getItem("jwt");
-      axios({
-        method: "PUT",
-        url: `${process.env.VUE_APP_MCS_URL}/noticelist/${this.nowGroup.groupId}`,
-        headers: { Authorization: token },
-      })
-        .then((res) => {
-          console.log(res);
-          this.noticeList = [];
-          this.start = 0;
-          const token = localStorage.getItem("jwt");
-          axios({
-            method: "get",
-            url: `${process.env.VUE_APP_MCS_URL}/noticelist`,
-            headers: { Authorization: token },
-            params: {
-              groupId: this.nowGroup.groupId,
-              start: this.start,
-            },
-          })
-            .then((res) => {
-              console.log(res);
-              if (res.data.noticeResultDtoList.length) {
-                // 20개씩 인피니티스크롤로 구현
-                this.start += 20;
-                this.noticeList.push(...res.data.noticeResultDtoList);
-                this.readNoticeCount = res.data.count;
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    noticeRead(noticeId, noticeContentId, noticeType) {
-      if (
-        noticeType == "feed" ||
-        noticeType == "comment" ||
-        noticeType == "emotion" ||
-        noticeType == "share"
-      ) {
-        this.$router.push({
-          name: "Detail",
-          params: { feedId: noticeContentId },
-        });
-      } else if (noticeType == "vote") {
-        this.$router.push({ name: "EntFeedList" });
-      } else if (noticeType == "ghostleg") {
-        this.$router.push({ name: "EntFeedList" });
-      }
-
-      const token = localStorage.getItem("jwt");
-      axios({
-        method: "PUT",
-        url: `${process.env.VUE_APP_MCS_URL}/noticeread/${noticeId}`,
-        headers: { Authorization: token },
-      })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    feedCreate: function () {
+    ...mapActions("notice", [
+      "noticeReadAll",
+      "noticeRead",
+      "getNoticeList",
+      "connect",
+      "disconnect",
+      "send",
+      "setDialog",
+    ]),
+    feedCreate() {
       this.$router.push({ name: "FeedCreate" });
     },
     move(page) {
       this.$router.push({ name: page });
     },
-
-    getNoticeList($state) {
-      const token = localStorage.getItem("jwt");
-      axios({
-        method: "get",
-        url: `${process.env.VUE_APP_MCS_URL}/noticelist`,
-        headers: { Authorization: token },
-        params: {
-          groupId: this.nowGroup.groupId,
-          start: this.start,
-        },
-      })
-        .then((res) => {
-          console.log(res);
-          if (res.data.noticeResultDtoList.length) {
-            // 20개씩 인피니티스크롤로 구현
-            this.start += 20;
-            this.noticeList.push(...res.data.noticeResultDtoList);
-            this.readNoticeCount = res.data.count;
-            $state.loaded();
-          } else {
-            $state.complete();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
   },
   computed: {
     ...mapState("account", ["userSeq", "userImgUrl", "userName", "nowGroup"]),
-    ...mapState("notice", ["noticeAlarm", "recv"]),
+    ...mapState("notice", [
+      "noticeAlarm",
+      "recv",
+      "noticeList",
+      "unreadNoticeCount",
+    ]),
     nowMobile() {
       if (window.innerWidth < 450) {
         return true;
