@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.ssafy.homesns.dao.ScheduleDao">
+
+	<insert id="scheduleCreate" parameterType="com.ssafy.homesns.dto.ScheduleDto" useGeneratedKeys="true" keyProperty="scheduleId">
+		INSERT INTO SCHEDULE ( GROUP_ID,    SCHEDULE_TITLE,    SCHEDULE_CONTENT,   SCHEDULE_DATE,     SCHEDULE_TIME,     SCHEDULE_LOCATION   )
+		              VALUES ( #{groupId},  #{scheduleTitle},  #{scheduleContent},  #{scheduleDate},   #{scheduleTime},   #{scheduleLocation} )
+	</insert>
+	
+	<select id="scheduleSearch" parameterType="int" resultType="com.ssafy.homesns.dto.ScheduleDto">
+		SELECT SCHEDULE_ID as scheduleId, GROUP_ID as groupId, SCHEDULE_TITLE as scheduleTitle, SCHEDULE_CONTENT as scheduleContent,
+			   SCHEDULE_DATE as scheduleDate, SCHEDULE_TIME as scheduleTime, SCHEDULE_LOCATION as scheduleLocation
+		  FROM SCHEDULE
+		 WHERE GROUP_ID = #{groupId}
+	</select>
+	
+	<select id="scheduleTotalCount" resultType="int">
+		SELECT COUNT(*)
+		  FROM SCHEDULE 
+		 WHERE GROUP_ID = #{groupId}
+	</select>
+	
+	<update id="scheduleUpdate" parameterType="com.ssafy.homesns.dto.ScheduleDto">
+		UPDATE SCHEDULE
+		   SET SCHEDULE_TITLE = #{scheduleTitle},
+		   	   SCHEDULE_CONTENT = #{scheduleContent},
+		   	   SCHEDULE_DATE = #{scheduleDate},
+		   	   SCHEDULE_TIME = #{scheduleTime},
+		       SCHEDULE_LOCATION = #{scheduleLocation}
+		 WHERE SCHEDULE_ID = #{scheduleId}
+	</update>
+	
+	<delete id="scheduleDelete" parameterType="int">
+		DELETE FROM SCHEDULE WHERE SCHEDULE_ID = #{scheduleId}
+	</delete>
+	
+</mapper>
