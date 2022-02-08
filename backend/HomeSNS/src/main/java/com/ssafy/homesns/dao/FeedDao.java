@@ -39,7 +39,7 @@ public interface FeedDao {
 	public int feedLocationFavoriteInsert(LocationFavoriteDto locationFavoriteDto);
 	
 	// feed추가할때 프런트에서 가지고 있어야 하는 정보리턴
-	public List<LocationDto> userLocationList(int userSeq, int groupId); 	
+	public List<LocationDto> userLocationList(GroupMemberDto params); 	
 	public List<GroupMemberDto> groupMemberList(int groupId); 
 	
 	

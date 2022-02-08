@@ -267,16 +267,16 @@ public class FeedServiceImpl implements FeedService {
 	
 	
 	@Override
-	public FeedResultDto feedCreateInfo(int groupId, int userSeq) {
+	public FeedResultDto feedCreateInfo(GroupMemberDto params) {
 		
 		FeedResultDto feedResultDto = new FeedResultDto(); 
 		
 		// 해당유저에 해당하는 장소 담기 (즐겨찾기 & 그룹 )
 		// locationName , lng, lat, favorite만
-		List<LocationDto> userLocationList = feedDao.userLocationList(userSeq, groupId);
+		List<LocationDto> userLocationList = feedDao.userLocationList(params);
 		
 		// userName하고 userSeq만 필요
-		List<GroupMemberDto> memberList = feedDao.groupMemberList(groupId); 
+		List<GroupMemberDto> memberList = feedDao.groupMemberList(params.getGroupId()); 
 		
 		
 		feedResultDto.setLocations(userLocationList);
