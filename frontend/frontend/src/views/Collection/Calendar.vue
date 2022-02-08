@@ -98,5 +98,18 @@ export default {
       return this.$store.state.calendar.events;
     }
   },
+
+  watch:{
+    start(newDate, oldDate) {
+      console.log('1')
+      let newDateMonth = this.$moment(newDate).format('MM');
+      let oldDateMonth = this.$moment(oldDate).format('MM');
+      console.log(newDateMonth)
+      console.log(oldDateMonth)
+      if(newDateMonth !== oldDateMonth){
+        this.$store.dispatch('REQEUST_QUERY_EVENTS_BY_DATE', newDate);
+      }
+    }
+  }
 }
 </script>
