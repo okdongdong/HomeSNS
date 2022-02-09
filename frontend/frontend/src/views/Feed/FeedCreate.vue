@@ -273,12 +273,11 @@ export default {
   },
   methods: {
     getFeedInfo() {
-      let data = { groupId: this.nowGroup.groupId };
+      let groupId = this.nowGroup.groupId ;
       const token = localStorage.getItem("jwt");
       axios({
         method: "get",
-        url: `${process.env.VUE_APP_MCS_URL}/feed/info`,
-        params: data,
+        url: `${process.env.VUE_APP_MCS_URL}/feed/info/${groupId}`,
         headers: { Authorization: token },
       })
         .then((res) => {
@@ -513,7 +512,7 @@ export default {
     },
   },
   created() {
-    // this.getFeedInfo();
+    this.getFeedInfo();
   },
   computed: {
     formIsValid() {
