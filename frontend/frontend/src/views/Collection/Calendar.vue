@@ -62,22 +62,26 @@
       ></v-calendar>
     </v-sheet>
     <EventDialog></EventDialog>
+    <EventDetail></EventDetail>
 </v-app>
 </template>
 
 <script>
 import EventDialog from '@/components/EventDialog.vue'
+import EventDetail from '@/components/EventDetail.vue'
 
 export default {
   name: 'Calendar',
   components: {
-    EventDialog
+    EventDialog,
+    EventDetail
   },
 
   data() {
     return {
       dateOpen: false,
-      start: this.$moment(new Date()).format('YYYY-MM-DD'),
+      // start: '',
+      start: null,
       type: 'month',
       typeOptions: [
         {text: 'Day', value: 'day'},
@@ -87,10 +91,20 @@ export default {
     }
   },
 
+  created() {
+    this.start = this.$moment(new Date()).format('YYYY-MM-DD')
+  },
+
   methods: {
     open(date) {
       this.$store.commit('OPEN_CALENDAR_DIALOG', date)
-    }
+    },
+
+    showEvent({event}) {
+      console.log('showEvent 정보')
+      console.log(event)
+      this.$store.dispatch('REQUEST_DETAIL_EVENT', event.id);
+    },
   },
 
   computed: {
@@ -101,9 +115,8 @@ export default {
 
   watch:{
     start(newDate, oldDate) {
-      console.log('1')
-      let newDateMonth = this.$moment(newDate).format('MM');
-      let oldDateMonth = this.$moment(oldDate).format('MM');
+      let newDateMonth = this.$moment(newDate).format('MM-DD');
+      let oldDateMonth = this.$moment(oldDate).format('MM-DD');
       console.log(newDateMonth)
       console.log(oldDateMonth)
       if(newDateMonth !== oldDateMonth){
