@@ -48,6 +48,11 @@ const mutations = {
       state.events.push(makeEvent(e));
     })
   },
+
+  SHOW_EVENT_DETAIL(state, event) {
+    state.event = event;
+    state.eventDetailDialog = true;
+  },
 };
 
 const actions = {
@@ -58,6 +63,8 @@ const actions = {
       //안찍힘
       console.log('addEvent정보')
       console.log(response)
+      // console.log(calendar)
+      console.log(context)
       const addedEvent = makeEvent(calendar);
       context.commit('ADD_EVENT', addedEvent);
       // snack bar 작업 해보기
@@ -67,29 +74,50 @@ const actions = {
     }
   },
 
-  async REQEUST_QUERY_EVENTS_BY_DATE({ rootState }, context, date) {
+  async REQEUST_QUERY_EVENTS_BY_DATE(context, calendar) {
     try {
-      const groupId = rootState.account.nowGroup.groupId
-      const response = await requestQueryEvents(date, groupId);
-      console.log(response.data)
-      console.log(date)
-      console.log(groupId)
-      context.commit('ADD_EVENTS', response.data);
+      const groupId = context.rootState.account.nowGroup.groupId
+      const response = await requestQueryEvents(calendar, groupId);
+      // console.log(context)
+      console.log('이벤트 vuex 저장 정보')
+      console.log(response.data.scheduleDto)
+      context.commit('ADD_EVENTS', response.data.scheduleDto);
     } catch (e) {
       // store.commit('SET_SNACKBAR', setSnackBarInfo('이벤트 전체 조회를 실패하였습니다.', 'error', 'top'))
       console.log('불러오기에러' + e);
     }
   },
+
+  async REQUEST_DETAIL_EVENT(context) {
+    try {
+      console.log(context)
+      const groupId = context.rootState.account.nowGroup.groupId
+      const respone = await requestEventDetail(groupId);
+      context.commit('SHOW_EVENT_DETAIL', respone.data);
+    } catch (e) {
+      // store.commit('SET_SNACKBAR', setSnackBarInfo('이벤트 상세 조회를 실패하였습니다.', 'error', 'top'))
+      console.log('이벤트 조회 에러' + e);
+    }
+  },
 }
 
-function requestQueryEvents(date, groupId) {
+function requestEventDetail(scheduleId, groupId) {
   const token = localStorage.getItem("jwt")
-  console.log(date)
+  // console.log(date)
   return axios({
     method: "GET",
     url: `${process.env.VUE_APP_MCS_URL}/schedule/${ groupId }`,
     headers: { Authorization: token },
-    params: { date: date }
+  })
+}
+
+function requestQueryEvents(date, groupId) {
+  const token = localStorage.getItem("jwt")
+  // console.log(date)
+  return axios({
+    method: "GET",
+    url: `${process.env.VUE_APP_MCS_URL}/schedule/${ groupId }`,
+    headers: { Authorization: token },
   })
 }
 
