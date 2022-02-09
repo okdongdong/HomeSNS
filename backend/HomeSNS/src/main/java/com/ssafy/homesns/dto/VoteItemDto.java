@@ -6,9 +6,15 @@ public class VoteItemDto {
 	private String voteItemName;
 	private int gameId;
 	private int count;
-	
-	// 현재 유저가 투표를 했다면, 투표를 한 항목에 userSeq 추가
 	private int userSeq;
+
+	public int getUserSeq() {
+		return userSeq;
+	}
+
+	public void setUserSeq(int userSeq) {
+		this.userSeq = userSeq;
+	}
 
 	public int getVoteItemId() {
 		return voteItemId;
@@ -42,18 +48,10 @@ public class VoteItemDto {
 		this.count = count;
 	}
 
-	public int getUserSeq() {
-		return userSeq;
-	}
-
-	public void setUserSeq(int userSeq) {
-		this.userSeq = userSeq;
-	}
-
 	@Override
 	public String toString() {
 		return "VoteItemDto [voteItemId=" + voteItemId + ", voteItemName=" + voteItemName + ", gameId=" + gameId
-				+ ", count=" + count + ", userSeq=" + userSeq + "]";
+				+ ", count=" + count + "]";
 	}
 
 }

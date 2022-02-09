@@ -78,7 +78,7 @@ public class GameController {
 	// 투표 현황 조회 == 내가 어떤 아이템에 투표를 했는지에 대한 정보 역시 같이 반환해줘야 할것
 	// 게임 전체 조회
 	@GetMapping(value="/game")
-	public ResponseEntity<GameResultDto> gameSearch(@RequestBody GameParamDto gameParamDto) {
+	public ResponseEntity<GameResultDto> gameSearch(GameParamDto gameParamDto) {
 
 		GameResultDto gameResultDto = gameService.gameSearch(gameParamDto);
 
