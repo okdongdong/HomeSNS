@@ -44,7 +44,7 @@ public interface CommentDao {
 	
 	// 댓글 감정표현 기록 추가, 댓글 감정표현의 수정에 따라 테이블 생성
 	public int commentEmotionUserUseCreate(CommentEmotionDto commentEmotionDto);
-	// 유저가 댓글에 어떤 감정표현을 했는지 찾기
+	// 유저가 댓글에 어떤 감정표현을 했는지 찾기 => 결과값이 없으면 아직 감정표현을 하지 않은 것
 	public CommentEmotionDto commentEmotionUserUseSearch(CommentEmotionDto commentEmotionDto);
 	// 댓글 감정표현 기록 삭제, 댓글 감정표현의 수정에 따라 테이블 삭제
 	public int commentEmotionUserUseDelete(CommentEmotionDto commentEmotionDto);

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.homesns.dto.CommentDto;
 import com.ssafy.homesns.dto.CommentEmotionDto;
@@ -25,6 +26,8 @@ import com.ssafy.homesns.service.CommentService;
 		allowedHeaders = "*",
 		methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, 
 				RequestMethod.DELETE, RequestMethod.HEAD, RequestMethod.OPTIONS })
+
+@RestController
 public class CommentController {
 
 	@Autowired
