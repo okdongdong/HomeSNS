@@ -33,7 +33,7 @@ public class GroupServiceImpl implements GroupService{
 
 		// 그룹을 생성했다면,
 		if ( groupDao.groupListCreate(groupDto) == 1 ) {
-
+			
 			// 생성된 그룹의 그룹ID를 찾아서 그룹 멤버로 추가한다
 			GroupMemberDto groupMemberDto = new GroupMemberDto();
 			groupMemberDto.setGroupId(groupDao.groupListRecentMake(groupDto.getGroupLeaderSeq()));

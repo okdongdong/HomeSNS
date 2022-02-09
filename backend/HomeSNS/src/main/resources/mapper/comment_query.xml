@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.ssafy.homesns.dao.CommentDao">
+
+	<insert id="commentCreate" parameterType="com.ssafy.homesns.dto.CommentDto" useGeneratedKeys="true" keyProperty="commentId">
+		INSERT INTO COMMENT ( FEED_ID,    COMMENT_TAG,    COMMENT_AUTHOR,    COMMENT_CONTENT,  COMMENT_UPLOAD_DATE   )
+		             VALUES ( #{feedId},  #{commentTag},  #{commentAuthor},  #{content},       now()                 )
+	</insert>
+	
+	<update id="commentUpdate" parameterType="com.ssafy.homesns.dto.CommentDto">
+		UPDATE COMMENT
+		   SET COMMENT_CONTENT = #{content}
+		 WHERE COMMENT_ID = #{commentId}
+	</update>
+	
+	<delete id="commentDelete" parameterType="int">
+		DELETE FROM COMMENT WHERE COMMENT_ID = #{commentId}
+	</delete>
+	
+	
+	
+	<insert id="commentEmotionCreate" parameterType="int" >
+		INSERT INTO COMMENT_EMOTION ( COMMENT_ID,    GOOD,    SAD,    CHECK,    FUN,    AMAZE    )
+		                     VALUES ( #{commentId},  #{good}, #{sad}, #{check}, #{fun}, #{amaze} )
+	</insert>
+	
+	<select id="commentEmotionSearch" parameterType="int" resultType="com.ssafy.homesns.dto.CommentDto">
+		SELECT COMMENT_ID as commentId, GOOD as good, SAD as sad, 
+			   CHECK as check, FUN as fun, AMAZE as amaze
+		  FROM COMMENT_EMOTION
+		 WHERE COMMENT_ID = #{commentId}
+	</select>
+	
+	
+	<update id="commentGoodAdd" parameterType="int">
+		UPDATE COMMENT_EMOTION
+		   SET GOOD = GOOD + 1
+		 WHERE COMMENT_ID = #{commentId}
+	</update>
+	
+	<update id="commentGoodSub" parameterType="int">
+		UPDATE COMMENT_EMOTION
+		   SET GOOD = GOOD - 1
+		 WHERE COMMENT_ID = #{commentId}
+	</update>
+	
+	<update id="commentSadAdd" parameterType="int">
+		UPDATE COMMENT_EMOTION
+		   SET SAD = SAD + 1
+		 WHERE COMMENT_ID = #{commentId}
+	</update>
+	
+	<update id="commentSadSub" parameterType="int">
+		UPDATE COMMENT_EMOTION
+		   SET SAD = SAD - 1
+		 WHERE COMMENT_ID = #{commentId}
+	</update>
+	
+	<update id="commentCheckAdd" parameterType="int">
+		UPDATE COMMENT_EMOTION
+		   SET CHECK = CHECK + 1
+		 WHERE COMMENT_ID = #{commentId}
+	</update>
+	
+	<update id="commentCheckSub" parameterType="int">
+		UPDATE COMMENT_EMOTION
+		   SET CHECK = CHECK - 1
+		 WHERE COMMENT_ID = #{commentId}
+	</update>
+	
+	<update id="commentFunAdd" parameterType="int">
+		UPDATE COMMENT_EMOTION
+		   SET FUN = FUN + 1
+		 WHERE COMMENT_ID = #{commentId}
+	</update>
+	
+	<update id="commentFunSub" parameterType="int">
+		UPDATE COMMENT_EMOTION
+		   SET FUN = FUN - 1
+		 WHERE COMMENT_ID = #{commentId}
+	</update>
+	
+	<update id="commentAmazeAdd" parameterType="int">
+		UPDATE COMMENT_EMOTION
+		   SET AMAZE = AMAZE + 1
+		 WHERE COMMENT_ID = #{commentId}
+	</update>
+	
+	<update id="commentAmazeSub" parameterType="int">
+		UPDATE COMMENT_EMOTION
+		   SET AMAZE = AMAZE - 1
+		 WHERE COMMENT_ID = #{commentId}
+	</update>
+	
+	<delete id="commentEmotionDelete" parameterType="int" >
+		DELETE FROM COMMENT_EMOTION 
+		      WHERE COMMENT_ID = #{commentId}
+	</delete>
+	
+	
+	
+	<insert id="commentEmotionUserUseCreate" parameterType="com.ssafy.homesns.dto.CommentEmotionDto" >
+		INSERT INTO COMMENT_EMOTION_USER_USE ( COMMENT_ID,    USER_SEQ,    EMOTION_CODE )
+		                              VALUES ( #{commentId},  #{userSeq},  #{code}      )
+	</insert>
+	
+	<select id="commentEmotionUserUseSearch" parameterType="com.ssafy.homesns.dto.CommentEmotionDto" resultType="com.ssafy.homesns.dto.CommentEmotionDto">
+		SELECT COMMENT_ID as commentId, USER_SEQ as userSeq, EMOTION_CODE as code
+		  FROM COMMENT_EMOTION_USER_USE
+		 WHERE COMMENT_ID = #{commentId}
+		   AND USER_SEQ = #{userSeq}
+	</select>
+	
+	<delete id="commentEmotionUserUseDelete" parameterType="com.ssafy.homesns.dto.CommentEmotionDto" >
+		DELETE FROM COMMENT_EMOTION_USER_USE 
+		      WHERE COMMENT_ID = #{commentId}
+		        AND USER_SEQ = #{userSeq}
+	</delete>
+</mapper>
