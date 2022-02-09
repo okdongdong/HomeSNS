@@ -2,26 +2,19 @@ package com.ssafy.homesns.dao;
 
 import java.util.List;
 
+import com.ssafy.homesns.dto.*;
 import org.apache.ibatis.annotations.Mapper;
-
-import com.ssafy.homesns.dto.CommentDto;
-import com.ssafy.homesns.dto.EventMemberDto;
-import com.ssafy.homesns.dto.FeedDto;
-import com.ssafy.homesns.dto.FeedParamDto;
-import com.ssafy.homesns.dto.FileDto;
-import com.ssafy.homesns.dto.GroupMemberDto;
-import com.ssafy.homesns.dto.HashtagDto;
-import com.ssafy.homesns.dto.LocationDto;
-import com.ssafy.homesns.dto.LocationFavoriteDto;
-import com.ssafy.homesns.dto.UserDto;
 
 @Mapper
 public interface FeedDao {
 
 	//groupId에 맞는 feed를 DB에서 찾아온다.
-	public List<FeedDto> feedMainPage(FeedParamDto feedParamDto);
+	// 밑에 두개 태현이가 건들임
+	public List<MainFeedDto> feedMain(FeedParamDto feedParamDto);
+	public List<MainFileDto> mainFileList(int feedId);
 
 	public List<FileDto> fileList(int feedId);
+
 	public List<CommentDto> commentList(int feedId);
 	public List<HashtagDto> hashtagList(int feedId);
 	public List<UserDto> eventMemberList(int feedId);

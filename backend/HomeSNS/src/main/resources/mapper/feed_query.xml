@@ -4,12 +4,13 @@
 
 
 
-	<select id="feedMainPage" parameterType="map" resultType="com.ssafy.homesns.dto.FeedDto">
-		SELECT FEED_ID, GROUP_ID, FEED_AUTHOR as feedAuthorSeq, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION 
-  		  FROM HOME_SNS.FEED
-  		 WHERE GROUP_ID = #{groupId}
-		 ORDER BY FEED_UPLOAD_DATE DESC
-		 LIMIT #{limit} OFFSET #{offset}
+<!-- 태현:feedid, feedtitle, feed 작성일, feed location만 들고옴-->
+	<select id="feedMain" parameterType="map" resultType="com.ssafy.homesns.dto.MainFeedDto">
+		SELECT FEED_ID, FEED_TITLE, FEED_EVENT_DATE, IFNULL(FEED_LOCATION,'') AS FEED_LOCATION
+		FROM HOME_SNS.FEED
+		WHERE GROUP_ID = #{groupId}
+		ORDER BY FEED_EVENT_DATE DESC
+			LIMIT #{limit} OFFSET #{offset}
 	</select>
 	
 	<select id="userExist" parameterType="string" resultType="com.ssafy.homesns.dto.UserDto">
@@ -25,10 +26,17 @@
 	
 	
 	 <!-- fileList 가져오는 SQL-->
-	<select id="fileList" parameterType="int" resultType="com.ssafy.homesns.dto.FileDto"> 
+	<select id="fileList" parameterType="int" resultType="com.ssafy.homesns.dto.FileDto">
 		 SELECT FILE_ID, FEED_ID, FILE_NAME, FILE_SIZE, FILE_CONTENT_TYPE, FILE_URL, REG_DT
 		   FROM HOME_SNS.FILE
 		  WHERE FEED_ID =#{feedId}
+	</select>
+
+<!--	태현 : 메인페이지 필요한 부분만 들고오기,,!-->
+	<select id="mainFileList" parameterType="int" resultType="com.ssafy.homesns.dto.MainFileDto">
+		SELECT FILE_CONTENT_TYPE, FILE_URL
+		FROM HOME_SNS.FILE
+		WHERE FEED_ID =#{feedId}
 	</select>
 	
 	<!-- 댓글 가져오는 SQL  -->
@@ -119,19 +127,14 @@
 	<!-- 피드추가페이지 로딩시 프런트가 가지고 있어야하는 내용리턴  -->
 	<!-- favorite표시한 장소 담기 -->
 	<select id="userLocationList" parameterType="map" resultType="com.ssafy.homesns.dto.LocationDto">
-		SELECT LOCATION_NAME, LAT, LNG, (SELECT 	
-   
-										   CASE WHEN LF.USER_SEQ IS NULL 
-												THEN false
-												ELSE true 
-												END
-						
-										FROM home_sns.location_favorite
-										where user_seq = #{userSeq}) as FAVORITE
-		  FROM LOCATION L LEFT JOIN location_favorite LF
-		  ON L.LOCATION_ID = LF.LOCATION_ID
-		  WHERE GROUP_ID = #{groupId}
-		  ORDER BY favorite DESC;
+		SELECT LOCATION_NAME, LAT, CASE WHEN LF.USER_SEQ IS NULL THEN false
+										ELSE true
+			END as FAVORITE
+		FROM LOCATION L
+				 LEFT OUTER JOIN (SELECT * FROM LOCATION_FAVORITE WHERE USER_SEQ = #{userSeq}) LF
+								 ON L.LOCATION_ID = LF.LOCATION_ID
+		WHERE GROUP_ID = #{groupId}
+		order by favorite desc;
   
 	</select>
 	

@@ -7,9 +7,11 @@ import com.ssafy.homesns.dto.FeedParamDto;
 import com.ssafy.homesns.dto.FeedResultDto;
 import com.ssafy.homesns.dto.GroupMemberDto;
 
+import com.ssafy.homesns.dto.MainFeedResultDto;
+
 public interface FeedService {
 
-	public FeedResultDto feedMainPage(FeedParamDto feedParamDto);
+	public MainFeedResultDto feedMain(FeedParamDto feedParamDto);
 	
 	public FeedResultDto feedDetail(int feedId);
 	
