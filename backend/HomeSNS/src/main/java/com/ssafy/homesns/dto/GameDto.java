@@ -24,7 +24,9 @@ public class GameDto {
 	// false => 투표 종료로 인한 사용 불가능 and 사다리타기 게임은 딱히 수정할 게 없을 것
 	private String updateYn;
 
-	
+	// 현재 유저가 투표한 항목
+	private int voteItemId;
+
 	public int getGameId() {
 		return gameId;
 	}
@@ -105,12 +107,20 @@ public class GameDto {
 		this.ghostLegDto = ghostLegDto;
 	}
 
-	public String isUpdateYn() {
+	public String getUpdateYn() {
 		return updateYn;
 	}
 
 	public void setUpdateYn(String updateYn) {
 		this.updateYn = updateYn;
+	}
+
+	public int getVoteItemId() {
+		return voteItemId;
+	}
+
+	public void setVoteItemId(int voteItemId) {
+		this.voteItemId = voteItemId;
 	}
 
 	@Override
@@ -119,7 +129,7 @@ public class GameDto {
 				+ gameAuthor + ", gameAuthorName=" + gameAuthorName + ", gameAuthorProfileImageUrl="
 				+ gameAuthorProfileImageUrl + ", code=" + code + ", gameRegisterDate=" + gameRegisterDate
 				+ ", voteItemDtoList=" + voteItemDtoList + ", ghostLegDto=" + ghostLegDto + ", updateYn=" + updateYn
-				+ "]";
+				+ ", voteItemId=" + voteItemId + "]";
 	}
-
+	
 }
