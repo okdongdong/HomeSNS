@@ -22,7 +22,7 @@ CREATE TABLE `feed` (
 	`feed_content`	varchar(200)	NULL,
 	`feed_upload_date`	timestamp	NULL,
 	`feed_event_date`	datetime	NULL,
-	`feed_location`	varchar(20)	NULL
+	`feed_location_id` int	NULL
 );
 
 CREATE TABLE `group_code` (
@@ -124,24 +124,6 @@ CREATE TABLE `location_favorite` (
 	`user_seq`	int	NOT NULL
 );
 
-CREATE TABLE `vote` (
-	`vote_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`group_id`	int	NOT NULL,
-	`user_seq`	int	NOT NULL,
-	`vote_name`	varchar(20)	NULL
-);
-
-CREATE TABLE `vote_item` (
-	`vote_item_name`	varchar(30)	NOT NULL PRIMARY KEY,
-	`vote_id`	int	NOT NULL,
-	`vote_cnt`	int	NULL
-);
-
-CREATE TABLE `voter` (
-	`vote_id`	int	NOT NULL,
-	`vote_item_name`	varchar(20)	NOT NULL,
-	`user_seq`	int	NOT NULL
-);
 
 CREATE TABLE `feed_emotion_user_use` (
 	`user_seq`	int	NOT NULL,
@@ -158,6 +140,36 @@ CREATE TABLE `comment_emotion_user_use` (
 	`comment_id`	int	NOT NULL,
 	`user_seq`	int	NOT NULL,
 	`emotion_code`	char(5)	NULL
+);
+
+CREATE TABLE `game` (
+	`game_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`group_id`	int	NOT NULL,
+	`game_title`	varchar(20)	NOT NULL,
+	`game_author`	int	NOT NULL,
+	`game_register_date`	timestamp	NULL,
+	`code` char(5)	NOT NULL,
+	`update_yn`	varchar(1)	NULL DEFAULT "y"
+);
+
+CREATE TABLE `ghost_leg` (
+	`game_id`	int	NOT NULL,
+	`player`	varchar(100)	NOT NULL,
+	`player_num`	int	NOT NULL,
+	`result`	varchar(100)	NOT NULL,
+	`map`	varchar(300)	NOT NULL
+);
+
+CREATE TABLE `vote_item` (
+	`vote_item_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`vote_item_name`	varchar(30)	NOT NULL,
+	`game_id`	int	NOT NULL,
+	`count`	int	NOT NULL DEFAULT 0
+);
+
+CREATE TABLE `voter` (
+	`vote_item_id`	int,
+	`user_seq`	int	NOT NULL
 );
 
 
@@ -257,7 +269,12 @@ ALTER TABLE `location` ADD CONSTRAINT `FK_group_TO_location_1` FOREIGN KEY (
 REFERENCES `group_list` (
 	`group_id`
 );
-
+ALTER TABLE  `feed` ADD CONSTRAINT `FK_location_TO_feed_1` FOREIGN KEY (
+	`feed_location_id`
+)
+REFERENCES `location` (
+	`location_id`
+);
 ALTER TABLE `location_favorite` ADD CONSTRAINT `FK_location_TO_location_favorite_1` FOREIGN KEY (
 	`location_id`
 )
@@ -272,47 +289,38 @@ REFERENCES `user` (
 	`user_seq`
 );
 
-ALTER TABLE `vote` ADD CONSTRAINT `FK_group_TO_vote_1` FOREIGN KEY (
+
+ALTER TABLE `game` ADD CONSTRAINT `FK_group_TO_game_1` FOREIGN KEY (
 	`group_id`
 )
 REFERENCES `group_list` (
 	`group_id`
 );
 
-ALTER TABLE `vote` ADD CONSTRAINT `FK_user_TO_vote_1` FOREIGN KEY (
-	`user_seq`
-)
-REFERENCES `user` (
-	`user_seq`
-);
 
-ALTER TABLE `vote_item` ADD CONSTRAINT `FK_vote_TO_vote_item_1` FOREIGN KEY (
-	`vote_id`
+ALTER TABLE `ghost_leg` ADD CONSTRAINT `FK_game_TO_ghost_leg_1` FOREIGN KEY (
+	`game_id`
 )
-REFERENCES `vote` (
-	`vote_id`
-);
+REFERENCES `game` (
+	`game_id`
+)
+ON DELETE CASCADE;
+
+ALTER TABLE `vote_item` ADD CONSTRAINT `FK_game_TO_vote_item_1` FOREIGN KEY (
+	`game_id`
+)
+REFERENCES `game` (
+	`game_id`
+)
+ON DELETE CASCADE;
 
 ALTER TABLE `voter` ADD CONSTRAINT `FK_vote_item_TO_voter_1` FOREIGN KEY (
-	`vote_id`
+	`vote_item_id`
 )
 REFERENCES `vote_item` (
-	`vote_id`
-);
-
-ALTER TABLE `voter` ADD CONSTRAINT `FK_vote_item_TO_voter_2` FOREIGN KEY (
-	`vote_item_name`
+	`vote_item_id`
 )
-REFERENCES `vote_item` (
-	`vote_item_name`
-);
-
-ALTER TABLE `voter` ADD CONSTRAINT `FK_user_TO_voter_1` FOREIGN KEY (
-	`user_seq`
-)
-REFERENCES `user` (
-	`user_seq`
-);
+ON DELETE CASCADE;
 
 ALTER TABLE `feed_emotion_user_use` ADD CONSTRAINT `FK_user_TO_feed_emotion_user_use_1` FOREIGN KEY (
 	`user_seq`
