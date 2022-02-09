@@ -1,5 +1,6 @@
 package com.ssafy.homesns.controller;
 
+import com.ssafy.homesns.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,14 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.ssafy.homesns.dto.FeedDto;
-import com.ssafy.homesns.dto.FeedParamDto;
-import com.ssafy.homesns.dto.FeedResultDto;
-import com.ssafy.homesns.dto.GroupMemberDto;
 import com.ssafy.homesns.service.FeedService;
 
 @CrossOrigin(
-		origins = "http://localhost:5500", // npm에서 5500번을 사용한다
+		origins = { "http://localhost:5500", "http://172.30.1.59:5500"}, // npm에서 5500번을 사용한다
 		allowCredentials = "true", // axios가 sessionId를 계속 다른것을 보내는데, 이것을 고정시켜준다
 		allowedHeaders = "*",
 		methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, 
@@ -38,22 +35,23 @@ public class FeedController {
 	
 	private static final int SUCCESS = 1;
 
-	// 현재 그룹의 feedList를 가져온다. -> mainPage 
-	// 파라미터로 받은 groupId를 feedMainPage로 넘겨주고 feedResultDto 값을 넘겨받는다. 
-	// feedResultDto에 feedList를 담아 리턴한다. 
-	@GetMapping(value="/main") 
-	public ResponseEntity<FeedResultDto> mainPage(FeedParamDto feedParamDto){
-		
-		FeedResultDto feedResultDto = feedService.feedMainPage(feedParamDto);
-		
-		if(feedResultDto.getResult() == SUCCESS) {
-			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);
+	// 태현이가 만듦!!!!!!!!!!!!!
+	// 현재 그룹의 feedList를 가져온다. -> mainPage
+	// 파라미터로 받은 groupId를 feedMainPage로 넘겨주고 feedResultDto 값을 넘겨받는다.
+	// feedResultDto에 feedList를 담아 리턴한다.
+	@GetMapping(value="/main")
+	public ResponseEntity<MainFeedResultDto> mainPage(FeedParamDto feedParamDto){
+
+		MainFeedResultDto mainFeedResultDto = feedService.feedMain(feedParamDto);
+
+		if(mainFeedResultDto.getResult() == SUCCESS) {
+			return new ResponseEntity<MainFeedResultDto>(mainFeedResultDto, HttpStatus.OK);
 		}
-		return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<MainFeedResultDto>(mainFeedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-	
-	
-	
+
+
+
 	//feedId로 해당 feed 상세조회
 	// author항목에 들어있는 userSeq를 user테이블과 join하여 사용자이름을 받아올 것
 	@GetMapping(value="/feed/{feedId}")

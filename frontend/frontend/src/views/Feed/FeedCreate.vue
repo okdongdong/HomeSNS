@@ -2,7 +2,7 @@
   <v-card flat>
     <v-form ref="form" @submit.prevent="submit">
       <v-container fluid>
-        <h1>💛피드쓰자~!~!💛</h1>
+        <h1>피드작성</h1>
         <v-row>
           <!-- 날짜 -->
           <v-col cols="12">
@@ -118,14 +118,32 @@
                     @click="mark"
                   >
                     <GmapMarker
-                      :key="index"
+                      :key="index + '1'"
                       v-for="(m, index) in markers"
                       :position="m.position"
                       @click="center = m.position"
                       :clickable="true"
                       :draggable="true"
-                      @drag="updateMarker(index, $event.latLng)"
+                      @dragend="updateMarker(index, $event.latLng)"
                     />
+                    <GmapInfoWindow
+                      @closeclick="window_open = false"
+                      :key="index"
+                      v-for="(m, index) in markers"
+                      :opened="window_open"
+                      :position="m.position"
+                      :options="{
+                        pixelOffset: {
+                          width: 0,
+                          height: -35,
+                        },
+                      }"
+                    >
+                      <p
+                        style="text-align: center; margin-bottom: 0px"
+                        v-html="setActualAddress"
+                      ></p>
+                    </GmapInfoWindow>
                   </GmapMap>
                 </div>
                 <br /><br />
@@ -137,7 +155,7 @@
             <v-combobox
               v-model="form.attendPeople"
               :items="items"
-              item-text="name"
+              item-text="username"
               label="참석자 명단"
               multiple
               chips
@@ -187,6 +205,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import axios from "axios";
 import { gmapApi } from "vue2-google-maps";
 export default {
@@ -212,11 +231,11 @@ export default {
       snackbar: false,
       items: [
         // 그룹 명단
-        { userSeq: 1, name: "강동옥" },
-        { userSeq: 2, name: "김태현" },
-        { userSeq: 3, name: "박상준" },
-        { userSeq: 4, name: "임창현" },
-        { userSeq: 5, name: "최이삭" },
+        { userSeq: 1, username: "강동옥" },
+        { userSeq: 2, username: "김태현" },
+        { userSeq: 3, username: "박상준" },
+        { userSeq: 4, username: "임창현" },
+        { userSeq: 5, username: "최이삭" },
       ],
       show: false,
       roomAbled: false,
@@ -224,7 +243,8 @@ export default {
       center: { lat: 37.5642135, lng: 127.0016985 }, // 처음 센터 값 (서울)
       currentPlace: null, // 현재위치
       markers: [],
-      // places: [],
+      window_open: false, //실제 주소 띄워주기 popup
+      actualAddress: null,
       geocodingService: {},
       // 장소레이블
       locaLabels: [
@@ -251,11 +271,26 @@ export default {
       ],
     };
   },
-
   methods: {
+    getFeedInfo() {
+      let data = { groupId: this.nowGroup.groupId };
+      const token = localStorage.getItem("jwt");
+      axios({
+        method: "get",
+        url: `${process.env.VUE_APP_MCS_URL}/feed/info`,
+        params: data,
+        headers: { Authorization: token },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     submit() {
       this.snackbar = true;
-      this.resetForm();
+      // this.resetForm();
     },
     locaLabelInput(value) {
       if (value === null) {
@@ -288,12 +323,14 @@ export default {
     },
     remove(id) {
       // 해시태그 없애기
+
       let idx = this.form.hashtag.indexOf(id);
       this.form.hashtag.splice(idx, 1);
       this.form.hashtag = [...this.form.hashtag];
     },
-    // 현재위치 들고오기
+
     getCurrLocation() {
+      // 현재위치 들고오기
       navigator.geolocation.getCurrentPosition((position) => {
         const currLocation = {
           lat: position.coords.latitude,
@@ -318,29 +355,56 @@ export default {
         // this.currentPlace = null;
       }
     },
-    mark(event) {
-      const marker = {
-        lat: event.latLng.lat(),
-        lng: event.latLng.lng(),
-      };
-      this.markers = [{ position: marker }];
-      // this.places = [this.currentPlace]
-      this.center = marker;
+    getActualAddress(data) {
       axios({
         method: "GET",
-        // url: `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${event.latLng.lat()},${event.latLng.lng()}&sourcecrs=epsg:3857&orders=addr,roadaddr&output=json`,
-        url: `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc`,
+        url: `/map-reversegeocode/v2/gc?coords=${data.lng},${data.lat}&sourcecrs=epsg:4326&orders=roadaddr&output=json`,
         headers: {
           "X-NCP-APIGW-API-KEY-ID": `${process.env.VUE_APP_NAVER_CLIENT_ID}`,
           "X-NCP-APIGW-API-KEY": `${process.env.VUE_APP_NAVER_CLIENT_SECRET}`,
         },
       })
         .then((res) => {
-          console.log(res);
+          if (res.data.status.code === 3) {
+            this.actualAddress = "주소가 조회되지 않습니다.\n위치를 다시 지정해주세요.";
+          } else {
+            let data = res.data.results[0];
+            let city = data.region.area1.name; // 시
+            let add1 = data.region.area2.name; // 구,군
+            let add2 = data.region.area4.name; // 면
+            let road = data.land.name; // 남대문로 10길
+            let num1 = data.land.number1; // 17
+            let num2 = data.land.number2; // ''
+            let building = data.land.addition0.value; // 건물명
+            if (num2 === "") {
+              if (building === "") {
+                this.actualAddress = city + " " + add1 + " " + add2 + "\n" + road + " " + num1;
+              } else {
+                this.actualAddress =
+                  city + " " + add1 + " " + add2 + "\n" + road + " " + num1 + "\n" + building;
+              }
+            } else {
+              if (building !== "") {
+                this.actualAddress =
+                  city + " " + add1 + " " + add2 + "\n" + road + " " + num1 + "-" + num2;
+              }
+              this.actualAddress =city +" " +add1 +" " +add2 +"\n" +road +" " +num1 +"-" +num2 +"\n" +building;
+            }
+          }
+          this.window_open = true; // 실제주소 popup true
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    mark(event) {
+      const marker = {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng(),
+      };
+      this.markers = [{ position: marker }];
+      this.center = marker;
+      this.getActualAddress(marker);
     },
     updateMarker(index, location) {
       const marker = {
@@ -348,8 +412,9 @@ export default {
         lng: location.lng(),
       };
       this.markers = [{ position: marker }];
-      // this.places = [this.currentPlace]
+      this.getActualAddress(marker);
     },
+
     toggleFavBtn(data) {
       // 목록에 있는 데이터 즐겨찾기 토글
       this.locaLabels[data.item.idx].fav = !this.locaLabels[data.item.idx].fav;
@@ -394,52 +459,49 @@ export default {
       let data = new FormData();
       data.append("feedTitle", this.form.title);
       data.append("feedEventDate", this.form.date);
-      let file = [];
       for (let i = 0; i < this.form.files.length; i++) {
-        file.push(this.form.files[i].content);
+        data.append("file", this.form.files[i].content);
       }
-      data.append("fileList", file);
+      let feedLocationStr = {};
       if (this.form.localLabel === 0 || this.markers.length === 0) {
-        data.append("feedLocation", null); // front에서 그냥 넘겨주기때문에 back에서 목록에 원래 있는건지 확인하고 값 넣기
-        data.append("Lat", null);
-        data.append("Lng", null);
-        data.append("Fav", false); // 장소 즐겨찾기 여부
+        feedLocationStr["locationName"] = null; // front에서 그냥 넘겨주기때문에 back에서 목록에 원래 있는건지 확인하고 값 넣기
+        feedLocationStr["lat"] = null;
+        feedLocationStr["lng"] = null;
+        feedLocationStr["favorite"] = false; // 장소 즐겨찾기 여부
       } else {
-        data.append("feedLocation", this.form.locaLabel);
-        data.append("Lat", this.markers[0].position.lat); // 위도
-        data.append("Lng", this.markers[0].position.lng); // 경도
-        data.append("Fav", this.form.currLocaFav); // 장소 즐겨찾기 여부
+        feedLocationStr["locationName"] = this.form.locaLabel;
+        feedLocationStr["lat"] = this.markers[0].position.lat; // 위도
+        feedLocationStr["lng"] = this.markers[0].position.lng; // 경도
+        feedLocationStr["favorite"] = this.form.currLocaFav; // 장소 즐겨찾기 여부
       }
+      data.append("feedLocationStr", JSON.stringify(feedLocationStr));
       // 참석인이 있는 경우
       let attendeeList = [];
       if (this.form.attendPeople.length > 0) {
         for (let i = 0; i < this.form.attendPeople.length; i++) {
-          console.log(this.form.attendPeople[i].seq);
           attendeeList.push({ userSeq: this.form.attendPeople[i].userSeq });
         }
       }
       data.append("feedAttendees", JSON.stringify(attendeeList));
       data.append("feedContent", this.form.content);
-      data.append("hashtagList", JSON.stringify(this.form.hashtag));
-
+      data.append("feedHashtags", JSON.stringify(this.form.hashtag));
+      console.log(JSON.stringify(this.form.hashtag));
       console.log(data.fileList);
       console.log(this.form.hashtag);
       for (let [key, value] of data) {
         console.log(key);
         console.log(value);
       }
-
-      // let json_data = {}
-      // for(let [key,value] of data){
-      //   json_data[key]=value;
-      // }
-      // console.log(json_data)
+      data.append("groupId", this.nowGroup.groupId);
 
       axios({
         method: "POST",
         url: `${process.env.VUE_APP_MCS_URL}/feed`,
         data: data,
-        headers: { Authorization: `JWT ${token}` },
+        headers: {
+          Authorization: token,
+          "Content-Type": "multipart/form-data",
+        },
       })
         .then(() => {
           console.log("피드작성 성공");
@@ -450,11 +512,19 @@ export default {
         });
     },
   },
+  created() {
+    // this.getFeedInfo();
+  },
   computed: {
     formIsValid() {
       return this.form.title && this.form.content;
     },
+    setActualAddress() {
+      // 텍스트 줄바꿈을 위해
+      return this.actualAddress.replace("\n", "<br />");
+    },
     google: gmapApi,
+    ...mapState("account", ["nowGroup"]),
   },
 };
 </script>
@@ -471,4 +541,6 @@ export default {
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.329);
   padding-bottom: 5%;
 }
+
+
 </style>
