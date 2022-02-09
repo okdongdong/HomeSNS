@@ -60,20 +60,28 @@ import { mapState } from "vuex";
 import axios from "axios";
 export default {
   name: "Main",
-  data: () => ({}),
+  data: () => ({
+    feedId : 1,
+  }),
   created() {
     this.getMain();
   },
   methods: {
     getMain() {
       const token = localStorage.getItem("jwt");
+      const data ={
+        groupId : this.nowGroup.groupId,
+        limit : 10,
+        offset: 0,
+      }
       axios({
         method: "GET",
-        url: `${process.env.VUE_APP_MCS_URL}/main/${this.nowGroup.groupId}`,
+        url: `${process.env.VUE_APP_MCS_URL}/main`,
+        params : data,
         headers: { Authorization: token },
       })
         .then((res) => {
-          console.log(res);
+          console.log(res.data);
         })
         .catch((err) => {
           console.log(err);
