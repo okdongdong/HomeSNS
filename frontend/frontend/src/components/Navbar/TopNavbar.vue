@@ -135,8 +135,8 @@
           active-class="deep-purple--text text--accent-4"
         >
           <v-list-item class="my-5">
-            <ProfilePhoto :size="100" :imgUrl="userImgUrl" :userSeq="userSeq" />
-            <h1>{{ userName }}</h1>
+            <ProfilePhoto :size="70" :imgUrl="userImgUrl" :userSeq="userSeq" />
+            <h1 class="ml-7">{{ userName }}</h1>
           </v-list-item>
           <v-list-item
             @click.stop="

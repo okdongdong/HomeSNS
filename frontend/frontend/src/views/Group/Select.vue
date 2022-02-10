@@ -13,7 +13,7 @@
           >
           </v-img>
         </div>
-        <v-card-title class="main-text justify-center text-h4 font-weight-bold"
+        <v-card-title class="main-text justify-center font-weight-bold"
           >우리집SNS</v-card-title
         >
         <v-spacer></v-spacer>
@@ -119,6 +119,7 @@ export default {
 }
 .main-text {
   color: #fff;
+  font-size: 30px;
 }
 h1 {
   color: white;
