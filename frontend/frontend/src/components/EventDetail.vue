@@ -2,12 +2,12 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent max-width="400">
       <v-card>
-        <v-card-title class="headline">{{event.title}}</v-card-title>
-        <v-card-text style="font-size: 1rem" class="font-weight-bold">{{event.content}}</v-card-text>
+        <v-card-title class="headline">{{ event.scheduleTitle }}</v-card-title>
+        <v-card-text style="font-size: 1rem" class="font-weight-bold">{{ event.scheduleContent }}</v-card-text>
 
         <div class="ml-5 font-weight-light">
-          <div>시작일: {{getEventStart()}}</div>
-          <div>종료일: {{getEventEnd()}}</div>
+          <div>시작일: {{ getEventStart() }}</div>
+          <div>종료일: {{ getEventEnd() }}</div>
         </div>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -31,12 +31,12 @@ export default {
   },
   methods: {
     getEventStart() {
-      return this.event.startDate + getTime(this.event.startTime);
+      return this.event.scheduleDateStart + getTime(this.event.scheduleTimeStart);
     },
     getEventEnd() {
-      return this.event.endDate + getTime(this.event.endTime);
+      return this.event.scheduleDateEnd + getTime(this.event.scheduleTimeEnd);
     },
-    close(){
+    close() {
       return this.$store.commit('CLOSE_EVENT_DETAIL');
     }
   }

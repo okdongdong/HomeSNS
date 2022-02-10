@@ -105,6 +105,7 @@ export default {
         //  setSnackBarInfo('제목과 종료일자를 작성해주세요.', 'error', 'top'));
       } else {
         // console.log(this.event)
+        location.reload();
         this.$store.dispatch('REQUEST_ADD_EVENT', this.event);
       }
     },
