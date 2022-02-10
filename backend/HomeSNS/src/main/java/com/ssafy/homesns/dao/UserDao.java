@@ -2,12 +2,21 @@ package com.ssafy.homesns.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.ssafy.homesns.dto.ProfileImageDto;
 import com.ssafy.homesns.dto.UserDto;
 
 @Mapper
 public interface UserDao {
-	// userDto를 받아서 DB에 유저 정보를 저장한다
+	
+	// 유저 정보 저장
 	public int userRegister(UserDto userDto);
+	// 유저 프로필 사진 저장
+	public int userProfileImageInsert(ProfileImageDto profileImageDto);
+	// 유저 프로필 사진 수정
+	public int userProfileImageUpdate(ProfileImageDto profileImageDto);
+	
+	// userSeq를 받아서 DB에 있는 유저 정보를 가져온다.
+	public UserDto userMypageSearch(int userSeq);
 	
 	// userDto를 받아서 DB에 유저 정보를 수정한다
 	public int userUpdate(UserDto userDto);

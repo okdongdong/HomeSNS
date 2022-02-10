@@ -8,6 +8,27 @@
 		          values (  #{userId},   #{userPassword},   #{userEmail},   #{userName},   #{userNickname},   #{userPhone},   #{userBod},   #{userProfileImageUrl},   now(),                #{userCls},   #{refreshToken} )
 	</insert>
 
+	<insert id="userProfileImageInsert" parameterType="com.ssafy.homesns.dto.ProfileImageDto" useGeneratedKeys="true" keyProperty="profileImageId">
+		INSERT INTO PROFILE_IMAGE ( USER_SEQ,    PROFILE_IMAGE_NAME,   PROFILE_IMAGE_SIZE,   PROFILE_IMAGE_Url,   REGDT  )
+		                   VALUES ( #{userSeq},  #{profileImageName},  #{profileImageSize},  #{profileImageUrl},  now()  )
+	</insert>
+	
+	<update id="userProfileImageUpdate" parameterType="com.ssafy.homesns.dto.ProfileImageDto">
+		UPDATE user
+		   SET USER_PROFILE_IMAGE_URL = #{profileImageUrl}
+		 WHERE USER_SEQ = #{userSeq}
+	</update>
+	
+	
+	
+	<select id="userMypageSearch" parameterType="int" resultType="com.ssafy.homesns.dto.UserDto">
+		SELECT USER_SEQ as userSeq, USER_ID as userId, USER_EMAIL as userEmail, 
+			   USER_NAME as userName, USER_NICKNAME as userNickname, USER_PHONE as userPhone, USER_BOD as userBod, 
+			   USER_PROFILE_IMAGE_URL as userProfileImageUrl,USER_REGISTER_DATE as userRegisterDate, USER_CLS as userCls
+		  FROM USER 
+		 WHERE USER_SEQ = #{userSeq}
+	</select>
+	
 	<update id="userUpdate" parameterType="com.ssafy.homesns.dto.UserDto">
 		UPDATE user SET USER_PASSWORD = #{userPassword}, USER_NAME = #{userName}, USER_NICKNAME = #{userNickname}, USER_BOD = #{userBod}, USER_PROFILE_IMAGE_URL = #{userProfileImageUrl}, REFRESH_TOKEN = #{refreshToken}  
 		 WHERE USER_SEQ = #{userSeq}

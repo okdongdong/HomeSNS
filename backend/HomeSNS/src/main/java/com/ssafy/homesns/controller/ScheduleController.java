@@ -46,6 +46,17 @@ public class ScheduleController {
 		}
 		return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@GetMapping(value="/schedule/{scheduleId}")
+	public ResponseEntity<ScheduleResultDto> scheduleDetailSearch(@PathVariable(value="scheduleId") int scheduleId) {
+		
+		ScheduleResultDto scheduleResultDto = scheduleService.scheduleDetailSearch(scheduleId);
+		
+		if (scheduleResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
 	@PutMapping(value="/schedule")
 	public ResponseEntity<ScheduleResultDto> scheduleUpdate(@RequestBody ScheduleDto scheduleDto) {
@@ -58,10 +69,10 @@ public class ScheduleController {
 		return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@DeleteMapping(value="/schedule/{groupId}")
-	public ResponseEntity<ScheduleResultDto> scheduleDelete(@PathVariable(value="groupId") int groupId) {
+	@DeleteMapping(value="/schedule/{scheduleId}")
+	public ResponseEntity<ScheduleResultDto> scheduleDelete(@PathVariable(value="scheduleId") int scheduleId) {
 		
-		ScheduleResultDto scheduleResultDto = scheduleService.scheduleDelete(groupId);
+		ScheduleResultDto scheduleResultDto = scheduleService.scheduleDelete(scheduleId);
 
 		if ( scheduleResultDto.getResult() == SUCCESS ) {
 			return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.OK);

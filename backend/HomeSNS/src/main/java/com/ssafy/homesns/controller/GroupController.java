@@ -9,12 +9,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.ssafy.homesns.dto.GroupDto;
 import com.ssafy.homesns.dto.GroupMemberDto;
@@ -42,11 +45,14 @@ public class GroupController {
 	// 2. 해당 그룹의 아이디 찾기
 	// 3. 찾은 그룹의 아이디와 자신을 그룹 멤버로 등록
 	@PostMapping(value="/group")
-	public ResponseEntity<GroupResultDto> groupListCreate(@RequestBody GroupDto groupDto) {
+	public ResponseEntity<GroupResultDto> groupListCreate(
+			@ModelAttribute GroupDto groupDto,
+			MultipartHttpServletRequest request) {
+		
 		// Security Context에서 UserSeq를 구한다
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		int userSeq = Integer.parseInt(authentication.getName());
-
+		
 		System.out.println(groupDto);
 		// 그룹 비밀번호 암호화
 		BCryptPasswordEncoder b = new BCryptPasswordEncoder();
@@ -55,8 +61,8 @@ public class GroupController {
 		// 그룹 리더 추가
 		groupDto.setGroupLeaderSeq(userSeq);
 		System.out.println(groupDto);
-
-		GroupResultDto groupResultDto = groupService.groupListCreate(groupDto);
+		
+		GroupResultDto groupResultDto = groupService.groupListCreate(groupDto, request);
 
 		if ( groupResultDto.getResult() == SUCCESS) {
 			return new ResponseEntity<GroupResultDto>(groupResultDto, HttpStatus.OK);
@@ -96,6 +102,20 @@ public class GroupController {
 		if ( groupResultDto.getResult() == SUCCESS) {
 			return new ResponseEntity<GroupResultDto>(groupResultDto, HttpStatus.OK);
 		}  
+		return new ResponseEntity<GroupResultDto>(groupResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@PostMapping(value="/group/profileImage")
+	public ResponseEntity<GroupResultDto> groupProfileImageUpdate(
+				@RequestParam int groupId,
+				MultipartHttpServletRequest request
+			) {
+		
+		GroupResultDto groupResultDto = groupService.groupProfileImageUpdate(groupId, request);
+		
+		if ( groupResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<GroupResultDto>(groupResultDto, HttpStatus.OK);
+		}
 		return new ResponseEntity<GroupResultDto>(groupResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
@@ -178,7 +198,7 @@ public class GroupController {
 		// Security Context에서 UserSeq를 구한다
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		int userSeq = Integer.parseInt(authentication.getName());
-
+		
 		GroupMemberDto groupMemberDto = new GroupMemberDto();
 		groupMemberDto.setGroupId(groupId);
 		groupMemberDto.setUserSeq(userSeq);

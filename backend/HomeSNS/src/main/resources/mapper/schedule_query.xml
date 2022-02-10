@@ -20,6 +20,19 @@
         FROM SCHEDULE
         WHERE GROUP_ID = #{groupId}
     </select>
+    
+	<select id="scheduleDetailSearch" parameterType="int" resultType="com.ssafy.homesns.dto.ScheduleDto">
+        SELECT SCHEDULE_ID         as scheduleId,
+               GROUP_ID            as groupId,
+               SCHEDULE_TITLE      as scheduleTitle,
+               SCHEDULE_CONTENT    as scheduleContent,
+               SCHEDULE_DATE_START as scheduleDateStart,
+               SCHEDULE_DATE_END   as scheduleDateEnd,
+               SCHEDULE_TIME_START as scheduleTimeStart,
+               SCHEDULE_TIME_END   as scheduleTimeEnd
+          FROM SCHEDULE
+         WHERE SCHEDULE_ID = #{scheduleId}
+    </select>
 
     <select id="scheduleTotalCount" resultType="int">
         SELECT COUNT(*)
@@ -40,8 +53,8 @@
 
     <delete id="scheduleDelete" parameterType="int">
         DELETE
-        FROM SCHEDULE
-        WHERE SCHEDULE_ID = #{scheduleId}
+          FROM SCHEDULE
+         WHERE SCHEDULE_ID = #{scheduleId}
     </delete>
 
 </mapper>

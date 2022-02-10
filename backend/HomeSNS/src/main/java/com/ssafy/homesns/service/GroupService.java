@@ -1,5 +1,7 @@
 package com.ssafy.homesns.service;
 
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import com.ssafy.homesns.dto.GroupDto;
 import com.ssafy.homesns.dto.GroupMemberDto;
 import com.ssafy.homesns.dto.GroupMemberResultDto;
@@ -8,7 +10,10 @@ import com.ssafy.homesns.dto.GroupResultDto;
 public interface GroupService {
 	
 	// 그룹 생성
-	public GroupResultDto groupListCreate(GroupDto groupDto);
+	public GroupResultDto groupListCreate(GroupDto groupDto, MultipartHttpServletRequest request);
+	// 그룹 프로필 이미지 수정
+	public GroupResultDto groupProfileImageUpdate(int groupId, MultipartHttpServletRequest request);
+	
 	// 그룹 리스트 불러오기
 	public GroupResultDto groupListSearch(int userSeq);
 	// 그룹 정보 수정
