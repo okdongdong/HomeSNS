@@ -7,6 +7,19 @@
 		                VALUES ( #{groupName},  #{groupLeaderSeq},  #{groupPassword} )
 	</insert>
 	
+	<insert id="groupProfileImageInsert" parameterType="com.ssafy.homesns.dto.ProfileImageDto" useGeneratedKeys="true" keyProperty="profileImageId">
+		INSERT INTO PROFILE_IMAGE ( GROUP_ID,    PROFILE_IMAGE_NAME,   PROFILE_IMAGE_SIZE,   PROFILE_IMAGE_Url,   REGDT  )
+		                   VALUES ( #{groupId},  #{profileImageName},  #{profileImageSize},  #{profileImageUrl},  now()  )
+	</insert>
+	
+	<update id="groupProfileImageUpdate" parameterType="com.ssafy.homesns.dto.ProfileImageDto">
+		UPDATE GROUP_LIST
+		   SET GROUP_PROFILE_IMAGE_URL = #{profileImageUrl}
+		 WHERE GROUP_ID = #{groupId}
+	</update>
+	
+	
+	
 	<select id="groupListRecentMake" parameterType="int" resultType="int">
 		SELECT GROUP_ID
 		  FROM GROUP_LIST

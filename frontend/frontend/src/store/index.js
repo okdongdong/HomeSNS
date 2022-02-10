@@ -8,6 +8,7 @@ import getMain from "./modules/getMain";
 import minigame from "./modules/minigame";
 import calendar from "./modules/calendar";
 import notice from "./modules/notice"
+import snackbar from "./modules/snackbar"
 
 
 Vue.use(Vuex);
@@ -20,7 +21,7 @@ export default new Vuex.Store({
     minigame,
     calendar,
     notice,
-
+    snackbar,
   },
   plugins: [createPersistedState({ paths: ["account"] })],
 });

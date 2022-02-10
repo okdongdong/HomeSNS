@@ -1,19 +1,30 @@
 import axios from "axios";
-// import store from './account.js'
+import store from "@/store";
+
+// 새로고침해야 detail 조회 가능 (시간나면 고치기)
+// detail 창 좀 꾸며보기
+// 분초 ?????
+//
 
 const state = {
-  event: {
-    scheduleId:null,
-    scheduleDateStart: "",
-    scheduleTimeStart: "",
-    scheduleDateEnd: "",
-    scheduleTimeEnd: "",
-    scheduleContent: "",
-    scheduleTitle: "",
-  },
+  event: initEvent(),
   events: [],
   dialog: false,
+  eventDetailDialog: false,
 };
+
+function initEvent() {
+  return {
+    scheduleId:null,
+    scheduleDateStart: "",
+    scheduleTimeStart: null,
+    scheduleDateEnd: "",
+    scheduleTimeEnd: null,
+    scheduleContent: "",
+    scheduleTitle: "",
+  }
+}
+
 //그룹 아이디 받아오기
 
 const getters = {};
@@ -31,6 +42,7 @@ const mutations = {
   },
 
   ADD_EVENT(state, getEvent) {
+    state.event = initEvent();
     state.events.push(getEvent);
     state.dialog = false;
   },
@@ -46,6 +58,11 @@ const mutations = {
     state.event = event;
     state.eventDetailDialog = true;
   },
+
+  CLOSE_EVENT_DETAIL(state) {
+    state.eventDetailDialog = false;
+  },
+
 };
 
 const actions = {
@@ -66,7 +83,7 @@ const actions = {
       // => 근데 이렇게하면 scheduleId가 없어서 상세조회가 불가능해서 그냥 새로고침되도록 만드는게 나을 듯
       const addedEvent = makeEvent(calendar);
       context.commit("ADD_EVENT", addedEvent);
-      // store.commit('SET_SNACKBAR', setSnackBarInfo('일정이 추가 되었습니다.', 'info', 'top'))
+      // store.commit('SET_SNACKBAR')
     } catch (e) {
       console.log("일정 추가 에러" + e);
     }
@@ -78,20 +95,22 @@ const actions = {
       const response = await requestQueryEvents(calendar, groupId);
       // console.log(context)
       console.log("이벤트 vuex 저장 정보");
-      console.log(response.data.scheduleDto);
-      context.commit("ADD_EVENTS", response.data.scheduleDto);
+      console.log(response.data.scheduleDtoList);
+      context.commit("ADD_EVENTS", response.data.scheduleDtoList);
     } catch (e) {
       // store.commit('SET_SNACKBAR', setSnackBarInfo('이벤트 전체 조회를 실패하였습니다.', 'error', 'top'))
+      store.commit('SET_SNACKBAR', '이벤트 전체 조회를 실패하였습니다.')
       console.log("불러오기에러" + e);
     }
   },
 
-  async REQUEST_DETAIL_EVENT(context) {
+  async REQUEST_DETAIL_EVENT(context, eventId) {
     try {
-      console.log(context);
-      const groupId = context.rootState.account.nowGroup.groupId;
-      const respone = await requestEventDetail(groupId);
-      context.commit("SHOW_EVENT_DETAIL", respone.data);
+      console.log(eventId)
+      const respone = await requestEventDetail(eventId);
+      console.log(respone.data)
+      console.log(store)
+      context.commit("SHOW_EVENT_DETAIL", respone.data.scheduleDto);
     } catch (e) {
       // store.commit('SET_SNACKBAR', setSnackBarInfo('이벤트 상세 조회를 실패하였습니다.', 'error', 'top'))
       console.log("이벤트 조회 에러" + e);
@@ -99,12 +118,12 @@ const actions = {
   },
 };
 
-function requestEventDetail(scheduleId, groupId) {
+function requestEventDetail(eventId) {
   const token = localStorage.getItem("jwt");
   // console.log(date)
   return axios({
     method: "GET",
-    url: `${process.env.VUE_APP_MCS_URL}/schedule/${groupId}`,
+    url: `${process.env.VUE_APP_MCS_URL}/schedule/detail/${eventId}`,
     headers: { Authorization: token },
   });
 }
@@ -153,6 +172,7 @@ const makeEvent = (event) => {
     name: event.scheduleTitle,
     start: event.scheduleDateStart + getTime(event.scheduleTimeStart),
     end: event.scheduleDateEnd + getTime(event.scheduleTimeEnd),
+    eventId: event.scheduleId,
     color: colors[Math.floor(Math.random() * 6)],
   };
 };
