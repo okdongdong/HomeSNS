@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.ssafy.homesns.dao.GameDao">
+
+	<insert id="gameCreate" parameterType="com.ssafy.homesns.dto.GameDto" useGeneratedKeys="true" keyProperty="gameId">
+		INSERT INTO GAME ( GROUP_ID,      GAME_TITLE,   GAME_AUTHOR,   CODE,     GAME_REGISTER_DATE )
+		          VALUES ( #{groupId},  #{gameTitle}, #{gameAuthor}, #{code},  now()              )
+	</insert>
+	
+	<insert id="ghostLegCreate" parameterType="com.ssafy.homesns.dto.GhostLegDto">
+		INSERT INTO GHOST_LEG ( GAME_ID,    PLAYER,    PLAYER_NUM,   RESULT,     MAP    )
+		               VALUES ( #{gameId},  #{player}, #{playerNum}, #{result},  #{map} )
+	</insert>
+	
+	<insert id="voteCreate" parameterType="com.ssafy.homesns.dto.VoteItemDto">
+		INSERT INTO VOTE_ITEM ( GAME_ID,   VOTE_ITEM_NAME  )
+		               VALUES ( #{gameId}, #{voteItemName} )
+	</insert>
+	
+	
+	
+	<select id="gameSearch" parameterType="com.ssafy.homesns.dto.GameParamDto" resultType="com.ssafy.homesns.dto.GameDto">
+		SELECT GAME_ID as gameId, GROUP_ID as groupId, GAME_TITLE as gameTitle, GAME_AUTHOR as gameAuthor,
+			   CODE as code, GAME_REGISTER_DATE as gameRegisterDate, 
+			   USER_NAME as gameAuthorName, USER_PROFILE_IMAGE_URL as gameAuthorProfileImageUrl
+		  FROM GAME JOIN USER
+		    ON GAME.GAME_AUTHOR = USER.USER_SEQ
+		 WHERE GROUP_ID = #{groupId}
+		 LIMIT #{limit} 
+		OFFSET #{offset}
+	</select>
+	
+	<select id="gameDetailSearch" parameterType="int" resultType="com.ssafy.homesns.dto.GameDto">
+		SELECT GAME_ID as gameId, GROUP_ID as groupId, GAME_TITLE as gameTitle, GAME_AUTHOR as gameAuthor,
+			   CODE as code, GAME_REGISTER_DATE as gameRegisterDate, 
+			   USER_NAME as gameAuthorName, USER_PROFILE_IMAGE_URL as gameAuthorProfileImageUrl
+		  FROM GAME JOIN USER
+		    ON GAME.GAME_AUTHOR = USER.USER_SEQ
+		 WHERE GAME_ID = #{gameId}
+	</select>
+
+	<select id="ghostLegDetailSearch" parameterType="int" resultType="com.ssafy.homesns.dto.GhostLegDto">
+		SELECT GAME_ID as gameId, PLAYER as player, PLAYER_NUM as playerNum, 
+			   RESULT as result, MAP as map
+		  FROM GHOST_LEG
+		 WHERE GAME_ID = #{gameId}
+	</select>
+		
+	<select id="voteDetailSearch" parameterType="int" resultType="com.ssafy.homesns.dto.VoteItemDto">
+		SELECT VOTE_ITEM_ID as voteItemId, GAME_ID as gameId, VOTE_ITEM_NAME as voteItemName, COUNT as count
+		  FROM VOTE_ITEM
+		 WHERE GAME_ID = #{gameId}
+	</select>
+	
+	<select id="voterSearch" parameterType="com.ssafy.homesns.dto.VoteItemDto" resultType="int">
+		SELECT VOTE_ITEM.VOTE_ITEM_ID as voteItemId
+		  FROM VOTE_ITEM JOIN VOTER
+		    ON VOTE_ITEM.VOTE_ITEM_ID = VOTER.VOTE_ITEM_ID
+		 WHERE GAME_ID = #{gameId}
+		   AND VOTER.USER_SEQ = #{userSeq}
+	</select>
+	
+	
+	
+	<update id="gameUpdate" parameterType="com.ssafy.homesns.dto.GameDto">
+		UPDATE GAME
+		   SET GAME_TITLE = #{gameTitle}
+		 WHERE GAME_ID = #{gameId}
+		   AND UPDATE_YN = "Y"
+	</update>
+	
+	<update id="ghostLegUpdate" parameterType="com.ssafy.homesns.dto.GhostLegDto">
+		UPDATE GHOST_LEG
+		   SET PLAYER = #{player},
+		       PLAYER_NUM = #{playerNum},
+		       RESULT = #{result},
+		       MAP = #{map}
+		 WHERE GAME_ID = #{gameId}
+	</update>
+	
+	<update id="voteUpdate" parameterType="com.ssafy.homesns.dto.VoteItemDto">
+		UPDATE VOTE_ITEM
+		   SET VOTE_ITEM_NAME = #{voteItemName}
+		 WHERE VOTE_ITEM_ID = #{voteItemId}
+	</update>
+	
+	
+
+	<insert id="voterCreate" parameterType="com.ssafy.homesns.dto.VoteItemDto" >
+		INSERT INTO VOTER ( USER_SEQ,   VOTE_ITEM_ID   )
+		           VALUES ( #{userSeq}, #{voteItemId}  )
+	</insert>
+	
+	<update id="voteAdd" parameterType="com.ssafy.homesns.dto.VoteItemDto">
+		UPDATE VOTE_ITEM
+		   SET COUNT = COUNT + 1
+		 WHERE VOTE_ITEM_ID = #{voteItemId}
+	</update>
+	
+	<delete id="voterDelete" parameterType="int">
+		DELETE FROM VOTER 
+		      WHERE USER_SEQ = #{userSeq}
+		        AND VOTE_ITEM_ID = #{voteItemId}
+	</delete>
+	
+	<update id="voteSub" parameterType="com.ssafy.homesns.dto.VoteItemDto">
+		UPDATE VOTE_ITEM
+		   SET COUNT = COUNT - 1
+		 WHERE VOTE_ITEM_ID = #{voteItemId}
+	</update>
+	
+	
+	
+	
+	
+	<update id="gameDisable" parameterType="com.ssafy.homesns.dto.GameDto">
+		UPDATE GAME
+		   SET UPDATE_YN = "N"
+		 WHERE GAME_ID = #{gameId}
+	</update>
+	
+	
+	
+	<delete id="gameDelete" parameterType="com.ssafy.homesns.dto.GameDto">
+		DELETE FROM GAME WHERE GAME_ID = #{gameId}
+	</delete>
+
+</mapper>

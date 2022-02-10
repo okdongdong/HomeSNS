@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import com.ssafy.homesns.dto.*;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,15 +16,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.homesns.dao.FeedDao;
-import com.ssafy.homesns.dto.CommentDto;
-import com.ssafy.homesns.dto.EventMemberDto;
-import com.ssafy.homesns.dto.FeedDto;
-import com.ssafy.homesns.dto.FeedResultDto;
-import com.ssafy.homesns.dto.FileDto;
-import com.ssafy.homesns.dto.HashtagDto;
-import com.ssafy.homesns.dto.LocationDto;
-import com.ssafy.homesns.dto.LocationFavoriteDto;
-import com.ssafy.homesns.dto.UserDto;
 
 @Service
 public class FeedServiceImpl implements FeedService {
@@ -52,52 +44,59 @@ public class FeedServiceImpl implements FeedService {
 	private static final int SUCCESS = 1;
 	private static final int FAIL = -1;
 
-	// feedDao의 feedMainPage를 사용해 DB에서 메인페이지에 사용될feed를 가져온다. 
+
+	// feedDao의 feedMainPage를 사용해 DB에서 메인페이지에 사용될feed를 가져온다.
 	// 성공하면 Result를 SUCCESS로 set하고, 실패하면 Result를 FAIL로 set한다
 
 	// feedParamDto로 해야겠다.
+	// 태현이가 만든 피드메인 페이지 가지고오기
 	@Override
-	public FeedResultDto feedMainPage(int groupId) {
+	@Transactional
+	public MainFeedResultDto feedMain(FeedParamDto feedParamDto) {
 
-
-		FeedResultDto feedResultDto = new FeedResultDto();
+		MainFeedResultDto mainFeedResultDto = new MainFeedResultDto();
 
 
 		try {
 
-			List<FeedDto> feedList = feedDao.feedMainPage(groupId);
-
+			List<MainFeedDto> feedList = feedDao.feedMain(feedParamDto);
 
 			// 5개만가져온다치면 들고온 게시물만 id받아와서 그걸로 다시 db 들려서 댓글, 해시태그, 사진 가져오는 방법
 
 			for(int i = 0 ; i < feedList.size(); i++) {
 
 				int feedId = feedList.get(i).getFeedId();
-				List<FileDto> fileList = feedDao.fileList(feedId);
-				List<HashtagDto> hashtagList = feedDao.hashtagList(feedId);
-				List<UserDto> userList = feedDao.eventMemberList(feedId);
-				LocationDto locationDto = feedDao.locationSearch(feedId);
+				System.out.println("feedId - " +feedId);
+				List<MainFileDto> fileList = feedDao.mainFileList(feedId);
+
+				System.out.println("fileList  - " +fileList);
+//				List<HashtagDto> hashtagList = feedDao.hashtagList(feedId);
+//				List<UserDto> userList = feedDao.eventMemberList(feedId);
+//				LocationDto locationDto = feedDao.locationSearch(feedId);
 
 				//댓글은 상세보기에서만있으면 되지 않을까??
 				//				List<CommentDto> commentList = feedDao.commentList(feedId);
 				//				feedList.get(i).setCommentList(commentList);
 				feedList.get(i).setFileList(fileList);
-				feedList.get(i).setHashtagList(hashtagList);
-				feedList.get(i).setUserList(userList);
-				feedList.get(i).setLocationDto(locationDto);
+//				feedList.get(i).setHashtagList(hashtagList);
+//				feedList.get(i).setUserList(userList);
+//				feedList.get(i).setLocationDto(locationDto);
 			}
 
-			feedResultDto.setFeedList(feedList);
-			feedResultDto.setResult(SUCCESS);			
+			mainFeedResultDto.setFeedList(feedList);
+			mainFeedResultDto.setResult(SUCCESS);
 		}catch(Exception e) {
 			e.printStackTrace();
-			feedResultDto.setResult(FAIL);
+			mainFeedResultDto.setResult(FAIL);
 		}
 
-		return feedResultDto;
+		return mainFeedResultDto;
 
 
 	}
+
+
+
 
 	// Feed 상세보기 페이지
 	// feedId를 이용하여 해당feed를 가져온다.
@@ -149,8 +148,35 @@ public class FeedServiceImpl implements FeedService {
 
 		try {
 
-			//feed table 추가
-			feedDao.feedInsert(feedDto);
+			// 장소 추가
+			String locationStr = feedDto.getFeedLocationStr();
+			if(locationStr != null) {
+				ObjectMapper objectMapper = new ObjectMapper(); 
+				LocationDto locationDto = objectMapper.readValue(locationStr, LocationDto.class);
+				locationDto.setGroupId(feedDto.getGroupId());
+				feedDao.feedLocationInsert(locationDto);
+				
+				int locationId = locationDto.getLocationId();
+				
+				// 장소 즐겨찾기 추가
+				if ( locationDto.getFavorite() ) {
+					LocationFavoriteDto locationFavoriteDto = new LocationFavoriteDto();
+					locationFavoriteDto.setLocationId(locationId);
+					locationFavoriteDto.setUserSeq(feedDto.getFeedAuthorSeq());
+					feedDao.feedLocationFavoriteInsert(locationFavoriteDto);
+				}
+				
+				feedDto.setFeedLocationId(locationId);
+				//feed table 추가
+				feedDao.feedInsert(feedDto);
+				
+			}
+			else {
+				
+				//feed table 추가
+				feedDao.feedInsert(feedDto);				
+			}
+			
 			int feedId = feedDto.getFeedId();
 
 			// hashtag 추가 
@@ -183,26 +209,6 @@ public class FeedServiceImpl implements FeedService {
 					feedDao.feedEventMemberInsert(attendeeList.get(i));
 				}		
 				
-			}
-			// 장소 추가
-			String locationStr = feedDto.getFeedLocationStr();
-			if(locationStr != null) {
-				ObjectMapper objectMapper = new ObjectMapper(); 
-				LocationDto locationDto = objectMapper.readValue(locationStr, LocationDto.class);
-//				Map<String, LocationDto> locationDto = objectMapper.readValue(locationStr, LocationDto.class);
-				locationDto.setGroupId(feedDto.getGroupId());
-				feedDao.feedLocationInsert(locationDto);
-				
-				System.out.println("locationDto-----:" + locationDto );
-			
-			
-			// 장소 즐겨찾기 추가
-				if ( locationDto.getFavorite() ) {
-					LocationFavoriteDto locationFavoriteDto = new LocationFavoriteDto();
-					locationFavoriteDto.setLocationId(locationDto.getLocationId());
-					locationFavoriteDto.setUserSeq(feedDto.getFeedAuthorSeq());
-					feedDao.feedLocationFavoriteInsert(locationFavoriteDto);
-				}
 			}
 
 
@@ -259,6 +265,34 @@ public class FeedServiceImpl implements FeedService {
 		return feedResultDto;
 	}
 
+	
+	
+	@Override
+	public FeedResultDto feedCreateInfo(GroupMemberDto params) {
+		
+		FeedResultDto feedResultDto = new FeedResultDto(); 
+		
+		// 해당유저에 해당하는 장소 담기 (즐겨찾기 & 그룹 )
+		// locationName , lng, lat, favorite만
+		List<LocationDto> userLocationList = feedDao.userLocationList(params);
+		
+		// userName하고 userSeq만 필요
+		List<GroupMemberDto> memberList = feedDao.groupMemberList(params.getGroupId()); 
+		
+		
+		feedResultDto.setLocations(userLocationList);
+		feedResultDto.setMembers(memberList);
+		feedResultDto.setResult(SUCCESS);
+		
+		return feedResultDto;
+		
+	}
+	
+	
+	
+	
+	
+	
 	@Override
 	public FeedResultDto feedUpdate(FeedDto feedDto, MultipartHttpServletRequest request) {
 
