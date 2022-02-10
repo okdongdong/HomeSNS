@@ -1,7 +1,11 @@
 package com.ssafy.homesns.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
+import com.ssafy.homesns.dto.FeedParamDto;
+import com.ssafy.homesns.dto.MainFeedDto;
 import com.ssafy.homesns.dto.ProfileImageDto;
 import com.ssafy.homesns.dto.UserDto;
 
@@ -36,4 +40,9 @@ public interface UserDao {
 	// phone을 받아서 DB에 유저 정보가 있는지 확인한다
 	public int checkUserPhone(String userPhone);
 	
+	
+	// userSeq를 받아서 유저가 작성한 피드를 찾는다
+	public List<MainFeedDto> userFeedSearch(FeedParamDto feedParamDto);
+	// userSeq를 받아서 유저가 스크랩한 피드를 찾는다
+	public List<MainFeedDto> userScrapSearch(FeedParamDto feedParamDto);
 }

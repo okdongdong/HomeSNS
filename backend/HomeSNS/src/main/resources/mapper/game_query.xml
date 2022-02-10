@@ -3,7 +3,7 @@
 <mapper namespace="com.ssafy.homesns.dao.GameDao">
 
 	<insert id="gameCreate" parameterType="com.ssafy.homesns.dto.GameDto" useGeneratedKeys="true" keyProperty="gameId">
-		INSERT INTO GAME ( GROUP_ID,      GAME_TITLE,   GAME_AUTHOR,   CODE,     GAME_REGISTER_DATE )
+		INSERT INTO GAME ( GROUP_ID,    GAME_TITLE,   GAME_AUTHOR,   CODE,     GAME_REGISTER_DATE )
 		          VALUES ( #{groupId},  #{gameTitle}, #{gameAuthor}, #{code},  now()              )
 	</insert>
 	
@@ -26,6 +26,7 @@
 		  FROM GAME JOIN USER
 		    ON GAME.GAME_AUTHOR = USER.USER_SEQ
 		 WHERE GROUP_ID = #{groupId}
+		 ORDER BY GAME_ID DESC
 		 LIMIT #{limit} 
 		OFFSET #{offset}
 	</select>

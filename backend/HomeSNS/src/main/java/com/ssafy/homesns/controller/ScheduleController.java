@@ -47,7 +47,7 @@ public class ScheduleController {
 		return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@GetMapping(value="/schedule/{scheduleId}")
+	@GetMapping(value="/schedule/detail/{scheduleId}")
 	public ResponseEntity<ScheduleResultDto> scheduleDetailSearch(@PathVariable(value="scheduleId") int scheduleId) {
 		
 		ScheduleResultDto scheduleResultDto = scheduleService.scheduleDetailSearch(scheduleId);

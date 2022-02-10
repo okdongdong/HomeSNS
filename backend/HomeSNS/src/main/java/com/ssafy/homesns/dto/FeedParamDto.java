@@ -9,6 +9,18 @@ public class FeedParamDto {
 	// group에 해당하는 feed검색용 parameter
 	private int groupId;
 
+	// userSeq를 사용한 feed검색용 parameter
+	private int userSeq;
+	
+	
+	public int getUserSeq() {
+		return userSeq;
+	}
+
+	public void setUserSeq(int userSeq) {
+		this.userSeq = userSeq;
+	}
+
 	public int getLimit() {
 		return limit;
 	}
@@ -31,9 +43,12 @@ public class FeedParamDto {
 
 	public void setGroupId(int groupId) {
 		this.groupId = groupId;
+	}
+
+	@Override
+	public String toString() {
+		return "FeedParamDto [limit=" + limit + ", offset=" + offset + ", groupId=" + groupId + ", userSeq=" + userSeq
+				+ "]";
 	} 
-	
-	
-	
-	
+
 }

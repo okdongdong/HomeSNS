@@ -80,6 +80,7 @@ public class GameController {
 	@GetMapping(value="/game")
 	public ResponseEntity<GameResultDto> gameSearch(GameParamDto gameParamDto) {
 
+		System.out.println(gameParamDto);
 		GameResultDto gameResultDto = gameService.gameSearch(gameParamDto);
 
 		if ( gameResultDto.getResult() == SUCCESS ) {

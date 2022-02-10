@@ -1,6 +1,7 @@
 package com.ssafy.homesns.service;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.FilenameUtils;
@@ -13,8 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.ssafy.homesns.dao.FeedDao;
 import com.ssafy.homesns.dao.UserDao;
-import com.ssafy.homesns.dto.FileDto;
+import com.ssafy.homesns.dto.FeedParamDto;
+import com.ssafy.homesns.dto.MainFeedDto;
+import com.ssafy.homesns.dto.MainFeedResultDto;
+import com.ssafy.homesns.dto.MainFileDto;
 import com.ssafy.homesns.dto.ProfileImageDto;
 import com.ssafy.homesns.dto.UserDto;
 import com.ssafy.homesns.dto.UserResultDto;
@@ -26,6 +31,9 @@ public class UserServiceImpl implements UserService{
 
 	@Autowired
 	UserDao userDao;
+
+	@Autowired
+	FeedDao feedDao;
 
 	private static final int SUCCESS = 1;
 	private static final int FAIL = -1;
@@ -58,7 +66,7 @@ public class UserServiceImpl implements UserService{
 		try {
 			// user table 추가
 			userDao.userRegister(userDto);
-			
+
 			// profile image table 추가
 			MultipartFile userProfileImage = request.getFile("profileImage");
 
@@ -89,7 +97,7 @@ public class UserServiceImpl implements UserService{
 				profileImageDto.setProfileImageSize(userProfileImage.getSize());
 				String profileImageUrl = uploadFolder + "/" + savingFileName;
 				profileImageDto.setProfileImageUrl(profileImageUrl);
-				
+
 				// Profile Image 추가
 				userDao.userProfileImageInsert(profileImageDto);
 			}
@@ -108,15 +116,15 @@ public class UserServiceImpl implements UserService{
 		// Security Context에서 UserSeq를 구한다
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		int userSeq = Integer.parseInt(authentication.getName());
-		
+
 		UserResultDto userResultDto = new UserResultDto();
-		
+
 		try {
 			// profile image table 추가
 			MultipartFile userProfileImage = request.getFile("profileImage");
-			
+
 			if( userProfileImage != null ) {
-				
+
 				File uploadDir = new File(uploadPath + File.separator + uploadFolder);
 				if (!uploadDir.exists()) uploadDir.mkdir();
 
@@ -142,10 +150,10 @@ public class UserServiceImpl implements UserService{
 				profileImageDto.setProfileImageSize(userProfileImage.getSize());
 				String profileImageUrl = uploadFolder + "/" + savingFileName;
 				profileImageDto.setProfileImageUrl(profileImageUrl);
-				
+
 				// Profile Image 추가
 				userDao.userProfileImageInsert(profileImageDto);
-				
+
 				// User테이블의 ProfileImageUrl 수정
 				userDao.userProfileImageUpdate(profileImageDto);
 			}
@@ -159,16 +167,16 @@ public class UserServiceImpl implements UserService{
 		return userResultDto;
 	}
 
-	
-	
+
+
 	@Override
 	public UserResultDto userMypageSearch() {
 		// Security Context에서 UserSeq를 구한다
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		int userSeq = Integer.parseInt(authentication.getName());
-		
+
 		UserResultDto userResultDto = new UserResultDto();
-		
+
 		try {
 			userResultDto.setUserDto(userDao.userMypageSearch(userSeq));
 			userResultDto.setResult(SUCCESS);
@@ -176,11 +184,11 @@ public class UserServiceImpl implements UserService{
 			e.printStackTrace();
 			userResultDto.setResult(FAIL);
 		}
-		
+
 		return userResultDto;
 	}
-	
-	
+
+
 	@Override
 	public UserResultDto userUpdate(UserDto userDto) {
 		UserResultDto userResultDto = new UserResultDto();
@@ -255,6 +263,64 @@ public class UserServiceImpl implements UserService{
 			userResultDto.setResult(FAIL);
 		}
 		return userResultDto;
+	}
+
+	@Override
+	public MainFeedResultDto userFeedSearch(FeedParamDto feedParamDto) {
+
+		MainFeedResultDto mainFeedResultDto = new MainFeedResultDto();
+
+		try {
+			List<MainFeedDto> feedList = userDao.userFeedSearch(feedParamDto);
+
+			for (int i = 0; i < feedList.size(); i++) {
+
+				int feedId = feedList.get(i).getFeedId();
+				System.out.println("feedId - " + feedId);
+
+				List<MainFileDto> fileList = feedDao.mainFileList(feedId);
+				System.out.println("fileList  - " + fileList);
+
+				feedList.get(i).setFileList(fileList);
+			}
+
+			mainFeedResultDto.setFeedList(feedList);
+			mainFeedResultDto.setResult(SUCCESS);
+		} catch ( Exception e ) {
+			e.printStackTrace();
+			mainFeedResultDto.setResult(FAIL);
+		}
+
+		return mainFeedResultDto;
+	}
+
+	@Override
+	public MainFeedResultDto userScrapSearch(FeedParamDto feedParamDto) {
+
+		MainFeedResultDto mainFeedResultDto = new MainFeedResultDto();
+
+		try {
+			List<MainFeedDto> feedList = userDao.userScrapSearch(feedParamDto);
+
+			for (int i = 0; i < feedList.size(); i++) {
+				
+				int feedId = feedList.get(i).getFeedId();
+				System.out.println("feedId - " + feedId);
+
+				List<MainFileDto> fileList = feedDao.mainFileList(feedId);
+				System.out.println("fileList  - " + fileList);
+
+				feedList.get(i).setFileList(fileList);
+			}
+
+			mainFeedResultDto.setFeedList(feedList);
+			mainFeedResultDto.setResult(SUCCESS);
+		} catch ( Exception e ) {
+			e.printStackTrace();
+			mainFeedResultDto.setResult(FAIL);
+		}
+
+		return mainFeedResultDto;
 	}
 
 }
