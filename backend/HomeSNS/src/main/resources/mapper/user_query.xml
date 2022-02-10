@@ -64,4 +64,26 @@
 		 WHERE USER_Phone = #{userPhone}
 	</select>
 
+	
+	<select id="userFeedSearch" parameterType="map" resultType="com.ssafy.homesns.dto.MainFeedDto">
+		SELECT FEED_ID, FEED_TITLE, FEED_EVENT_DATE, IFNULL(FEED_LOCATION_ID,'') AS FEED_LOCATION_ID
+		  FROM HOME_SNS.FEED
+		 WHERE FEED_AUTHOR = #{userSeq}
+	  ORDER BY FEED_UPLOAD_DATE DESC
+		 LIMIT #{limit} 
+		OFFSET #{offset}
+	</select>
+
+	<select id="userScrapSearch" parameterType="map" resultType="com.ssafy.homesns.dto.MainFeedDto">
+		SELECT FEED_ID, FEED_TITLE, FEED_EVENT_DATE, IFNULL(FEED_LOCATION_ID,'') AS FEED_LOCATION_ID
+		  FROM SCRAP JOIN FEED
+		    ON SCRAP.FEED_ID = FEED.FEED_ID
+		 WHERE SCRAP.USER_SEQ = #{userSeq}
+	  ORDER BY FEED_UPLOAD_DATE DESC
+		 LIMIT #{limit} 
+		OFFSET #{offset}
+	</select>
 </mapper>
+
+
+

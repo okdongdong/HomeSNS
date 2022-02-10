@@ -2,6 +2,8 @@ package com.ssafy.homesns.service;
 
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.ssafy.homesns.dto.FeedParamDto;
+import com.ssafy.homesns.dto.MainFeedResultDto;
 import com.ssafy.homesns.dto.UserDto;
 import com.ssafy.homesns.dto.UserResultDto;
 
@@ -19,4 +21,7 @@ public interface UserService {
 	public UserResultDto checkUserEmail(String userEmail);
 	public UserResultDto checkUserPhone(String userPhone);
 
+	// 유저/타유저 프로필 페이지
+	public MainFeedResultDto userFeedSearch(FeedParamDto feedParamDto);
+	public MainFeedResultDto userScrapSearch(FeedParamDto feedParamDto);
 }

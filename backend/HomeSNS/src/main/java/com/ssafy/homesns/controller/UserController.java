@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.ssafy.homesns.dto.FeedParamDto;
+import com.ssafy.homesns.dto.MainFeedResultDto;
 import com.ssafy.homesns.dto.UserDto;
 import com.ssafy.homesns.dto.UserResultDto;
 import com.ssafy.homesns.service.UserService;
@@ -69,7 +71,7 @@ public class UserController {
 	public ResponseEntity<UserResultDto> mypage() {
 
 		UserResultDto userResultDto = userService.userMypageSearch();
-		
+
 		if ( userResultDto.getResult() == SUCCESS ) {
 			return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.OK);
 		}
@@ -168,5 +170,61 @@ public class UserController {
 	}
 
 
+	@GetMapping(value="/user/feed/my")
+	public ResponseEntity<MainFeedResultDto> userMyFeedSearch(FeedParamDto feedParamDto) {
+		// Security Context에서 UserSeq를 구한다
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		int userSeq = Integer.parseInt(authentication.getName());
+		feedParamDto.setUserSeq(userSeq);
+		
+		MainFeedResultDto mainFeedResultDto = userService.userFeedSearch(feedParamDto);
+		
+		if ( mainFeedResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<MainFeedResultDto>(mainFeedResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<MainFeedResultDto>(mainFeedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@GetMapping(value="/user/scrap/my")
+	public ResponseEntity<MainFeedResultDto> userMyScrapSearch(FeedParamDto feedParamDto) {
+		// Security Context에서 UserSeq를 구한다
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		int userSeq = Integer.parseInt(authentication.getName());
+		feedParamDto.setUserSeq(userSeq);
+		
+		MainFeedResultDto mainFeedResultDto = userService.userScrapSearch(feedParamDto);
+		
+		if ( mainFeedResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<MainFeedResultDto>(mainFeedResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<MainFeedResultDto>(mainFeedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	
+	@GetMapping(value="/user/feed/other")
+	public ResponseEntity<MainFeedResultDto> userFeedSearch(FeedParamDto feedParamDto) {
 
+		MainFeedResultDto mainFeedResultDto = userService.userFeedSearch(feedParamDto);
+		
+		if ( mainFeedResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<MainFeedResultDto>(mainFeedResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<MainFeedResultDto>(mainFeedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@GetMapping(value="/user/scrap/other")
+	public ResponseEntity<MainFeedResultDto> userScrapSearch(FeedParamDto feedParamDto) {
+		
+		MainFeedResultDto mainFeedResultDto = userService.userScrapSearch(feedParamDto);
+		
+		if ( mainFeedResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<MainFeedResultDto>(mainFeedResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<MainFeedResultDto>(mainFeedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }
+
+
+
+
+
