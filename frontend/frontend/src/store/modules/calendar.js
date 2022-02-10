@@ -1,6 +1,6 @@
-import axios from "axios";
-// import store from "@/store";
 
+import axios from "axios";
+import store from './account.js'
 
 const state = {
   event: initEvent(),
@@ -10,6 +10,9 @@ const state = {
 //그룹 아이디 받아오기
 
 function initEvent() {
+  // console.log(store.state.account.nowGroup.groupId)
+  console.log('50')
+  console.log(store.state.nowGroup.groupId)
   return {
     scheduleDateStart: '',
     scheduleTimeStart: '',
@@ -17,7 +20,9 @@ function initEvent() {
     scheduleTimeEnd: '',
     scheduleContent: '',
     scheduleTitle: '',
+    // groupId: store.state.nowGroup.groupId,
     groupId: '1',
+    // groupId: this.$store.account.['nowGroup'].groupId,
   }
 }
 
@@ -37,6 +42,8 @@ const mutations = {
   },
 
   ADD_EVENT(state, getEvent) {
+    console.log('20')
+    console.log(getEvent)
     state.events.push(getEvent);
     state.event = initEvent();
     state.dialog = false;
@@ -63,9 +70,12 @@ const actions = {
       //안찍힘
       console.log('addEvent정보')
       console.log(response)
+      const groupId = context.rootState.account.nowGroup.groupId
       // console.log(calendar)
       console.log(context)
       const addedEvent = makeEvent(calendar);
+      addedEvent["groupId"] = groupId
+      console.log(addedEvent)
       context.commit('ADD_EVENT', addedEvent);
       // snack bar 작업 해보기
       // store.commit('SET_SNACKBAR', setSnackBarInfo('일정이 추가 되었습니다.', 'info', 'top'))
