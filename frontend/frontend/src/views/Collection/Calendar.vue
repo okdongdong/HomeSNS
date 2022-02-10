@@ -1,5 +1,5 @@
 <template>
-<v-app class="pa-5">
+  <v-app class="pa-5">
     <v-row>
       <v-col>
         <v-menu
@@ -21,12 +21,11 @@
             ></v-text-field>
           </template>
 
-          <v-date-picker
-            v-model="start"
-            no-title
-          >
+          <v-date-picker v-model="start" no-title>
             <v-btn text color="primary" @click="dateOpen = false">Cancel</v-btn>
-            <v-btn text color="primary" @click="$refs.dateOpen.save(start)">OK</v-btn>
+            <v-btn text color="primary" @click="$refs.dateOpen.save(start)"
+              >OK</v-btn
+            >
           </v-date-picker>
         </v-menu>
       </v-col>
@@ -44,7 +43,7 @@
       </v-col>
     </v-row>
     <div class="text-center mb-3 display-1">
-      {{start | moment('YYYY MMMM')}}
+      {{ start | moment("YYYY MMMM") }}
     </div>
     <v-sheet height="500">
       <v-calendar
@@ -58,40 +57,70 @@
         @click:time="open"
         ref="calendar"
         v-model="start"
-        
       ></v-calendar>
     </v-sheet>
     <EventDialog></EventDialog>
-</v-app>
+    <EventDetail></EventDetail>
+  </v-app>
 </template>
 
 <script>
-import EventDialog from '@/components/EventDialog.vue'
+import EventDialog from "@/components/EventDialog.vue";
+import EventDetail from "@/components/EventDetail.vue";
 
 export default {
-  name: 'Calendar',
+  name: "Calendar",
   components: {
-    EventDialog
+    EventDialog,
+    EventDetail,
   },
 
   data() {
     return {
       dateOpen: false,
-      start: this.$moment(new Date()).format('YYYY-MM-DD'),
-      type: 'month',
+      // start: '',
+      start: null,
+      type: "month",
       typeOptions: [
-        {text: 'Day', value: 'day'},
-        {text: 'Week', value: 'week'},
-        {text: 'Month', value: 'month'},
+        { text: "Day", value: "day" },
+        { text: "Week", value: "week" },
+        { text: "Month", value: "month" },
       ],
-    }
+    };
+  },
+
+  created() {
+    this.start = this.$moment(new Date()).format("YYYY-MM-DD");
   },
 
   methods: {
     open(date) {
-      console.log('1')
-      this.$store.commit('OPEN_CALENDAR_DIALOG', date)
-    }
+      this.$store.commit("OPEN_CALENDAR_DIALOG", date);
+    },
+
+    showEvent({ event }) {
+      console.log("showEvent 정보");
+      console.log(event);
+      this.$store.dispatch("REQUEST_DETAIL_EVENT", event.id);
+    },
   },
-}
+
+  computed: {
+    events() {
+      return this.$store.state.calendar.events;
+    },
+  },
+
+  watch: {
+    start(newDate, oldDate) {
+      let newDateMonth = this.$moment(newDate).format("YYYY-MM");
+      let oldDateMonth = this.$moment(oldDate).format("YYYY-MM");
+      console.log("newDateMonth", newDateMonth);
+      console.log("oldDateMonth", oldDateMonth);
+      if (newDateMonth !== oldDateMonth) {
+        this.$store.dispatch("REQEUST_QUERY_EVENTS_BY_DATE", newDate);
+      }
+    },
+  },
+};
 </script>

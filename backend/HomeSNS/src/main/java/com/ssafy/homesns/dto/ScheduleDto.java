@@ -1,7 +1,10 @@
 package com.ssafy.homesns.dto;
 
-import java.sql.Date;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class ScheduleDto {
 	private int scheduleId;
@@ -10,12 +13,16 @@ public class ScheduleDto {
 	private String scheduleContent;
 
 	// 연-월-일까지만
-	private Date scheduleDateStart;
-	private Date scheduleDateEnd;
+//	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private String scheduleDateStart;
+//	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private String scheduleDateEnd;
 
 	// 시:분
-	private Time scheduleTimeStart;
-	private Time scheduleTimeEnd;
+//	@DateTimeFormat(pattern = "HH:mm")
+	private String scheduleTimeStart;
+//	@DateTimeFormat(pattern = "HH:mm")
+	private String scheduleTimeEnd;
 
 	// 장소는 일단 보류
 //	private String scheduleLocation;
@@ -49,35 +56,35 @@ public class ScheduleDto {
 		this.scheduleContent = scheduleContent;
 	}
 
-	public Date getScheduleDateStart() {
+	public String getScheduleDateStart() {
 		return scheduleDateStart;
 	}
 
-	public void setScheduleDateStart(Date scheduleDateStart) {
+	public void setScheduleDateStart(String scheduleDateStart) {
 		this.scheduleDateStart = scheduleDateStart;
 	}
 
-	public Date getScheduleDateEnd() {
+	public String getScheduleDateEnd() {
 		return scheduleDateEnd;
 	}
 
-	public void setScheduleDateEnd(Date scheduleDateEnd) {
+	public void setScheduleDateEnd(String scheduleDateEnd) {
 		this.scheduleDateEnd = scheduleDateEnd;
 	}
 
-	public Time getScheduleTimeStart() {
+	public String getScheduleTimeStart() {
 		return scheduleTimeStart;
 	}
 
-	public void setScheduleTimeStart(Time scheduleTimeStart) {
+	public void setScheduleTimeStart(String scheduleTimeStart) {
 		this.scheduleTimeStart = scheduleTimeStart;
 	}
 
-	public Time getScheduleTimeEnd() {
+	public String getScheduleTimeEnd() {
 		return scheduleTimeEnd;
 	}
 
-	public void setScheduleTimeEnd(Time scheduleTimeEnd) {
+	public void setScheduleTimeEnd(String scheduleTimeEnd) {
 		this.scheduleTimeEnd = scheduleTimeEnd;
 	}
 
