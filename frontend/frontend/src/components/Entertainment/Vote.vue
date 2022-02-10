@@ -1,7 +1,5 @@
 <template>
   <div>
-    <h3>투표항목</h3>
-
     <!-- 투표내용보여주기 -->
     <!-- 투표하기 -->
     <div v-for="(voteItem, idx) in info.voteItems" :key="idx">
