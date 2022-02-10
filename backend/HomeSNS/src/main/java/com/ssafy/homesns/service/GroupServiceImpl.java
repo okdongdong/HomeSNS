@@ -31,6 +31,8 @@ public class GroupServiceImpl implements GroupService{
 	private static final int SUCCESS = 1;
 	private static final int FAIL = -1;
 	
+	private static final int DUP = 2;
+	
 	String uploadFolder = "upload";
 	
 	/* for production code */
@@ -253,7 +255,7 @@ public class GroupServiceImpl implements GroupService{
 			
 			// 해당 그룹에 이미 참여하고 있다면, Create 하지 않는다
 			if ( groupDao.groupMemberExist(groupMemberDto) == 1 ) {
-				groupMemberResultDto.setResult(FAIL);
+				groupMemberResultDto.setResult(DUP);
 			} else {
 				// 해당 그룹에 참여하고 있지 않다면 Create 한다
 				if ( groupDao.groupMemberCreate(groupMemberDto) == 1 ) {

@@ -38,7 +38,9 @@ public class GroupController {
 	GroupService groupService;
 
 	private static final int SUCCESS = 1;
-
+	private static final int FAIL = -1;
+	
+	private static final int DUP = 2;
 
 	// 새로운 그룹을 생성하는 동시에 그룹에 참가 => GroupList + GroupMember 동시에 추가
 	// 1. 그룹을 생성
@@ -142,9 +144,11 @@ public class GroupController {
 		
 		GroupMemberResultDto groupMemberResultDto = groupService.groupMemberCreate(groupDto);
 		
-		if ( groupMemberResultDto.getResult() == SUCCESS) {
+		if ( groupMemberResultDto.getResult() == SUCCESS ) {
 			return new ResponseEntity<GroupMemberResultDto>(groupMemberResultDto, HttpStatus.OK);
-		}  
+		} else if ( groupMemberResultDto.getResult() == DUP ) {
+			return new ResponseEntity<GroupMemberResultDto>(groupMemberResultDto, HttpStatus.BAD_REQUEST);
+		} 
 		return new ResponseEntity<GroupMemberResultDto>(groupMemberResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
