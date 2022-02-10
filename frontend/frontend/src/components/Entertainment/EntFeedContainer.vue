@@ -28,10 +28,10 @@
         </div>
       </div>
 
-      <div v-if="content.type === 'vote'">
+      <div v-if="content.type == 'vote'">
         <Vote :info="content.info" />
       </div>
-      <div v-else-if="content.type === 'ghost'">
+      <div v-else-if="content.type == 'ghost'">
         <GhostLeg :info="content.info" />
       </div>
     </div>
