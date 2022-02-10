@@ -27,6 +27,8 @@ public interface GameDao {
 	public GhostLegDto ghostLegDetailSearch(int gameId);
 	// 투표 상세 조회
 	public List<VoteItemDto> voteDetailSearch(int gameId);
+	// 유저 투표 현황 조회
+	public Integer voterSearch(VoteItemDto voteItemDto);
 	
 	// 게임 수정
 	public int gameUpdate(GameDto gameDto);
@@ -34,7 +36,7 @@ public interface GameDao {
 	public int ghostLegUpdate(GhostLegDto ghostLegDto);
 	// 투표 수정
 	public int voteUpdate(VoteItemDto voteItemDto);
-
+	
 	// 투표 하기
 	//// voter 레코드 생성
 	public int voterCreate(VoteItemDto voteItemDto);

@@ -148,8 +148,35 @@ public class FeedServiceImpl implements FeedService {
 
 		try {
 
-			//feed table 추가
-			feedDao.feedInsert(feedDto);
+			// 장소 추가
+			String locationStr = feedDto.getFeedLocationStr();
+			if(locationStr != null) {
+				ObjectMapper objectMapper = new ObjectMapper(); 
+				LocationDto locationDto = objectMapper.readValue(locationStr, LocationDto.class);
+				locationDto.setGroupId(feedDto.getGroupId());
+				feedDao.feedLocationInsert(locationDto);
+				
+				int locationId = locationDto.getLocationId();
+				
+				// 장소 즐겨찾기 추가
+				if ( locationDto.getFavorite() ) {
+					LocationFavoriteDto locationFavoriteDto = new LocationFavoriteDto();
+					locationFavoriteDto.setLocationId(locationId);
+					locationFavoriteDto.setUserSeq(feedDto.getFeedAuthorSeq());
+					feedDao.feedLocationFavoriteInsert(locationFavoriteDto);
+				}
+				
+				feedDto.setFeedLocationId(locationId);
+				//feed table 추가
+				feedDao.feedInsert(feedDto);
+				
+			}
+			else {
+				
+				//feed table 추가
+				feedDao.feedInsert(feedDto);				
+			}
+			
 			int feedId = feedDto.getFeedId();
 
 			// hashtag 추가 
@@ -182,26 +209,6 @@ public class FeedServiceImpl implements FeedService {
 					feedDao.feedEventMemberInsert(attendeeList.get(i));
 				}		
 				
-			}
-			// 장소 추가
-			String locationStr = feedDto.getFeedLocationStr();
-			if(locationStr != null) {
-				ObjectMapper objectMapper = new ObjectMapper(); 
-				LocationDto locationDto = objectMapper.readValue(locationStr, LocationDto.class);
-//				Map<String, LocationDto> locationDto = objectMapper.readValue(locationStr, LocationDto.class);
-				locationDto.setGroupId(feedDto.getGroupId());
-				feedDao.feedLocationInsert(locationDto);
-				
-				System.out.println("locationDto-----:" + locationDto );
-			
-			
-			// 장소 즐겨찾기 추가
-				if ( locationDto.getFavorite() ) {
-					LocationFavoriteDto locationFavoriteDto = new LocationFavoriteDto();
-					locationFavoriteDto.setLocationId(locationDto.getLocationId());
-					locationFavoriteDto.setUserSeq(feedDto.getFeedAuthorSeq());
-					feedDao.feedLocationFavoriteInsert(locationFavoriteDto);
-				}
 			}
 
 

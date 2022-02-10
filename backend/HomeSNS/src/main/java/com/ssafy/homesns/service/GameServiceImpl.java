@@ -3,6 +3,8 @@ package com.ssafy.homesns.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +12,7 @@ import com.ssafy.homesns.dao.GameDao;
 import com.ssafy.homesns.dto.GameDto;
 import com.ssafy.homesns.dto.GameParamDto;
 import com.ssafy.homesns.dto.GameResultDto;
+import com.ssafy.homesns.dto.GhostLegDto;
 import com.ssafy.homesns.dto.VoteItemDto;
 import com.ssafy.homesns.dto.VoteItemResultDto;
 
@@ -74,6 +77,9 @@ public class GameServiceImpl implements GameService{
 	@Override
 	@Transactional
 	public GameResultDto gameSearch(GameParamDto gameParamDto) {
+		// Security Context에서 UserSeq를 구한다
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		int userSeq = Integer.parseInt(authentication.getName());
 		
 		GameResultDto gameResultDto = new GameResultDto();
 		
@@ -82,12 +88,22 @@ public class GameServiceImpl implements GameService{
 			List<GameDto> list = gameDao.gameSearch(gameParamDto);
 			
 			for (int i = 0; i < list.size(); i++) {
-				GameDto gameDto = list.get(i);
 				// 사다리타기 코드 40001, 투표 코드 40002
-				if ( gameDto.getCode() == "40001" ) {
-					gameDto.setGhostLegDto(gameDao.ghostLegDetailSearch(gameDto.getGameId()));
-				} else if ( gameDto.getCode() == "40002" ) {
-					gameDto.setVoteItemDtoList(gameDao.voteDetailSearch(gameDto.getGameId()));
+				if ( list.get(i).getCode().equals("40001") ) {
+					GhostLegDto ghostLegDto = gameDao.ghostLegDetailSearch(list.get(i).getGameId());
+					list.get(i).setGhostLegDto(ghostLegDto);
+				} else if ( list.get(i).getCode().equals("40002") ) {
+					List<VoteItemDto> voteItemDtoList = gameDao.voteDetailSearch(list.get(i).getGameId());
+					
+					VoteItemDto voteItemDto = new VoteItemDto();
+					voteItemDto.setGameId(list.get(i).getGameId());
+					voteItemDto.setUserSeq(userSeq);
+					Integer voteItemId = gameDao.voterSearch(voteItemDto);
+					if ( voteItemId != null ) {
+						list.get(i).setVoteItemId(voteItemId);
+					}
+					
+					list.get(i).setVoteItemDtoList(voteItemDtoList);
 				}
 			}
 			
@@ -97,6 +113,7 @@ public class GameServiceImpl implements GameService{
 			e.printStackTrace();
 			gameResultDto.setResult(FAIL);
 		}
+		
 		return gameResultDto;
 	}
 
@@ -125,12 +142,23 @@ public class GameServiceImpl implements GameService{
 	@Override
 	@Transactional
 	public GameResultDto voteDetailSearch(int gameId) {
+		// Security Context에서 UserSeq를 구한다
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		int userSeq = Integer.parseInt(authentication.getName());
 		
 		GameResultDto gameResultDto = new GameResultDto();
 		try {
 			
 			GameDto gameDto = gameDao.gameDetailSearch(gameId);
 			gameDto.setVoteItemDtoList(gameDao.voteDetailSearch(gameId));
+			
+			VoteItemDto voteItemDto = new VoteItemDto();
+			voteItemDto.setGameId(gameDto.getGameId());
+			voteItemDto.setUserSeq(userSeq);
+			Integer voteItemId = gameDao.voterSearch(voteItemDto);
+			if ( voteItemId != null ) {
+				gameDto.setVoteItemId(voteItemId);
+			}
 			
 			gameResultDto.setGameDto(gameDto);
 			gameResultDto.setResult(SUCCESS);
