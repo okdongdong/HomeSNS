@@ -6,14 +6,22 @@
       <div class="d-flex justify-center">
         <v-card flat color="rgb(0,0,0,0)">
           <div class="d-flex justify-center">
-            <v-img src="@/assets/logo3.png" alt="logo" max-width="150" max-height="150"> </v-img>
+            <v-img
+              src="@/assets/logo3.png"
+              alt="logo"
+              max-width="150"
+              max-height="150"
+            >
+            </v-img>
           </div>
-          <v-card-title class="main-text justify-center font-weight-bold">우리집 SNS</v-card-title>
+          <v-card-title class="main-text justify-center font-weight-bold"
+            >우리집 SNS</v-card-title
+          >
         </v-card>
       </div>
       <br />
       <v-row justify="center">
-        <v-form class="form-data" ref="form" v-model="valid" lazy-validation >
+        <v-form class="form-data" ref="form" v-model="valid" lazy-validation>
           <!-- 아이디 -->
           <v-text-field
             clearable
@@ -105,7 +113,15 @@
           >
             회원가입
           </v-btn>
-          <v-btn text dark large rounded class="mr-4 my-2" @click.stop="move('Login')" width="100%">
+          <v-btn
+            text
+            dark
+            large
+            rounded
+            class="mr-4 my-2"
+            @click.stop="move('Login')"
+            width="100%"
+          >
             뒤로가기
           </v-btn>
         </v-form>
@@ -134,17 +150,21 @@ export default {
     rules: {
       idRules: [
         (v) => !!v || " 아이디를 입력해주세요.",
-        (v) => /^[a-zA-Z0-9]*$/.test(v) || "아이디는 영문+숫자만 입력 가능합니다.",
-        (v) => !(v && v.length > 20) || "아이디는 20자 이상 입력할 수 없습니다.",
+        (v) =>
+          /^[a-zA-Z0-9]*$/.test(v) || "아이디는 영문+숫자만 입력 가능합니다.",
+        (v) =>
+          !(v && v.length > 20) || "아이디는 20자 이상 입력할 수 없습니다.",
       ],
 
       passwordRules: [
         (v) => !!v || " 비밀번호를 입력해주세요.",
-        (v) => !(v && v.length >= 20) || "패스워드는 20자 이상 입력할 수 없습니다.",
+        (v) =>
+          !(v && v.length >= 20) || "패스워드는 20자 이상 입력할 수 없습니다.",
       ],
 
       passwordConfirmationRules: [
-        (v) => v === this.credentials.password || "패스워드가 일치하지 않습니다.",
+        (v) =>
+          v === this.credentials.password || "패스워드가 일치하지 않습니다.",
       ],
 
       nameRules: [
@@ -167,18 +187,20 @@ export default {
       console.log(this.credentials.userId);
       console.log("userName");
       console.log(this.credentials.userName);
-
+      let data = new FormData();
+      data.append("userId", this.credentials.id);
+      data.append("userEmail", this.credentials.email);
+      data.append("userPassword", this.credentials.password);
+      data.append("userName", this.credentials.name);
+      data.append("userPhone", this.credentials.phone);
+      data.append("userBod", this.credentials.bod);
       axios({
         method: "POST",
         url: `${process.env.VUE_APP_MCS_URL}/register`,
-        data: {
-          userId: this.credentials.id,
-          userEmail: this.credentials.email,
-          userPassword: this.credentials.password,
-          userName: this.credentials.name,
-          userPhone: this.credentials.phone,
-          userBod: this.credentials.bod,
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
+        data: data,
       })
         .then((res) => {
           console.log(res);
@@ -201,7 +223,7 @@ export default {
 
 <style scoped>
 .my-background {
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .form-data {

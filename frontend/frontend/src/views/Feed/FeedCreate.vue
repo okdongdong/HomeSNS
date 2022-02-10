@@ -1,5 +1,14 @@
 <template>
   <v-card flat>
+    <v-overlay :value="nowLoading">
+      <v-progress-circular
+        :size="100"
+        :width="10"
+        color="white"
+        indeterminate
+      ></v-progress-circular>
+    </v-overlay>
+
     <v-form ref="form" @submit.prevent="submit">
       <v-container fluid>
         <h1>피드작성</h1>
@@ -28,7 +37,12 @@
           </v-col>
 
           <!-- 사진 -->
-          <v-col v-for="(file, i) in form.files" :key="i" class="d-flex child-flex" cols="4">
+          <v-col
+            v-for="(file, i) in form.files"
+            :key="i"
+            class="d-flex child-flex"
+            cols="4"
+          >
             <video
               v-if="file.type == 'video'"
               autoplay
@@ -104,7 +118,9 @@
           <v-col :style="show ? 'padding:12px' : 'padding:0px'">
             <v-expand-transition>
               <v-card v-show="show">
-                <v-btn small @click="getCurrLocation()">현재위치 가지고오기 </v-btn>
+                <v-btn small @click="getCurrLocation()"
+                  >현재위치 가지고오기
+                </v-btn>
 
                 <div class="d-flex justify-center">
                   <GmapAutocomplete @place_changed="setPlace" />
@@ -155,7 +171,7 @@
             <v-combobox
               v-model="form.attendPeople"
               :items="items"
-              item-text="username"
+              item-text="userName"
               label="참석자 명단"
               multiple
               chips
@@ -198,7 +214,14 @@
       <v-card-actions>
         <v-btn text @click="$router.go(-1)"> Cancel </v-btn>
         <v-spacer></v-spacer>
-        <v-btn :disabled="!formIsValid" text color="primary" @click="submitFeed"> Register </v-btn>
+        <v-btn
+          :disabled="!formIsValid"
+          text
+          color="primary"
+          @click="submitFeed"
+        >
+          Register
+        </v-btn>
       </v-card-actions>
     </v-form>
   </v-card>
@@ -212,6 +235,7 @@ export default {
   name: "Feedcreate",
   data() {
     return {
+      nowLoading: false,
       form: {
         date: null, // 날짜
         title: null, // 제목
@@ -229,16 +253,12 @@ export default {
       },
       tmphashtag: null,
       snackbar: false,
-      items: [
-        // 그룹 명단
-        { userSeq: 1, username: "강동옥" },
-        { userSeq: 2, username: "김태현" },
-        { userSeq: 3, username: "박상준" },
-        { userSeq: 4, username: "임창현" },
-        { userSeq: 5, username: "최이삭" },
-      ],
+
+      // 그룹 명단
+      items: [],
       show: false,
       roomAbled: false,
+
       // 구글 맵
       center: { lat: 37.5642135, lng: 127.0016985 }, // 처음 센터 값 (서울)
       currentPlace: null, // 현재위치
@@ -246,34 +266,30 @@ export default {
       window_open: false, //실제 주소 띄워주기 popup
       actualAddress: null,
       geocodingService: {},
+
       // 장소레이블
-      locaLabels: [
-        {
-          item: "내 집",
-          fav: true,
-          idx: 0,
-        },
-        {
-          item: "학교",
-          fav: true,
-          idx: 1,
-        },
-        {
-          item: "울산바위",
-          fav: false,
-          idx: 2,
-        },
-        {
-          item: "대구존맛막창집",
-          fav: false,
-          idx: 3,
-        },
-      ],
+      locaLabels: [],
     };
   },
   methods: {
+    getMembers() {
+      const token = localStorage.getItem("jwt");
+      axios({
+        method: "get",
+        url: `${process.env.VUE_APP_MCS_URL}/group/member/${this.nowGroup.groupId}`,
+        headers: { Authorization: token },
+        // params: params,
+      })
+        .then((res) => {
+          console.log(res);
+          this.items = res.data.userDtoList;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     getFeedInfo() {
-      let groupId = this.nowGroup.groupId ;
+      let groupId = this.nowGroup.groupId;
       const token = localStorage.getItem("jwt");
       axios({
         method: "get",
@@ -282,6 +298,16 @@ export default {
       })
         .then((res) => {
           console.log(res);
+          res.data.locations.forEach((location) => {
+            this.locaLabels.push({
+              idx: location.locationId,
+              item: location.locationName,
+              lat: location.lat,
+              lng: location.lng,
+              fav: location.favorite,
+            });
+          });
+          console.log(this.locaLabels);
         })
         .catch((err) => {
           console.log(err);
@@ -365,7 +391,8 @@ export default {
       })
         .then((res) => {
           if (res.data.status.code === 3) {
-            this.actualAddress = "주소가 조회되지 않습니다.\n위치를 다시 지정해주세요.";
+            this.actualAddress =
+              "주소가 조회되지 않습니다.\n위치를 다시 지정해주세요.";
           } else {
             let data = res.data.results[0];
             let city = data.region.area1.name; // 시
@@ -377,17 +404,51 @@ export default {
             let building = data.land.addition0.value; // 건물명
             if (num2 === "") {
               if (building === "") {
-                this.actualAddress = city + " " + add1 + " " + add2 + "\n" + road + " " + num1;
+                this.actualAddress =
+                  city + " " + add1 + " " + add2 + "\n" + road + " " + num1;
               } else {
                 this.actualAddress =
-                  city + " " + add1 + " " + add2 + "\n" + road + " " + num1 + "\n" + building;
+                  city +
+                  " " +
+                  add1 +
+                  " " +
+                  add2 +
+                  "\n" +
+                  road +
+                  " " +
+                  num1 +
+                  "\n" +
+                  building;
               }
             } else {
               if (building !== "") {
                 this.actualAddress =
-                  city + " " + add1 + " " + add2 + "\n" + road + " " + num1 + "-" + num2;
+                  city +
+                  " " +
+                  add1 +
+                  " " +
+                  add2 +
+                  "\n" +
+                  road +
+                  " " +
+                  num1 +
+                  "-" +
+                  num2;
               }
-              this.actualAddress =city +" " +add1 +" " +add2 +"\n" +road +" " +num1 +"-" +num2 +"\n" +building;
+              this.actualAddress =
+                city +
+                " " +
+                add1 +
+                " " +
+                add2 +
+                "\n" +
+                road +
+                " " +
+                num1 +
+                "-" +
+                num2 +
+                "\n" +
+                building;
             }
           }
           this.window_open = true; // 실제주소 popup true
@@ -454,6 +515,7 @@ export default {
 
     //데이터 쏘기
     submitFeed() {
+      this.nowLoading = true;
       const token = localStorage.getItem("jwt");
       let data = new FormData();
       data.append("feedTitle", this.form.title);
@@ -504,15 +566,23 @@ export default {
       })
         .then(() => {
           console.log("피드작성 성공");
-          this.$router.push({name : 'Main', params : {groupId : this.nowGroup.groupId} }); // 이전 페이지로 보내기
+          this.nowLoading = false;
+        })
+        .then(() => {
+          this.$router.push({
+            name: "Main",
+            params: { groupId: this.nowGroup.groupId },
+          }); // 이전 페이지로 보내기
         })
         .catch((err) => {
+          this.nowLoading = false;
           console.log(err);
         });
     },
   },
   created() {
     this.getFeedInfo();
+    this.getMembers();
   },
   computed: {
     formIsValid() {
@@ -540,6 +610,4 @@ export default {
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.329);
   padding-bottom: 5%;
 }
-
-
 </style>
