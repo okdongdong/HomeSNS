@@ -1,67 +1,91 @@
 <template>
   <v-stepper v-model="step" flat style="background-color: rgba(0, 0, 0, 0)">
     <v-stepper-items>
-      <!-- 페이지 1 : 플레이어 수 입력 -->
-
-      <!-- 페이지 3 : 결과 출력 -->
-      <v-stepper-content step="1">
-        <div class="container">
-          <!-- 플레이어명 -->
-          <div class="my-2 d-flex justify-content-between">
-            <div v-for="i in calPlayerNum" :key="i">
-              <div
-                v-if="info.playerNames[i] != null"
-                class="text-center"
-                @click.stop="
-                  drawActive
-                    ? (draw(i), (nowActiveIdx = i))
-                    : drawAll(nowActiveIdx)
-                "
-              >
-                {{ info.playerNames[i] }}
-              </div>
-            </div>
-          </div>
-
-          <!-- 사다리 -->
-          <div style="position: relative">
-            <div
-              class="container canvas-container"
-              style="padding: 0; position: absolute"
-            >
-              <!-- 사다리타기 진행용 캔버스 -->
-              <canvas id="my-canvas"></canvas>
-            </div>
-
-            <div class="my-2 d-flex justify-content-between">
-              <div
-                :class="{
-                  'ladder-base': i > 1,
-                  'start-or-end-ladder-base': i === 1,
-                }"
-                v-for="i in calPlayerNum"
-                :key="i"
-              >
+      <!-- 결과 출력 -->
+      <v-stepper-content step="1" class="pa-0">
+        <div
+          class="d-flex justify-center  mb-5"
+          style="
+            width: 100%;
+            box-shadow: inset 0 0 7px #888;
+            background-color: white;
+          "
+        >
+          <div class="overflow-x-auto py-2">
+            <div :style="'width:calc(90px * ' + info.playerNum + ');'">
+              <!-- 플레이어명 -->
+              <div class="my-2 d-flex justify-content-between">
                 <div
-                  v-for="j in 10"
-                  :key="j"
-                  class="box"
-                  :class="{ edge: info.isEdge[i][j] == 2 }"
-                ></div>
+                  v-for="i in calPlayerNum"
+                  :key="i"
+                  class="container justify-content-between"
+                >
+                  <div
+                    v-if="info.playerNames[i] != null"
+                    class="text-center"
+                    @click.stop="
+                      drawActive
+                        ? (draw(i), (nowActiveIdx = i))
+                        : drawAll(nowActiveIdx)
+                    "
+                  >
+                    {{ info.playerNames[i] }}
+                  </div>
+                </div>
               </div>
-              <div class="start-or-end-ladder-base"></div>
-            </div>
-          </div>
 
-          <!-- 결과값 -->
-          <div class="my-2 d-flex justify-content-between">
-            <div v-for="i in calPlayerNum" :key="i">
-              <div v-if="info.resultNames[i] != null" class="text-center">
-                {{ info.resultNames[i] }}
+              <!-- 사다리 -->
+              <div style="position: relative">
+                <div
+                  class="container canvas-container"
+                  style="padding: 0; position: absolute"
+                >
+                  <!-- 사다리타기 진행용 캔버스 -->
+                  <!-- 플레이어 수에 맞춰서 캔버스 크기 조정 -->
+                  <canvas
+                    :id="'my-canvas-' + info.contentId"
+                    class="my-canvas"
+                    :width="300 * info.playerNum + 'px'"
+                    :height="150 * info.playerNum + 'px'"
+                  ></canvas>
+                </div>
+
+                <div class="my-2 d-flex justify-content-between">
+                  <div
+                    :class="{
+                      'ladder-base': i > 1,
+                      'start-or-end-ladder-base': i == 1,
+                    }"
+                    v-for="i in calPlayerNum"
+                    :key="i"
+                  >
+                    <div
+                      v-for="j in 10"
+                      :key="j"
+                      class="box"
+                      :class="{ edge: info.isEdge[i][j] == 2 }"
+                    ></div>
+                  </div>
+                  <div class="start-or-end-ladder-base"></div>
+                </div>
+              </div>
+
+              <!-- 결과값 -->
+              <div class="my-2 d-flex justify-content-between">
+                <div
+                  v-for="i in calPlayerNum"
+                  :key="i"
+                  class="container justify-content-between"
+                >
+                  <div v-if="info.resultNames[i] != null" class="text-center">
+                    {{ info.resultNames[i] }}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
         <div class="justify-end d-flex">
           <div
             @click.stop="(step = 2), calResult()"
@@ -120,9 +144,9 @@ export default {
       for (let i = 1; i <= this.info.playerNum; i++) {
         let myPos = i;
         for (let j = 0; j < 10; j++) {
-          if (this.info.isEdge[myPos][j] === 1) {
+          if (this.info.isEdge[myPos][j] == 1) {
             myPos += 1;
-          } else if (this.info.isEdge[myPos][j] === 2) {
+          } else if (this.info.isEdge[myPos][j] == 2) {
             myPos -= 1;
           }
         }
@@ -130,36 +154,48 @@ export default {
       }
     },
     drawAll(i) {
-      const canvas = document.getElementById("my-canvas");
+      const canvas = document.getElementById(
+        `my-canvas-${this.info.contentId}`
+      );
       if (this.nowColorIdx >= 10) {
         this.nowColorIdx = 0;
       }
 
       const ctx = canvas.getContext("2d");
-      this.nowPosX = (300 * i - 150) / this.info.playerNum - 1;
-      this.nowPosY = 0;
-      let addPosX = 300 / this.info.playerNum;
+      this.nowPosX = 300 * i - 150 - 20 / 3;
+      this.nowPosY = -this.info.playerNum;
+      let addPosX = 300;
 
       ctx.strokeStyle = this.colors[this.nowColorIdx++];
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.moveTo(this.nowPosX, this.nowPosY);
+      ctx.lineWidth = 40 / 3; // 라인의 굵기
+
       let j = 0;
       while (j < 10) {
-        if (this.info.isEdge[i][j] === 1) {
+        if (this.info.isEdge[i][j] == 1) {
+          ctx.beginPath();
+          ctx.moveTo(this.nowPosX, this.nowPosY);
           this.nowPosX += addPosX;
           i++;
+          ctx.lineWidth = 2 * this.info.playerNum; // 라인의 굵기
           ctx.lineTo(this.nowPosX, this.nowPosY);
-        } else if (this.info.isEdge[i][j] === 2) {
+          ctx.stroke();
+        } else if (this.info.isEdge[i][j] == 2) {
+          ctx.beginPath();
+          ctx.moveTo(this.nowPosX, this.nowPosY);
           this.nowPosX -= addPosX;
           i--;
+          ctx.lineWidth = 2 * this.info.playerNum; // 라인의 굵기
           ctx.lineTo(this.nowPosX, this.nowPosY);
+          ctx.stroke();
         }
         j++;
-        this.nowPosY += 12;
-        ctx.lineTo(this.nowPosX, this.nowPosY);
+        ctx.beginPath();
+        ctx.moveTo(this.nowPosX, this.nowPosY - this.info.playerNum);
+        this.nowPosY += 12 * this.info.playerNum;
+        ctx.lineWidth = 15;
+        ctx.lineTo(this.nowPosX, this.nowPosY + this.info.playerNum);
+        ctx.stroke();
       }
-      ctx.stroke();
       this.drawDone = true;
       this.nowPosX = null;
     },
@@ -174,11 +210,11 @@ export default {
       if (this.nowPosX === null) {
         // 최초로 변수 정의하는 부분
         this.drawActive = false;
-        this.nowPosX = (300 * i - 150) / this.info.playerNum - 2;
+        this.nowPosX = 300 * i - 150;
         this.nowPosY = 0;
       }
-      var addPosX = 300 / this.info.playerNum;
-      var canvas = document.getElementById("my-canvas");
+      var addPosX = 300;
+      var canvas = document.getElementById(`my-canvas-${this.info.contentId}`);
       var ctx = canvas.getContext("2d");
       ctx.moveTo(this.nowPosX, this.nowPosY);
       ctx.fillStyle = this.colors[this.nowColorIdx];
@@ -194,11 +230,10 @@ export default {
       if (this.nowColorIdx >= 10) {
         this.nowColorIdx = 0;
       }
-
-      if (dx === addPosX) {
-        if (this.info.isEdge[i][j] === 1) {
+      if (dx / addPosX >= 1) {
+        if (this.info.isEdge[i][j] == 1) {
           i++;
-        } else if (this.info.isEdge[i][j] === 2) {
+        } else if (this.info.isEdge[i][j] == 2) {
           i--;
         }
       }
@@ -208,20 +243,30 @@ export default {
         dy = 0;
       }
 
-      if (this.info.isEdge[i][j] === 1 && dx < addPosX) {
-        this.nowPosX++;
-        dx++;
-      } else if (this.info.isEdge[i][j] === 2 && dx < addPosX) {
-        this.nowPosX--;
-        dx++;
+      if (this.info.isEdge[i][j] == 1 && dx < addPosX) {
+        dx += this.info.playerNum;
+        this.nowPosX +=
+          dx > addPosX
+            ? this.info.playerNum - dx + addPosX
+            : this.info.playerNum;
+      } else if (this.info.isEdge[i][j] == 2 && dx < addPosX) {
+        dx += this.info.playerNum;
+        this.nowPosX -=
+          dx > addPosX
+            ? this.info.playerNum - dx + addPosX
+            : this.info.playerNum;
       } else {
-        this.nowPosY++;
-        dy++;
+        this.nowPosY += this.info.playerNum;
+        dy += 1;
       }
       // 재귀로 동작하는 부분
       ctx.beginPath();
-      ctx.arc(this.nowPosX, this.nowPosY, 2, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.fillRect(
+        this.nowPosX - 40 / 3,
+        this.nowPosY - 2 * this.info.playerNum,
+        40 / 3, //가로
+        2 * this.info.playerNum //세로
+      );
       ctx.closePath();
       setTimeout(() => {
         return this.draw(i, j, dx, dy);
@@ -242,7 +287,8 @@ export default {
   width: 100%;
   position: absolute;
 }
-#my-canvas {
+.my-canvas {
+  position: absolute;
   width: inherit;
   height: 300px;
 }
