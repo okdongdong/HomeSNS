@@ -504,7 +504,7 @@ export default {
       })
         .then(() => {
           console.log("피드작성 성공");
-          this.$router.go(-1); // 이전 페이지로 보내기
+          this.$router.push({name : 'Main', params : {groupId : this.nowGroup.groupId} }); // 이전 페이지로 보내기
         })
         .catch((err) => {
           console.log(err);

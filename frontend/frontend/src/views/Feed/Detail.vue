@@ -120,19 +120,20 @@ export default {
         url: `${process.env.VUE_APP_MCS_URL}/feed/${this.feedId}`,
         headers: { Authorization: token },
       }).then((res) => {
-        this.feed.author = res.data.feedAuthor;
-        this.feed.title = res.data.feedTitle;
-        this.feed.content = res.data.feedContent;
-        this.feed.imgUrls = res.data.feedImgUrls;
-        this.feed.uploadDate = res.data.feedUploadDate;
-        this.feed.eventDate = res.data.feedEventDate;
-        this.feed.location = res.data.feedLocation;
-        this.nowLoading = false;
+        console.log(res)
+        // this.feed.author = res.data.feedAuthor;
+        // this.feed.title = res.data.feedTitle;
+        // this.feed.content = res.data.feedContent;
+        // this.feed.imgUrls = res.data.feedImgUrls;
+        // this.feed.uploadDate = res.data.feedUploadDate;
+        // this.feed.eventDate = res.data.feedEventDate;
+        // this.feed.location = res.data.feedLocation;
+        // this.nowLoading = false;
       });
     },
   },
   created() {
-    // this.getFeed();
+    this.getFeed();
   },
 };
 </script>
