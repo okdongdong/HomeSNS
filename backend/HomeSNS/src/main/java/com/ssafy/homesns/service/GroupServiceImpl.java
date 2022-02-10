@@ -27,10 +27,10 @@ public class GroupServiceImpl implements GroupService{
 
 	@Autowired
 	GroupDao groupDao;
-
+	
 	private static final int SUCCESS = 1;
 	private static final int FAIL = -1;
-
+	
 	String uploadFolder = "upload";
 	
 	/* for production code */
@@ -39,7 +39,7 @@ public class GroupServiceImpl implements GroupService{
 
 	/* for eclipse development code */
 	String uploadPath = "/Users" + File.separator + "sac" + File.separator + "ssafy" + File.separator + "2nd";
-
+	
 	@Override
 	@Transactional
 	public GroupResultDto groupListCreate(GroupDto groupDto, MultipartHttpServletRequest request) {
@@ -235,25 +235,36 @@ public class GroupServiceImpl implements GroupService{
 		int userSeq = Integer.parseInt(authentication.getName());
 
 		GroupMemberResultDto groupMemberResultDto = new GroupMemberResultDto();
-
+		
 		// 비밀번호 비교
 		BCryptPasswordEncoder b = new BCryptPasswordEncoder();
 		if ( b.matches(groupDto.getGroupPassword(), groupDao.groupPasswordCheck(groupDto.getGroupId())) ) {
-			// 비밀번호가 맞다면, 그룹멤버에 해당 유저를 추가한다
+			// 비밀번호가 맞다면, 해당 그룹을 조회하고 그룹멤버에 해당 유저를 추가한다
+			groupDto = groupDao.groupDetailSearch(groupDto.getGroupId());
+			groupMemberResultDto.setGroupDto(groupDto);
+			System.out.println(groupDto);
+			
 			// 제일 처음에는 매니저 권한이 없다
 			GroupMemberDto groupMemberDto = new GroupMemberDto();
+			
 			groupMemberDto.setGroupId(groupDto.getGroupId());
 			groupMemberDto.setUserSeq(userSeq);
 			groupMemberDto.setManagerYn("N");
-
-			if ( groupDao.groupMemberCreate(groupMemberDto) == 1 ) {
-				groupMemberResultDto.setResult(SUCCESS);
-			}
-			else {
-				System.out.println("groupMemberCreate FAIL");
+			
+			// 해당 그룹에 이미 참여하고 있다면, Create 하지 않는다
+			if ( groupDao.groupMemberExist(groupMemberDto) == 1 ) {
 				groupMemberResultDto.setResult(FAIL);
+			} else {
+				// 해당 그룹에 참여하고 있지 않다면 Create 한다
+				if ( groupDao.groupMemberCreate(groupMemberDto) == 1 ) {
+					groupMemberResultDto.setResult(SUCCESS);
+				}
+				else {
+					System.out.println("groupMemberCreate FAIL");
+					groupMemberResultDto.setResult(FAIL);
+				}
 			}
-
+			
 		} else {
 			System.out.println("groupPasswordCheck FAIL");
 			groupMemberResultDto.setResult(FAIL);

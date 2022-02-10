@@ -141,7 +141,7 @@ public class GroupController {
 	public ResponseEntity<GroupMemberResultDto> groupMemberCreate(@RequestBody GroupDto groupDto) {
 		
 		GroupMemberResultDto groupMemberResultDto = groupService.groupMemberCreate(groupDto);
-
+		
 		if ( groupMemberResultDto.getResult() == SUCCESS) {
 			return new ResponseEntity<GroupMemberResultDto>(groupMemberResultDto, HttpStatus.OK);
 		}  
