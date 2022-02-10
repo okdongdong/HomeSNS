@@ -1,19 +1,19 @@
 <template>
   <v-app>
     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-    <Vote />
+    <Notice />
     bbbbbbbbbbbbbbbbbbbbbbbb
   </v-app>
 </template>
 
 <script>
-import Vote from "@/components/Entertainment/Vote.vue";
 import { mapActions } from "vuex";
+import Notice from "../../components/Navbar/Notice.vue";
 
 export default {
   name: "VoteList",
   components: {
-    Vote,
+    Notice,
   },
   methods: {
     ...mapActions(["getVote"]),
