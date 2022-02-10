@@ -1,14 +1,18 @@
 <template>
-  <div class="container">
+  <v-app class="container">
     <div class="d-flex justify-space-between align-center">
       <h1>ENTERTAINMENT</h1>
       <EntCreatePopup />
     </div>
     <div v-for="(content, idx) in contentDataList" :key="idx">
-      <EntFeedContainer :content="content" />
+      <EntFeedContainer
+        :content="content"
+        :idx="idx"
+        @deleteContent="deleteContent(idx)"
+      />
     </div>
     <infinite-loading @infinite="getContent"></infinite-loading>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -30,6 +34,10 @@ export default {
   created() {},
   beforeUpdate() {},
   methods: {
+    deleteContent(idx) {
+      this.contentDataList.splice(idx, 1);
+      console.log(idx);
+    },
     getContent($state) {
       const token = localStorage.getItem("jwt");
 
@@ -60,11 +68,12 @@ export default {
                   type: "ghost",
                   info: {
                     title: contentData.gameTitle,
+                    authorId: contentData.gameAuthor,
                     author: contentData.gameAuthorName,
                     authorPicUrl: contentData.gameAuthorProfileImageUrl,
                     createdAt: contentData.gameRegisterDate,
                     playerNum: contentData.ghostLegDto.playerNum,
-                    contentId: contentData.ghostLegDto.gameId,
+                    contentId: contentData.gameId,
                     isEdge: tempEdge,
                     playerNames: tempPlayerNames,
                     resultNames: tempResultNamse,
@@ -75,9 +84,11 @@ export default {
                   type: "vote",
                   info: {
                     title: contentData.gameTitle,
+                    authorId: contentData.gameAuthor,
                     author: contentData.gameAuthorName,
                     authorPicUrl: contentData.gameAuthorProfileImageUrl,
                     createdAt: contentData.gameRegisterDate,
+                    contentId: contentData.gameId,
                     myVoteItem: contentData.voteItemId
                       ? contentData.voteItemId
                       : null,
@@ -85,7 +96,6 @@ export default {
                   },
                 });
               }
-              console.log(this.contentDataList);
               this.start += 10;
               $state.loaded();
             });
