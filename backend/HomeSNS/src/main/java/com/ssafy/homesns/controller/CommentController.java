@@ -42,7 +42,7 @@ public class CommentController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		int userSeq = Integer.parseInt(authentication.getName());
 
-		commentDto.setCommentAuthor(userSeq);
+		commentDto.setCommentAuthorSeq(userSeq);
 		CommentResultDto commentResultDto = commentService.commentCreate(commentDto);
 
 		if ( commentResultDto.getResult() == SUCCESS ) {
@@ -58,7 +58,7 @@ public class CommentController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		int userSeq = Integer.parseInt(authentication.getName());
 
-		commentDto.setCommentAuthor(userSeq);
+		commentDto.setCommentAuthorSeq(userSeq);
 		CommentResultDto commentResultDto = commentService.commentUpdate(commentDto);
 
 		if ( commentResultDto.getResult() == SUCCESS ) {
