@@ -2,3 +2,6 @@
 application.properties
 /Servers/
 .meta
+frontend/
+libs/
+static/
