@@ -1,6 +1,6 @@
 <template>
-  <div class="pa-3">
-    <div class="pa-5 content-box">
+  <v-app class="container">
+    <div class="px-3 content-box mb-3 py-3">
       <!-- 투표제목 -->
       <h1>투표만들기</h1>
       <div>
@@ -8,34 +8,38 @@
         <v-text-field
           background-color="white"
           label="투표제목"
-          outlined
+          solo
           maxlength="20"
           :rules="rules.voteTitleRule"
           v-model="voteInfo.voteTitle"
           placeholder="투표제목을 입력하세요."
         />
       </div>
+    </div>
 
-      <!-- 투표내용 -->
+    <!-- 투표내용 -->
+    <div class="px-3 content-box mb-3 py-3">
       <h3>투표항목</h3>
       <div
         v-for="(voteItem, idx) in voteInfo.voteItems"
         :key="idx"
-        class="d-flex justify-space-between align-center my-2"
+        class="d-flex justify-space-between my-2"
       >
         <v-text-field
+          class="mb-3"
           background-color="white"
           v-model="voteItem.voteItemName"
           :rules="rules.voteTitleRule"
           hide-details
-          outlined
+          solo
           clearable
           rounded
           dense
+          height="38"
         ></v-text-field>
-        <v-btn @click.stop="voteDelItem(idx)" icon
-          ><v-icon color="red" size="32">remove_circle</v-icon></v-btn
-        >
+        <div>
+          <v-icon class="ms-2" color="red" size="38">remove_circle</v-icon>
+        </div>
       </div>
       <div>
         <v-btn
@@ -50,33 +54,31 @@
           <v-icon size="32">add_circle_outline</v-icon>
         </v-btn>
       </div>
-      <div>
-        <v-btn
-          @click.stop="voteCreate(voteInfo)"
-          class="my-5"
-          large
-          rounded
-          color="rgb(98,101,232)"
-          block
-          ><span class="mr-3" style="color: #fff; font-size: 1.3rem"
-            >투표생성</span
-          ><v-icon color="white">how_to_vote</v-icon></v-btn
-        >
-      </div>
     </div>
-    <div>
-      <v-btn
-        @click.stop="voteCreate(voteInfo)"
-        class="my-5"
-        large
-        rounded
-        color="rgb(98,101,232)"
-        block
-        text
-        ><span class="mr-3" style="font-size: 1rem">뒤로가기</span></v-btn
+    <div class="px-5 py-3 content-box mb-3">
+      <v-row>
+        <v-col>
+          <v-btn
+            @click.stop="$router.go(-1)"
+            color="rgba(255, 255, 255, 0.5)"
+            large
+            ><span style="font-size: 1rem"
+              ><v-icon class="me-3">chevron_left</v-icon>뒤로가기</span
+            ></v-btn
+          >
+        </v-col>
+        <v-col>
+          <v-btn
+            @click.stop="voteCreate(voteInfo)"
+            large
+            color="rgb(98,101,232)"
+            ><span style="color: #fff">투표생성</span
+            ><v-icon class="ms-3" color="white">how_to_vote</v-icon></v-btn
+          >
+        </v-col></v-row
       >
     </div>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -147,9 +149,7 @@ export default {
 
 <style scoped>
 .content-box {
-  border: solid 2px black;
-  border-radius: 25px;
-  background-color: rgb(245, 245, 245);
-  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.329);
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.6);
 }
 </style>

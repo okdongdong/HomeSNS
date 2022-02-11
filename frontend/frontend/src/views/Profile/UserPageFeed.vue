@@ -63,9 +63,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.content-box {
-  border-radius: 5px;
-  background-color: rgba(255, 255, 255, 0.5);
-}
-</style>
+<style scoped></style>
