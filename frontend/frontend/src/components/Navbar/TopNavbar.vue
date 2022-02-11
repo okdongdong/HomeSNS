@@ -34,7 +34,9 @@
         width="70"
         src="../../assets/logo2.png"
         alt="로고"
-        @click.stop="move('Main')"
+        @click.stop="
+          $router.push({ name: 'Main', params: { groupId: nowGroup.groupId } })
+        "
       />
       <v-spacer></v-spacer>
       <v-btn rounded text @click.stop="move('FeedCreate')">추억담기 </v-btn>
@@ -135,8 +137,8 @@
           active-class="deep-purple--text text--accent-4"
         >
           <v-list-item class="my-5">
-            <ProfilePhoto :size="100" :imgUrl="userImgUrl" :userSeq="userSeq" />
-            <h1>{{ userName }}</h1>
+            <ProfilePhoto :size="70" :imgUrl="userImgUrl" :userSeq="userSeq" />
+            <h1 class="ml-7">{{ userName }}</h1>
           </v-list-item>
           <v-list-item
             @click.stop="

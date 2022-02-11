@@ -7,6 +7,8 @@ public class FeedResultDto {
 	private FeedDto feedDto;
 	private List<FeedDto> feedList;
 	private int feedId;
+	private List<LocationDto> locations;
+	private List<GroupMemberDto> members;
 	
 	public int getResult() {
 		return result;
@@ -45,6 +47,26 @@ public class FeedResultDto {
 
 	public void setFeedId(int feedId) {
 		this.feedId = feedId;
+	}
+
+
+	public List<LocationDto> getLocations() {
+		return locations;
+	}
+
+
+	public void setLocations(List<LocationDto> locations) {
+		this.locations = locations;
+	}
+
+
+	public List<GroupMemberDto> getMembers() {
+		return members;
+	}
+
+
+	public void setMembers(List<GroupMemberDto> members) {
+		this.members = members;
 	}
 
 

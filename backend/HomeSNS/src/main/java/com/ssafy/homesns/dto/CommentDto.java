@@ -7,8 +7,9 @@ public class CommentDto {
 	private int commentId;
 	private int feedId; 
 	private int commentTag;
-	private int commentAuthor; 
-	private String content;
+	private int commentAuthorSeq;
+	private String commentAuthor;
+	private String commentContent;
 	private Date commentUploadDate; 
 	
 	private int good;
@@ -35,17 +36,24 @@ public class CommentDto {
 	public void setCommentTag(int commentTag) {
 		this.commentTag = commentTag;
 	}
-	public int getCommentAuthor() {
+	
+	public int getCommentAuthorSeq() {
+		return commentAuthorSeq;
+	}
+	public void setCommentAuthorSeq(int commentAuthorSeq) {
+		this.commentAuthorSeq = commentAuthorSeq;
+	}
+	public String getCommentAuthor() {
 		return commentAuthor;
 	}
-	public void setCommentAuthor(int commentAuthor) {
+	public void setCommentAuthor(String commentAuthor) {
 		this.commentAuthor = commentAuthor;
 	}
-	public String getContent() {
-		return content;
+	public String getCommentContent() {
+		return commentContent;
 	}
-	public void setContent(String content) {
-		this.content = content;
+	public void setCommentContent(String commentContent) {
+		this.commentContent = commentContent;
 	}
 	public Date getCommentUploadDate() {
 		return commentUploadDate;
@@ -86,11 +94,11 @@ public class CommentDto {
 	@Override
 	public String toString() {
 		return "CommentDto [commentId=" + commentId + ", feedId=" + feedId + ", commentTag=" + commentTag
-				+ ", commentAuthor=" + commentAuthor + ", content=" + content + ", commentUploadDate="
-				+ commentUploadDate + ", good=" + good + ", sad=" + sad + ", check=" + check + ", fun=" + fun
-				+ ", amaze=" + amaze + "]";
-	} 
-	
+				+ ", commentAuthorSeq=" + commentAuthorSeq + ", commentAuthor=" + commentAuthor + ", commentContent="
+				+ commentContent + ", commentUploadDate=" + commentUploadDate + ", good=" + good + ", sad=" + sad
+				+ ", check=" + check + ", fun=" + fun + ", amaze=" + amaze + "]";
+	}
+
 	
 	
 }

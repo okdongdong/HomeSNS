@@ -26,6 +26,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 		ScheduleResultDto scheduleResultDto = new ScheduleResultDto();
 		
 		if ( scheduleDao.scheduleCreate(scheduleDto) == 1 ) {
+			scheduleResultDto.setScheduleId(scheduleDto.getScheduleId());
 			scheduleResultDto.setResult(SUCCESS);
 		} else {
 			scheduleResultDto.setResult(FAIL);
@@ -43,7 +44,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 			List<ScheduleDto> list = scheduleDao.scheduleSearch(groupId);
 			int count = scheduleDao.scheduleTotalCount(groupId);
 			
-			scheduleResultDto.setScheduleDto(list);
+			scheduleResultDto.setScheduleDtoList(list);
 			scheduleResultDto.setCount(count);
 			scheduleResultDto.setResult(SUCCESS);
 		} catch (Exception e) {
@@ -54,6 +55,25 @@ public class ScheduleServiceImpl implements ScheduleService{
 		return scheduleResultDto;
 	}
 
+
+	// 스케줄 상세 조회
+	@Override
+	public ScheduleResultDto scheduleDetailSearch(int scheduleId) {
+		
+		ScheduleResultDto scheduleResultDto = new ScheduleResultDto();
+		
+		try {
+			scheduleResultDto.setScheduleDto(scheduleDao.scheduleDetailSearch(scheduleId));
+			scheduleResultDto.setResult(SUCCESS);
+		} catch( Exception e) {
+			e.printStackTrace();
+			scheduleResultDto.setResult(FAIL);
+		}
+		
+		return scheduleResultDto;
+	}
+	
+	
 	// 스케줄 수정하기
 	@Override
 	public ScheduleResultDto scheduleUpdate(ScheduleDto scheduleDto) {
@@ -83,6 +103,5 @@ public class ScheduleServiceImpl implements ScheduleService{
 		
 		return scheduleResultDto;
 	}
-	
 
 }

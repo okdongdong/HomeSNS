@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.homesns.dto.CommentDto;
 import com.ssafy.homesns.dto.CommentEmotionDto;
@@ -20,11 +21,14 @@ import com.ssafy.homesns.dto.CommentResultDto;
 import com.ssafy.homesns.service.CommentService;
 
 @CrossOrigin(
-		origins = "http://localhost:5500", // npm에서 5500번을 사용한다
+		origins = { "http://localhost:5500", "http://172.30.1.59:5500","http://192.168.0.100:5500",
+		"http://192.168.0.40:5500"}, // npm에서 5500번을 사용한다
 		allowCredentials = "true", // axios가 sessionId를 계속 다른것을 보내는데, 이것을 고정시켜준다
 		allowedHeaders = "*",
 		methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, 
 				RequestMethod.DELETE, RequestMethod.HEAD, RequestMethod.OPTIONS })
+
+@RestController
 public class CommentController {
 
 	@Autowired
@@ -39,7 +43,7 @@ public class CommentController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		int userSeq = Integer.parseInt(authentication.getName());
 
-		commentDto.setCommentAuthor(userSeq);
+		commentDto.setCommentAuthorSeq(userSeq);
 		CommentResultDto commentResultDto = commentService.commentCreate(commentDto);
 
 		if ( commentResultDto.getResult() == SUCCESS ) {
@@ -55,7 +59,7 @@ public class CommentController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		int userSeq = Integer.parseInt(authentication.getName());
 
-		commentDto.setCommentAuthor(userSeq);
+		commentDto.setCommentAuthorSeq(userSeq);
 		CommentResultDto commentResultDto = commentService.commentUpdate(commentDto);
 
 		if ( commentResultDto.getResult() == SUCCESS ) {

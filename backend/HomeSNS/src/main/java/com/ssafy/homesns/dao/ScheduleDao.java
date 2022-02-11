@@ -15,6 +15,9 @@ public interface ScheduleDao {
 	// groupID를 사용해서 해당 그룹 내의 스케줄 목록 찾기
 	public List<ScheduleDto> scheduleSearch(int groupId);
 	
+	// scheduleID를 사용해서 스케줄 상세 조회
+	public ScheduleDto scheduleDetailSearch(int scheduleId);
+	
 	// grouopID를 사용해서 해당 그룹 내의 스케줄 전체 개수 찾기
 	public int scheduleTotalCount(int groupId);
 	

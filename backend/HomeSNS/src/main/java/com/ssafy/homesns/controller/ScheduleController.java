@@ -10,7 +10,7 @@ import com.ssafy.homesns.dto.ScheduleResultDto;
 import com.ssafy.homesns.service.ScheduleService;
 
 @CrossOrigin(
-		origins = {"http://localhost:5500", "http://192.168.0.100:5500/"}, // npm에서 5500번을 사용한다
+		origins = { "http://localhost:5500", "http://172.30.1.59:5500", "http://192.168.0.100:5500", "http://192.168.0.40:5500" },
 		allowCredentials = "true", // axios가 sessionId를 계속 다른것을 보내는데, 이것을 고정시켜준다
 		allowedHeaders = "*",
 		methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, 
@@ -46,6 +46,17 @@ public class ScheduleController {
 		}
 		return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@GetMapping(value="/schedule/detail/{scheduleId}")
+	public ResponseEntity<ScheduleResultDto> scheduleDetailSearch(@PathVariable(value="scheduleId") int scheduleId) {
+		
+		ScheduleResultDto scheduleResultDto = scheduleService.scheduleDetailSearch(scheduleId);
+		
+		if (scheduleResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
 	@PutMapping(value="/schedule")
 	public ResponseEntity<ScheduleResultDto> scheduleUpdate(@RequestBody ScheduleDto scheduleDto) {
@@ -58,10 +69,10 @@ public class ScheduleController {
 		return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@DeleteMapping(value="/schedule/{groupId}")
-	public ResponseEntity<ScheduleResultDto> scheduleDelete(@PathVariable(value="groupId") int groupId) {
+	@DeleteMapping(value="/schedule/{scheduleId}")
+	public ResponseEntity<ScheduleResultDto> scheduleDelete(@PathVariable(value="scheduleId") int scheduleId) {
 		
-		ScheduleResultDto scheduleResultDto = scheduleService.scheduleDelete(groupId);
+		ScheduleResultDto scheduleResultDto = scheduleService.scheduleDelete(scheduleId);
 
 		if ( scheduleResultDto.getResult() == SUCCESS ) {
 			return new ResponseEntity<ScheduleResultDto>(scheduleResultDto, HttpStatus.OK);

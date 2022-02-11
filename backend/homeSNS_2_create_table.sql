@@ -1,14 +1,14 @@
 
 CREATE TABLE `user` (
 	`user_seq`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`user_id`	varchar(20)	NULL UNIQUE , 
+	`user_id`	varchar(50)	NULL UNIQUE , 
 	`user_password`	varchar(100)	NOT NULL,
-	`user_email`	varchar(30)	NULL UNIQUE,
-	`user_name`	varchar(20)	NOT NULL,
-	`user_nickname`	varchar(20)	NULL,
-	`user_phone`	varchar(20)	NULL UNIQUE,
+	`user_email`	varchar(50)	NULL UNIQUE,
+	`user_name`	varchar(50)	NOT NULL,
+	`user_nickname`	varchar(50)	NULL,
+	`user_phone`	varchar(50)	NULL UNIQUE,
 	`user_bod`	date	NULL,
-	`user_profile_image_url`	varchar(100)	NULL DEFAULT "image/noimage.png",
+	`user_profile_image_url`	varchar(300)	NULL DEFAULT "image/noimage.png",
 	`user_register_date`	date	NULL,
 	`user_cls`	char(5)	NULL,
 	`refresh_token`	varchar(50)	NULL
@@ -18,11 +18,11 @@ CREATE TABLE `feed` (
 	`feed_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`group_id`	int	NOT NULL ,
 	`feed_author`	int	NULL,
-	`feed_title`	varchar(20)	NULL,
-	`feed_content`	varchar(200)	NULL,
+	`feed_title`	varchar(50)	NULL,
+	`feed_content`	varchar(1000)	NULL,
 	`feed_upload_date`	timestamp	NULL,
 	`feed_event_date`	datetime	NULL,
-	`feed_location`	varchar(20)	NULL
+	`feed_location_id` int	NULL
 );
 
 CREATE TABLE `group_code` (
@@ -40,14 +40,14 @@ CREATE TABLE `code` (
 CREATE TABLE `hashtag` (
 	`hashtag_seq`	int NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`feed_id`	int	NOT NULL,
-	`hashtag_content`	varchar(20)	NOT NULL
+	`hashtag_content`	varchar(50)	NOT NULL
 );
 
 CREATE TABLE `group_list` (
 	`group_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`group_name`	varchar(20)	NULL,
-	`group_profile_image_url`	varchar(100)	NULL DEFAULT "image/nogroupimage.png",
-	`group_leader_seq`	varchar(20)	NOT NULL,
+	`group_name`	varchar(50)	NULL,
+	`group_profile_image_url`	varchar(500)	NULL DEFAULT "image/nogroupimage.png",
+	`group_leader_seq`	int NOT NULL,
 	`group_password`	varchar(100)	NULL
 );
 
@@ -58,22 +58,24 @@ CREATE TABLE `group_member` (
 );
 
 CREATE TABLE `schedule` (
-	`schedule_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`group_id`	int	NOT NULL,
-	`schedule_title`	varchar(30)	NULL,
-	`schedule_content`	varchar(100)	NULL,
-	`schedule_date`	date	NOT NULL,
-	`schedule_time`	time	NULL,
-	`schedule_location`	varchar(50)	NULL
+    `schedule_id`    int    NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `group_id`    int    NOT NULL,
+    `schedule_title`    varchar(50)    NULL,
+    `schedule_content`    varchar(100)    NULL,
+    `schedule_date_start`    date    NOT NULL,
+    `schedule_date_end`    date    NOT NULL,
+    `schedule_time_start`    time    NULL,
+    `schedule_time_end`    time    NULL
 );
+
 
 CREATE TABLE `comment` (
 	`comment_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`feed_id`	int	NOT NULL,
 	`comment_tag`	int	NULL,
 	`comment_author`	int	NULL,
-	`comment_content`	varchar(100)	NULL,
-	`comment_upload_date`	date	NULL
+	`comment_content`	varchar(300)	NULL,
+	`comment_upload_date`	timestamp	NULL
 );
 
 CREATE TABLE `feed_emotion` (
@@ -97,11 +99,11 @@ CREATE TABLE `comment_emotion` (
 CREATE TABLE `file` (
 	`file_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`feed_id`	int	NOT NULL,
-	`file_name`	varchar(30)	NULL,
-	`file_size`	int	NULL,
-	`file_content_type`	varchar(20)	NULL,
-	`file_url`	varchar(50)	NULL UNIQUE,
-	`reg_dt`	date	NULL
+	`file_name`	varchar(100)	NULL,
+	`file_size`	float	NULL,
+	`file_content_type`	varchar(50)	NULL,
+	`file_url`	varchar(300)	NULL UNIQUE,
+	`reg_dt`	timestamp	NULL
 );
 
 CREATE TABLE `scrap` (
@@ -112,7 +114,7 @@ CREATE TABLE `scrap` (
 CREATE TABLE `location` (
 	`location_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`group_id`	int	NOT NULL,
-	`location_name`	varchar(20)	NULL,
+	`location_name`	varchar(50)	NULL,
 	`lat`	float	NULL,
 	`lng`	float	NULL
 );
@@ -122,24 +124,6 @@ CREATE TABLE `location_favorite` (
 	`user_seq`	int	NOT NULL
 );
 
-CREATE TABLE `vote` (
-	`vote_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`group_id`	int	NOT NULL,
-	`user_seq`	int	NOT NULL,
-	`vote_name`	varchar(20)	NULL
-);
-
-CREATE TABLE `vote_item` (
-	`vote_item_name`	varchar(30)	NOT NULL PRIMARY KEY,
-	`vote_id`	int	NOT NULL,
-	`vote_cnt`	int	NULL
-);
-
-CREATE TABLE `voter` (
-	`vote_id`	int	NOT NULL,
-	`vote_item_name`	varchar(20)	NOT NULL,
-	`user_seq`	int	NOT NULL
-);
 
 CREATE TABLE `feed_emotion_user_use` (
 	`user_seq`	int	NOT NULL,
@@ -156,6 +140,58 @@ CREATE TABLE `comment_emotion_user_use` (
 	`comment_id`	int	NOT NULL,
 	`user_seq`	int	NOT NULL,
 	`emotion_code`	char(5)	NULL
+);
+
+CREATE TABLE `game` (
+	`game_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`group_id`	int	NOT NULL,
+	`game_title`	varchar(50)	NOT NULL,
+	`game_author`	int	NOT NULL,
+	`game_register_date`	timestamp	NULL,
+	`code` char(5)	NOT NULL,
+	`update_yn`	varchar(1)	NULL DEFAULT "y"
+);
+
+CREATE TABLE `ghost_leg` (
+	`game_id`	int	NOT NULL,
+	`player`	varchar(100)	NOT NULL,
+	`player_num`	int	NOT NULL,
+	`result`	varchar(100)	NOT NULL,
+	`map`	varchar(300)	NOT NULL
+);
+
+CREATE TABLE `vote_item` (
+	`vote_item_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`vote_item_name`	varchar(50)	NOT NULL,
+	`game_id`	int	NOT NULL,
+	`count`	int	NOT NULL DEFAULT 0
+);
+
+CREATE TABLE `voter` (
+	`vote_item_id`	int,
+	`user_seq`	int	NOT NULL
+);
+
+
+CREATE TABLE `profile_image` (
+    `profile_image_id`    int    NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`user_seq`     int,
+    `group_id`    int,
+    `profile_image_name`    varchar(50) NULL,
+	`profile_image_size`    float NULL,
+	`profile_image_url`    varchar(300)    NULL,
+    `reg_dt`    timestamp    NULL
+);
+
+CREATE TABLE `notice` (
+`notice_id`      int    NOT NULL PRIMARY KEY AUTO_INCREMENT,
+`user_seq` int,
+`target_user_seq` int,
+`target_user_group_id` int,
+`notice_type`      VARCHAR(50),
+`notice_content_id` int,
+`notice_read_yn` char(1) DEFAULT "n",
+`notice_time` DATETIME
 );
 
 
@@ -255,7 +291,12 @@ ALTER TABLE `location` ADD CONSTRAINT `FK_group_TO_location_1` FOREIGN KEY (
 REFERENCES `group_list` (
 	`group_id`
 );
-
+ALTER TABLE  `feed` ADD CONSTRAINT `FK_location_TO_feed_1` FOREIGN KEY (
+	`feed_location_id`
+)
+REFERENCES `location` (
+	`location_id`
+);
 ALTER TABLE `location_favorite` ADD CONSTRAINT `FK_location_TO_location_favorite_1` FOREIGN KEY (
 	`location_id`
 )
@@ -270,47 +311,38 @@ REFERENCES `user` (
 	`user_seq`
 );
 
-ALTER TABLE `vote` ADD CONSTRAINT `FK_group_TO_vote_1` FOREIGN KEY (
+
+ALTER TABLE `game` ADD CONSTRAINT `FK_group_TO_game_1` FOREIGN KEY (
 	`group_id`
 )
 REFERENCES `group_list` (
 	`group_id`
 );
 
-ALTER TABLE `vote` ADD CONSTRAINT `FK_user_TO_vote_1` FOREIGN KEY (
-	`user_seq`
-)
-REFERENCES `user` (
-	`user_seq`
-);
 
-ALTER TABLE `vote_item` ADD CONSTRAINT `FK_vote_TO_vote_item_1` FOREIGN KEY (
-	`vote_id`
+ALTER TABLE `ghost_leg` ADD CONSTRAINT `FK_game_TO_ghost_leg_1` FOREIGN KEY (
+	`game_id`
 )
-REFERENCES `vote` (
-	`vote_id`
-);
+REFERENCES `game` (
+	`game_id`
+)
+ON DELETE CASCADE;
+
+ALTER TABLE `vote_item` ADD CONSTRAINT `FK_game_TO_vote_item_1` FOREIGN KEY (
+	`game_id`
+)
+REFERENCES `game` (
+	`game_id`
+)
+ON DELETE CASCADE;
 
 ALTER TABLE `voter` ADD CONSTRAINT `FK_vote_item_TO_voter_1` FOREIGN KEY (
-	`vote_id`
+	`vote_item_id`
 )
 REFERENCES `vote_item` (
-	`vote_id`
-);
-
-ALTER TABLE `voter` ADD CONSTRAINT `FK_vote_item_TO_voter_2` FOREIGN KEY (
-	`vote_item_name`
+	`vote_item_id`
 )
-REFERENCES `vote_item` (
-	`vote_item_name`
-);
-
-ALTER TABLE `voter` ADD CONSTRAINT `FK_user_TO_voter_1` FOREIGN KEY (
-	`user_seq`
-)
-REFERENCES `user` (
-	`user_seq`
-);
+ON DELETE CASCADE;
 
 ALTER TABLE `feed_emotion_user_use` ADD CONSTRAINT `FK_user_TO_feed_emotion_user_use_1` FOREIGN KEY (
 	`user_seq`

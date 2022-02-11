@@ -54,9 +54,9 @@
 <script>
 export default {
   name: "EntCreatePopup",
-  props: {
-    dialog: Boolean,
-  },
+  data: () => ({
+    dialog:false,
+  })
 };
 </script>
 

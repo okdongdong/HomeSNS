@@ -9,12 +9,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.ssafy.homesns.dto.GroupDto;
 import com.ssafy.homesns.dto.GroupMemberDto;
@@ -23,7 +26,7 @@ import com.ssafy.homesns.dto.GroupResultDto;
 import com.ssafy.homesns.service.GroupService;
 
 @CrossOrigin(
-		origins = "http://localhost:5500", // npm에서 5500번을 사용한다
+		origins = { "http://localhost:5500", "http://172.30.1.59:5500", "http://192.168.0.100:5500", "http://192.168.0.40:5500" },
 		allowCredentials = "true", // axios가 sessionId를 계속 다른것을 보내는데, 이것을 고정시켜준다
 		allowedHeaders = "*",
 		methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, 
@@ -35,18 +38,23 @@ public class GroupController {
 	GroupService groupService;
 
 	private static final int SUCCESS = 1;
-
+	private static final int FAIL = -1;
+	
+	private static final int DUP = 2;
 
 	// 새로운 그룹을 생성하는 동시에 그룹에 참가 => GroupList + GroupMember 동시에 추가
 	// 1. 그룹을 생성
 	// 2. 해당 그룹의 아이디 찾기
 	// 3. 찾은 그룹의 아이디와 자신을 그룹 멤버로 등록
 	@PostMapping(value="/group")
-	public ResponseEntity<GroupResultDto> groupListCreate(@RequestBody GroupDto groupDto) {
+	public ResponseEntity<GroupResultDto> groupListCreate(
+			@ModelAttribute GroupDto groupDto,
+			MultipartHttpServletRequest request) {
+		
 		// Security Context에서 UserSeq를 구한다
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		int userSeq = Integer.parseInt(authentication.getName());
-
+		
 		System.out.println(groupDto);
 		// 그룹 비밀번호 암호화
 		BCryptPasswordEncoder b = new BCryptPasswordEncoder();
@@ -55,8 +63,8 @@ public class GroupController {
 		// 그룹 리더 추가
 		groupDto.setGroupLeaderSeq(userSeq);
 		System.out.println(groupDto);
-
-		GroupResultDto groupResultDto = groupService.groupListCreate(groupDto);
+		
+		GroupResultDto groupResultDto = groupService.groupListCreate(groupDto, request);
 
 		if ( groupResultDto.getResult() == SUCCESS) {
 			return new ResponseEntity<GroupResultDto>(groupResultDto, HttpStatus.OK);
@@ -99,6 +107,20 @@ public class GroupController {
 		return new ResponseEntity<GroupResultDto>(groupResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
+	@PostMapping(value="/group/profileImage")
+	public ResponseEntity<GroupResultDto> groupProfileImageUpdate(
+				@RequestParam int groupId,
+				MultipartHttpServletRequest request
+			) {
+		
+		GroupResultDto groupResultDto = groupService.groupProfileImageUpdate(groupId, request);
+		
+		if ( groupResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<GroupResultDto>(groupResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<GroupResultDto>(groupResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
 	// 그룹을 나가는 것이 아니라 그룹을 삭제하는 동작이어야 한다
 	@DeleteMapping(value="/group/{groupId}")
 	public ResponseEntity<GroupResultDto> groupListDelete(@PathVariable(value="groupId") int groupId) {
@@ -121,10 +143,12 @@ public class GroupController {
 	public ResponseEntity<GroupMemberResultDto> groupMemberCreate(@RequestBody GroupDto groupDto) {
 		
 		GroupMemberResultDto groupMemberResultDto = groupService.groupMemberCreate(groupDto);
-
-		if ( groupMemberResultDto.getResult() == SUCCESS) {
+		
+		if ( groupMemberResultDto.getResult() == SUCCESS ) {
 			return new ResponseEntity<GroupMemberResultDto>(groupMemberResultDto, HttpStatus.OK);
-		}  
+		} else if ( groupMemberResultDto.getResult() == DUP ) {
+			return new ResponseEntity<GroupMemberResultDto>(groupMemberResultDto, HttpStatus.BAD_REQUEST);
+		} 
 		return new ResponseEntity<GroupMemberResultDto>(groupMemberResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
@@ -178,7 +202,7 @@ public class GroupController {
 		// Security Context에서 UserSeq를 구한다
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		int userSeq = Integer.parseInt(authentication.getName());
-
+		
 		GroupMemberDto groupMemberDto = new GroupMemberDto();
 		groupMemberDto.setGroupId(groupId);
 		groupMemberDto.setUserSeq(userSeq);

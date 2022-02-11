@@ -7,6 +7,19 @@
 		                VALUES ( #{groupName},  #{groupLeaderSeq},  #{groupPassword} )
 	</insert>
 	
+	<insert id="groupProfileImageInsert" parameterType="com.ssafy.homesns.dto.ProfileImageDto" useGeneratedKeys="true" keyProperty="profileImageId">
+		INSERT INTO PROFILE_IMAGE ( GROUP_ID,    PROFILE_IMAGE_NAME,   PROFILE_IMAGE_SIZE,   PROFILE_IMAGE_Url,   REGDT  )
+		                   VALUES ( #{groupId},  #{profileImageName},  #{profileImageSize},  #{profileImageUrl},  now()  )
+	</insert>
+	
+	<update id="groupProfileImageUpdate" parameterType="com.ssafy.homesns.dto.ProfileImageDto">
+		UPDATE GROUP_LIST
+		   SET GROUP_PROFILE_IMAGE_URL = #{profileImageUrl}
+		 WHERE GROUP_ID = #{groupId}
+	</update>
+	
+	
+	
 	<select id="groupListRecentMake" parameterType="int" resultType="int">
 		SELECT GROUP_ID
 		  FROM GROUP_LIST
@@ -20,6 +33,21 @@
 		  FROM GROUP_LIST JOIN GROUP_MEMBER
 		    ON GROUP_LIST.GROUP_ID = GROUP_MEMBER.GROUP_ID
 		 WHERE USER_SEQ = #{userSeq}
+	</select>
+	
+	<select id="groupMemberExist" parameterType="com.ssafy.homesns.dto.GroupMemberDto" resultType="int">
+		SELECT EXISTS (
+			SELECT * 
+			  FROM GROUP_MEMBER
+			 WHERE GROUP_ID = #{groupId}
+			   AND USER_SEQ = #{userSeq}
+		)
+	</select>
+	
+	<select id="groupDetailSearch" parameterType="int" resultType="com.ssafy.homesns.dto.GroupDto">
+		SELECT GROUP_ID as groupId, GROUP_NAME as groupName, GROUP_PROFILE_IMAGE_URL as groupProfileImageUrl, GROUP_LEADER_SEQ as groupLeaderSeq
+		  FROM GROUP_LIST
+		 WHERE GROUP_ID = #{groupId}
 	</select>
 	
 	<select id="groupListTotalCount" resultType="int">

@@ -7,7 +7,7 @@ public class FileDto {
 	private int fileId;
 	private int feedId; 
 	private String fileName; 
-	private long fileSize;
+	private float fileSize;
 	private String fileContentType;
 	private String fileUrl; 
 	private Date regDt;
@@ -29,10 +29,10 @@ public class FileDto {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-	public long getFileSize() {
+	public float getFileSize() {
 		return fileSize;
 	}
-	public void setFileSize(long fileSize) {
+	public void setFileSize(float fileSize) {
 		this.fileSize = fileSize;
 	}
 	public String getFileContentType() {

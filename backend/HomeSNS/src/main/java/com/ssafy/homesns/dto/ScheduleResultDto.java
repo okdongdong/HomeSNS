@@ -4,20 +4,36 @@ import java.util.List;
 
 public class ScheduleResultDto {
 	private int result;
-	private List<ScheduleDto> scheduleDto;
+	private int scheduleId;
+	
+	private ScheduleDto scheduleDto;
+	private List<ScheduleDto> scheduleDtoList;
 	private int count;
 	
+	
+	public int getScheduleId() {
+		return scheduleId;
+	}
+	public void setScheduleId(int scheduleId) {
+		this.scheduleId = scheduleId;
+	}
 	public int getResult() {
 		return result;
 	}
 	public void setResult(int result) {
 		this.result = result;
 	}
-	public List<ScheduleDto> getScheduleDto() {
+	public ScheduleDto getScheduleDto() {
 		return scheduleDto;
 	}
-	public void setScheduleDto(List<ScheduleDto> scheduleDto) {
+	public void setScheduleDto(ScheduleDto scheduleDto) {
 		this.scheduleDto = scheduleDto;
+	}
+	public List<ScheduleDto> getScheduleDtoList() {
+		return scheduleDtoList;
+	}
+	public void setScheduleDtoList(List<ScheduleDto> scheduleDtoList) {
+		this.scheduleDtoList = scheduleDtoList;
 	}
 	public int getCount() {
 		return count;
@@ -25,10 +41,11 @@ public class ScheduleResultDto {
 	public void setCount(int count) {
 		this.count = count;
 	}
+	
 	@Override
 	public String toString() {
-		return "ScheduleResultDto [result=" + result + ", scheduleDto=" + scheduleDto + ", count=" + count + "]";
+		return "ScheduleResultDto [result=" + result + ", scheduleId=" + scheduleId + ", scheduleDto=" + scheduleDto
+				+ ", scheduleDtoList=" + scheduleDtoList + ", count=" + count + "]";
 	}
-	
-	
+
 }

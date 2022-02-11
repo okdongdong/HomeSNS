@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.ssafy.homesns.dto.GroupDto;
 import com.ssafy.homesns.dto.GroupMemberDto;
+import com.ssafy.homesns.dto.ProfileImageDto;
 import com.ssafy.homesns.dto.UserDto;
 
 @Mapper
@@ -13,13 +14,22 @@ public interface GroupDao {
 	
 	// 그룹 생성
 	public int groupListCreate(GroupDto groupDto);
+	// 그룹 프로필 사진 저장
+	public int groupProfileImageInsert(ProfileImageDto profileImageDto);
+	// 그룹 프로필 사진 수정
+	public int groupProfileImageUpdate(ProfileImageDto profileImageDto);
 	
 	// 특정 유저가 그룹 리더이고 가장 최근에 생성된 그룹ID 찾기
 	public int groupListRecentMake(int userSeq);
-
+	
 	// 그룹 리스트 불러오기 / 특정 유저가 참여하고 있는 그룹 리스트
 	public List<GroupDto> groupListSearch(int userSeq);
 
+	// 그룹에 멤버가 참여 중인지 아닌지 조회
+	public int groupMemberExist(GroupMemberDto groupMemberDto);
+	// 그룹 ID를 사용해서 그룹 조회
+	public GroupDto groupDetailSearch(int groupId);
+	
 	// 특정 유저가 참여하고 있는 그룹의 수
 	public int groupListTotalCount(int userSeq);
 

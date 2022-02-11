@@ -148,10 +148,12 @@ export default {
       this.previewImage = URL.createObjectURL(this.image);
     },
     createGroup: function () {
+      //연동할때 주석 풀기
       // let data = new FormData();
       // data.append("groupName", this.groupname);
+      // data.append("groupPassword", this.password);
       // data.append("groupProfileImageUrl", this.image);
-      let data ={
+      let data ={ // 연동할때 주석 처리하기
         groupName : this.groupname,
         groupPassword : this.password,
       }
@@ -161,12 +163,16 @@ export default {
         url: `${process.env.VUE_APP_MCS_URL}/group`,
         data: data,
         headers: {
-          // "content-type": "multipart/form-data",
-          Authorization: `${token}`,
+          // "Content-Type": "multipart/form-data", // 연동할때 주석 풀기
+          Authorization:token,
         },
-      }).then(() => {
+      })
+      .then(() => {
         this.$router.push({ name: "Select" });
         console.log("123");
+      })
+      .catch((error)=>{
+        console.log(error);
       });
     },
   },
