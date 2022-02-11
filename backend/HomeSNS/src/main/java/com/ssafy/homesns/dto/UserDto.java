@@ -10,7 +10,7 @@ public class UserDto {
 	private String userName;
 	private String userNickname;
 	private String userPhone;
-	private Date userBod;
+	private String userBod;
 	private String userProfileImageUrl;
 	private Date userRegisterDate;
 	
@@ -77,11 +77,11 @@ public class UserDto {
 		this.userPhone = userPhone;
 	}
 
-	public Date getUserBod() {
+	public String getUserBod() {
 		return userBod;
 	}
 
-	public void setUserBod(Date userBod) {
+	public void setUserBod(String userBod) {
 		this.userBod = userBod;
 	}
 
