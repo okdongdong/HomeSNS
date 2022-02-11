@@ -10,7 +10,7 @@ const notice = {
     noticeAlarm: false,
     unreadNoticeCount: 0,
     noticeList: [],
-    nowGroupId:null,
+    nowGroupId: null,
     start: 0,
     dialog: false,
   },
@@ -38,8 +38,7 @@ const notice = {
             // 20개씩 인피니티스크롤로 구현
             state.start += 20;
             state.noticeList.push(...res.data.noticeResultDtoList);
-            state.unreadNoticeCount  = res.data.count
-            
+            state.unreadNoticeCount = res.data.count;
           }
         })
         .catch((err) => {
@@ -168,39 +167,42 @@ const notice = {
       console.log(
         `소켓 연결을 시도합니다. 서버 주소: ${serverURL}/notice/${rootState.account.nowGroup.groupId}`
       );
-      this.stompClient.connect(
-        headers,
-        (frame) => {
-          // 소켓 연결 성공
-          console.log("소켓 연결 성공", frame);
-          // 서버의 메시지 전송 endpoint를 구독
+      if (!(this.stompClient && this.stompClient.connected)) {
+        this.stompClient.connect(
+          headers,
+          (frame) => {
+            // 소켓 연결 성공
+            console.log("소켓 연결 성공", frame);
 
-          // 이런형태를 pub sub 구조라고 한다.
-          this.stompClient.subscribe(
-            `/notice/send/${rootState.account.nowGroup.groupId}`,
-            (res) => {
-              commit("CAL_NOTICE_COUNT", 1);
-              console.log("구독으로 받은 메시지 입니다.", res.body);
+            // 서버의 메시지 전송 endpoint를 구독
 
-              // 받은 데이터를 json으로 파싱하고 저장
-              state.recv = JSON.parse(res.body);
-              if (
-                state.recv.targetUserList.some(
-                  (id) => id === rootState.account.userSeq
-                )
-              ) {
-                commit("NOTICE_ALARM");
+            // 이런형태를 pub sub 구조라고 한다.
+            this.stompClient.subscribe(
+              `/notice/send/${rootState.account.nowGroup.groupId}`,
+              (res) => {
+                commit("CAL_NOTICE_COUNT", 1);
+                console.log("구독으로 받은 메시지 입니다.", res.body);
+
+                // 받은 데이터를 json으로 파싱하고 저장
+                state.recv = JSON.parse(res.body);
+                if (
+                  state.recv.targetUserList.some(
+                    (id) => id === rootState.account.userSeq
+                  )
+                ) {
+                  commit("NOTICE_ALARM");
+                }
+
+                commit("NOTICE_CLEAR");
               }
-
-              commit("NOTICE_CLEAR");
-            }
-          );
-        },
-        (error) => {
-          // 소켓 연결 실패
-          console.log("소켓 연결 실패", error);
-        }
-      );
+            );
+          },
+          (error) => {
+            // 소켓 연결 실패
+            console.log("소켓 연결 실패", error);
+          }
+        );
+      }
     },
     disconnect() {
       this.stompClient.disconnect();

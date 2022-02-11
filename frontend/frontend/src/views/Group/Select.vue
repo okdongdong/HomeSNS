@@ -23,13 +23,8 @@
       <!-- 그룹 추가하는 곳 -->
       <v-row class="ma-1">
         <v-col class="pa-5" cols="6">
-          <v-img
-            aspect-ratio="1"
-            src="@/assets/group_add.png"
-            alt="그룹 사진입니다."
-            class="group-img"
-            @click="groupCreate"
-          />
+          <group-create-popup  />
+
           <h3 style="margin-top: 8px">그룹 추가</h3>
         </v-col>
         <!-- data받아오면 for문으로 돌리기 -->
@@ -57,7 +52,9 @@
 
 <script>
 import axios from "axios";
+import GroupCreatePopup from "../../components/GroupCreatePopup.vue";
 export default {
+  components: { GroupCreatePopup },
   name: "Select",
 
   data() {
@@ -89,15 +86,14 @@ export default {
     },
     // 그룹 사진 클릭 시, 해당 그룹 메인페이지로 이동
     groupMainPage: function (groupInfo) {
+      console.log('groupInfo',groupInfo)
       this.$store.dispatch("account/setNowGroup", groupInfo);
       this.$router.push({
         name: "Main",
         params: { groupId: groupInfo.groupId },
       });
     },
-    groupCreate: function () {
-      this.$router.push({ name: "GroupCreate" });
-    },
+   
   },
   created() {
     this.getGroup();

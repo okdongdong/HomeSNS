@@ -1,32 +1,35 @@
 <template>
   <v-app class="text-center container">
     <h1>그룹프로필</h1>
-        <div class="justify-center d-flex">
-
-    <v-img
-      aspect-ratio="1"
-      :src="nowGroup.groupProfileImageUrl"
-      alt="그룹 사진입니다."
-      class="group-img"
-      max-width=200
-    />
-        </div>
-    <h3 style="color: white; margin-top: 8px">{{ nowGroup.groupName }}</h3>
-
-    <h1>그룹원</h1>
-    <div class="container justify-space-around d-flex flex-wrap">
-      <ProfilePhoto
-        v-for="member in members"
-        :key="member.userId"
-        :name="member.userName"
-        :size="100"
-        :imgUrl="member.userImgUrl"
-        :userSeq="member.userId"
+    <div class="justify-center d-flex">
+      <v-img
+        aspect-ratio="1"
+        :src="nowGroup.groupProfileImageUrl"
+        alt="그룹 사진입니다."
+        class="group-img"
+        max-width="200"
       />
+    </div>
+    <h2 style="color: white; margin-top: 8px">{{ nowGroup.groupName }}</h2>
 
-      <!-- 3의 배수가 아닐 경우 왼쪽으로 밀기용 -->
-      <div style="width: 100px"></div>
-      <div style="width: 100px"></div>
+    <div class=" content-box my-5">
+      <h2>그룹원</h2>
+
+      <div class="justify-space-around d-flex flex-wrap">
+        <ProfilePhoto
+          class="ma-3"
+          v-for="member in members"
+          :key="member.userSeq"
+          :name="member.userName"
+          :size="100"
+          :imgUrl="member.userImgUrl"
+          :userSeq="member.userSeq"
+        />
+
+        <!-- 3의 배수가 아닐 경우 왼쪽으로 밀기용 -->
+        <div class="ma-3" style="width: 100px"></div>
+        <div class="ma-3" style="width: 100px"></div>
+      </div>
     </div>
   </v-app>
 </template>
@@ -70,6 +73,13 @@ export default {
 </script>
 
 <style scoped>
+.content-box {
+  /* border: solid 2px black; */
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.329);
+}
+
 .group-img {
   object-fit: cover;
   border: 4px solid white;

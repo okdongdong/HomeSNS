@@ -102,9 +102,9 @@ export default {
 
 <style scoped>
 .content-box {
-  border: solid 2px black;
-  border-radius: 25px;
-  background-color: rgb(245, 245, 245);
+  /* border: solid 2px black; */
+  border-radius: 10px;
+  background-color: rgba(255,255,255,0.6);
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.329);
 }
 
