@@ -149,21 +149,21 @@ export default {
     },
     createGroup: function () {
       //연동할때 주석 풀기
-      // let data = new FormData();
-      // data.append("groupName", this.groupname);
-      // data.append("groupPassword", this.password);
-      // data.append("groupProfileImageUrl", this.image);
-      let data ={ // 연동할때 주석 처리하기
-        groupName : this.groupname,
-        groupPassword : this.password,
-      }
+      let data = new FormData();
+      data.append("groupName", this.groupname);
+      data.append("groupPassword", this.password);
+      data.append("groupProfileImageUrl", this.image);
+      // let data ={ // 연동할때 주석 처리하기
+      //   groupName : this.groupname,
+      //   groupPassword : this.password,
+      // }
       const token = localStorage.getItem("jwt");
       axios({
         method: "post",
         url: `${process.env.VUE_APP_MCS_URL}/group`,
         data: data,
         headers: {
-          // "Content-Type": "multipart/form-data", // 연동할때 주석 풀기
+          "Content-Type": "multipart/form-data", // 연동할때 주석 풀기
           Authorization:token,
         },
       })
