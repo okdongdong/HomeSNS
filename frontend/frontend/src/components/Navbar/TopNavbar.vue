@@ -136,7 +136,19 @@
           v-model="group"
           active-class="deep-purple--text text--accent-4"
         >
-          <v-list-item class="my-5">
+          <v-list-item
+            class="my-5"
+            @click.stop="
+              $router.push({
+                name: 'UserPage',
+                params: { userSeq: userSeq },
+              }),
+                $router.app._route.name == 'UserPage' ||
+                $router.app._route.name == 'UserPageScrap'
+                  ? getProfile(userSeq)
+                  : ''
+            "
+          >
             <ProfilePhoto :size="70" :imgUrl="userImgUrl" :userSeq="userSeq" />
             <h1 class="ml-7">{{ userName }}</h1>
           </v-list-item>
@@ -145,7 +157,11 @@
               $router.push({
                 name: 'UserPage',
                 params: { userSeq: userSeq },
-              })
+              }),
+                $router.app._route.name == 'UserPage' ||
+                $router.app._route.name == 'UserPageScrap'
+                  ? getProfile(userSeq)
+                  : ''
             "
           >
             <v-list-item-title class="d-flex align-center">
@@ -233,6 +249,7 @@ export default {
       "send",
       "setDialog",
     ]),
+    ...mapActions("group", ["getProfile"]),
     feedCreate() {
       this.$router.push({ name: "FeedCreate" });
     },
