@@ -5,10 +5,16 @@ import java.util.List;
 public class GameResultDto {
 	
 	private int result;
+	private int gameId;
 	private GameDto gameDto;
 	private List<GameDto> gameDtoList;
 	
-	
+	public int getGameId() {
+		return gameId;
+	}
+	public void setGameId(int gameId) {
+		this.gameId = gameId;
+	}
 	public int getResult() {
 		return result;
 	}
@@ -27,9 +33,11 @@ public class GameResultDto {
 	public void setGameDtoList(List<GameDto> gameDtoList) {
 		this.gameDtoList = gameDtoList;
 	}
+	
 	@Override
 	public String toString() {
-		return "GameResultDto [result=" + result + ", gameDto=" + gameDto + ", gameDtoList=" + gameDtoList + "]";
+		return "GameResultDto [result=" + result + ", gameId=" + gameId + ", gameDto=" + gameDto + ", gameDtoList="
+				+ gameDtoList + "]";
 	}
-
+	
 }

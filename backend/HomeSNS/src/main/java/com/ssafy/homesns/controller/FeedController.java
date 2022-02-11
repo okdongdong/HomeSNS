@@ -1,6 +1,5 @@
 package com.ssafy.homesns.controller;
 
-import com.ssafy.homesns.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,15 +12,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.ssafy.homesns.dto.FeedDto;
+import com.ssafy.homesns.dto.FeedParamDto;
+import com.ssafy.homesns.dto.FeedResultDto;
+import com.ssafy.homesns.dto.GroupMemberDto;
+import com.ssafy.homesns.dto.MainFeedResultDto;
 import com.ssafy.homesns.service.FeedService;
 
 @CrossOrigin(
-		origins = { "http://localhost:5500", "http://172.30.1.59:5500"}, // npm에서 5500번을 사용한다
+		origins = { "http://localhost:5500", "http://172.30.1.59:5500","http://192.168.0.100:5500",
+			"http://192.168.0.40:5500"}, // npm에서 5500번을 사용한다
 		allowCredentials = "true", // axios가 sessionId를 계속 다른것을 보내는데, 이것을 고정시켜준다
 		allowedHeaders = "*",
 		methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, 
@@ -87,7 +91,7 @@ public class FeedController {
 		}		 
 	}
 	
-	// feed 추가 
+	// feed 추가페이지 로딩 요청시
 	// 추가시 프런트에서 필요한 데이터넘겨줌 
 	@GetMapping(value="/feed/info/{groupId}")
 	public ResponseEntity<FeedResultDto> feedCreateInfo(@PathVariable int groupId){
@@ -114,8 +118,19 @@ public class FeedController {
 	
 	
 	// feed 수정
-	@PutMapping(value="/feed")
+	// multipart/form-data 는 put 요청이 안됨으로 post 요청으로 받음 
+	// file관련해서는 모두 delete -> insert 
+	// 나머지 feed데이터 관련해서는 update 하는 로직으로 구성
+	@PostMapping(value="/feed/update")
 	public ResponseEntity<FeedResultDto> feedUpdate(FeedDto feedDto, MultipartHttpServletRequest request){
+
+		
+		// 작성자 seq jwt에서 받아오기
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		int authorSeq = Integer.parseInt(authentication.getName());
+		// 작성자 셋팅
+		feedDto.setFeedAuthorSeq(authorSeq);
+
 		
 		FeedResultDto feedResultDto = feedService.feedUpdate(feedDto, request);
 		if( feedResultDto.getResult() == SUCCESS ) {

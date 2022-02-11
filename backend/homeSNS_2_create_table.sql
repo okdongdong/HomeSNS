@@ -173,6 +173,17 @@ CREATE TABLE `voter` (
 );
 
 
+CREATE TABLE `profile_image` (
+    `profile_image_id`    int    NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`user_seq`     int,
+    `group_id`    int,
+    `profile_image_name`    varchar(20) NULL,
+	`profile_image_size`    long NULL,
+	`profile_image_url`    varchar(20)    NULL,
+    `reg_dt`    timestamp    NULL
+);
+
+
 ALTER TABLE `feed` ADD CONSTRAINT `FK_group_TO_feed_1` FOREIGN KEY (
 	`group_id`
 )

@@ -15,6 +15,7 @@ public interface UserService {
 	public UserResultDto userUpdate(UserDto userDto);
 	public UserResultDto userDelete(int userSeq);
 	public UserResultDto userExist(String userPhone);
+	public UserResultDto userPage(int userSeq);
 	
 	// 중복체크
 	public UserResultDto checkUserId(String userId);
@@ -24,4 +25,8 @@ public interface UserService {
 	// 유저/타유저 프로필 페이지
 	public MainFeedResultDto userFeedSearch(FeedParamDto feedParamDto);
 	public MainFeedResultDto userScrapSearch(FeedParamDto feedParamDto);
+	
+	// 아이디/비밀번호 찾기
+	public UserResultDto userFindId(String userEmail);
+	public UserResultDto userFindPw(UserDto userDto);
 }

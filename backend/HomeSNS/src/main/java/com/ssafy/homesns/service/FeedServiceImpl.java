@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-import com.ssafy.homesns.dto.*;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,20 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.homesns.dao.FeedDao;
+import com.ssafy.homesns.dto.CommentDto;
+import com.ssafy.homesns.dto.EventMemberDto;
+import com.ssafy.homesns.dto.FeedDto;
+import com.ssafy.homesns.dto.FeedParamDto;
+import com.ssafy.homesns.dto.FeedResultDto;
+import com.ssafy.homesns.dto.FileDto;
+import com.ssafy.homesns.dto.GroupMemberDto;
+import com.ssafy.homesns.dto.HashtagDto;
+import com.ssafy.homesns.dto.LocationDto;
+import com.ssafy.homesns.dto.LocationFavoriteDto;
+import com.ssafy.homesns.dto.MainFeedDto;
+import com.ssafy.homesns.dto.MainFeedResultDto;
+import com.ssafy.homesns.dto.MainFileDto;
+import com.ssafy.homesns.dto.UserDto;
 
 @Service
 public class FeedServiceImpl implements FeedService {
@@ -172,7 +185,6 @@ public class FeedServiceImpl implements FeedService {
 				
 			}
 			else {
-				
 				//feed table 추가
 				feedDao.feedInsert(feedDto);				
 			}
@@ -292,23 +304,106 @@ public class FeedServiceImpl implements FeedService {
 	
 	
 	
-	
+	// file관련해서는 모두 delete -> insert 
+	// 나머지 feed데이터 관련해서는 update 하는 로직으로 구성
 	@Override
 	public FeedResultDto feedUpdate(FeedDto feedDto, MultipartHttpServletRequest request) {
 
 		FeedResultDto feedResultDto = new FeedResultDto();
 
-
+		int feedId = feedDto.getFeedId();
 		try {
-			feedDao.feedUpdate(feedDto);
+			
+			
+			String locationStr = feedDto.getFeedLocationStr();
+			if(locationStr != null) {
+				ObjectMapper objectMapper = new ObjectMapper(); 
+				LocationDto locationDto = objectMapper.readValue(locationStr, LocationDto.class);
+				locationDto.setGroupId(feedDto.getGroupId());
+				
+				int locationId = feedDto.getFeedLocationId();
+				locationDto.setLocationId(locationId);
+				
+				// 있던 장소 수정한거면 원래 값이 있고 
+				// 새로 만들었으면 값이 없음 -> 0으로 받기로함
+				if( locationId != 0 ) { // 있던장소 수정 
+					feedDao.feedLocationUpdate(locationDto);
+					if( locationDto.getFavorite() ) { // 즐겨찾기 추가
+						LocationFavoriteDto locationFavoriteDto = new LocationFavoriteDto();
+						locationFavoriteDto.setLocationId(locationId);
+						locationFavoriteDto.setUserSeq(feedDto.getFeedAuthorSeq());
+						feedDao.feedLocationFavoriteInsert(locationFavoriteDto);
+					}
+					
+				}else {// 기존에 없던 장소 추가
+					
+					feedDao.feedLocationInsert(locationDto);
+					locationId = locationDto.getLocationId();
+					if( locationDto.getFavorite() ) { // 즐겨찾기 추가
+						LocationFavoriteDto locationFavoriteDto = new LocationFavoriteDto();
+						locationFavoriteDto.setLocationId(locationId);
+						locationFavoriteDto.setUserSeq(feedDto.getFeedAuthorSeq());
+						feedDao.feedLocationFavoriteInsert(locationFavoriteDto);
+					}
+					feedDto.setFeedLocationId(locationId);
+				}
+				
+				// 즐겨찾기 삭제는 버튼 누를때 바로 적용하는 걸로..
+				
+				
+				
+				
+				// 장소 즐겨찾기 추가
+				// 원래 추가 안되었었던거면 update문이 아니라 insert 써야 하는데...
+				
+				
+			}
+			//feed table 추가
+			feedDao.feedUpdate(feedDto);				
+			
+
+			// hashtag 추가 
+			String hashtagStr = feedDto.getFeedHashtags();
+			if(hashtagStr !=null) {				
+
+				//JSON포맷의  String hashtag를 자동으로 JSON으로 변환시킨후 HashtagDto에 Mapping 
+				ObjectMapper objectMapper = new ObjectMapper(); 
+				List<HashtagDto> hashtagList = objectMapper.readValue(hashtagStr, new TypeReference<List<HashtagDto>>() {});
+
+				// feedId에 해당하는 hashtag가 여러 행이니까 update문 못씀..
+				// hashtag 다 지우고 다시 insert 
+				feedDao.feedHashtagDelete(feedId);
+				
+				int len = hashtagList.size();
+				for(int i = 0 ; i < len ; i++) {
+					hashtagList.get(i).setFeedId(feedId);
+					feedDao.feedHashtagInsert(hashtagList.get(i));
+				}				
+			}
+
+
+	
+			// 참가 인원 추가
+			String attendeeStr = feedDto.getFeedAttendees();
+
+			if(attendeeStr != null) {
+				ObjectMapper objectMapper = new ObjectMapper(); 
+				List<EventMemberDto> attendeeList = objectMapper.readValue(attendeeStr, new TypeReference<List<EventMemberDto>>() {});
+
+				// feedId에 해당하는 참석자가 여러 행이니까 update문 못씀..
+				// eventMember 다 지우고 다시 insert
+				feedDao.feedEventMemberDelete(feedId);
+				int len = attendeeList.size();
+				for(int i = 0 ; i < len ; i++) {
+					attendeeList.get(i).setFeedId(feedId);
+					feedDao.feedEventMemberInsert(attendeeList.get(i));
+				}		
+				
+			}
 
 			List<MultipartFile> fileList = request.getFiles("file");
 
-			File uploadDir = new File(uploadPath + File.separator + uploadFolder);
-			if (!uploadDir.exists()) uploadDir.mkdir();
-
-
-
+			//file delete 물리 data 
 			List<String> fileUrlList = feedDao.feedFileUrlDeleteList(feedDto.getFeedId());	
 			for(String fileUrl : fileUrlList) {	
 				File file = new File(uploadPath + File.separator, fileUrl);
@@ -316,13 +411,12 @@ public class FeedServiceImpl implements FeedService {
 					file.delete();
 				}
 			}
-
+			// file delete DB
 			feedDao.feedFileDelete(feedDto.getFeedId()); 
 
 
-			// 여기서 부터 하면 됨
+			// file insert
 			for (MultipartFile part : fileList) {
-				int feedId = feedDto.getFeedId();
 
 				String fileName = part.getOriginalFilename();
 
@@ -348,10 +442,9 @@ public class FeedServiceImpl implements FeedService {
 				String fileUrl = uploadFolder + "/" + savingFileName;
 				fileDto.setFileUrl(fileUrl);
 
-				//file 추가 
+				//file DB추가 
 				feedDao.feedFileInsert(fileDto);
 			}
-
 
 			feedResultDto.setResult(SUCCESS);
 
@@ -364,6 +457,7 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
+	@Transactional
 	public FeedResultDto feedDelete(int feedId) {
 
 		FeedResultDto feedResultDto = new FeedResultDto();

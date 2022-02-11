@@ -46,6 +46,14 @@
 		 WHERE USER_PHONE = #{userPhone}
 	</select>
 	
+	<select id="userPage" parameterType="int" resultType="com.ssafy.homesns.dto.UserDto">
+		SELECT USER_NAME as userName, USER_PROFILE_IMAGE_URL as userProfileImageUrl
+		  FROM USER 
+		 WHERE USER_SEQ = #{userSeq}
+	</select>
+	
+	
+	
 	<select id="checkUserId" parameterType="string" resultType="int">
 		SELECT COUNT(*)
 		  FROM USER 
@@ -83,6 +91,25 @@
 		 LIMIT #{limit} 
 		OFFSET #{offset}
 	</select>
+	
+	<select id="userFindId" parameterType="string" resultType="string">
+		SELECT USER_ID as userId
+		  FROM USER 
+		 WHERE USER_EMAIL = #{userEmail}
+	</select>
+	
+	<select id="userFindUserSeq" parameterType="com.ssafy.homesns.dto.UserDto" resultType="Integer">
+		SELECT USER_SEQ as userSeq
+		  FROM USER 
+		 WHERE USER_ID = #{userId}
+		   AND USER_EMAIL = #{userEmail}
+	</select>
+	
+	<update id="userChangePassword" parameterType="com.ssafy.homesns.dto.UserDto">
+		UPDATE USER
+		   SET USER_PASSWORD = #{userPassword}  
+		 WHERE USER_SEQ = #{userSeq}
+	</update>
 </mapper>
 
 
