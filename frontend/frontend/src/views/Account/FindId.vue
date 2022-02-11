@@ -25,7 +25,7 @@
           >아이디 찾기</v-card-title
         >
         <br />
-        <div>
+        <div class="text-left">
           <v-card-text class="main-text justify-left font-weight-bold"
             >가입 시</v-card-text
           >

@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="container">
     <p class="main-text ml-5 mt-5">개인 정보 수정</p>
     <div class="container">
       <v-row justify="center">

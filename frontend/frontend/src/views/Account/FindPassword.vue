@@ -21,6 +21,7 @@
           >
           </v-img>
         </div>
+        <div class="text-left">
         <v-card-title class="main-text justify-center font-weight-bold"
           >비밀번호 찾기</v-card-title
         >
@@ -37,6 +38,7 @@
         <v-card-text class="main-text justify-left font-weight-bold"
           >발송됩니다.</v-card-text
         >
+        </div>
       </v-card>
     </div>
     <br />
