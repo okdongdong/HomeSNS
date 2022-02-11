@@ -1,10 +1,10 @@
 <template>
-  <v-stepper v-model="step" flat style="background-color: rgba(0, 0, 0, 0)">
+  <v-stepper v-model="step" flat>
     <v-stepper-items>
       <!-- 결과 출력 -->
       <v-stepper-content step="1" class="pa-0">
         <div
-          class="d-flex justify-center  mb-5"
+          class="d-flex justify-center mb-5"
           style="
             width: 100%;
             box-shadow: inset 0 0 7px #888;
@@ -288,7 +288,7 @@ export default {
   position: absolute;
 }
 .my-canvas {
-  position: absolute;
+  position: relative;
   width: inherit;
   height: 300px;
 }

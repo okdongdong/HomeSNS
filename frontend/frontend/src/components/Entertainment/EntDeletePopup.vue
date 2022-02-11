@@ -34,7 +34,7 @@
 
 <script>
 export default {
-  name: "EntCreatePopup",
+  name: "EntDeletePopup",
   data: () => ({
     dialog: false,
   }),

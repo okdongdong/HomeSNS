@@ -184,9 +184,9 @@ export default {
   methods: {
     signup() {
       console.log("userId");
-      console.log(this.credentials.userId);
+      console.log(this.credentials.id);
       console.log("userName");
-      console.log(this.credentials.userName);
+      console.log(this.credentials.name);
       let data = new FormData();
       data.append("userId", this.credentials.id);
       data.append("userEmail", this.credentials.email);
@@ -209,6 +209,7 @@ export default {
         })
         .catch((err) => {
           console.log(err);
+          console.log(err.response);
         });
     },
     validate() {
