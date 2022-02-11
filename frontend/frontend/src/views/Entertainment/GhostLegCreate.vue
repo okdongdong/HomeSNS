@@ -1,160 +1,212 @@
 <template>
-  <div>
-    <v-stepper v-model="step">
-      <v-stepper-items>
-        <!-- 페이지 1 : 플레이어 수 입력 -->
-        <v-stepper-content step="1">
-          <h3>플레이어 수를 입력하세요</h3>
-          <v-text-field solo v-model="playerNum" />
-          <div class="justify-end d-flex">
-            <v-btn icon color="primary" @click.stop="step = 2">
-              <v-icon> chevron_right </v-icon>
-            </v-btn>
-          </div>
-        </v-stepper-content>
+  <v-app class="pa-3">
+    <h1>사다리타기 만들기</h1>
+    <div class="pa-5 content-box">
+      <v-stepper v-model="step" flat style="background-color: rgba(0, 0, 0, 0)">
+        <v-stepper-items>
+          <!-- 페이지 1 : 플레이어 수 입력 -->
+          <v-stepper-content step="1">
+            <h3 class="text-center mb-5">플레이어 수를 선택하세요</h3>
 
-        <!-- 페이지 2 : 사다리 기초 생성 및 플레이어명, 결과값 입력 -->
-        <v-stepper-content step="2">
-          <h3>플레이어명과 결과값을 입력하세요</h3>
-          <div class="container">
-            <!-- 플레이어명 -->
-            <div class="my-2 d-flex justify-content-between">
-              <div v-for="i in calPlayerNum" :key="i">
-                <input type="text" class="my-input" v-model="playerNames[i]" />
-              </div>
+            <div style="height: 50px"></div>
+
+            <v-slider
+              class="mx-5"
+              v-model="playerNum"
+              step="1"
+              thumb-label="always"
+              color="rgb(98,101,232)"
+              track-color="rgb(98,101,232)"
+              thumb-color="rgb(98,101,232)"
+              max="10"
+              min="2"
+            ></v-slider>
+
+            <div class="justify-end d-flex">
+              <v-btn icon color="primary" @click.stop="step = 2">
+                <v-icon size="48" color="rgb(98,101,232)">
+                  chevron_right
+                </v-icon>
+              </v-btn>
             </div>
+          </v-stepper-content>
 
-            <!-- 사다리 -->
-            <div class="my-2 d-flex justify-content-between">
+          <!-- 페이지 2 : 사다리 기초 생성 및 플레이어명, 결과값 입력 -->
+          <v-stepper-content step="2">
+            <h3>플레이어명과 결과값을 입력하세요</h3>
+            <div class="overflow-x-auto mb-5">
               <div
-                :class="{
-                  'ladder-base': i > 1,
-                  'start-or-end-ladder-base': i === 1,
-                }"
-                v-for="i in calPlayerNum"
-                :key="i"
+                class="mb-5"
+                :style="'width:max(calc(90px * ' + playerNum + '),100%);'"
               >
-                <div v-for="j in 10" :key="j" class="box">
-                  <!-- {{ i }} {{ j }} -->
+                <!-- 플레이어명 -->
+                <div class="my-2 d-flex justify-content-between">
+                  <div v-for="i in calPlayerNum" :key="i">
+                    <v-text-field
+                      background-color="white"
+                      hide-details
+                      outlined
+                      dense
+                      type="text"
+                      class="my-input"
+                      v-model="playerNames[i]"
+                    />
+                  </div>
                 </div>
-              </div>
-              <div class="start-or-end-ladder-base"></div>
-            </div>
 
-            <!-- 결과값 -->
-            <div class="my-2 d-flex justify-content-between">
-              <div v-for="i in calPlayerNum" :key="i">
-                <input type="text" class="my-input" v-model="resultNames[i]" />
-              </div>
-            </div>
-          </div>
-          <div class="justify-space-between d-flex">
-            <v-btn icon text @click.stop="step = 1">
-              <v-icon> chevron_left </v-icon>
-            </v-btn>
-
-            <v-btn icon color="primary" @click.stop="(step = 3), randomPick()">
-              <v-icon> chevron_right </v-icon>
-            </v-btn>
-          </div>
-        </v-stepper-content>
-
-        <!-- 페이지 3 : 결과 출력 -->
-        <v-stepper-content step="3">
-          <h3>사다리 보기</h3>
-          <div class="container">
-            <!-- 플레이어명 -->
-            <div class="my-2 d-flex justify-content-between">
-              <div
-                v-for="i in calPlayerNum"
-                :key="i"
-                class="container justify-content-between"
-              >
-                <div
-                  v-if="playerNames[i] != null"
-                  class="text-center"
-                  @click.stop.stop="
-                    drawActive
-                      ? (draw(i), (nowActiveIdx = i))
-                      : drawAll(nowActiveIdx)
-                  "
-                >
-                  {{ playerNames[i] }}
-                </div>
-              </div>
-            </div>
-
-            <!-- 사다리 -->
-            <div style="position: relative">
-              <div
-                class="container canvas-container"
-                style="padding: 0; position: absolute"
-              >
-                <!-- 사다리타기 진행용 캔버스 -->
-                <canvas id="my-canvas"></canvas>
-              </div>
-
-              <div class="my-2 d-flex justify-content-between">
-                <div
-                  :class="{
-                    'ladder-base': i > 1,
-                    'start-or-end-ladder-base': i === 1,
-                  }"
-                  v-for="i in calPlayerNum"
-                  :key="i"
-                >
+                <!-- 사다리 -->
+                <div class="my-2 d-flex justify-content-between">
                   <div
-                    v-for="j in 10"
-                    :key="j"
-                    class="box"
-                    :class="{ edge: isEdge[i][j] == 2 }"
-                  ></div>
+                    :class="{
+                      'ladder-base': i > 1,
+                      'start-or-end-ladder-base': i === 1,
+                    }"
+                    v-for="i in calPlayerNum"
+                    :key="i"
+                  >
+                    <div v-for="j in 10" :key="j" class="box">
+                      <!-- {{ i }} {{ j }} -->
+                    </div>
+                  </div>
+                  <div class="start-or-end-ladder-base"></div>
                 </div>
-                <div class="start-or-end-ladder-base"></div>
+
+                <!-- 결과값 -->
+                <div class="my-2 d-flex justify-content-between">
+                  <div v-for="i in calPlayerNum" :key="i">
+                    <v-text-field
+                      center
+                      background-color="white"
+                      hide-details
+                      outlined
+                      dense
+                      type="text"
+                      class="my-input"
+                      v-model="resultNames[i]"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
+            <div class="justify-space-between d-flex">
+              <v-btn icon text @click.stop="step = 1">
+                <v-icon size="48"> chevron_left </v-icon>
+              </v-btn>
 
-            <!-- 결과값 -->
-            <div class="my-2 d-flex justify-content-between">
-              <div
-                v-for="i in calPlayerNum"
-                :key="i"
-                class="container justify-content-between"
+              <v-btn
+                icon
+                color="primary"
+                @click.stop="(step = 3), randomPick()"
               >
-                <div v-if="resultNames[i] != null" class="text-center">
-                  {{ resultNames[i] }}
+                <v-icon size="48" color="rgb(98,101,232)">
+                  chevron_right
+                </v-icon>
+              </v-btn>
+            </div>
+          </v-stepper-content>
+
+          <!-- 페이지 3 : 결과 출력 -->
+          <v-stepper-content step="3">
+            <h3>사다리 보기</h3>
+            <div class="overflow-x-auto py-2 mb-5">
+              <div :style="'width:max(calc(90px * ' + playerNum + '),100%);'">
+                <!-- 플레이어명 -->
+                <div class="my-2 d-flex justify-content-between">
+                  <div
+                    v-for="i in calPlayerNum"
+                    :key="i"
+                    class="container justify-content-between"
+                  >
+                    <div
+                      v-if="playerNames[i] != null"
+                      class="text-center"
+                      @click.stop="
+                        drawActive
+                          ? (draw(i), (nowActiveIdx = i))
+                          : drawAll(nowActiveIdx)
+                      "
+                    >
+                      {{ playerNames[i] }}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 사다리 -->
+                <div style="position: relative">
+                  <div
+                    class="container canvas-container"
+                    style="padding: 0; position: absolute"
+                  >
+                    <!-- 사다리타기 진행용 캔버스 -->
+                    <canvas id="my-canvas"></canvas>
+                  </div>
+
+                  <div class="my-2 d-flex justify-content-between">
+                    <div
+                      :class="{
+                        'ladder-base': i > 1,
+                        'start-or-end-ladder-base': i === 1,
+                      }"
+                      v-for="i in calPlayerNum"
+                      :key="i"
+                    >
+                      <div
+                        v-for="j in 10"
+                        :key="j"
+                        class="box"
+                        :class="{ edge: isEdge[i][j] == 2 }"
+                      ></div>
+                    </div>
+                    <div class="start-or-end-ladder-base"></div>
+                  </div>
+                </div>
+
+                <!-- 결과값 -->
+                <div class="my-2 d-flex justify-content-between">
+                  <div
+                    v-for="i in calPlayerNum"
+                    :key="i"
+                    class="container justify-content-between"
+                  >
+                    <div v-if="resultNames[i] != null" class="text-center">
+                      {{ resultNames[i] }}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="justify-space-between d-flex">
-            <v-btn icon text @click.stop="step = 2">
-              <v-icon> chevron_left </v-icon>
-            </v-btn>
-            <v-btn icon color="primary" @click.stop="(step = 4), calResult()">
-              <v-icon> chevron_right </v-icon>
-            </v-btn>
-          </div>
-        </v-stepper-content>
 
-        <!-- 모든결과보기 -->
-        <v-stepper-content step="4">
-          <div v-for="i in playerNum" :key="i">
-            {{ playerNames[i] }} => {{ resultNames[result[i - 1]] }}
-          </div>
+            <div class="justify-space-between d-flex">
+              <v-btn icon text @click.stop="step = 2">
+                <v-icon size="48"> chevron_left </v-icon>
+              </v-btn>
+              <v-btn icon @click.stop="(step = 4), calResult()">
+                <v-icon size="48" color="rgb(98,101,232)">
+                  chevron_right
+                </v-icon>
+              </v-btn>
+            </div>
+          </v-stepper-content>
 
-          <div class="justify-space-between d-flex">
-            <v-btn icon text @click.stop="step = 3">
-              <v-icon> chevron_left </v-icon>
-            </v-btn>
-            <v-btn icon text @click.stop="ghostLegCreate()">
-              <v-icon> send </v-icon>
-            </v-btn>
-          </div>
-        </v-stepper-content>
-      </v-stepper-items>
-    </v-stepper>
-  </div>
+          <!-- 모든결과보기 -->
+          <v-stepper-content step="4">
+            <div v-for="i in playerNum" :key="i">
+              {{ playerNames[i] }} => {{ resultNames[result[i - 1]] }}
+            </div>
+
+            <div class="justify-space-between d-flex">
+              <v-btn icon text @click.stop="step = 3">
+                <v-icon size="48"> chevron_left </v-icon>
+              </v-btn>
+              <v-btn icon text @click.stop="ghostLegCreate()">
+                <v-icon size="32" color="rgb(98,101,232)"> send </v-icon>
+              </v-btn>
+            </div>
+          </v-stepper-content>
+        </v-stepper-items>
+      </v-stepper>
+    </div>
+  </v-app>
 </template>
 
 <script>
@@ -219,27 +271,28 @@ export default {
   methods: {
     ghostLegCreate() {
       // 임시용 경로변경
-      this.$router.push({ name: "EntFeedList" });
-
       const data = {
-        playerNum: 0,
-        isEdge: [],
-        playerNames: [],
-        resultNames: [],
+        groupId: this.nowGroup.groupId,
+        gameTitle: "GL",
+        ghostLegDto: {
+          playerNum: this.playerNum,
+          map: [],
+          player: [],
+          result: [],
+        },
       };
-      data.playerNum = this.playerNum;
       this.isEdge.forEach((arr) => {
-        data.isEdge.push(arr.join());
+        data.ghostLegDto.map.push(arr.join(""));
       });
-      data.isEdge = data.isEdge.join("+");
-      data.playerNames = this.playerNames.join();
-
-      console.log(data)
+      data.ghostLegDto.map = data.ghostLegDto.map.join();
+      data.ghostLegDto.player = this.playerNames.join();
+      data.ghostLegDto.result = this.resultNames.join();
+      console.log(data);
 
       const token = localStorage.getItem("jwt");
       axios({
-        method: "POST",
-        url: `${process.env.VUE_APP_MCS_URL}/ghostleg`,
+        method: "post",
+        url: `${process.env.VUE_APP_MCS_URL}/game/ghostLeg`,
         headers: { Authorization: token },
         data: data,
       })
@@ -399,6 +452,7 @@ export default {
   },
   computed: {
     ...mapState("minigame", ["colors"]),
+    ...mapState("account", ["nowGroup"]),
     calPlayerNum() {
       return [1] * this.playerNum;
     },
@@ -407,6 +461,12 @@ export default {
 </script>
 
 <style scoped>
+.content-box {
+  border: solid 2px black;
+  border-radius: 25px;
+  background-color: rgb(245, 245, 245);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.329);
+}
 .canvas-container {
   width: 100%;
   position: absolute;
