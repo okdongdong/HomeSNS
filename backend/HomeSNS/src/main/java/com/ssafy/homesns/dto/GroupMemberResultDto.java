@@ -4,10 +4,19 @@ import java.util.List;
 
 public class GroupMemberResultDto {
 	private int result;
+	private GroupDto groupDto;
+	
 	private List<GroupMemberDto> groupMemberDtoList;
 	private List<UserDto> userDtoList;
 	private int count;
 	
+	
+	public GroupDto getGroupDto() {
+		return groupDto;
+	}
+	public void setGroupDto(GroupDto groupDto) {
+		this.groupDto = groupDto;
+	}
 	public int getResult() {
 		return result;
 	}
@@ -35,9 +44,8 @@ public class GroupMemberResultDto {
 	
 	@Override
 	public String toString() {
-		return "GroupMemberResultDto [result=" + result + ", groupMemberDtoList=" + groupMemberDtoList
-				+ ", userDtoList=" + userDtoList + ", count=" + count + "]";
+		return "GroupMemberResultDto [result=" + result + ", groupDto=" + groupDto + ", groupMemberDtoList="
+				+ groupMemberDtoList + ", userDtoList=" + userDtoList + ", count=" + count + "]";
 	}
-	
-	
+
 }

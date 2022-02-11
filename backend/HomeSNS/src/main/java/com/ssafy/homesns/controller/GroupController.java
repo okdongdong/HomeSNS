@@ -26,7 +26,7 @@ import com.ssafy.homesns.dto.GroupResultDto;
 import com.ssafy.homesns.service.GroupService;
 
 @CrossOrigin(
-		origins = "http://localhost:5500", // npm에서 5500번을 사용한다
+		origins = { "http://localhost:5500", "http://172.30.1.59:5500", "http://192.168.0.100:5500", "http://192.168.0.40:5500" },
 		allowCredentials = "true", // axios가 sessionId를 계속 다른것을 보내는데, 이것을 고정시켜준다
 		allowedHeaders = "*",
 		methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, 
@@ -38,7 +38,9 @@ public class GroupController {
 	GroupService groupService;
 
 	private static final int SUCCESS = 1;
-
+	private static final int FAIL = -1;
+	
+	private static final int DUP = 2;
 
 	// 새로운 그룹을 생성하는 동시에 그룹에 참가 => GroupList + GroupMember 동시에 추가
 	// 1. 그룹을 생성
@@ -141,10 +143,12 @@ public class GroupController {
 	public ResponseEntity<GroupMemberResultDto> groupMemberCreate(@RequestBody GroupDto groupDto) {
 		
 		GroupMemberResultDto groupMemberResultDto = groupService.groupMemberCreate(groupDto);
-
-		if ( groupMemberResultDto.getResult() == SUCCESS) {
+		
+		if ( groupMemberResultDto.getResult() == SUCCESS ) {
 			return new ResponseEntity<GroupMemberResultDto>(groupMemberResultDto, HttpStatus.OK);
-		}  
+		} else if ( groupMemberResultDto.getResult() == DUP ) {
+			return new ResponseEntity<GroupMemberResultDto>(groupMemberResultDto, HttpStatus.BAD_REQUEST);
+		} 
 		return new ResponseEntity<GroupMemberResultDto>(groupMemberResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
