@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.ssafy.homesns.dao.FeedDao">
+
+
+
+<!-- 태현:feedid, feedtitle, feed 작성일, feed location만 들고옴-->
+	<select id="feedMain" parameterType="map" resultType="com.ssafy.homesns.dto.MainFeedDto">
+		SELECT FEED_ID, FEED_TITLE, FEED_EVENT_DATE, IFNULL(FEED_LOCATION_ID,'') AS FEED_LOCATION_ID
+		FROM HOME_SNS.FEED
+		WHERE GROUP_ID = #{groupId}
+		ORDER BY FEED_EVENT_DATE DESC
+			LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<select id="userExist" parameterType="string" resultType="com.ssafy.homesns.dto.UserDto">
+		SELECT USER_SEQ as userSeq, USER_ID as userId, USER_PASSWORD as userPassword, USER_EMAIL as userEmail, 
+			   USER_NAME as userName, USER_NICKNAME as userNickname, USER_PHONE as userPhone, USER_BOD as userBod, 
+			   USER_PROFILE_IMAGE_URL as userProfileImageUrl,USER_REGISTER_DATE as userRegisterDate, USER_CLS as userCls
+		  FROM USER 
+		 WHERE USER_PHONE = #{userPhone}
+	</select>
+	
+	
+	<!--피드상세 조회 -->
+	
+	
+	 <!-- fileList 가져오는 SQL-->
+	<select id="fileList" parameterType="int" resultType="com.ssafy.homesns.dto.FileDto">
+		 SELECT FILE_ID, FEED_ID, FILE_NAME, FILE_SIZE, FILE_CONTENT_TYPE, FILE_URL, REG_DT
+		   FROM HOME_SNS.FILE
+		  WHERE FEED_ID =#{feedId}
+	</select>
+
+<!--	태현 : 메인페이지 필요한 부분만 들고오기,,!-->
+	<select id="mainFileList" parameterType="int" resultType="com.ssafy.homesns.dto.MainFileDto">
+		SELECT FILE_CONTENT_TYPE, FILE_URL
+		FROM HOME_SNS.FILE
+		WHERE FEED_ID =#{feedId}
+	</select>
+	
+	<!-- 댓글 가져오는 SQL  -->
+	<select id="commentList" parameterType="int" resultType="com.ssafy.homesns.dto.CommentDto"> 
+		SELECT c.comment_id,feed_id,comment_tag,comment_author as comment_author_seq, u.user_name as comment_author,comment_content,comment_upload_date, 
+				ce.good, ce.sad, ce.check, ce.fun , ce.amaze
+		FROM home_sns.comment c
+        JOIN home_sns.user u ON comment_author = user_seq 
+        LEFT OUTER JOIN home_sns.comment_emotion ce ON c.comment_id = ce.comment_id  
+        WHERE feed_id = #{feedId}
+	</select>
+	
+	<!-- 해쉬태그 가져오는 SQL -->
+	<select id="hashtagList" parameterType="int" resultType="com.ssafy.homesns.dto.HashtagDto"> 
+		SELECT HASHTAG_SEQ, FEED_ID, HASHTAG_CONTENT
+		  FROM HOME_SNS.HASHTAG
+		 WHERE FEED_ID =#{feedId}
+	</select>
+	
+	<!-- 참가인원 가져오는 SQL -->
+	<select id="eventMemberList" parameterType="int" resultType="com.ssafy.homesns.dto.UserDto"> 
+		SELECT USER.USER_SEQ as userSeq, USER_ID as userId, USER_EMAIL as userEmail, 
+			   USER_NAME as userName, USER_NICKNAME as userNickname, USER_PHONE as userPhone
+		  FROM EVENT_MEMBER JOIN USER
+		    ON EVENT_MEMBER.USER_SEQ = USER.USER_SEQ
+		 WHERE FEED_ID =#{feedId}
+	</select>
+	
+	<!-- 장소 가져오는 SQL -->
+	<select id="locationSearch" parameterType="int" resultType="com.ssafy.homesns.dto.LocationDto"> 
+		SELECT l.LOCATION_ID, l.GROUP_ID, l.LOCATION_NAME, l.LAT, l.LNG
+		  FROM feed f JOIN location l on l.location_id = f.feed_location_id 
+		 WHERE feed_id = #{feedId};
+	</select>
+	
+	<!-- 장소 즐겨찾기 가져오는 SQL -->
+	<select id="locationFavoriteSearch" parameterType="int" resultType="com.ssafy.homesns.dto.LocationFavoriteDto"> 
+		SELECT LOCATION_ID, USER_SEQ
+		  FROM LOCATION_FAVORITE
+		 WHERE USER_SEQ =#{userSeq}
+	</select>
+	
+	
+	<!-- feed table값만 가져오는 SQL -->
+	<select id="feedDetail" parameterType="int" resultType="com.ssafy.homesns.dto.FeedDto"> 
+		SELECT f.FEED_ID, GROUP_ID, FEED_AUTHOR as feed_author_seq ,u.user_name as FEED_AUTHOR, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION_ID ,fe.good, fe.sad, fe.check, fe.fun, fe.amaze
+		  FROM HOME_SNS.FEED f JOIN USER u ON f.feed_author = u.user_seq
+          JOIN home_sns.feed_emotion fe  ON f.feed_id = fe.feed_id
+		 WHERE f.FEED_ID = #{feed_id};
+	</select>
+
+	
+	
+	<!--피드 추가 -->
+
+	<insert id="feedInsert" parameterType="com.ssafy.homesns.dto.FeedDto" useGeneratedKeys="true" keyProperty="feedId">
+		
+		INSERT INTO FEED ( GROUP_ID , FEED_AUTHOR, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION_ID )
+		            VALUES ( #{groupId}, #{feedAuthor},  #{feedTitle},  #{feedContent}, now(), #{feedEventDate} , #{feedLocationId} )
+	</insert>
+	
+	<insert id="feedFileInsert" parameterType="com.ssafy.homesns.dto.FileDto">
+
+		INSERT INTO FILE ( FEED_ID, FILE_NAME, FILE_SIZE, FILE_CONTENT_TYPE, FILE_URL, REG_DT )
+		            VALUES ( #{feedId}, #{fileName}, #{fileSize}, #{fileContentType}, #{fileUrl}, now() )
+	</insert>
+
+	<insert id="feedHashtagInsert" parameterType="com.ssafy.homesns.dto.HashtagDto">
+		INSERT INTO HASHTAG ( FEED_ID, HASHTAG_CONTENT )
+		            VALUES ( #{feedId}, #{hashtagContent})
+	</insert>
+	
+	<insert id="feedEventMemberInsert" parameterType="com.ssafy.homesns.dto.EventMemberDto" >
+		
+		INSERT INTO EVENT_MEMBER (  FEED_ID ,   USER_SEQ    )
+		                  VALUES (  #{feedId}, #{userSeq}  )
+	</insert>
+	
+	<insert id="feedLocationInsert" parameterType="com.ssafy.homesns.dto.LocationDto" useGeneratedKeys="true" keyProperty="locationId">
+		
+		INSERT INTO LOCATION ( GROUP_ID ,  LOCATION_NAME,   LAT,     LNG    )
+		              VALUES ( #{groupId}, #{locationName}, #{lat},  #{lng}  )
+	</insert>
+	
+	<insert id="feedLocationFavoriteInsert" parameterType="com.ssafy.homesns.dto.LocationFavoriteDto" >
+		
+		INSERT INTO LOCATION_FAVORITE ( LOCATION_ID ,  USER_SEQ   )
+		                       VALUES ( #{locationId}, #{userSeq} )
+	</insert>
+	
+	
+	<!-- 피드추가페이지 로딩시 프런트가 가지고 있어야하는 내용리턴  -->
+	<!-- favorite표시한 장소 담기 -->
+	<select id="userLocationList" parameterType="map" resultType="com.ssafy.homesns.dto.LocationDto">
+		SELECT LOCATION_NAME, LAT, CASE WHEN LF.USER_SEQ IS NULL THEN false
+										ELSE true
+			END as FAVORITE
+		FROM LOCATION L
+				 LEFT OUTER JOIN (SELECT * FROM LOCATION_FAVORITE WHERE USER_SEQ = #{userSeq}) LF
+								 ON L.LOCATION_ID = LF.LOCATION_ID
+		WHERE GROUP_ID = #{groupId}
+		order by favorite desc;
+  
+	</select>
+	
+	
+	<select id="groupMemberList" parameterType="int" resultType="com.ssafy.homesns.dto.GroupMemberDto">
+		SELECT user_name, g.user_seq 
+	  	  FROM group_member g JOIN  user u
+	 	    ON g.user_seq = u.user_seq
+	 	 WHERE group_id = #{groupId}; 
+	</select>
+	
+	
+	
+	
+	<!-- 피드 수정 -->
+	
+	<update id="feedUpdate" parameterType="com.ssafy.homesns.dto.FeedDto">
+		UPDATE HOME_SNS.FEED
+		   SET 
+			   FEED_TITLE = #{feedTitle},
+			   FEED_CONTENT = #{feedContent},
+			   FEED_EVENT_DATE = #{feedEventDate},
+			   FEED_LOCATION_ID =  #{feedLocationId}
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<select id="feedFileUrlDeleteList" parameterType="int" resultType="string">
+		SELECT FILE_URL FROM 
+		  FROM HOME_SNS.FILE 
+		 WHERE FEED_ID = #{feedId}
+	</select>
+	
+	
+	<delete id="feedFileDelete" parameterType="int">
+		DELETE FROM HOME_SNS.FILE
+		 WHERE FEED_ID = #{feedId}
+	</delete>
+	
+	
+	<!-- 피드 삭제 -->
+	<!-- cascade설정으로 딸려있는 fk 자동삭제 -->
+	<delete id="feedDelete" parameterType="int">
+		DELETE FROM HOME_SNS.FEED
+		 WHERE FEED_ID = #{feedId}
+	</delete>
+	
+	
+	
+</mapper>

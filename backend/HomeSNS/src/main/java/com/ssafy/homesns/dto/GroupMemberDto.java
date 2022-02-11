@@ -3,7 +3,8 @@ package com.ssafy.homesns.dto;
 public class GroupMemberDto {
 	private int groupId;
 	private int userSeq;
-	private char managerYn;
+	private String userName;
+	private String managerYn;
 	
 	public int getGroupId() {
 		return groupId;
@@ -17,16 +18,22 @@ public class GroupMemberDto {
 	public void setUserSeq(int userSeq) {
 		this.userSeq = userSeq;
 	}
-	public char getManagerYn() {
+	public String getManagerYn() {
 		return managerYn;
 	}
-	public void setManagerYn(char managerYn) {
+	public void setManagerYn(String managerYn) {
 		this.managerYn = managerYn;
 	}
 	
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 	@Override
 	public String toString() {
 		return "GroupMemberDto [groupId=" + groupId + ", userSeq=" + userSeq + ", managerYn=" + managerYn + "]";
 	}
-	
+
 }

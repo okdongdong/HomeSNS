@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.ssafy.homesns.dao.UserDao">
+
+
+	<insert id="userRegister" parameterType="com.ssafy.homesns.dto.UserDto">
+		insert into user (  user_id,     user_password,     user_email,     user_name,     user_nickname,     user_phone,     user_bod,     user_profile_image_url,   user_register_date,   user_cls,     refresh_token   ) 
+		          values (  #{userId},   #{userPassword},   #{userEmail},   #{userName},   #{userNickname},   #{userPhone},   #{userBod},   #{userProfileImageUrl},   now(),                #{userCls},   #{refreshToken} )
+	</insert>
+
+	<insert id="userProfileImageInsert" parameterType="com.ssafy.homesns.dto.ProfileImageDto" useGeneratedKeys="true" keyProperty="profileImageId">
+		INSERT INTO PROFILE_IMAGE ( USER_SEQ,    PROFILE_IMAGE_NAME,   PROFILE_IMAGE_SIZE,   PROFILE_IMAGE_Url,   REGDT  )
+		                   VALUES ( #{userSeq},  #{profileImageName},  #{profileImageSize},  #{profileImageUrl},  now()  )
+	</insert>
+	
+	<update id="userProfileImageUpdate" parameterType="com.ssafy.homesns.dto.ProfileImageDto">
+		UPDATE user
+		   SET USER_PROFILE_IMAGE_URL = #{profileImageUrl}
+		 WHERE USER_SEQ = #{userSeq}
+	</update>
+	
+	
+	
+	<select id="userMypageSearch" parameterType="int" resultType="com.ssafy.homesns.dto.UserDto">
+		SELECT USER_SEQ as userSeq, USER_ID as userId, USER_EMAIL as userEmail, 
+			   USER_NAME as userName, USER_NICKNAME as userNickname, USER_PHONE as userPhone, USER_BOD as userBod, 
+			   USER_PROFILE_IMAGE_URL as userProfileImageUrl,USER_REGISTER_DATE as userRegisterDate, USER_CLS as userCls
+		  FROM USER 
+		 WHERE USER_SEQ = #{userSeq}
+	</select>
+	
+	<update id="userUpdate" parameterType="com.ssafy.homesns.dto.UserDto">
+		UPDATE user SET USER_PASSWORD = #{userPassword}, USER_NAME = #{userName}, USER_NICKNAME = #{userNickname}, USER_BOD = #{userBod}, USER_PROFILE_IMAGE_URL = #{userProfileImageUrl}, REFRESH_TOKEN = #{refreshToken}  
+		 WHERE USER_SEQ = #{userSeq}
+	</update>
+
+	<delete id="userDelete" parameterType="int">
+		DELETE FROM user WHERE USER_SEQ = #{userSeq}
+	</delete>
+	
+	<select id="userExist" parameterType="string" resultType="com.ssafy.homesns.dto.UserDto">
+		SELECT USER_SEQ as userSeq, USER_ID as userId, USER_PASSWORD as userPassword, USER_EMAIL as userEmail, 
+			   USER_NAME as userName, USER_NICKNAME as userNickname, USER_PHONE as userPhone, USER_BOD as userBod, 
+			   USER_PROFILE_IMAGE_URL as userProfileImageUrl,USER_REGISTER_DATE as userRegisterDate, USER_CLS as userCls
+		  FROM USER 
+		 WHERE USER_PHONE = #{userPhone}
+	</select>
+	
+	<select id="checkUserId" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		  FROM USER 
+		 WHERE USER_ID = #{userId}
+	</select>
+	
+	<select id="checkUserEmail" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		  FROM USER 
+		 WHERE USER_EMAIL = #{userEmail}
+	</select>
+
+	<select id="checkUserPhone" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		  FROM USER 
+		 WHERE USER_Phone = #{userPhone}
+	</select>
+
+	
+	<select id="userFeedSearch" parameterType="map" resultType="com.ssafy.homesns.dto.MainFeedDto">
+		SELECT FEED_ID, FEED_TITLE, FEED_EVENT_DATE, IFNULL(FEED_LOCATION_ID,'') AS FEED_LOCATION_ID
+		  FROM HOME_SNS.FEED
+		 WHERE FEED_AUTHOR = #{userSeq}
+	  ORDER BY FEED_UPLOAD_DATE DESC
+		 LIMIT #{limit} 
+		OFFSET #{offset}
+	</select>
+
+	<select id="userScrapSearch" parameterType="map" resultType="com.ssafy.homesns.dto.MainFeedDto">
+		SELECT FEED_ID, FEED_TITLE, FEED_EVENT_DATE, IFNULL(FEED_LOCATION_ID,'') AS FEED_LOCATION_ID
+		  FROM SCRAP JOIN FEED
+		    ON SCRAP.FEED_ID = FEED.FEED_ID
+		 WHERE SCRAP.USER_SEQ = #{userSeq}
+	  ORDER BY FEED_UPLOAD_DATE DESC
+		 LIMIT #{limit} 
+		OFFSET #{offset}
+	</select>
+</mapper>
+
+
+

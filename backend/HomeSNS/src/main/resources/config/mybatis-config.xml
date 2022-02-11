@@ -6,13 +6,21 @@
     <settings>
     	<!-- callSettersOnNulls : 쿼리 결과 필드가 null일때, 누락되지 않도록 한다 -->
         <setting name="callSettersOnNulls" value="true"/>
+        <!-- returnInstanceForEmptyRow : 쿼리 결과 row가 null일때, 누락되지 않도록 한다 -->
+        <setting name="returnInstanceForEmptyRow" value="true"/>
         <!-- mapUnderscoreToCamelCase : _ 가 있는 것을 없애고 CamelCase형태로 alias 해준다  -->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
 
 	<mappers>
 		<!-- mapper가 있는 파일의 위치를 추가해서 SQL문을 가져다 쓸 수 있도록 한다 -->
-
+		<mapper resource="mapper/login_query.xml" />
+		<mapper resource="mapper/user_query.xml" />
+		<mapper resource="mapper/feed_query.xml" />
+		<mapper resource="mapper/group_query.xml" />
+		<mapper resource="mapper/schedule_query.xml" />
+		<mapper resource="mapper/notice_query.xml" />
+		<mapper resource="mapper/game_query.xml" />
 	</mappers>
 	
 </configuration>

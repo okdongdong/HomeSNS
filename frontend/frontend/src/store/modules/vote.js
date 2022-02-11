@@ -38,7 +38,7 @@ const vote = {
       axios({
         method: "POST",
         url: `${process.env.VUE_APP_MCS_URL}/vote`,
-        headers: { Authorization: `JWT ${token}` },
+        headers: { Authorization: token },
         data: voteInfo,
       })
         .then((res) => {

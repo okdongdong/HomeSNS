@@ -1,25 +1,55 @@
 <template>
   <v-app>
-    <img :src="userInfo.imgUrl" alt="유저프로필사진" />
-    <span>{{ userInfo.name }}이름이들어가야해요</span>
+    <div class="d-flex justify-center ma-5">
+
+    <ProfilePhoto :size='150' :imgUrl="userInfo.imgUrl"/>
+    </div>
+    <h2 class="text-center">{{ userInfo.name }}</h2>
+    <v-btn
+      v-if="mySeq == userSeq"
+      rounded
+      color="green"
+      @click.stop="$router.push({ name: 'MyPage' })"
+      >정보수정</v-btn
+    >
     <v-card>
       <v-toolbar color="rgb(98,101,232)" dark>
         <template v-slot>
-          <v-tabs v-model="tab" align-with-title>
-            <v-tabs-slider color="white"></v-tabs-slider>
+          <v-tabs v-model="tab" grow>
+            <v-tabs-slider size="xl" color="white"></v-tabs-slider>
 
             <v-tab v-for="item in items" :key="item">
-              {{ item }}
+              <div>{{ item }}</div>
             </v-tab>
           </v-tabs>
         </template>
       </v-toolbar>
 
       <v-tabs-items v-model="tab">
-        <v-tab-item v-for="feeds in contents" :key="feeds">
-          <v-card flat>
-            <v-card-text v-for="feed in feeds" :key="feed">{{feed}}사진 url을 받아서 이미지가 들어갈 곳</v-card-text>
-          </v-card>
+        <v-tab-item v-for="(feeds,idx) in contents" :key="idx">
+          <v-row class="ma-1">
+            <v-col cols="4" v-for="feed in feeds" :key="feed.id">
+              <v-card
+                width="150"
+                height="120"
+                elevation="12"
+                rounded="xl"
+                class="d-inline-flex justify-self-center ma-1"
+              >
+                <v-img
+                  class="feed-img"
+                  :src="feed.imgUrl"
+                  alt="피드사진"
+                  @click.stop="
+                    $router.push({
+                      name: 'Detail',
+                      params: { feedId: feed.Id },
+                    })
+                  "
+                />
+              </v-card>
+            </v-col>
+          </v-row>
         </v-tab-item>
       </v-tabs-items>
     </v-card>
@@ -28,19 +58,53 @@
 
 <script>
 import axios from "axios";
+import { mapState } from "vuex";
+import ProfilePhoto from "../../components/ProfilePhoto.vue";
+
 export default {
   name: "UserPage",
   props: {
-    userSeq: Number,
+    userSeq: String,
+  },
+  components: {
+    ProfilePhoto,
   },
   data: function () {
     return {
       tab: null,
       items: ["게시물", "스크랩"],
-      contents: { articles: [1,2,3,4,5,6,7,8,9], scraps: [9,87,5,6,4,8,3,2,5,4,8,2,354] },
+      articleOffset: 1,
+      scrapOffset: 1,
+      contents: {
+        articles: [
+          {
+            id: 1,
+            imgUrl:
+              "http://ojsfile.ohmynews.com/STD_IMG_FILE/2022/0106/IE002921895_STD.jpg",
+          },
+          {
+            id: 2,
+            imgUrl:
+              "http://ojsfile.ohmynews.com/STD_IMG_FILE/2022/0106/IE002921895_STD.jpg",
+          },
+          
+        ],
+        scraps: [
+          {
+            id: 1,
+            imgUrl: "https://t1.daumcdn.net/cfile/tistory/99E88C335A33A50433",
+          },
+          {
+            id: 2,
+            imgUrl: "https://t1.daumcdn.net/cfile/tistory/99E88C335A33A50433",
+          },
+          
+        ],
+      },
       userInfo: {
-        imgUrl: null,
-        name: null,
+        imgUrl:
+          "https://image.ajunews.com/content/image/2016/12/26/20161226142046950664.jpg",
+        name: "김영철",
       },
     };
   },
@@ -49,9 +113,11 @@ export default {
   },
   methods: {
     getProfile: function () {
+      const token = localStorage.getItem("jwt");
       axios({
         method: "get",
         url: `${process.env.VUE_APP_MCS_URL}/profile/${this.userSeq}`,
+        headers: { Authorization: `JWT ${token}` },
       })
         .then((res) => {
           this.userInfo = res.data;
@@ -60,32 +126,68 @@ export default {
           console.log(err);
         });
     },
-    addArticle: function () {
+    getArticle: function () {
+      const token = localStorage.getItem("jwt");
+      const params = {
+        userSeq: this.userSeq,
+        offset: this.articleOffset,
+        limit: 18,
+      };
       axios({
         method: "get",
-        url: `${process.env.VUE_APP_MCS_URL}/profile/${this.personId}`,
+        url: `${process.env.VUE_APP_MCS_URL}/article/`,
+        headers: { Authorization: `JWT ${token}` },
+        params: params,
       })
         .then((res) => {
-          this.userInfo = res.data;
+          res.data.forEach((article) => {
+            this.contents.articles.push(article);
+            this.articleOffset++;
+          });
         })
         .catch((err) => {
           console.log(err);
         });
     },
-    addScrap: function () {
+    getScrap: function () {
+      const token = localStorage.getItem("jwt");
+      const params = {
+        userSeq: this.userSeq,
+        offset: this.scrapOffset,
+        limit: 18,
+      };
       axios({
         method: "get",
-        url: `${process.env.VUE_APP_MCS_URL}/profile/${this.personId}`,
+        url: `${process.env.VUE_APP_MCS_URL}/scrap/`,
+        headers: { Authorization: `JWT ${token}` },
+        params: params,
       })
         .then((res) => {
-          this.userInfo = res.data;
+          res.data.forEach((scrap) => {
+            this.contents.scraps.push(scrap);
+            this.scrapOffset++;
+          });
         })
         .catch((err) => {
           console.log(err);
         });
     },
   },
+  computed: {
+    ...mapState("account", { mySeq: (state) => state.userSeq }),
+  },
 };
 </script>
 
-<style></style>
+<style scoped>
+.feed-img {
+  overflow: hidden;
+
+  width: inherit;
+  height: inherit;
+  border: 2px solid white;
+  object-fit: cover;
+}
+
+
+</style>

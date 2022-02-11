@@ -5,6 +5,10 @@ import createPersistedState from "vuex-persistedstate";
 import account from "./modules/account";
 import vote from "./modules/vote";
 import getMain from "./modules/getMain";
+import minigame from "./modules/minigame";
+import calendar from "./modules/calendar";
+import notice from "./modules/notice"
+import snackbar from "./modules/snackbar"
 
 
 Vue.use(Vuex);
@@ -14,6 +18,10 @@ export default new Vuex.Store({
     account,
     vote,
     getMain,
+    minigame,
+    calendar,
+    notice,
+    snackbar,
   },
   plugins: [createPersistedState({ paths: ["account"] })],
 });

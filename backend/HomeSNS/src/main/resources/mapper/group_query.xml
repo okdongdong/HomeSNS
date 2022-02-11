@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.ssafy.homesns.dao.GroupDao">
+
+	<insert id="groupListCreate" parameterType="com.ssafy.homesns.dto.GroupDto" useGeneratedKeys="true" keyProperty="groupId">
+		INSERT INTO GROUP_LIST ( GROUP_NAME,    GROUP_LEADER_SEQ,   GROUP_PASSWORD   )
+		                VALUES ( #{groupName},  #{groupLeaderSeq},  #{groupPassword} )
+	</insert>
+	
+	<insert id="groupProfileImageInsert" parameterType="com.ssafy.homesns.dto.ProfileImageDto" useGeneratedKeys="true" keyProperty="profileImageId">
+		INSERT INTO PROFILE_IMAGE ( GROUP_ID,    PROFILE_IMAGE_NAME,   PROFILE_IMAGE_SIZE,   PROFILE_IMAGE_Url,   REGDT  )
+		                   VALUES ( #{groupId},  #{profileImageName},  #{profileImageSize},  #{profileImageUrl},  now()  )
+	</insert>
+	
+	<update id="groupProfileImageUpdate" parameterType="com.ssafy.homesns.dto.ProfileImageDto">
+		UPDATE GROUP_LIST
+		   SET GROUP_PROFILE_IMAGE_URL = #{profileImageUrl}
+		 WHERE GROUP_ID = #{groupId}
+	</update>
+	
+	
+	
+	<select id="groupListRecentMake" parameterType="int" resultType="int">
+		SELECT GROUP_ID
+		  FROM GROUP_LIST
+		 WHERE GROUP_LEADER_SEQ = #{userSeq}
+	  ORDER BY GROUP_ID DESC
+		 LIMIT 1
+	</select>
+	
+	<select id="groupListSearch" parameterType="int" resultType="com.ssafy.homesns.dto.GroupDto">
+		SELECT USER_SEQ as userSeq, GROUP_LIST.GROUP_ID as groupId, GROUP_NAME as groupName, GROUP_PROFILE_IMAGE_URL as groupProfileImageUrl
+		  FROM GROUP_LIST JOIN GROUP_MEMBER
+		    ON GROUP_LIST.GROUP_ID = GROUP_MEMBER.GROUP_ID
+		 WHERE USER_SEQ = #{userSeq}
+	</select>
+	
+	<select id="groupListTotalCount" resultType="int">
+		SELECT COUNT(*)
+		  FROM GROUP_MEMBER 
+		 WHERE USER_SEQ = #{userSeq}
+	</select>
+	
+	<update id="groupListUpdate" parameterType="com.ssafy.homesns.dto.GroupDto">
+		UPDATE GROUP_LIST
+		   SET GROUP_NAME = #{groupName},
+		       GROUP_PASSWORD = #{groupPassword}
+		 WHERE GROUP_ID = #{groupId}
+	</update>
+	
+	<delete id="groupListDelete" parameterType="int">
+		DELETE FROM GROUP_LIST WHERE GROUP_ID = #{groupId}
+	</delete>
+	
+	<select id="groupListLeaderSearch" parameterType="int" resultType="int">
+		SELECT GROUP_LEADER_SEQ 
+		  FROM GROUP_LIST 
+		 WHERE GROUP_ID = #{groupId}
+	</select>
+	
+	
+	
+	<select id="groupPasswordCheck" parameterType="int" resultType="String">
+		SELECT GROUP_PASSWORD
+		  FROM GROUP_LIST 
+		 WHERE GROUP_ID = #{groupId}
+	</select>
+	
+	<insert id="groupMemberCreate" parameterType="com.ssafy.homesns.dto.GroupMemberDto" >
+		INSERT INTO GROUP_MEMBER ( GROUP_ID,    USER_SEQ,    MANAGER_YN   )
+		                  VALUES ( #{groupId},  #{userSeq},  #{managerYn} )
+	</insert>
+	
+	<select id="groupMemberListSearch" parameterType="int" resultType="com.ssafy.homesns.dto.UserDto">
+		SELECT USER.USER_SEQ as userSeq, USER.USER_ID as userId, USER.USER_EMAIL as userEmail, 
+			   USER.USER_NAME as userName, USER.USER_NICKNAME as userNickname, 
+			   USER.USER_PHONE as userPhone, USER_PROFILE_IMAGE_URL as userProfileImageUrl
+		  FROM GROUP_MEMBER JOIN USER
+		    ON GROUP_MEMBER.USER_SEQ = USER.USER_SEQ
+		 WHERE GROUP_ID = #{groupId}
+	</select>
+	
+	<select id="groupMemberTotalCount" parameterType="int" resultType="int">
+		SELECT COUNT(*)
+		  FROM GROUP_MEMBER
+		 WHERE GROUP_ID = #{groupId}
+	</select>
+	
+	<select id="groupLeaderSearch" parameterType="int" resultType="int">
+		SELECT GROUP_LEADER_SEQ as groupLeaderSeq
+		  FROM GROUP_LIST
+		 WHERE GROUP_ID = #{groupId}
+	</select>
+	
+	<update id="groupMemberManagerAuthApprove" parameterType="int">
+		UPDATE GROUP_MEMBER
+		   SET MANAGER_YN = "Y"
+		 WHERE USER_SEQ = #{userSeq}
+	</update>
+	
+	<update id="groupMemberManagerAuthDecline" parameterType="int">
+		UPDATE GROUP_MEMBER
+		   SET MANAGER_YN = "N"
+		 WHERE USER_SEQ = #{userSeq}
+	</update>
+	
+	<delete id="groupMemberDelete" parameterType="com.ssafy.homesns.dto.GroupMemberDto" >
+		DELETE FROM GROUP_MEMBER 
+		      WHERE GROUP_ID = #{groupId}
+		        AND USER_SEQ = #{userSeq}
+	</delete>
+</mapper>
