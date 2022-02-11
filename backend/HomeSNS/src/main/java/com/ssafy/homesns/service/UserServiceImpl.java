@@ -1,13 +1,18 @@
 package com.ssafy.homesns.service;
 
 import java.io.File;
+import java.security.SecureRandom;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +42,8 @@ public class UserServiceImpl implements UserService{
 
 	private static final int SUCCESS = 1;
 	private static final int FAIL = -1;
-
+	private static final int NOEXIST = 2;
+	
 	String uploadFolder = "upload";
 
 
@@ -298,7 +304,7 @@ public class UserServiceImpl implements UserService{
 	public MainFeedResultDto userScrapSearch(FeedParamDto feedParamDto) {
 
 		MainFeedResultDto mainFeedResultDto = new MainFeedResultDto();
-
+		
 		try {
 			List<MainFeedDto> feedList = userDao.userScrapSearch(feedParamDto);
 
@@ -323,4 +329,125 @@ public class UserServiceImpl implements UserService{
 		return mainFeedResultDto;
 	}
 
+	@Autowired
+	private JavaMailSender mailSender;
+	private static final String FROM_ADDRESS = "limjjangguri@gmail.com";
+	
+	@Override
+	public UserResultDto userFindId(String userEmail) {
+		
+		UserResultDto userResultDto = new UserResultDto();
+		
+		try {
+			String userId = userDao.userFindId(userEmail);
+			// userId를 찾았다면,
+			if ( userId != null ) {
+				// userEmail로 userId에 대한 정보를 전송한다
+				SimpleMailMessage message = new SimpleMailMessage();
+				
+		        message.setTo(userEmail);
+		        message.setFrom(FROM_ADDRESS);
+		        message.setSubject("[HOME SNS] 요청하신 아이디 찾기 안내입니다");
+		        message.setText("ID : " + userId);
+		        System.out.println(message);
+		        
+		        mailSender.send(message);
+		        
+				userResultDto.setResult(SUCCESS);
+			} else {
+				System.out.println("해당 이메일로 가입한 아이디가 존재하지 않습니다.");
+				userResultDto.setResult(NOEXIST);
+			}
+			
+		} catch( Exception e ) {
+			e.printStackTrace();
+			System.out.println("에러가 발생했습니다.");
+			userResultDto.setResult(FAIL);
+		}
+		
+		return userResultDto;
+	}
+
+	@Override
+	public UserResultDto userFindPw(UserDto userDto) {
+		
+		UserResultDto userResultDto = new UserResultDto();
+		System.out.println(userDto);
+		try {
+			Integer userSeq = userDao.userFindUserSeq(userDto);
+			// userSeq를 찾지 못했다면, FAIL or 다른 값을 줘서 구분할 수 있도록 할 것
+			if ( userSeq == null ) userResultDto.setResult(NOEXIST);
+			
+			// userSeq를 찾았다면, 비밀번호를 난수로 생성한다
+			String tempPassword = getRandomPassword(50);
+			System.out.println(tempPassword);
+			
+			// 생성한 비밀번호를 암호화 해서 DB에 저장한다
+			BCryptPasswordEncoder b = new BCryptPasswordEncoder();
+			userDto.setUserPassword(b.encode(tempPassword));
+			System.out.println(userDto.getUserPassword());
+			userDto.setUserSeq(userSeq);
+			userDao.userChangePassword(userDto);
+			
+			
+			// userEmail로 생성한 비밀번호를 전송한다
+			SimpleMailMessage message = new SimpleMailMessage();
+			
+	        message.setTo(userDto.getUserEmail());
+	        message.setFrom(FROM_ADDRESS);
+	        message.setSubject("[HOME SNS] 요청하신 비밀번호 찾기 안내입니다");
+	        message.setText("임시 비밀번호 : " + tempPassword);
+	        System.out.println(message);
+	        
+	        mailSender.send(message);
+			
+			userResultDto.setResult(SUCCESS);
+		} catch( Exception e ) {
+			e.printStackTrace();
+			userResultDto.setResult(FAIL);
+		}
+
+		return userResultDto;
+	}
+
+	private static String getRandomPassword(int passwordLength) {
+		char[] charSet = new char[] { 
+				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
+				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 
+				'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
+				'!', '@', '#', '$', '%', '^', '&' };
+		StringBuffer sb = new StringBuffer();
+		SecureRandom sr = new SecureRandom();
+		sr.setSeed(new Date().getTime());
+		
+		int idx = 0;
+		int len = charSet.length;
+		for (int i = 0; i < passwordLength; i++) {
+			idx = sr.nextInt(len);
+			sb.append(charSet[idx]);
+		}
+		
+		return sb.toString();
+	}
+
+	@Override
+	public UserResultDto userPage(int userSeq) {
+		
+		UserResultDto userResultDto = new UserResultDto();
+
+		try {
+			UserDto userDto =  userDao.userPage(userSeq);
+			
+			userResultDto.setUserDto(userDto);			
+			userResultDto.setResult(SUCCESS);
+		}catch(Exception e) {
+			e.printStackTrace();
+			userResultDto.setResult(FAIL);
+		}
+		return userResultDto;
+	}
+	
 }
+
+
+

@@ -75,13 +75,5 @@ public class LoginController {
 		
 		return new ResponseEntity<>(userDto, httpHeaders, HttpStatus.OK);
 	}
-	
-	// test 용도
-	@PostMapping("/hello")
-	public ResponseEntity<String> hello(@RequestBody LoginDto loginDto) {
-		System.out.println("Enter Hello");
-		System.out.println(loginDto.getUserId());
-		System.out.println(loginDto.getUserPassword());
-		return new ResponseEntity<String>("HELLO!!!", HttpStatus.OK);
-	}
+
 }
