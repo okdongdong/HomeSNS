@@ -66,10 +66,10 @@ export default {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
 
 #app {
-  font-family: "Gowun Dodum", sans-serif;
+  font-family: 'Gowun Dodum', sans-serif;
   background-color: rgba(255, 255, 255, 0.5);
 }
 @-webkit-keyframes AnimationName {
