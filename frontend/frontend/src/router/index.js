@@ -115,9 +115,10 @@ const routes = [
     component: GhostLegCreate,
   },
   {
-    path: "/feedcreate",
+    path: "/feedcreate/:feedId",
     name: "FeedCreate",
     component: FeedCreate,
+    props:true,
   },
   {
     path: "/detail/:feedId",
