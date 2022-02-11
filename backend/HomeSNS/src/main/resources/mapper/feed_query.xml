@@ -179,6 +179,11 @@
 		 WHERE FEED_ID = #{feedId}
 	</delete>
 	
+	<delete id="feedFileDeleteUseFileID" parameterType="int">
+		DELETE FROM HOME_SNS.FILE
+		 WHERE FILE_ID = #{fileId}
+	</delete>
+	
 	
 	<delete id="feedHashtagDelete" parameterType='int'>
 		DELETE FROM HOME_SNS.HASHTAG

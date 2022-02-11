@@ -83,7 +83,7 @@
 	</select>
 
 	<select id="userScrapSearch" parameterType="map" resultType="com.ssafy.homesns.dto.MainFeedDto">
-		SELECT FEED_ID, FEED_TITLE, FEED_EVENT_DATE, IFNULL(FEED_LOCATION_ID,'') AS FEED_LOCATION_ID
+		SELECT feed.FEED_ID, FEED_TITLE, FEED_EVENT_DATE, IFNULL(FEED_LOCATION_ID,'') AS FEED_LOCATION_ID
 		  FROM SCRAP JOIN FEED
 		    ON SCRAP.FEED_ID = FEED.FEED_ID
 		 WHERE SCRAP.USER_SEQ = #{userSeq}
