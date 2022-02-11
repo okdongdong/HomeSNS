@@ -39,7 +39,6 @@
           </v-btn>
         </v-col>
         <v-col>
-          <div></div>
           <v-btn
             :color="
               $router.app._route.name == 'UserPageScrap'
@@ -105,5 +104,6 @@ export default {
 .content-box {
   border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.329);
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <v-app class="container">
-    <div class="container px-3 align-center">
+    <div class="align-center">
       <div class="mb-5" v-for="(feeds, idx) in feedList" :key="idx">
-        <div class="d-flex px-3 align-center">
+        <div class="d-flex align-center">
           <h1>{{ feeds[0].feedEventDate }}</h1>
         </div>
         <div class="feeds-group" v-for="(feed, idx2) in feeds" :key="idx2">
@@ -172,8 +172,8 @@ export default {
 .content-box {
   /* border: solid 2px black; */
   border-radius: 5px;
-  /* box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.329); */
   background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.329);
 }
 h3 {
   display: flex;
