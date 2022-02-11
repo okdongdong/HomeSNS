@@ -16,8 +16,11 @@
           <div class="d-inline-flex"><v-icon>location_on</v-icon>{{ feed.location }}</div>
         </div>
         <div>
-          <div>행사일 : {{ feed.eventDate }}</div>
-          <div>업로드 : {{ feed.uploadDate }}</div>
+          <div class="d-inline-flex">{{ feed.eventDate }} 추억</div>
+          <FeedPopup
+            :feed-id="feedId"
+          />
+          <!-- <div>업로드 : {{ feed.uploadDate }}</div> -->
         </div>
       </div>
       <hr />
@@ -57,8 +60,8 @@
       :show-emotions="showEmotions"
       style="position:absolute;"
     />
-    <div class="content-group">
-      {{ feed.content }}
+    <div class="content-group" v-html="getContent()">
+    <!-- 댓글 부분 ! -->
     <!-- <Comment v-for="comment in comments" :key="comment" :comment="comment" /> -->
     </div>
   </div>
@@ -66,6 +69,7 @@
 
 <script>
 // import Comment from "../../components/Feed/Comment.vue";
+import FeedPopup from "../../components/Feed/FeedPopup.vue"
 import Emotion from "../../components/Feed/Emotion.vue";
 import ProfilePhoto from "../../components/ProfilePhoto.vue";
 import axios from "axios";
@@ -78,6 +82,7 @@ export default {
   },
   components: {
     // Comment,
+    FeedPopup,
     Emotion,
     ProfilePhoto,
   },
@@ -85,21 +90,21 @@ export default {
     nowLoading: false,
     tab: 0,
     showEmotions: false,
+    feedAutorSeq : null,
     feed: {
       // 샘플 데이터
-      author: "위릴릴윈터",
-      title: "미국여행",
+      author: null,
+      title: null,
       //author profile img 필요
-      content:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+      content: null,
       imgUrls: [
         "https://bbs.bepick.in/bbs/2021/12/085af6f07ceabed2af78ce0646341f8c_1103933013.jpeg",
         "https://img.hankyung.com/photo/202112/BF.28426974.1.jpg",
         "http://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2021/07/05/41bdae8f-ae62-490e-9f28-f790ab37fe67.jpg",
       ],
-      uploadDate: "2121-21-21",
-      eventDate: "2222-22-22",
-      location: "NY,somewhere",
+      uploadDate: null,
+      eventDate: null,
+      location: null,
     },
 
     comments: [
@@ -120,19 +125,30 @@ export default {
         url: `${process.env.VUE_APP_MCS_URL}/feed/${this.feedId}`,
         headers: { Authorization: token },
       }).then((res) => {
-        console.log(res)
-        // this.feed.author = res.data.feedAuthor;
-        // this.feed.title = res.data.feedTitle;
-        // this.feed.content = res.data.feedContent;
-        // this.feed.imgUrls = res.data.feedImgUrls;
-        // this.feed.uploadDate = res.data.feedUploadDate;
-        // this.feed.eventDate = res.data.feedEventDate;
-        // this.feed.location = res.data.feedLocation;
-        // this.nowLoading = false;
+        console.log(res.data)
+        this.feedAuthorSeq = res.data.feedDto.feedAuthorSeq;
+        this.feed.author = res.data.feedDto.feedAuthor;
+        this.feed.title = res.data.feedDto.feedTitle;
+        console.log(res.data.feedDto.feedContent)
+        this.feed.content = res.data.feedDto.feedContent;
+        console.log(this.feed.content)
+        // this.feed.imgUrls = res.data.feedDto.feedImgUrls;
+        this.feed.uploadDate = res.data.feedDto.feedUploadDate;
+        this.feed.eventDate = res.data.feedDto.feedEventDate.year+'년'+' '+res.data.feedDto.feedEventDate.month+'월'+' '+res.data.feedDto.feedEventDate.day+'일';
+        this.feed.location = res.data.feedDto.locationDto.locationName;
+        this.nowLoading = false;
       });
     },
+    getContent(){
+      if(this.feed.content){
+        return this.feed.content.replaceAll("\r\n", "<br />");
+      }else{
+        return null;
+      }
+    }
   },
   created() {
+    this.feedId *=1;
     this.getFeed();
   },
 };
