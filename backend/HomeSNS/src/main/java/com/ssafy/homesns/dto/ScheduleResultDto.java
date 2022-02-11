@@ -4,11 +4,19 @@ import java.util.List;
 
 public class ScheduleResultDto {
 	private int result;
+	private int scheduleId;
+	
 	private ScheduleDto scheduleDto;
 	private List<ScheduleDto> scheduleDtoList;
 	private int count;
 	
 	
+	public int getScheduleId() {
+		return scheduleId;
+	}
+	public void setScheduleId(int scheduleId) {
+		this.scheduleId = scheduleId;
+	}
 	public int getResult() {
 		return result;
 	}
@@ -33,10 +41,11 @@ public class ScheduleResultDto {
 	public void setCount(int count) {
 		this.count = count;
 	}
+	
 	@Override
 	public String toString() {
-		return "ScheduleResultDto [result=" + result + ", scheduleDto=" + scheduleDto + ", scheduleDtoList="
-				+ scheduleDtoList + ", count=" + count + "]";
+		return "ScheduleResultDto [result=" + result + ", scheduleId=" + scheduleId + ", scheduleDto=" + scheduleDto
+				+ ", scheduleDtoList=" + scheduleDtoList + ", count=" + count + "]";
 	}
-	
+
 }

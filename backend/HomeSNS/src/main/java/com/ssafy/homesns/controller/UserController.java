@@ -24,7 +24,7 @@ import com.ssafy.homesns.dto.UserResultDto;
 import com.ssafy.homesns.service.UserService;
 
 @CrossOrigin(
-		origins = "http://localhost:5500", // npm에서 5500번을 사용한다
+		origins = { "http://localhost:5500", "http://172.30.1.59:5500", "http://192.168.0.100:5500", "http://192.168.0.40:5500" },
 		allowCredentials = "true", // axios가 sessionId를 계속 다른것을 보내는데, 이것을 고정시켜준다
 		allowedHeaders = "*",
 		methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, 
@@ -36,7 +36,8 @@ public class UserController {
 	UserService userService;
 
 	private static final int SUCCESS = 1;
-
+	private static final int NOEXIST = 2;
+	
 	//	// POST 통신으로 /register에 요청이 올 경우 동작한다
 	//	// userRegister를 실행 후, 그 결과를 userResultDto에 받는다
 	//	// getResult()에 따라 Html코드로 등록을 성공했는지 실패했는지 return한다
@@ -134,6 +135,18 @@ public class UserController {
 		}
 	}
 
+	// UserSeq를 받아서 해당 유저 검색 후 유저 정보 다 넘겨준다 -> 이름 + 프로필 사진
+	@GetMapping(value="/user/profile/{userSeq}")
+	public ResponseEntity<UserResultDto> userPage(@PathVariable int userSeq){
+		
+		UserResultDto userResultDto = userService.userPage(userSeq);
+
+		if ( userResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.NOT_FOUND);
+		}
+	}
 
 
 	// 중복 체크용 코드 
@@ -222,9 +235,32 @@ public class UserController {
 		}
 		return new ResponseEntity<MainFeedResultDto>(mainFeedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	// email로 조회해서 아이디 찾기
+	@GetMapping(value="/user/find/id/{userEmail}")
+	public ResponseEntity<UserResultDto> userFindId(@PathVariable String userEmail) {
+		
+		UserResultDto userResultDto = userService.userFindId(userEmail);
+		
+		if ( userResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.OK);
+		} else if ( userResultDto.getResult() == NOEXIST ) {
+			return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	// id + email로 조회해서 비밀번호 찾기
+	@GetMapping(value="/user/find/pw")
+	public ResponseEntity<UserResultDto> userFindPw(UserDto userDto) {
+		
+		UserResultDto userResultDto = userService.userFindPw(userDto);
+
+		if ( userResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.OK);
+		} else if ( userResultDto.getResult() == NOEXIST ) {
+			return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }
-
-
-
-
-

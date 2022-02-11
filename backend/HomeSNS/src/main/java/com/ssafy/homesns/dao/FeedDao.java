@@ -2,8 +2,20 @@ package com.ssafy.homesns.dao;
 
 import java.util.List;
 
-import com.ssafy.homesns.dto.*;
 import org.apache.ibatis.annotations.Mapper;
+
+import com.ssafy.homesns.dto.CommentDto;
+import com.ssafy.homesns.dto.EventMemberDto;
+import com.ssafy.homesns.dto.FeedDto;
+import com.ssafy.homesns.dto.FeedParamDto;
+import com.ssafy.homesns.dto.FileDto;
+import com.ssafy.homesns.dto.GroupMemberDto;
+import com.ssafy.homesns.dto.HashtagDto;
+import com.ssafy.homesns.dto.LocationDto;
+import com.ssafy.homesns.dto.LocationFavoriteDto;
+import com.ssafy.homesns.dto.MainFeedDto;
+import com.ssafy.homesns.dto.MainFileDto;
+import com.ssafy.homesns.dto.UserDto;
 
 @Mapper
 public interface FeedDao {
@@ -38,8 +50,13 @@ public interface FeedDao {
 	
 	// feed수정
 	public int feedUpdate(FeedDto feedDto);
+	public int feedLocationUpdate(LocationDto locationDto);
 	
-	// feed수정,삭제
+	// feed 삭제후 수정용
+	public int feedHashtagDelete(int feedId);
+	public int feedEventMemberDelete(int feedId);
+	
+	// feed File 삭제후 수정
 	public List<String> feedFileUrlDeleteList(int feedId);
 	public int feedFileDelete(int feedId);
 	
