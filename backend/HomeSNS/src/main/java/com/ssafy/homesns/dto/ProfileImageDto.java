@@ -9,7 +9,7 @@ public class ProfileImageDto {
 	private int groupId;
 	
 	private String profileImageName;
-	private long profileImageSize;
+	private float profileImageSize;
 	private String profileImageUrl;
 	private Date regDt;
 	
@@ -37,10 +37,10 @@ public class ProfileImageDto {
 	public void setProfileImageName(String profileImageName) {
 		this.profileImageName = profileImageName;
 	}
-	public long getProfileImageSize() {
+	public float getProfileImageSize() {
 		return profileImageSize;
 	}
-	public void setProfileImageSize(long profileImageSize) {
+	public void setProfileImageSize(float profileImageSize) {
 		this.profileImageSize = profileImageSize;
 	}
 	public String getProfileImageUrl() {

@@ -186,6 +186,7 @@ public class FeedServiceImpl implements FeedService {
 			}
 			else {
 				//feed table 추가
+
 				feedDao.feedInsert(feedDto);				
 			}
 			

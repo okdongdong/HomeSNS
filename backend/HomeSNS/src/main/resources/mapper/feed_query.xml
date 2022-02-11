@@ -131,7 +131,7 @@
 	<!-- 피드추가페이지 로딩시 프런트가 가지고 있어야하는 내용리턴  -->
 	<!-- favorite표시한 장소 담기 -->
 	<select id="userLocationList" parameterType="map" resultType="com.ssafy.homesns.dto.LocationDto">
-		SELECT LOCATION_NAME, LAT, CASE WHEN LF.USER_SEQ IS NULL THEN false
+		SELECT L.LOCATION_ID , LOCATION_NAME,  LAT, LNG , CASE WHEN LF.USER_SEQ IS NULL THEN false
 										ELSE true
 			END as FAVORITE
 		FROM LOCATION L
