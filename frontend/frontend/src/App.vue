@@ -134,7 +134,7 @@ export default {
     #df94c2
   );
   background-size: 1600% 1600%;
-  animation: AnimationName 35s linear infinite;
+  animation: AnimationName 60s linear infinite;
   animation-fill-mode: forwards;
   width: 100%;
   height: 100%;
