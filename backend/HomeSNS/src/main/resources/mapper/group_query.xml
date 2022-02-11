@@ -35,6 +35,21 @@
 		 WHERE USER_SEQ = #{userSeq}
 	</select>
 	
+	<select id="groupMemberExist" parameterType="com.ssafy.homesns.dto.GroupMemberDto" resultType="int">
+		SELECT EXISTS (
+			SELECT * 
+			  FROM GROUP_MEMBER
+			 WHERE GROUP_ID = #{groupId}
+			   AND USER_SEQ = #{userSeq}
+		)
+	</select>
+	
+	<select id="groupDetailSearch" parameterType="int" resultType="com.ssafy.homesns.dto.GroupDto">
+		SELECT GROUP_ID as groupId, GROUP_NAME as groupName, GROUP_PROFILE_IMAGE_URL as groupProfileImageUrl, GROUP_LEADER_SEQ as groupLeaderSeq
+		  FROM GROUP_LIST
+		 WHERE GROUP_ID = #{groupId}
+	</select>
+	
 	<select id="groupListTotalCount" resultType="int">
 		SELECT COUNT(*)
 		  FROM GROUP_MEMBER 

@@ -10,7 +10,6 @@ import Background from "../views/Account/Background.vue";
 import Location from "../views/Collection/Location.vue";
 //test
 import Calendar from "../views/Collection/Calendar.vue";
-//test
 import Timeline from "../views/Collection/Timeline.vue";
 
 import EntFeedList from "../views/Entertainment/EntFeedList.vue";
@@ -86,13 +85,11 @@ const routes = [
     name: "Location",
     component: Location,
   },
-  //test
   {
     path: "/calendar",
     name: "Calendar",
     component: Calendar,
   },
-  //test
   {
     path: "/timeline",
     name: "Timeline",
@@ -124,9 +121,10 @@ const routes = [
     component: GhostLegCreate,
   },
   {
-    path: "/feedcreate",
+    path: "/feedcreate/:feedId",
     name: "FeedCreate",
     component: FeedCreate,
+    props:true,
   },
   {
     path: "/detail/:feedId",

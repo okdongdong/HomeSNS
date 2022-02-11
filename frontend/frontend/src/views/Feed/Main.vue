@@ -8,9 +8,9 @@
       <v-container>
         <v-row>
           <v-col v-for="(file,idx3) in feed.fileList" :key="idx3" class="d-flex child-flex" cols="4">
-            <!-- :src="require(`@/uploadImg/${file.fileUrl}`)" -->
+            <!-- :src=getImg(file.fileUrl) -->
             <v-img
-              :src= getImg(file.fileUrl)
+              :src= "`http://newsimg.hankookilbo.com/2020/01/22/202001222303092476_2.jpg`"
               :lazy-src="`https://picsum.photos/200/300`"
               aspect-ratio="1"
               class="grey lighten-2"
@@ -118,12 +118,12 @@ export default {
           console.log(err);
         });
     },
-    getImg(){
+    // getImg(){
     // getImg(url){
     //   const tmpUrl = '@assets/'+url
     //   return require(tmpUrl)
-      return require('@/assets/upload/1ab04224-4c11-41fb-8495-9209f339dcf0.jpg')
-    }
+    //   return require('@/assets/upload/1ab04224-4c11-41fb-8495-9209f339dcf0.jpg')
+    // }
   },
   computed: {
     ...mapState("account", ["nowGroup"]),

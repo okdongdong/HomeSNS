@@ -39,7 +39,7 @@
         "
       />
       <v-spacer></v-spacer>
-      <v-btn rounded text @click.stop="move('FeedCreate')">추억담기 </v-btn>
+      <v-btn rounded text @click.stop="$router.push({ name: 'FeedCreate', params: { feedId: -1 }})">추억담기 </v-btn>
 
       <v-dialog v-model="dialog" scrollable max-width="400px">
         <template v-slot:activator="{ on, attrs }">
@@ -231,8 +231,8 @@ export default {
   },
 
   mounted() {
-    this.connect();
-    this.getNoticeList();
+    // this.connect();
+    // this.getNoticeList();
   },
   beforeDestroy() {
     this.disconnect();

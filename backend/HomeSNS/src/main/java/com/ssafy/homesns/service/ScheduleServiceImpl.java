@@ -26,6 +26,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 		ScheduleResultDto scheduleResultDto = new ScheduleResultDto();
 		
 		if ( scheduleDao.scheduleCreate(scheduleDto) == 1 ) {
+			scheduleResultDto.setScheduleId(scheduleDto.getScheduleId());
 			scheduleResultDto.setResult(SUCCESS);
 		} else {
 			scheduleResultDto.setResult(FAIL);

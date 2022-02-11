@@ -25,6 +25,11 @@ public interface GroupDao {
 	// 그룹 리스트 불러오기 / 특정 유저가 참여하고 있는 그룹 리스트
 	public List<GroupDto> groupListSearch(int userSeq);
 
+	// 그룹에 멤버가 참여 중인지 아닌지 조회
+	public int groupMemberExist(GroupMemberDto groupMemberDto);
+	// 그룹 ID를 사용해서 그룹 조회
+	public GroupDto groupDetailSearch(int groupId);
+	
 	// 특정 유저가 참여하고 있는 그룹의 수
 	public int groupListTotalCount(int userSeq);
 

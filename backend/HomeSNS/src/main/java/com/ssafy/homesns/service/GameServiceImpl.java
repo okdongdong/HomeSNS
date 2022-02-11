@@ -35,9 +35,11 @@ public class GameServiceImpl implements GameService{
 		// 게임 레코드 생성 + 사다리타기 레코드 생성
 		try {
 			gameDao.gameCreate(gameDto);
+			
 			gameDto.getGhostLegDto().setGameId(gameDto.getGameId());
 			gameDao.ghostLegCreate(gameDto.getGhostLegDto());
 			
+			gameResultDto.setGameId(gameDto.getGameId());
 			gameResultDto.setResult(SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -64,6 +66,7 @@ public class GameServiceImpl implements GameService{
 				gameDao.voteCreate(voteItemDto);
 			}
 			
+			gameResultDto.setGameId(gameDto.getGameId());
 			gameResultDto.setResult(SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
