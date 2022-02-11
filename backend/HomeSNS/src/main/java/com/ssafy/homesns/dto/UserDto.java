@@ -1,9 +1,6 @@
 package com.ssafy.homesns.dto;
 
-import java.time.LocalDate;
 import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 public class UserDto {
 	private int userSeq;
@@ -13,9 +10,7 @@ public class UserDto {
 	private String userName;
 	private String userNickname;
 	private String userPhone;
-	
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate userBod;
+	private Date userBod;
 	private String userProfileImageUrl;
 	private Date userRegisterDate;
 	
@@ -82,12 +77,11 @@ public class UserDto {
 		this.userPhone = userPhone;
 	}
 
-	
-	public LocalDate getUserBod() {
+	public Date getUserBod() {
 		return userBod;
 	}
 
-	public void setUserBod(LocalDate userBod) {
+	public void setUserBod(Date userBod) {
 		this.userBod = userBod;
 	}
 
