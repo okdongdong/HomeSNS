@@ -15,15 +15,10 @@
             </div>
             <v-container>
               <v-row>
-                <v-col
-                  v-for="(file, idx3) in feed.fileList"
-                  :key="idx3"
-                  class="pa-0"
-                  cols="4"
-                >
+                <v-col v-for="(file, idx3) in feed.fileList" :key="idx3" class="pa-0" cols="4">
                   <!-- :src="require(`@/uploadImg/${file.fileUrl}`)" -->
                   <v-img
-                    :src="file"
+                    :src="`https://picsum.photos/200/300`"
                     :lazy-src="`https://picsum.photos/200/300`"
                     aspect-ratio="1"
                     class="grey lighten-2"
@@ -35,11 +30,7 @@
                     "
                   >
                     <template v-slot:placeholder>
-                      <v-row
-                        class="fill-height ma-0"
-                        align="center"
-                        justify="center"
-                      >
+                      <v-row class="fill-height ma-0" align="center" justify="center">
                         <v-progress-circular
                           indeterminate
                           color="grey lighten-5"
@@ -129,9 +120,7 @@ export default {
               ];
               if (i === 0) {
                 feedByDateList.push(feedData);
-              } else if (
-                feedByDateList[0].feedEventDate === feedData.feedEventDate
-              ) {
+              } else if (feedByDateList[0].feedEventDate === feedData.feedEventDate) {
                 feedByDateList.push(feedData);
               } else {
                 // 날짜 다르면 날짜별로 모아놓은거 feedList에 push
@@ -155,12 +144,12 @@ export default {
           console.log(err);
         });
     },
-    getImg() {
-      // getImg(url){
-      //   const tmpUrl = '@assets/'+url
-      //   return require(tmpUrl)
-      return require("@/assets/upload/test1.png");
-    },
+    // getImg() {
+    // getImg(url){
+    //   const tmpUrl = '@assets/'+url
+    //   return require(tmpUrl)
+    // return require("@/assets/upload/test1.png");
+    // },
   },
   computed: {
     ...mapState("account", ["nowGroup"]),

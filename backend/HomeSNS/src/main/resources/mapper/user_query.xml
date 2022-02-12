@@ -25,7 +25,7 @@
 		SELECT USER_SEQ as userSeq, USER_ID as userId, USER_EMAIL as userEmail, 
 			   USER_NAME as userName, USER_NICKNAME as userNickname, USER_PHONE as userPhone, USER_BOD as userBod, 
 			   USER_PROFILE_IMAGE_URL as userProfileImageUrl,USER_REGISTER_DATE as userRegisterDate, USER_CLS as userCls
-		  FROM USER 
+		  FROM user 
 		 WHERE USER_SEQ = #{userSeq}
 	</select>
 	
@@ -42,13 +42,13 @@
 		SELECT USER_SEQ as userSeq, USER_ID as userId, USER_PASSWORD as userPassword, USER_EMAIL as userEmail, 
 			   USER_NAME as userName, USER_NICKNAME as userNickname, USER_PHONE as userPhone, USER_BOD as userBod, 
 			   USER_PROFILE_IMAGE_URL as userProfileImageUrl,USER_REGISTER_DATE as userRegisterDate, USER_CLS as userCls
-		  FROM USER 
+		  FROM user 
 		 WHERE USER_PHONE = #{userPhone}
 	</select>
 	
 	<select id="userPage" parameterType="int" resultType="com.ssafy.homesns.dto.UserDto">
 		SELECT USER_NAME as userName, USER_PROFILE_IMAGE_URL as userProfileImageUrl
-		  FROM USER 
+		  FROM user 
 		 WHERE USER_SEQ = #{userSeq}
 	</select>
 	
@@ -56,19 +56,19 @@
 	
 	<select id="checkUserId" parameterType="string" resultType="int">
 		SELECT COUNT(*)
-		  FROM USER 
+		  FROM user 
 		 WHERE USER_ID = #{userId}
 	</select>
 	
 	<select id="checkUserEmail" parameterType="string" resultType="int">
 		SELECT COUNT(*)
-		  FROM USER 
+		  FROM user 
 		 WHERE USER_EMAIL = #{userEmail}
 	</select>
 
 	<select id="checkUserPhone" parameterType="string" resultType="int">
 		SELECT COUNT(*)
-		  FROM USER 
+		  FROM user 
 		 WHERE USER_Phone = #{userPhone}
 	</select>
 
@@ -83,7 +83,7 @@
 	</select>
 
 	<select id="userScrapSearch" parameterType="map" resultType="com.ssafy.homesns.dto.MainFeedDto">
-		SELECT FEED_ID, FEED_TITLE, FEED_EVENT_DATE, IFNULL(FEED_LOCATION_ID,'') AS FEED_LOCATION_ID
+		SELECT feed.FEED_ID, FEED_TITLE, FEED_EVENT_DATE, IFNULL(FEED_LOCATION_ID,'') AS FEED_LOCATION_ID
 		  FROM SCRAP JOIN FEED
 		    ON SCRAP.FEED_ID = FEED.FEED_ID
 		 WHERE SCRAP.USER_SEQ = #{userSeq}
@@ -94,13 +94,13 @@
 	
 	<select id="userFindId" parameterType="string" resultType="string">
 		SELECT USER_ID as userId
-		  FROM USER 
+		  FROM user 
 		 WHERE USER_EMAIL = #{userEmail}
 	</select>
 	
 	<select id="userFindUserSeq" parameterType="com.ssafy.homesns.dto.UserDto" resultType="Integer">
 		SELECT USER_SEQ as userSeq
-		  FROM USER 
+		  FROM user 
 		 WHERE USER_ID = #{userId}
 		   AND USER_EMAIL = #{userEmail}
 	</select>
