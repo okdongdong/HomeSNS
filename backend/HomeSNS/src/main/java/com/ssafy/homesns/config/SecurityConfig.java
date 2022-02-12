@@ -78,6 +78,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/notice/**").permitAll()
 
                 .anyRequest().authenticated()
+                .and()
+                .requiresChannel()
+                    .antMatchers("/api/**").requiresSecure()
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
