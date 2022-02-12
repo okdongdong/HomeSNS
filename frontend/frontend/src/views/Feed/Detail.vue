@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-app class="container px-0">
     <div class="pa-3">
       <v-overlay :value="nowLoading">
         <v-progress-circular
@@ -39,32 +39,35 @@
         </v-carousel-item>
       </v-carousel>
     </div>
-    <v-row class="icon-group">
-      <v-col cols="10">
-      <span style="padding:3px;"></span>
-        <v-btn icon large @click="showEmotions ? (showEmotions = false) : (showEmotions = true)">
-          <v-icon>favorite_border</v-icon>
-        </v-btn>
-        <v-btn icon large>
-          <v-icon>chat_bubble_outline</v-icon>
-        </v-btn>
-      </v-col>
-      <v-col cols="2">
-        <v-btn icon large style="padding:0;">
-          <v-icon>bookmark_border</v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
+    <div>
+      <v-row class="icon-group">
+        <v-col cols="10">
+        <span style="padding:3px;"></span>
+          <v-btn icon large @click="showEmotions ? (showEmotions = false) : (showEmotions = true)">
+            <v-icon>favorite_border</v-icon>
+          </v-btn>
+          <v-btn icon large>
+            <v-icon>chat_bubble_outline</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col cols="2">
+          <v-btn icon large style="padding:0;">
+            <v-icon>bookmark_border</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+   
     <!-- 감정 버튼 -->
     <Emotion
       :show-emotions="showEmotions"
       style="position:absolute;"
     />
+     </div>
     <div class="content-group" v-html="getContent()">
     <!-- 댓글 부분 ! -->
     <!-- <Comment v-for="comment in comments" :key="comment" :comment="comment" /> -->
     </div>
-  </div>
+  </v-app>
 </template>
 
 <script>

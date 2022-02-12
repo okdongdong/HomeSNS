@@ -1,4 +1,5 @@
 <template>
+  <div>
   <v-card flat>
     <v-overlay :value="nowLoading">
       <v-progress-circular
@@ -38,33 +39,51 @@
 
           <!-- 사진 -->
           <v-col v-for="(file, i) in form.files" :key="i" class="d-flex child-flex" cols="4">
+            <!-- 피드 새로 작성 시 보이는 사진,동영상-->
             <video
-              v-if="file.type == 'video'"
+              v-if="file.type == 'video' && feedId == -1"
               autoplay
               muted
               :src="file.previewImage"
-              @click="deleteFile(i)"
+              @click="deleteFile(i,file)"
             ></video>
             <v-img
-              v-else
+              v-else-if="file.type == 'img' && feedId == -1"
               :src="file.previewImage"
               :lazy-src="`https://picsum.photos/200/300`"
               aspect-ratio="1"
               class="grey lighten-2"
-              @click="deleteFile(i)"
+              @click="deleteFile(i,file)"
+            />
+            <!-- 피드 수정 시 보이는 사진,동영상(file.fileUrl로 로딩할 것) -->
+            <video
+              v-else-if="file.type == 'video' && feedId != -1"
+              autoplay
+              muted
+              :src="`https://dimg.donga.com/wps/NEWS/IMAGE/2021/05/14/106923490.2.jpg`"
+              @click="deleteFile(i,file)"
+            ></video>
+            <v-img
+              v-else-if="file.type == 'img' && feedId != -1"
+              :src="`https://dimg.donga.com/wps/NEWS/IMAGE/2021/05/14/106923490.2.jpg`"
+              :lazy-src="`https://picsum.photos/200/300`"
+              aspect-ratio="1"
+              class="grey lighten-2"
+              @click="deleteFile(i,file)"
             >
               <template v-slot:placeholder>
                 <v-row class="fill-height ma-0" align="center" justify="center">
-                  <!-- <v-progress-circular
+                  <v-progress-circular
                     indeterminate
                     color="grey lighten-5"
-                  ></v-progress-circular> -->
+                  ></v-progress-circular>
                 </v-row>
               </template>
             </v-img>
           </v-col>
           <v-col cols="12">
             <v-file-input
+              :rules="rules.file"
               multiple
               type="file"
               accept="image/*,video/*"
@@ -77,6 +96,7 @@
           <!-- 장소레이블 -->
           <v-col cols="11">
             <v-combobox
+              :rules="rules.localName"
               v-model="form.locaLabel"
               :items="locaLabels"
               label="장소 이름"
@@ -217,14 +237,20 @@
       </v-card-actions>
     </v-form>
   </v-card>
+  <!-- <Snackbar></Snackbar> -->
+  </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import axios from "axios";
 import { gmapApi } from "vue2-google-maps";
+// import Snackbar from "@/components/Snackbar.vue";
 export default {
   name: "Feedcreate",
+  // components:{
+  //   Snackbar,
+  // },
   props: {
     feedId: Number,
   },
@@ -245,6 +271,8 @@ export default {
       },
       rules: {
         name: [(val) => (val || "").length > 0 || "제목을 입력해주세요"],
+        file :[(v) => !!v || "사진 및 동영상을 입력해주세요.",],
+        localname:[(v) => !!v || "장소이름 및 장소를 입력해주세요.",],
       },
       tmphashtag: null,
       snackbar: false,
@@ -265,6 +293,8 @@ export default {
       // 장소레이블
       locaLabels: [],
       locationId :0, // 장소 본래 있던 것인지 새로운건지 인지하기 용
+
+      deleteFiles :[] // 삭제 파일
     };
   },
   methods: {
@@ -299,7 +329,6 @@ export default {
     },
     ////////// feed update시 들고올 데이터 ////////////
     FeedUpdateInfo() {
-      console.log("아니 실행시키라고 ...");
       const token = localStorage.getItem("jwt");
       axios({
         method: "get",
@@ -307,7 +336,6 @@ export default {
         headers: { Authorization: token },
       })
         .then((res) => {
-          console.log("들고옴!!!");
           console.log(res.data);
           const originData = res.data.feedDto;
           /////////// 문자열 -> 날짜 최종 포맷 (ex - '2021-10-08') ///////////////
@@ -328,12 +356,9 @@ export default {
             day = "0" + day;
           }
           this.form.date = year + "-" + month + "-" + day;
-
           this.form.title = originData.feedTitle;
-
           this.form.locaLabel = originData.locationDto.locationName;
           this.form.currLocaFav = originData.locationDto.favorite;
-
           this.markers = [
             { position: { lat: originData.locationDto.lat, lng: originData.locationDto.lng } },
           ];
@@ -346,15 +371,17 @@ export default {
           for (let i = 0; i < originData.fileList.length; i++) {
             if (originData.fileList[i].fileContentType.includes("image")) {
               this.form.files.push({
+                fileId : originData.fileList[i].fileId,
                 type: "img",
                 content: originData.fileList[i].fileName,
-                // previewImage: URL.createObjectURL(originData.fileList[i].fileName), // 여기서 오류 남
+                fileUrl : originData.fileList[i].fileUrl,
               });
             } else {
               this.form.files.push({
+                fileId : originData.fileList[i].fileId,
                 type: "video",
                 content: originData.fileList[i].fileName,
-                // previewImage: URL.createObjectURL(originData.fileList[i].fileName),
+                fileUrl : originData.fileList[i].fileUrl,
               });
             }
           }
@@ -553,12 +580,14 @@ export default {
         if (data[i].type.includes("video")) {
           // 나는 비디오
           this.form.files.push({
+            fileId : 0,
             type: "video",
             content: data[i],
             previewImage: URL.createObjectURL(data[i]),
           });
         } else {
           this.form.files.push({
+            fileId : 0,
             type: "img",
             content: data[i],
             previewImage: URL.createObjectURL(data[i]),
@@ -566,8 +595,16 @@ export default {
         }
       }
     },
-    deleteFile(i) {
+    deleteFile(i,deletefile) {
+      if(this.feedId != -1 && deletefile.fileId != 0){ // 수정일때, 그리고 새로올린 사진이 아닐때
+        console.log(deletefile)
+        this.deleteFiles.push({
+          fileId : deletefile.fileId,
+          fileUrl :deletefile.fileUrl,
+        })
+      }
       this.form.files.splice(i, 1);
+
     },
 
     //데이터 쏘기
@@ -577,9 +614,7 @@ export default {
       let data = new FormData();
       data.append("feedTitle", this.form.title);
       data.append("feedEventDate", this.form.date);
-      for (let i = 0; i < this.form.files.length; i++) {
-        data.append("file", this.form.files[i].content);
-      }
+      
       let flag = 0
       for(let i=0;i<this.locaLabels.length;i++){ // 기존리스트 있는 경우
         if(this.form.locaLabel===this.locaLabels[i].item && this.markers[0].position.lat===this.locaLabels[i].lat && this.markers[0].position.lng===this.locaLabels[i].lng){
@@ -613,7 +648,9 @@ export default {
       data.append("feedAttendees", JSON.stringify(attendeeList));
       data.append("feedContent", this.form.content);
       data.append("feedHashtags", JSON.stringify(this.form.hashtag));
-
+      for (let i = 0; i < this.form.files.length; i++) {
+        data.append("file", this.form.files[i].content);
+        }
       for (let [key, value] of data) {
         console.log(key);
         console.log(value);
@@ -621,7 +658,8 @@ export default {
       data.append("groupId", this.nowGroup.groupId);
 
       ////////////// 새로운 피드 작성 /////////////////////
-      if (this.feedId === -1) {
+      if (this.feedId == -1) {
+        
         console.log('새로운 피드작성')
         axios({
           method: "POST",
@@ -654,6 +692,7 @@ export default {
           data.append("feedLocationId", 0)
         }
         data.append("feedId", this.feedId)
+        data.append("fileDeleteStr", JSON.stringify(this.deleteFiles))
         axios({
           method: "POST",
           url: `${process.env.VUE_APP_MCS_URL}/feed/update`,
@@ -675,15 +714,19 @@ export default {
     },
   },
   created() {
-    this.feedId *=1;
+    console.log(typeof this.feedId)
     this.getFeedInfo();
-    if (this.feedId !== -1) {
+    if (this.feedId != -1) {
+      console.log('여기들어옴?')
       this.FeedUpdateInfo();
     }
   },
   computed: {
     formIsValid() {
-      return this.form.title && this.form.content;
+      // if(!!this.form.files.length){
+      //   this.$store.dispatch('snackbar/')
+      // }
+      return this.form.title && this.form.content && this.form.files.length && this.markers.length && this.form.locaLabel;
     },
     setActualAddress() {
       // 텍스트 줄바꿈을 위해
