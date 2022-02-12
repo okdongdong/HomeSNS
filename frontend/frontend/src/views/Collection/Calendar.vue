@@ -1,67 +1,69 @@
 <template>
   <v-app class="pa-5">
-    <v-container>
-      <v-row>
-        <v-col>
-          <v-menu
-            ref="dateOpen"
-            v-model="dateOpen"
-            :close-on-content-click="false"
-            :return-value.sync="start"
-          >
-            <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="start"
-                label="Start Date"
-                prepend-icon="mdi-calendar"
-                dense
-                readonly
-                outlined
-                hide-details
-                v-on="on"
-              ></v-text-field>
-            </template>
+    <v-card>
+      <v-container>
+        <v-row>
+          <v-col>
+            <v-menu
+              ref="dateOpen"
+              v-model="dateOpen"
+              :close-on-content-click="false"
+              :return-value.sync="start"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="start"
+                  label="Start Date"
+                  prepend-icon="mdi-calendar"
+                  dense
+                  readonly
+                  outlined
+                  hide-details
+                  v-on="on"
+                ></v-text-field>
+              </template>
 
-            <v-date-picker v-model="start" no-title>
-              <v-btn text color="primary" @click="dateOpen = false">Cancel</v-btn>
-              <v-btn text color="primary" @click="$refs.dateOpen.save(start)"
-              >OK
-              </v-btn
-              >
-            </v-date-picker>
-          </v-menu>
-        </v-col>
+              <v-date-picker v-model="start" no-title>
+                <v-btn text color="primary" @click="dateOpen = false">Cancel</v-btn>
+                <v-btn text color="primary" @click="$refs.dateOpen.save(start)"
+                >OK
+                </v-btn
+                >
+              </v-date-picker>
+            </v-menu>
+          </v-col>
 
-        <v-col>
-          <v-select
-            v-model="type"
-            :items="typeOptions"
-            label="Type"
-            class="my-auto"
-            hide-details
-            outlined
-            dense
-          ></v-select>
-        </v-col>
-      </v-row>
-    </v-container>
-    <div class="text-center mb-3 display-1">
-      {{ start | moment("YYYY MMMM") }}
-    </div>
-    <v-sheet height="800px">
-      <v-calendar
-        :event-color="getEventColor"
-        :events="events"
-        :start="start"
-        :type="type"
-        @click:date="open"
-        @click:event="showEvent"
-        @click:more="moreEvent"
-        @click:time="open"
-        ref="calendar"
-        v-model="start"
-      ></v-calendar>
-    </v-sheet>
+          <v-col>
+            <v-select
+              v-model="type"
+              :items="typeOptions"
+              label="Type"
+              class="my-auto"
+              hide-details
+              outlined
+              dense
+            ></v-select>
+          </v-col>
+        </v-row>
+      </v-container>
+      <div class="text-center mb-3 display-1">
+        {{ start | moment("YYYY년 MM월") }}
+      </div>
+      <v-sheet height="750px">
+        <v-calendar
+          :event-color="getEventColor"
+          :events="events"
+          :start="start"
+          :type="type"
+          @click:date="open"
+          @click:event="showEvent"
+          @click:more="moreEvent"
+          @click:time="open"
+          ref="calendar"
+          v-model="start"
+        ></v-calendar>
+      </v-sheet>
+    </v-card>
     <EventDialog></EventDialog>
     <EventDetail></EventDetail>
     <Snackbar></Snackbar>
@@ -110,7 +112,7 @@ export default {
       this.$store.dispatch('REQUEST_DETAIL_EVENT', event.eventId);
     },
     moreEvent() {
-      this.type= "day"
+      this.type = "day"
       console.log(this.typeOptions[0].text)
     }
   },

@@ -7,7 +7,8 @@ import MyPage from "../views/Account/MyPage.vue";
 import SignUp from "../views/Account/SignUp.vue";
 import Background from "../views/Account/Background.vue";
 
-import Location from '../views/Collection/Location.vue'
+import Location from "../views/Collection/Location.vue";
+//test
 import Calendar from "../views/Collection/Calendar.vue";
 import Timeline from "../views/Collection/Timeline.vue";
 
@@ -23,11 +24,15 @@ import Main from "../views/Feed/Main.vue";
 // import Update from '../views/Feed/Update.vue'
 
 import GroupCreate from "../views/Group/GroupCreate.vue";
+import GroupEnter from "../views/Group/GroupEnter.vue";
 // import Management from '../views/Group/Management.vue'
 import GroupProfile from "../views/Group/GroupProfile.vue";
 import Select from "../views/Group/Select.vue";
 
 import UserPage from "../views/Profile/UserPage.vue";
+import UserPageFeed from "../views/Profile/UserPageFeed.vue";
+import UserPageScrap from "../views/Profile/UserPageScrap.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -55,6 +60,11 @@ const routes = [
         path: "/groupcreate",
         name: "GroupCreate",
         component: GroupCreate,
+      },
+      {
+        path: "/groupenter",
+        name: "GroupEnter",
+        component: GroupEnter,
       },
       {
         path: "/select",
@@ -114,7 +124,7 @@ const routes = [
     path: "/feedcreate/:feedId",
     name: "FeedCreate",
     component: FeedCreate,
-    props:true,
+    props: true,
   },
   {
     path: "/detail/:feedId",
@@ -146,10 +156,23 @@ const routes = [
   },
 
   {
-    path: "/userpage/:userSeq",
-    name: "UserPage",
+    path: "/userpage",
     component: UserPage,
     props: true,
+    children: [
+      {
+        path: "/:userSeq",
+        name: "UserPage",
+        component: UserPageFeed,
+        props: true,
+      },
+      {
+        path: "/:userSeq/scrap",
+        name: "UserPageScrap",
+        component: UserPageScrap,
+        props: true,
+      },
+    ],
   },
 ];
 
@@ -166,7 +189,11 @@ router.beforeEach((to, from, next) => {
   if (token && (to.name == "Login" || to.name == "SignUp")) {
     next({ name: "Select" });
   } else if (!token && to.name != "Login") {
-    if (to.name == "SignUp" || to.name ==  "FindId" || to.name ==  "FindPassword") {
+    if (
+      to.name == "SignUp" ||
+      to.name == "FindId" ||
+      to.name == "FindPassword"
+    ) {
       next();
     } else {
       next({ name: "Login" });
