@@ -4,19 +4,18 @@
 
 	<insert id="commentCreate" parameterType="com.ssafy.homesns.dto.CommentDto" useGeneratedKeys="true" keyProperty="commentId">
 		INSERT INTO COMMENT ( FEED_ID,    COMMENT_TAG,    COMMENT_AUTHOR,    COMMENT_CONTENT,  COMMENT_UPLOAD_DATE   )
-		             VALUES ( #{feedId},  #{commentTag},  #{commentAuthor},  #{content},       now()                 )
+		             VALUES ( #{feedId},  #{commentTag},  #{commentAuthor},  #{commentContent},       now()                 )
 	</insert>
 	
 	<update id="commentUpdate" parameterType="com.ssafy.homesns.dto.CommentDto">
 		UPDATE COMMENT
-		   SET COMMENT_CONTENT = #{content}
+		   SET COMMENT_CONTENT = #{commentContent}
 		 WHERE COMMENT_ID = #{commentId}
 	</update>
 	
 	<delete id="commentDelete" parameterType="int">
 		DELETE FROM COMMENT WHERE COMMENT_ID = #{commentId}
 	</delete>
-	
 	
 	
 	<insert id="commentEmotionCreate" parameterType="int" >

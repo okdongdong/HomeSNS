@@ -44,7 +44,7 @@ public class CommentServiceImpl implements CommentService{
 		
 		CommentResultDto commentResultDto = new CommentResultDto();
 		
-		if ( commentDao.commentCreate(commentDto) == 1 ) {
+		if ( commentDao.commentUpdate(commentDto) == 1 ) {
 			commentResultDto.setResult(SUCCESS);
 		} else {
 			commentResultDto.setResult(FAIL);
