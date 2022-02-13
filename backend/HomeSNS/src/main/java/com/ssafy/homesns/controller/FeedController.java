@@ -1,6 +1,7 @@
 package com.ssafy.homesns.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,9 @@ import com.ssafy.homesns.dto.FeedDto;
 import com.ssafy.homesns.dto.FeedParamDto;
 import com.ssafy.homesns.dto.FeedResultDto;
 import com.ssafy.homesns.dto.GroupMemberDto;
+import com.ssafy.homesns.dto.LocationFavoriteDto;
 import com.ssafy.homesns.dto.MainFeedResultDto;
+import com.ssafy.homesns.jwt.JwtFilter;
 import com.ssafy.homesns.service.FeedService;
 
 @CrossOrigin(
@@ -97,7 +100,9 @@ public class FeedController {
 	@GetMapping(value="/feed/info/{groupId}")
 	public ResponseEntity<FeedResultDto> feedCreateInfo(@PathVariable int groupId){
 			
-		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		// CORS이슈
+		System.out.println("httpHeaders : " + httpHeaders);
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		int userSeq = Integer.parseInt(authentication.getName());
 		
@@ -156,5 +161,36 @@ public class FeedController {
 			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 		}		
 	}
+	
+	
+	
+	
+	// 장소 즐겨찾기 삭제 
+	// 받은locationId 와 JWT토큰에서 userSeq를 받아서 삭제한ㄷ. 
+	@DeleteMapping(value="/locationFav/{locationId}")
+	public ResponseEntity<FeedResultDto> LocationFavoriteDelete(@PathVariable int locationId){
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println(authentication);
+		int userSeq = Integer.parseInt(authentication.getName());
+		
+		LocationFavoriteDto locationFavoriteDto = new LocationFavoriteDto();
+		locationFavoriteDto.setLocationId(locationId);
+		locationFavoriteDto.setUserSeq(userSeq);
+		
+		FeedResultDto feedResultDto = feedService.locationFavoriteDelete(locationFavoriteDto);
+		
+		if( feedResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+		}		
+	}
+	
+	
+	
+	
+	
+	
 	
 }

@@ -501,6 +501,23 @@ public class FeedServiceImpl implements FeedService {
 
 		return feedResultDto;
 	}
+	
+	@Override
+	@Transactional
+	public FeedResultDto locationFavoriteDelete(LocationFavoriteDto locationFavoriteDto) {
+		
+		FeedResultDto feedResultDto = new FeedResultDto();
+		
+		if ( feedDao.locationFavoriteDelete(locationFavoriteDto) == 1 ){
+			feedResultDto.setResult(SUCCESS);
+		}else {
+			feedResultDto.setResult(FAIL);
+		}
+		
+		return feedResultDto;
+	}
+	
+	
 
 
 }
