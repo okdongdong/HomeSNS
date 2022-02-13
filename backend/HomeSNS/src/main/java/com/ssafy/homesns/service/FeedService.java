@@ -6,7 +6,7 @@ import com.ssafy.homesns.dto.FeedDto;
 import com.ssafy.homesns.dto.FeedParamDto;
 import com.ssafy.homesns.dto.FeedResultDto;
 import com.ssafy.homesns.dto.GroupMemberDto;
-
+import com.ssafy.homesns.dto.LocationFavoriteDto;
 import com.ssafy.homesns.dto.MainFeedResultDto;
 
 public interface FeedService {
@@ -22,4 +22,6 @@ public interface FeedService {
 	public FeedResultDto feedUpdate(FeedDto feedDto, MultipartHttpServletRequest request);
 	
 	public FeedResultDto feedDelete(int feedId);
+	
+	public FeedResultDto locationFavoriteDelete(LocationFavoriteDto locationFavoriteDto);
 }
