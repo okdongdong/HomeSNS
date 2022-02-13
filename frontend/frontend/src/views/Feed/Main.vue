@@ -26,7 +26,11 @@
                 <v-col v-for="(file, idx3) in feed.fileList" :key="idx3" class="pa-0" cols="4">
                   <!-- :src="require(`@/uploadImg/${file.fileUrl}`)" -->
                   <v-img
+<<<<<<< HEAD
                     :src="`http://newsimg.hankookilbo.com/2020/01/22/202001222303092476_2.jpg`"
+=======
+                    :src="`https://picsum.photos/200/300`"
+>>>>>>> 068548c7ed523eb47a92c88ae407e865bb43cb92
                     :lazy-src="`https://picsum.photos/200/300`"
                     aspect-ratio="1"
                     class="grey lighten-2"
@@ -140,7 +144,11 @@ export default {
     // getImg(url){
     //   const tmpUrl = '@assets/'+url
     //   return require(tmpUrl)
+<<<<<<< HEAD
     //   return require("@/assets/upload/test1.png");
+=======
+    // return require("@/assets/upload/test1.png");
+>>>>>>> 068548c7ed523eb47a92c88ae407e865bb43cb92
     // },
   },
   computed: {

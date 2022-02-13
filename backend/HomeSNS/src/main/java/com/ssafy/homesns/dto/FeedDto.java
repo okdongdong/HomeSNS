@@ -20,6 +20,7 @@ public class FeedDto {
 	private Date feedUploadDate;
 
 	private String feedLocationStr; 
+	private String fileDeleteStr; 
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate feedEventDate;
@@ -168,6 +169,12 @@ public class FeedDto {
 	}
 	
 	
+	public String getFileDeleteStr() {
+		return fileDeleteStr;
+	}
+	public void setFileDeleteStr(String fileDeleteStr) {
+		this.fileDeleteStr = fileDeleteStr;
+	}
 	public String getFeedLocationStr() {
 		return feedLocationStr;
 	}
@@ -180,9 +187,10 @@ public class FeedDto {
 				+ ", feedAuthor=" + feedAuthor + ", feedTitle=" + feedTitle + ", feedContent=" + feedContent
 				+ ", feedHashtags=" + feedHashtags + ", feedAttendees=" + feedAttendees + ", feedLocationId="
 				+ feedLocationId + ", feedUploadDate=" + feedUploadDate + ", feedLocationStr=" + feedLocationStr
-				+ ", feedEventDate=" + feedEventDate + ", locationDto=" + locationDto + ", good=" + good + ", sad="
-				+ sad + ", check=" + check + ", fun=" + fun + ", amaze=" + amaze + ", fileList=" + fileList
-				+ ", commentList=" + commentList + ", hashtagList=" + hashtagList + ", userList=" + userList + "]";
+				+ ", fileDeleteStr=" + fileDeleteStr + ", feedEventDate=" + feedEventDate + ", locationDto="
+				+ locationDto + ", good=" + good + ", sad=" + sad + ", check=" + check + ", fun=" + fun + ", amaze="
+				+ amaze + ", fileList=" + fileList + ", commentList=" + commentList + ", hashtagList=" + hashtagList
+				+ ", userList=" + userList + "]";
 	}
 	
 	

@@ -2,6 +2,7 @@ package com.ssafy.homesns.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -401,20 +402,39 @@ public class FeedServiceImpl implements FeedService {
 				
 			}
 
-			List<MultipartFile> fileList = request.getFiles("file");
 
-			//file delete 물리 data 
-			List<String> fileUrlList = feedDao.feedFileUrlDeleteList(feedDto.getFeedId());	
-			for(String fileUrl : fileUrlList) {	
-				File file = new File(uploadPath + File.separator, fileUrl);
-				if(file.exists()) {
-					file.delete();
+
+			//미디어 삭제 
+			String fileDeleteStr = feedDto.getFileDeleteStr();
+	
+			// 수정사항 중에 삭제된 파일이 있다면!
+			if(fileDeleteStr != null) {
+				
+				// fileid, URL   List만 들어있을것!
+				ObjectMapper objectMapper = new ObjectMapper(); 
+				List<FileDto> fileDeleteList = objectMapper.readValue(fileDeleteStr, new TypeReference<List<FileDto>>() {});
+				List<String> fileUrlList = new ArrayList<String>();
+				
+
+				// 삭제한 데이터 지우기
+				for (int i = 0 ; i < fileDeleteList.size(); i++) {
+					fileUrlList.add(fileDeleteList.get(i).getFileUrl());
+					// file delete DB using fileId
+					feedDao.feedFileDeleteUseFileID(fileDeleteList.get(i).getFileId()); 
+					
+				}
+				//file delete 물리 data 
+				for(String fileUrl : fileUrlList) {	
+					File file = new File(uploadPath + File.separator, fileUrl);
+					if(file.exists()) {
+						file.delete();
+					}
 				}
 			}
-			// file delete DB
-			feedDao.feedFileDelete(feedDto.getFeedId()); 
 
 
+			// 파일 추가
+			List<MultipartFile> fileList = request.getFiles("file");
 			// file insert
 			for (MultipartFile part : fileList) {
 
@@ -481,6 +501,23 @@ public class FeedServiceImpl implements FeedService {
 
 		return feedResultDto;
 	}
+	
+	@Override
+	@Transactional
+	public FeedResultDto locationFavoriteDelete(LocationFavoriteDto locationFavoriteDto) {
+		
+		FeedResultDto feedResultDto = new FeedResultDto();
+		
+		if ( feedDao.locationFavoriteDelete(locationFavoriteDto) == 1 ){
+			feedResultDto.setResult(SUCCESS);
+		}else {
+			feedResultDto.setResult(FAIL);
+		}
+		
+		return feedResultDto;
+	}
+	
+	
 
 
 }

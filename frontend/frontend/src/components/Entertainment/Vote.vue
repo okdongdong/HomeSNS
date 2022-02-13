@@ -30,6 +30,7 @@
               v-if="nowVote"
               class="align-center d-flex ml-3"
               flat
+              style="background-color: rgba(0, 0, 0, 0)"
             >
               <v-icon
                 @click.stop="myVote(idx)"
