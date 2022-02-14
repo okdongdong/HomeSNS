@@ -169,7 +169,7 @@ public class FeedController {
 	
 	
 	// 장소 즐겨찾기 삭제 
-	// 받은locationId 와 JWT토큰에서 userSeq를 받아서 삭제한ㄷ. 
+	// 받은locationId 와 JWT토큰에서 userSeq를 받아서 삭제한다. 
 	@DeleteMapping(value="/locationFav/{locationId}")
 	public ResponseEntity<FeedResultDto> LocationFavoriteDelete(@PathVariable int locationId){
 		

@@ -50,8 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/favicon.ico"
                         ,"/error"
                         ,"/pagenotfound"
-//                        ,"/asset/**"
-                        
+                        ,"/assets/**"
+
+                   
 
                 );
     }
