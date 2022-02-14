@@ -59,9 +59,11 @@ public interface FeedDao {
 	// feed File 삭제후 수정
 	public List<String> feedFileUrlDeleteList(int feedId);
 	public int feedFileDelete(int feedId);
+	public int feedFileDeleteUseFileID(int fileId);
 	
 	// feed 삭제
 	// feed지우면 fk 테이블 자동삭제 cascade
 	public int feedDelete(int feedId);
+	public int locationFavoriteDelete(LocationFavoriteDto locationFavoriteDto);
 
 }

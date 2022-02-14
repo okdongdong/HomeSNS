@@ -1,380 +1,389 @@
 
-CREATE TABLE `user` (
-	`user_seq`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`user_id`	varchar(20)	NULL UNIQUE , 
-	`user_password`	varchar(100)	NOT NULL,
-	`user_email`	varchar(30)	NULL UNIQUE,
-	`user_name`	varchar(20)	NOT NULL,
-	`user_nickname`	varchar(20)	NULL,
-	`user_phone`	varchar(20)	NULL UNIQUE,
-	`user_bod`	date	NULL,
-	`user_profile_image_url`	varchar(100)	NULL DEFAULT "image/noimage.png",
-	`user_register_date`	date	NULL,
-	`user_cls`	char(5)	NULL,
-	`refresh_token`	varchar(50)	NULL
+CREATE TABLE `USER` (
+	`USER_SEQ`	INT	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`USER_ID`	VARCHAR(50)	NULL UNIQUE , 
+	`USER_PASSWORD`	VARCHAR(300)	NOT NULL,
+	`USER_EMAIL`	VARCHAR(50)	NULL UNIQUE,
+	`USER_NAME`	VARCHAR(50)	NOT NULL,
+	`USER_NICKNAME`	VARCHAR(50)	NULL,
+	`USER_PHONE`	VARCHAR(50)	NULL UNIQUE,
+	`USER_BOD`	DATE	NULL,
+	`USER_PROFILE_IMAGE_URL`	VARCHAR(300)	NULL DEFAULT "IMAGE/NOIMAGE.PNG",
+	`USER_REGISTER_DATE`	TIMESTAMP	NULL,
+	`USER_CLS`	CHAR(5)	NULL,
+	`REFRESH_TOKEN`	VARCHAR(50)	NULL
 );
 
-CREATE TABLE `feed` (
-	`feed_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`group_id`	int	NOT NULL ,
-	`feed_author`	int	NULL,
-	`feed_title`	varchar(20)	NULL,
-	`feed_content`	varchar(200)	NULL,
-	`feed_upload_date`	timestamp	NULL,
-	`feed_event_date`	datetime	NULL,
-	`feed_location_id` int	NULL
+CREATE TABLE `FEED` (
+	`FEED_ID`	INT	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`GROUP_ID`	INT	NOT NULL ,
+	`FEED_AUTHOR`	INT	NULL,
+	`FEED_TITLE`	VARCHAR(50)	NULL,
+	`FEED_CONTENT`	VARCHAR(1000)	NULL,
+	`FEED_UPLOAD_DATE`	TIMESTAMP	NULL,
+	`FEED_EVENT_DATE`	DATETIME	NULL,
+	`FEED_LOCATION_ID` INT	NULL
 );
 
-CREATE TABLE `group_code` (
-	`group_code`	char(3) NOT NULL PRIMARY KEY,
-	`group_code_name`	varchar(20)	NULL UNIQUE
+CREATE TABLE `GROUP_CODE` (
+	`GROUP_CODE`	CHAR(3) NOT NULL PRIMARY KEY,
+	`GROUP_CODE_NAME`	VARCHAR(20)	NULL UNIQUE
 );
 
-CREATE TABLE `code` (
-	`code`	char(2) NOT NULL PRIMARY KEY,
-	`group_code`	char(3) NULL,
-	`code_name`	varchar(20)	NULL UNIQUE,
-	`use_yn`	varchar(1)	NULL DEFAULT "n"
+CREATE TABLE `CODE` (
+	`CODE`	CHAR(2) NOT NULL PRIMARY KEY,
+	`GROUP_CODE`	CHAR(3) NULL,
+	`CODE_NAME`	VARCHAR(20)	NULL UNIQUE,
+	`USE_YN`	VARCHAR(1)	NULL DEFAULT "N"
 );
 
-CREATE TABLE `hashtag` (
-	`hashtag_seq`	int NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`feed_id`	int	NOT NULL,
-	`hashtag_content`	varchar(20)	NOT NULL
+CREATE TABLE `HASHTAG` (
+	`HASHTAG_SEQ`	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`FEED_ID`	INT	NOT NULL,
+	`HASHTAG_CONTENT`	VARCHAR(50)	NOT NULL
 );
 
-CREATE TABLE `group_list` (
-	`group_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`group_name`	varchar(20)	NULL,
-	`group_profile_image_url`	varchar(100)	NULL DEFAULT "image/nogroupimage.png",
-	`group_leader_seq`	varchar(20)	NOT NULL,
-	`group_password`	varchar(100)	NULL
+CREATE TABLE `GROUP_LIST` (
+	`GROUP_ID`	INT	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`GROUP_NAME`	VARCHAR(50)	NULL,
+	`GROUP_PROFILE_IMAGE_URL`	VARCHAR(300)	NULL DEFAULT "IMAGE/NOGROUPIMAGE.PNG",
+	`GROUP_LEADER_SEQ`	INT	NOT NULL,
+	`GROUP_PASSWORD`	VARCHAR(200)	NULL
 );
 
-CREATE TABLE `group_member` (
-	`group_id`	int	NOT NULL,
-	`user_seq`	int	NOT NULL,
-	`manager_yn`	char(1)	NULL DEFAULT "n"
+CREATE TABLE `GROUP_MEMBER` (
+	`GROUP_ID`	INT	NOT NULL,
+	`USER_SEQ`	INT	NOT NULL,
+	`MANAGER_YN`	CHAR(1)	NULL DEFAULT "N"
 );
 
-CREATE TABLE `schedule` (
-    `schedule_id`    int    NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `group_id`    int    NOT NULL,
-    `schedule_title`    varchar(30)    NULL,
-    `schedule_content`    varchar(100)    NULL,
-    `schedule_date_start`    date    NOT NULL,
-    `schedule_date_end`    date    NOT NULL,
-    `schedule_time_start`    time    NULL,
-    `schedule_time_end`    time    NULL
-);
-
-
-CREATE TABLE `comment` (
-	`comment_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`feed_id`	int	NOT NULL,
-	`comment_tag`	int	NULL,
-	`comment_author`	int	NULL,
-	`comment_content`	varchar(100)	NULL,
-	`comment_upload_date`	date	NULL
-);
-
-CREATE TABLE `feed_emotion` (
-	`feed_id`	int	NOT NULL ,
-	`good`	int	NULL,
-	`sad`	int	NULL,
-	`check`	int	NULL,
-	`fun`	int	NULL,
-	`amaze`	int	NULL
-);
-
-CREATE TABLE `comment_emotion` (
-	`comment_id`	int	NOT NULL,
-	`good`	int	NULL,
-	`sad`	int	NULL,
-	`check`	int	NULL,
-	`fun`	int	NULL,
-	`amaze`	int	NULL
-);
-
-CREATE TABLE `file` (
-	`file_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`feed_id`	int	NOT NULL,
-	`file_name`	varchar(30)	NULL,
-	`file_size`	int	NULL,
-	`file_content_type`	varchar(20)	NULL,
-	`file_url`	varchar(50)	NULL UNIQUE,
-	`reg_dt`	date	NULL
-);
-
-CREATE TABLE `scrap` (
-	`user_seq`	int	NOT NULL,
-	`feed_id`	int	NOT NULL
-);
-
-CREATE TABLE `location` (
-	`location_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`group_id`	int	NOT NULL,
-	`location_name`	varchar(20)	NULL,
-	`lat`	float	NULL,
-	`lng`	float	NULL
-);
-
-CREATE TABLE `location_favorite` (
-	`location_id`	int	NOT NULL  ,
-	`user_seq`	int	NOT NULL
+CREATE TABLE `SCHEDULE` (
+    `SCHEDULE_ID`    INT    NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `GROUP_ID`    INT    NOT NULL,
+    `SCHEDULE_TITLE`    VARCHAR(50)    NULL,
+    `SCHEDULE_CONTENT`    VARCHAR(300)    NULL,
+    `SCHEDULE_DATE_START`    DATE    NOT NULL,
+    `SCHEDULE_DATE_END`    DATE    NOT NULL,
+    `SCHEDULE_TIME_START`    TIME    NULL,
+    `SCHEDULE_TIME_END`    TIME    NULL
 );
 
 
-CREATE TABLE `feed_emotion_user_use` (
-	`user_seq`	int	NOT NULL,
-	`feed_id`	int	NOT NULL,
-	`emotion_code`	char(5)	NULL
+CREATE TABLE `COMMENT` (
+	`COMMENT_ID`	INT	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`FEED_ID`	INT	NOT NULL,
+	`COMMENT_TAG`	INT	NULL,
+	`COMMENT_AUTHOR`	INT	NULL,
+	`COMMENT_CONTENT`	VARCHAR(300)	NULL,
+	`COMMENT_UPLOAD_DATE`	TIMESTAMP	NULL
 );
 
-CREATE TABLE `event_member` (
-	`feed_id`	int	NOT NULL,
-	`user_seq`	int	NOT NULL
+CREATE TABLE `FEED_EMOTION` (
+	`FEED_ID`	INT	NOT NULL ,
+	`GOOD`	INT	NULL,
+	`SAD`	INT	NULL,
+	`CHECK`	INT	NULL,
+	`FUN`	INT	NULL,
+	`AMAZE`	INT	NULL
 );
 
-CREATE TABLE `comment_emotion_user_use` (
-	`comment_id`	int	NOT NULL,
-	`user_seq`	int	NOT NULL,
-	`emotion_code`	char(5)	NULL
+CREATE TABLE `COMMENT_EMOTION` (
+	`COMMENT_ID`	INT	NOT NULL,
+	`GOOD`	INT	NULL,
+	`SAD`	INT	NULL,
+	`CHECK`	INT	NULL,
+	`FUN`	INT	NULL,
+	`AMAZE`	INT	NULL
 );
 
-CREATE TABLE `game` (
-	`game_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`group_id`	int	NOT NULL,
-	`game_title`	varchar(20)	NOT NULL,
-	`game_author`	int	NOT NULL,
-	`game_register_date`	timestamp	NULL,
-	`code` char(5)	NOT NULL,
-	`update_yn`	varchar(1)	NULL DEFAULT "y"
+CREATE TABLE `FILE` (
+	`FILE_ID`	INT	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`FEED_ID`	INT	NOT NULL,
+	`FILE_NAME`	VARCHAR(100)	NULL,
+	`FILE_SIZE`	FLOAT	NULL,
+	`FILE_CONTENT_TYPE`	VARCHAR(50)	NULL,
+	`FILE_URL`	VARCHAR(300)	NULL UNIQUE,
+	`REG_DT`	TIMESTAMP	NULL
 );
 
-CREATE TABLE `ghost_leg` (
-	`game_id`	int	NOT NULL,
-	`player`	varchar(100)	NOT NULL,
-	`player_num`	int	NOT NULL,
-	`result`	varchar(100)	NOT NULL,
-	`map`	varchar(300)	NOT NULL
+CREATE TABLE `SCRAP` (
+	`USER_SEQ`	INT	NOT NULL,
+	`FEED_ID`	INT	NOT NULL
 );
 
-CREATE TABLE `vote_item` (
-	`vote_item_id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`vote_item_name`	varchar(30)	NOT NULL,
-	`game_id`	int	NOT NULL,
-	`count`	int	NOT NULL DEFAULT 0
+CREATE TABLE `LOCATION` (
+	`LOCATION_ID`	INT	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`GROUP_ID`	INT	NOT NULL,
+	`LOCATION_NAME`	VARCHAR(100)	NULL,
+	`LAT`	FLOAT	NULL,
+	`LNG`	FLOAT	NULL
 );
 
-CREATE TABLE `voter` (
-	`vote_item_id`	int,
-	`user_seq`	int	NOT NULL
-);
-
-
-CREATE TABLE `profile_image` (
-    `profile_image_id`    int    NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`user_seq`     int,
-    `group_id`    int,
-    `profile_image_name`    varchar(20) NULL,
-	`profile_image_size`    long NULL,
-	`profile_image_url`    varchar(20)    NULL,
-    `reg_dt`    timestamp    NULL
+CREATE TABLE `LOCATION_FAVORITE` (
+	`LOCATION_ID`	INT	NOT NULL  ,
+	`USER_SEQ`	INT	NOT NULL
 );
 
 
-ALTER TABLE `feed` ADD CONSTRAINT `FK_group_TO_feed_1` FOREIGN KEY (
-	`group_id`
+CREATE TABLE `FEED_EMOTION_USER_USE` (
+	`USER_SEQ`	INT	NOT NULL,
+	`FEED_ID`	INT	NOT NULL,
+	`EMOTION_CODE`	CHAR(5)	NULL
+);
+
+CREATE TABLE `EVENT_MEMBER` (
+	`FEED_ID`	INT	NOT NULL,
+	`USER_SEQ`	INT	NOT NULL
+);
+
+CREATE TABLE `COMMENT_EMOTION_USER_USE` (
+	`COMMENT_ID`	INT	NOT NULL,
+	`USER_SEQ`	INT	NOT NULL,
+	`EMOTION_CODE`	CHAR(5)	NULL
+);
+
+CREATE TABLE `GAME` (
+	`GAME_ID`	INT	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`GROUP_ID`	INT	NOT NULL,
+	`GAME_TITLE`	VARCHAR(50)	NOT NULL,
+	`GAME_AUTHOR`	INT	NOT NULL,
+	`GAME_REGISTER_DATE`	TIMESTAMP	NULL,
+	`CODE` CHAR(5)	NOT NULL,
+	`UPDATE_YN`	VARCHAR(1)	NULL DEFAULT "Y"
+);
+
+CREATE TABLE `GHOST_LEG` (
+	`GAME_ID`	INT	NOT NULL,
+	`PLAYER`	VARCHAR(100)	NOT NULL,
+	`PLAYER_NUM`	INT	NOT NULL,
+	`RESULT`	VARCHAR(100)	NOT NULL,
+	`MAP`	VARCHAR(300)	NOT NULL
+);
+
+CREATE TABLE `VOTE_ITEM` (
+	`VOTE_ITEM_ID`	INT	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`VOTE_ITEM_NAME`	VARCHAR(50)	NOT NULL,
+	`GAME_ID`	INT	NOT NULL,
+	`COUNT`	INT	NOT NULL DEFAULT 0
+);
+
+CREATE TABLE `VOTER` (
+	`VOTE_ITEM_ID`	INT,
+	`USER_SEQ`	INT	NOT NULL
+);
+
+
+CREATE TABLE `PROFILE_IMAGE` (
+    `PROFILE_IMAGE_ID`    INT    NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`USER_SEQ`     INT,
+    `GROUP_ID`    INT,
+    `PROFILE_IMAGE_NAME`    VARCHAR(50) NULL,
+	`PROFILE_IMAGE_SIZE`    FLOAT NULL,
+	`PROFILE_IMAGE_URL`    VARCHAR(20)    NULL,
+    `REG_DT`    TIMESTAMP    NULL
+);
+CREATE TABLE `NOTICE` (
+`NOTICE_ID`      INT    NOT NULL PRIMARY KEY AUTO_INCREMENT,
+`USER_SEQ` INT,
+`TARGET_USER_SEQ` INT,
+`TARGET_USER_GROUP_ID` INT,
+`NOTICE_TYPE`      VARCHAR(50),
+`NOTICE_CONTENT_ID` INT,
+`NOTICE_READ_YN` CHAR(1) DEFAULT "N",
+`NOTICE_TIME` DATETIME
+);
+
+ALTER TABLE `FEED` ADD CONSTRAINT `FK_GROUP_TO_FEED_1` FOREIGN KEY (
+	`GROUP_ID`
 )
-REFERENCES `group_list` (
-	`group_id`
+REFERENCES `GROUP_LIST` (
+	`GROUP_ID`
 );
 
-ALTER TABLE `code` ADD CONSTRAINT `FK_group_code_TO_code_1` FOREIGN KEY (
-	`group_code`
+ALTER TABLE `CODE` ADD CONSTRAINT `FK_GROUP_CODE_TO_CODE_1` FOREIGN KEY (
+	`GROUP_CODE`
 )
-REFERENCES `group_code` (
-	`group_code`
+REFERENCES `GROUP_CODE` (
+	`GROUP_CODE`
 );
 
-ALTER TABLE `hashtag` ADD CONSTRAINT `FK_feed_TO_hashtag_1` FOREIGN KEY (
-	`feed_id`
+ALTER TABLE `HASHTAG` ADD CONSTRAINT `FK_FEED_TO_HASHTAG_1` FOREIGN KEY (
+	`FEED_ID`
 )
-REFERENCES `feed` (
-	`feed_id`
+REFERENCES `FEED` (
+	`FEED_ID`
 )
 ON DELETE CASCADE;
 
-ALTER TABLE `group_member` ADD CONSTRAINT `FK_group_TO_group_member_1` FOREIGN KEY (
-	`group_id`
+ALTER TABLE `GROUP_MEMBER` ADD CONSTRAINT `FK_GROUP_TO_GROUP_MEMBER_1` FOREIGN KEY (
+	`GROUP_ID`
 )
-REFERENCES `group_list` (
-	`group_id`
+REFERENCES `GROUP_LIST` (
+	`GROUP_ID`
 );
 
-ALTER TABLE `group_member` ADD CONSTRAINT `FK_user_TO_group_member_1` FOREIGN KEY (
-	`user_seq`
+ALTER TABLE `GROUP_MEMBER` ADD CONSTRAINT `FK_USER_TO_GROUP_MEMBER_1` FOREIGN KEY (
+	`USER_SEQ`
 )
-REFERENCES `user` (
-	`user_seq`
+REFERENCES `USER` (
+	`USER_SEQ`
 );
 
-ALTER TABLE `schedule` ADD CONSTRAINT `FK_group_TO_schedule_1` FOREIGN KEY (
-	`group_id`
+ALTER TABLE `SCHEDULE` ADD CONSTRAINT `FK_GROUP_TO_SCHEDULE_1` FOREIGN KEY (
+	`GROUP_ID`
 )
-REFERENCES `group_list` (
-	`group_id`
+REFERENCES `GROUP_LIST` (
+	`GROUP_ID`
 );
 
-ALTER TABLE `comment` ADD CONSTRAINT `FK_feed_TO_comment_1` FOREIGN KEY (
-	`feed_id`
+ALTER TABLE `COMMENT` ADD CONSTRAINT `FK_FEED_TO_COMMENT_1` FOREIGN KEY (
+	`FEED_ID`
 )
-REFERENCES `feed` (
-	`feed_id`
+REFERENCES `FEED` (
+	`FEED_ID`
 )
 ON DELETE CASCADE;
 
-ALTER TABLE `feed_emotion` ADD CONSTRAINT `FK_feed_TO_feed_emotion_1` FOREIGN KEY (
-	`feed_id`
+ALTER TABLE `FEED_EMOTION` ADD CONSTRAINT `FK_FEED_TO_FEED_EMOTION_1` FOREIGN KEY (
+	`FEED_ID`
 )
-REFERENCES `feed` (
-	`feed_id`
-)
-ON DELETE CASCADE;
-
-ALTER TABLE `comment_emotion` ADD CONSTRAINT `FK_comment_TO_comment_emotion_1` FOREIGN KEY (
-	`comment_id`
-)
-REFERENCES `comment` (
-	`comment_id`
+REFERENCES `FEED` (
+	`FEED_ID`
 )
 ON DELETE CASCADE;
 
-ALTER TABLE `file` ADD CONSTRAINT `FK_feed_TO_file_1` FOREIGN KEY (
-	`feed_id`
+ALTER TABLE `COMMENT_EMOTION` ADD CONSTRAINT `FK_COMMENT_TO_COMMENT_EMOTION_1` FOREIGN KEY (
+	`COMMENT_ID`
 )
-REFERENCES `feed` (
-	`feed_id`
-)
-ON DELETE CASCADE;
-
-ALTER TABLE `scrap` ADD CONSTRAINT `FK_user_TO_scrap_1` FOREIGN KEY (
-	`user_seq`
-)
-REFERENCES `user` (
-	`user_seq`
-);
-
-ALTER TABLE `scrap` ADD CONSTRAINT `FK_feed_TO_scrap_1` FOREIGN KEY (
-	`feed_id`
-)
-REFERENCES `feed` (
-	`feed_id`
+REFERENCES `COMMENT` (
+	`COMMENT_ID`
 )
 ON DELETE CASCADE;
 
-ALTER TABLE `location` ADD CONSTRAINT `FK_group_TO_location_1` FOREIGN KEY (
-	`group_id`
+ALTER TABLE `FILE` ADD CONSTRAINT `FK_FEED_TO_FILE_1` FOREIGN KEY (
+	`FEED_ID`
 )
-REFERENCES `group_list` (
-	`group_id`
-);
-ALTER TABLE  `feed` ADD CONSTRAINT `FK_location_TO_feed_1` FOREIGN KEY (
-	`feed_location_id`
+REFERENCES `FEED` (
+	`FEED_ID`
 )
-REFERENCES `location` (
-	`location_id`
-);
-ALTER TABLE `location_favorite` ADD CONSTRAINT `FK_location_TO_location_favorite_1` FOREIGN KEY (
-	`location_id`
+ON DELETE CASCADE;
+
+ALTER TABLE `SCRAP` ADD CONSTRAINT `FK_USER_TO_SCRAP_1` FOREIGN KEY (
+	`USER_SEQ`
 )
-REFERENCES `location` (
-	`location_id`
+REFERENCES `USER` (
+	`USER_SEQ`
 );
 
-ALTER TABLE `location_favorite` ADD CONSTRAINT `FK_user_TO_location_favorite_1` FOREIGN KEY (
-	`user_seq`
+ALTER TABLE `SCRAP` ADD CONSTRAINT `FK_FEED_TO_SCRAP_1` FOREIGN KEY (
+	`FEED_ID`
 )
-REFERENCES `user` (
-	`user_seq`
+REFERENCES `FEED` (
+	`FEED_ID`
+)
+ON DELETE CASCADE;
+
+ALTER TABLE `LOCATION` ADD CONSTRAINT `FK_GROUP_TO_LOCATION_1` FOREIGN KEY (
+	`GROUP_ID`
+)
+REFERENCES `GROUP_LIST` (
+	`GROUP_ID`
+);
+ALTER TABLE  `FEED` ADD CONSTRAINT `FK_LOCATION_TO_FEED_1` FOREIGN KEY (
+	`FEED_LOCATION_ID`
+)
+REFERENCES `LOCATION` (
+	`LOCATION_ID`
+);
+ALTER TABLE `LOCATION_FAVORITE` ADD CONSTRAINT `FK_LOCATION_TO_LOCATION_FAVORITE_1` FOREIGN KEY (
+	`LOCATION_ID`
+)
+REFERENCES `LOCATION` (
+	`LOCATION_ID`
 );
 
-
-ALTER TABLE `game` ADD CONSTRAINT `FK_group_TO_game_1` FOREIGN KEY (
-	`group_id`
+ALTER TABLE `LOCATION_FAVORITE` ADD CONSTRAINT `FK_USER_TO_LOCATION_FAVORITE_1` FOREIGN KEY (
+	`USER_SEQ`
 )
-REFERENCES `group_list` (
-	`group_id`
+REFERENCES `USER` (
+	`USER_SEQ`
 );
 
 
-ALTER TABLE `ghost_leg` ADD CONSTRAINT `FK_game_TO_ghost_leg_1` FOREIGN KEY (
-	`game_id`
+ALTER TABLE `GAME` ADD CONSTRAINT `FK_GROUP_TO_GAME_1` FOREIGN KEY (
+	`GROUP_ID`
 )
-REFERENCES `game` (
-	`game_id`
-)
-ON DELETE CASCADE;
-
-ALTER TABLE `vote_item` ADD CONSTRAINT `FK_game_TO_vote_item_1` FOREIGN KEY (
-	`game_id`
-)
-REFERENCES `game` (
-	`game_id`
-)
-ON DELETE CASCADE;
-
-ALTER TABLE `voter` ADD CONSTRAINT `FK_vote_item_TO_voter_1` FOREIGN KEY (
-	`vote_item_id`
-)
-REFERENCES `vote_item` (
-	`vote_item_id`
-)
-ON DELETE CASCADE;
-
-ALTER TABLE `feed_emotion_user_use` ADD CONSTRAINT `FK_user_TO_feed_emotion_user_use_1` FOREIGN KEY (
-	`user_seq`
-)
-REFERENCES `user` (
-	`user_seq`
+REFERENCES `GROUP_LIST` (
+	`GROUP_ID`
 );
 
-ALTER TABLE `feed_emotion_user_use` ADD CONSTRAINT `FK_feed_TO_feed_emotion_user_use_1` FOREIGN KEY (
-	`feed_id`
+
+ALTER TABLE `GHOST_LEG` ADD CONSTRAINT `FK_GAME_TO_GHOST_LEG_1` FOREIGN KEY (
+	`GAME_ID`
 )
-REFERENCES `feed` (
-	`feed_id`
+REFERENCES `GAME` (
+	`GAME_ID`
 )
 ON DELETE CASCADE;
 
-ALTER TABLE `event_member` ADD CONSTRAINT `FK_feed_TO_event_member_1` FOREIGN KEY (
-	`feed_id`
+ALTER TABLE `VOTE_ITEM` ADD CONSTRAINT `FK_GAME_TO_VOTE_ITEM_1` FOREIGN KEY (
+	`GAME_ID`
 )
-REFERENCES `feed` (
-	`feed_id`
+REFERENCES `GAME` (
+	`GAME_ID`
 )
 ON DELETE CASCADE;
 
-ALTER TABLE `event_member` ADD CONSTRAINT `FK_user_TO_event_member_1` FOREIGN KEY (
-	`user_seq`
+ALTER TABLE `VOTER` ADD CONSTRAINT `FK_VOTE_ITEM_TO_VOTER_1` FOREIGN KEY (
+	`VOTE_ITEM_ID`
 )
-REFERENCES `user` (
-	`user_seq`
+REFERENCES `VOTE_ITEM` (
+	`VOTE_ITEM_ID`
+)
+ON DELETE CASCADE;
+
+ALTER TABLE `FEED_EMOTION_USER_USE` ADD CONSTRAINT `FK_USER_TO_FEED_EMOTION_USER_USE_1` FOREIGN KEY (
+	`USER_SEQ`
+)
+REFERENCES `USER` (
+	`USER_SEQ`
 );
 
-ALTER TABLE `comment_emotion_user_use` ADD CONSTRAINT `FK_comment_TO_comment_emotion_user_use_1` FOREIGN KEY (
-	`comment_id`
+ALTER TABLE `FEED_EMOTION_USER_USE` ADD CONSTRAINT `FK_FEED_TO_FEED_EMOTION_USER_USE_1` FOREIGN KEY (
+	`FEED_ID`
 )
-REFERENCES `comment` (
-	`comment_id`
+REFERENCES `FEED` (
+	`FEED_ID`
 )
 ON DELETE CASCADE;
 
-ALTER TABLE `comment_emotion_user_use` ADD CONSTRAINT `FK_user_TO_comment_emotion_user_use_1` FOREIGN KEY (
-	`user_seq`
+ALTER TABLE `EVENT_MEMBER` ADD CONSTRAINT `FK_FEED_TO_EVENT_MEMBER_1` FOREIGN KEY (
+	`FEED_ID`
 )
-REFERENCES `user` (
-	`user_seq`
+REFERENCES `FEED` (
+	`FEED_ID`
+)
+ON DELETE CASCADE;
+
+ALTER TABLE `EVENT_MEMBER` ADD CONSTRAINT `FK_USER_TO_EVENT_MEMBER_1` FOREIGN KEY (
+	`USER_SEQ`
+)
+REFERENCES `USER` (
+	`USER_SEQ`
+);
+
+ALTER TABLE `COMMENT_EMOTION_USER_USE` ADD CONSTRAINT `FK_COMMENT_TO_COMMENT_EMOTION_USER_USE_1` FOREIGN KEY (
+	`COMMENT_ID`
+)
+REFERENCES `COMMENT` (
+	`COMMENT_ID`
+)
+ON DELETE CASCADE;
+
+ALTER TABLE `COMMENT_EMOTION_USER_USE` ADD CONSTRAINT `FK_USER_TO_COMMENT_EMOTION_USER_USE_1` FOREIGN KEY (
+	`USER_SEQ`
+)
+REFERENCES `USER` (
+	`USER_SEQ`
 );
 

@@ -50,6 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/favicon.ico"
                         ,"/error"
                         ,"/pagenotfound"
+//                        ,"/asset/**"
+                        
+
                 );
     }
 
@@ -76,8 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/register").permitAll()
                 .antMatchers("/notice/**").permitAll()
 
-                .anyRequest().authenticated()
-
+           
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
     }

@@ -43,9 +43,9 @@
 	<select id="commentList" parameterType="int" resultType="com.ssafy.homesns.dto.CommentDto"> 
 		SELECT c.comment_id,feed_id,comment_tag,comment_author as comment_author_seq, u.user_name as comment_author,comment_content,comment_upload_date, 
 				ce.good, ce.sad, ce.check, ce.fun , ce.amaze
-		FROM home_sns.comment c
-        JOIN home_sns.user u ON comment_author = user_seq 
-        LEFT OUTER JOIN home_sns.comment_emotion ce ON c.comment_id = ce.comment_id  
+		FROM HOME_SNS.COMMENT c
+        JOIN HOME_SNS.USER u ON comment_author = user_seq 
+        LEFT OUTER JOIN HOME_SNS.COMMENT_EMOTION ce ON c.comment_id = ce.comment_id  
         WHERE feed_id = #{feedId}
 	</select>
 	
@@ -68,7 +68,7 @@
 	<!-- 장소 가져오는 SQL -->
 	<select id="locationSearch" parameterType="int" resultType="com.ssafy.homesns.dto.LocationDto"> 
 		SELECT l.LOCATION_ID, l.GROUP_ID, l.LOCATION_NAME, l.LAT, l.LNG
-		  FROM feed f JOIN location l on l.location_id = f.feed_location_id 
+		  FROM FEED f JOIN LOCATION l on l.location_id = f.feed_location_id 
 		 WHERE feed_id = #{feedId};
 	</select>
 	
@@ -84,7 +84,7 @@
 	<select id="feedDetail" parameterType="int" resultType="com.ssafy.homesns.dto.FeedDto"> 
 		SELECT f.FEED_ID, GROUP_ID, FEED_AUTHOR as feed_author_seq ,u.user_name as FEED_AUTHOR, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION_ID ,fe.good, fe.sad, fe.check, fe.fun, fe.amaze
 		  FROM HOME_SNS.FEED f JOIN USER u ON f.feed_author = u.user_seq
-          LEFT OUTER JOIN home_sns.feed_emotion fe  ON f.feed_id = fe.feed_id
+          LEFT OUTER JOIN HOME_SNS.FEED_EMOTION fe  ON f.feed_id = fe.feed_id
 		 WHERE f.FEED_ID = #{feed_id};
 	</select>
 
@@ -145,7 +145,7 @@
 	
 	<select id="groupMemberList" parameterType="int" resultType="com.ssafy.homesns.dto.GroupMemberDto">
 		SELECT user_name, g.user_seq 
-	  	  FROM group_member g JOIN  user u
+	  	  FROM GROUP_MEMBER g JOIN  USER u
 	 	    ON g.user_seq = u.user_seq
 	 	 WHERE group_id = #{groupId}; 
 	</select>
@@ -179,6 +179,11 @@
 		 WHERE FEED_ID = #{feedId}
 	</delete>
 	
+	<delete id="feedFileDeleteUseFileID" parameterType="int">
+		DELETE FROM HOME_SNS.FILE
+		 WHERE FILE_ID = #{fileId}
+	</delete>
+	
 	
 	<delete id="feedHashtagDelete" parameterType='int'>
 		DELETE FROM HOME_SNS.HASHTAG
@@ -191,7 +196,7 @@
 	</delete>
 	
 	<update id="feedLocationUpdate" parameterType="com.ssafy.homesns.dto.LocationDto">
-		UPDATE home_sns.location
+		UPDATE HOME_SNS.LOCATION
 		   SET  location_name = #{locationName},
 				lat = #{lat},
 				lng = #{lng}
@@ -204,7 +209,11 @@
 		DELETE FROM HOME_SNS.FEED
 		 WHERE FEED_ID = #{feedId}
 	</delete>
-	
-	
+		
+	<!-- 장소 즐겨찾기 삭제 -->
+	<delete id="locationFavoriteDelete" parameterType="com.ssafy.homesns.dto.LocationFavoriteDto">
+		DELETE FROM HOME_SNS.FEED
+		 WHERE LOCATION_ID =#{locationId} AND USER_SEQ ={userSeq} 
+	</delete>
 	
 </mapper>

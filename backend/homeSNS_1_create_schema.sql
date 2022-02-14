@@ -1,1 +1,1 @@
-CREATE SCHEMA `home_sns`;
+CREATE SCHEMA `HOME_SNS`;
