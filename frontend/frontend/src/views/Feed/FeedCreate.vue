@@ -704,7 +704,7 @@ export default {
         })
         .then(()=>{
           console.log('피드수정 성공')
-          // this.$router.push({name:"Detail", params:{feedId:this.feedId}})
+          this.$router.push({name:"Detail", params:{feedId:this.feedId}})
         })
         .catch((error)=>{
           console.log('피드수정 실패')
