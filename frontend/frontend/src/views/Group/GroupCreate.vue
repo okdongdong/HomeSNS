@@ -155,7 +155,7 @@ export default {
       let data = new FormData();
       data.append("groupName", this.groupname);
       data.append("groupPassword", this.password);
-      data.append("groupProfileImageUrl", this.image);
+      data.append("profileImage", this.image);
       // let data ={ // 연동할때 주석 처리하기
       //   groupName : this.groupname,
       //   groupPassword : this.password,

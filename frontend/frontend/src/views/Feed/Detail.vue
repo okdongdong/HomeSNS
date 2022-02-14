@@ -12,23 +12,20 @@
 
       <v-row class="py-3">
         <v-col cols="10">
-        <div>
-          <h1 class="d-inline-flex">{{ feed.title }}</h1>
-        </div>
-        <div>
-          <div class="d-inline-flex">{{ feed.eventDate }}</div>
-        </div>
+          <div>
+            <h1 class="d-inline-flex">{{ feed.title }}</h1>
+          </div>
+          <div>
+            <div class="d-inline-flex">{{ feed.eventDate }}</div>
+          </div>
         </v-col>
         <v-col cols="2" class="d-flex justify-center align-center">
-        <FeedPopup
-          :feed-id="feedId"
-          :feed-author-seq="feedAuthorSeq"
-          />
+          <FeedPopup :feed-id="feedId" :feed-author-seq="feedAuthorSeq" />
         </v-col>
       </v-row>
       <hr />
-      <div class="d-flex align-center" style="margin-top:12px;margin-bottom:3px;">
-        <ProfilePhoto :size="40" />
+      <div class="d-flex align-center" style="margin-top: 12px; margin-bottom: 3px">
+        <ProfilePhoto :size="25" />
         <h3 class="mx-3">
           {{ feed.author }}
         </h3>
@@ -39,62 +36,71 @@
       <!-- 사진 -->
       <v-carousel height="400" hide-delimiter-background show-arrows-on-hover>
         <v-carousel-item v-for="(imgUrl, i) in feed.imgUrls" :key="i">
-          <v-img :src="imgUrl" aspect-ratio="1"></v-img>
+          <v-img :src="`https://i6e205.p.ssafy.io/${imgUrl.fileUrl}`" aspect-ratio="1"></v-img>
         </v-carousel-item>
       </v-carousel>
     </div>
     <div>
       <v-row class="icon-group">
         <v-col cols="10">
-        <span style="padding:3px;"></span>
+          <span style="padding: 3px"></span>
           <v-btn icon large @click="showEmotions ? (showEmotions = false) : (showEmotions = true)">
             <v-icon>favorite_border</v-icon>
           </v-btn>
-          <!-- 댓글버튼 필요없음.. -->
-          <!-- <v-btn icon large>
-            <v-icon>chat_bubble_outline</v-icon>
-          </v-btn> -->
         </v-col>
         <v-col cols="2">
-          <v-btn icon large style="padding:0;">
+          <v-btn icon large style="padding: 0">
             <v-icon>bookmark_border</v-icon>
           </v-btn>
         </v-col>
       </v-row>
       <!-- 감정 버튼 -->
-      <Emotion
-        :show-emotions="showEmotions"
-        style="position:absolute;"
-      />
+      <Emotion :show-emotions="showEmotions" style="position: absolute" />
     </div>
-      <div class="content-group" v-html="getContent()"></div>
-      <!-- 댓글 부분 ! -->
-      <v-form class="px-3" ref="form" @submit.prevent="createComment">
-        <div class="d-flex">
-        <v-text-field label="댓글 달기" v-model="comment"></v-text-field>
-          <v-btn
-            class="my-5 ml-2"
-            elevation="3"
-            rounded
-            dark
-            color="indigo"
-            small
-            >
+    <div class="content-group" v-html="getContent()"></div>
+    <!-- 댓글 부분 ! -->
+    <v-form class="px-3" ref="form" @submit.prevent="createComment">
+      <div class="d-flex">
+        <v-text-field label="댓글 달기" v-model="comment"> </v-text-field>
+        <v-btn
+          class="my-5 ml-2"
+          elevation="3"
+          rounded
+          dark
+          color="indigo"
+          small
+          @click="createComment"
+        >
           게시
         </v-btn>
-        </div>
-      </v-form>
-      <Comment v-for="(comment,idx) in comments" :key="idx" :comment="comment" />
+      </div>
+      <v-card class="ml-1" max-width="400" v-if="commentInTag">
+        <v-list>
+          <v-list-item-group v-model="tagList" multiple color="indigo">
+            <v-list-item v-for="member in members" :key="member.userName">
+              <v-list-item-content>
+                <v-list-item-title
+                  v-text="member.userName"
+                  @click.stop="selectTagMember(member)"
+                ></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-card>
+    </v-form>
+    <Comment v-for="(comment, idx) in comments" :key="idx" :comment="comment" :feed-id="feedId"/>
+  <infinite-loading @infinite="getComments"></infinite-loading>
   </v-app>
 </template>
 
 <script>
 import Comment from "../../components/Feed/Comment.vue";
-import FeedPopup from "../../components/Feed/FeedPopup.vue"
+import FeedPopup from "../../components/Feed/FeedPopup.vue";
 import Emotion from "../../components/Feed/Emotion.vue";
 import ProfilePhoto from "../../components/ProfilePhoto.vue";
 import axios from "axios";
-// import { mapState } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "Detail",
@@ -111,27 +117,24 @@ export default {
     nowLoading: false,
     tab: 0,
     showEmotions: false,
-    feedAuthorSeq : null,
+    feedAuthorSeq: null,
     feed: {
       // 샘플 데이터
       author: null,
       title: null,
       //author profile img 필요
       content: null,
-      imgUrls: [
-        "https://bbs.bepick.in/bbs/2021/12/085af6f07ceabed2af78ce0646341f8c_1103933013.jpeg",
-        "https://img.hankyung.com/photo/202112/BF.28426974.1.jpg",
-        "http://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2021/07/05/41bdae8f-ae62-490e-9f28-f790ab37fe67.jpg",
-      ],
+      imgUrls: [],
       uploadDate: null,
       eventDate: null,
       location: null,
     },
-    comment:null,
-    memberList:[], // 해시태그위한 멤버리스트
-    memberToggle:false,
-    tagList:[], // 해시태그한 사람
-    comments: [
+    // 댓글쪽
+    comment: null,
+    members: [], // 해시태그위한 멤버리스트
+    memberToggle: false,
+    tagList: [], // 해시태그한 사람
+    comments: [ // vuex로 넘겨줬으니까 지우기
       {
         author: "할매",
         tag: "임시태그",
@@ -147,6 +150,24 @@ export default {
     ],
   }),
   methods: {
+    getMember() {
+      let groupId = this.nowGroup.groupId;
+      const token = localStorage.getItem("jwt");
+      axios({
+        method: "get",
+        url: `${process.env.VUE_APP_MCS_URL}/feed/info/${groupId}`,
+        headers: { Authorization: token },
+      })
+        .then((res) => {
+          console.log("그룹멤버들");
+          console.log(res);
+          this.members = res.data.members;
+          console.log(this.members);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     getFeed() {
       this.nowLoading = true;
       const token = localStorage.getItem("jwt");
@@ -155,48 +176,132 @@ export default {
         url: `${process.env.VUE_APP_MCS_URL}/feed/${this.feedId}`,
         headers: { Authorization: token },
       }).then((res) => {
-        console.log('피드상세')
-        console.log(res.data)
+        // console.log("피드상세");
+        // console.log(res.data);
         this.feedAuthorSeq = res.data.feedDto.feedAuthorSeq;
         this.feed.author = res.data.feedDto.feedAuthor;
         this.feed.title = res.data.feedDto.feedTitle;
-        console.log(res.data.feedDto.feedContent)
         this.feed.content = res.data.feedDto.feedContent;
-        console.log(this.feed.content)
-        // this.feed.imgUrls = res.data.feedDto.feedImgUrls;
+        this.feed.imgUrls = res.data.feedDto.fileList;
         this.feed.uploadDate = res.data.feedDto.feedUploadDate;
-        this.feed.eventDate = res.data.feedDto.feedEventDate.year+'년'+' '+res.data.feedDto.feedEventDate.month+'월'+' '+res.data.feedDto.feedEventDate.day+'일';
+        this.feed.eventDate =
+          res.data.feedDto.feedEventDate.year +
+          "년" +
+          " " +
+          res.data.feedDto.feedEventDate.month +
+          "월" +
+          " " +
+          res.data.feedDto.feedEventDate.day +
+          "일";
         this.feed.location = res.data.feedDto.locationDto.locationName;
         this.nowLoading = false;
+        this.memberList = res.data.feedDto.userList;
       });
     },
-    getContent(){
-      if(this.feed.content){
+    getContent() {
+      if (this.feed.content) {
         return this.feed.content.replaceAll("\r\n", "<br />");
-      }else{
+      } else {
         return null;
       }
     },
-    createComment(){
+    getComments($state){
+      let data={
+        feedId: this.feedId,
+        limit:10,
+      }
+      this.$store.dispatch('comments/getComments', data, $state)
 
-    }
+    },
+    createComment(event) {
+      event.preventDefault();
+      // const token = localStorage.getItem("jwt");
+      let data ={
+        commentDto : {
+        feedId: this.feedId,
+        commentTag: this.tagList, // userName, userSeq있음
+        commentContent: this.comment,
+        },
+        feedId : this.feedId
+      }
+      this.$store.dispatch('comments/createComment',data)
+      // let commentDto = {
+      //   feedId: this.feedId,
+      //   commentTag: this.tagList, // userName, userSeq있음
+      //   commentContent: this.comment,
+      // };
+      // axios({
+      //   method: "POST",
+      //   url: `${process.env.VUE_APP_MCS_URL}/feed/comment`,
+      //   data: commentDto,
+      //   headers: { Authorization: token },
+      // }).then(() => {
+      //   this.comments.push({
+      //     author: this.userName,
+      //     tag: this.tagList,
+      //     content: this.comment,
+      //     uploadDate: "방금",
+      //   });
+      //   this.comment = null;
+      //   this.tagList = null;
+      // });
+    },
+    selectTagMember(member) {
+      // 원래는 자동으로 토글되야하는데 안되서 일단 수동으로 구현(comment내에 태그 지우면 없어짐)
+      let flag = 0;
+      for (let i = 0; i < this.tagList.length; i++) {
+        if (this.tagList[i].userName == member.userName) {
+          this.tagList.splice(i, 1);
+          flag = 1;
+          break;
+        }
+      }
+      if (flag == 0) {
+        this.tagList.push({
+          userSeq: member.userSeq,
+          userName: member.userName,
+        });
+        this.comment += member.userName + " ";
+      }
+    },
   },
   created() {
-    this.feedId *=1;
+    this.feedId *= 1;
     this.getFeed();
+    this.getMember();
+    this.getComments();
+  },
+  beforeDestroy(){
+    this.$store.dispatch('comments/resetOffset')
   },
   computed: {
-
+    ...mapState("account", ["nowGroup", "userName"]),
+    ...mapState("comments",["comments","isPageEnd"]),
+    commentInTag() {
+      if (this.comment != null && this.comment.substr(-1) == "@") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
+  watch: {
+    comment: function (val) {
+      for (let i = 0; i < this.tagList.length; i++) {
+        if (!val.includes(this.tagList[i].userName)) {
+          this.tagList.splice(i, 1);
+        }
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
-  .icon-group{
-    padding : 0px 3px;
-  }
-  .content-group{
-    padding : 3px 15px;
-  }
-
+.icon-group {
+  padding: 0px 3px;
+}
+.content-group {
+  padding: 3px 15px;
+}
 </style>

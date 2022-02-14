@@ -2,6 +2,7 @@ package com.ssafy.homesns.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,7 +49,8 @@ public class GroupController {
 	// 1. 그룹을 생성
 	// 2. 해당 그룹의 아이디 찾기
 	// 3. 찾은 그룹의 아이디와 자신을 그룹 멤버로 등록
-	@PostMapping(value="/group")
+
+	@PostMapping(consumes = MediaType.ALL_VALUE, value="/group") 
 	public ResponseEntity<GroupResultDto> groupListCreate(
 			@ModelAttribute GroupDto groupDto,
 			MultipartHttpServletRequest request) {

@@ -31,7 +31,7 @@
                 >
                   <!-- :src="require(`@/uploadImg/${file.fileUrl}`)" -->
                   <v-img
-                    :src="`http://newsimg.hankookilbo.com/2020/01/22/202001222303092476_2.jpg`"
+                    :src="`https://i6e205.p.ssafy.io/${file.fileUrl}`"
                     :lazy-src="`https://picsum.photos/200/300`"
                     aspect-ratio="1"
                     class="grey lighten-2"
@@ -109,13 +109,7 @@ export default {
               };
               let currFeed = res.data.mainFeedDtoList[i];
               feedData.feedId = currFeed.feedId;
-              feedData.feedEventDate =
-                currFeed.feedEventDate.year +
-                "년" +
-                currFeed.feedEventDate.month +
-                "월" +
-                currFeed.feedEventDate.day +
-                "일";
+              feedData.feedEventDate = this.$moment(currFeed.feedEventDate).format("YYYY년 MM월 DD일");
               feedData.feedLocation = currFeed.feedLocation; // 등록안된 곳은 빈값''
               feedData.feedTitle = currFeed.feedTitle;
               feedData.fileList = currFeed.fileList;

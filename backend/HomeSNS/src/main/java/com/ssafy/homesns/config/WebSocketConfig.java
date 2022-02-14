@@ -13,14 +13,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     // 클라이언트가 메시지를 구독할 endpoint를 정의합니다.
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/notice/send");
+        config.enableSimpleBroker("/api/notice/send");
     }
 
     @Override
     // connection을 맺을때 CORS 허용합니다.
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/notice/**")
-                .setAllowedOrigins("http://localhost:5500","http://192.168.0.100:5500")
+        registry.addEndpoint("/api/notice/**")
+                .setAllowedOrigins("http://localhost:5500","http://192.168.0.100:5500","https://i6e205.p.ssafy.io")
                 .withSockJS();
     }
 }

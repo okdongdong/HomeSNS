@@ -8,7 +8,7 @@
 	</insert>
 	
 	<insert id="groupProfileImageInsert" parameterType="com.ssafy.homesns.dto.ProfileImageDto" useGeneratedKeys="true" keyProperty="profileImageId">
-		INSERT INTO PROFILE_IMAGE ( GROUP_ID,    PROFILE_IMAGE_NAME,   PROFILE_IMAGE_SIZE,   PROFILE_IMAGE_Url,   REGDT  )
+		INSERT INTO PROFILE_IMAGE ( GROUP_ID,    PROFILE_IMAGE_NAME,   PROFILE_IMAGE_SIZE,   PROFILE_IMAGE_URL,   REG_DT  )
 		                   VALUES ( #{groupId},  #{profileImageName},  #{profileImageSize},  #{profileImageUrl},  now()  )
 	</insert>
 	
