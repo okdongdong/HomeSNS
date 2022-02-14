@@ -12,7 +12,7 @@
 
     <v-form ref="form" @submit.prevent="submit">
       <v-container fluid>
-        <h1>피드작성</h1>
+        <h1>피드작성{{ feedId }}</h1>
         <v-row>
           <!-- 날짜 -->
           <v-col cols="12">
@@ -242,7 +242,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 import axios from "axios";
 import { gmapApi } from "vue2-google-maps";
 // import Snackbar from "@/components/Snackbar.vue";
@@ -298,7 +298,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions("notice", ["send"]),
     // 장소,
     getFeedInfo() {
       let groupId = this.nowGroup.groupId;
@@ -671,15 +670,9 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         })
-          .then((res) => {
+          .then(() => {
             console.log("피드작성 성공");
             this.nowLoading = false;
-            const noticeInfo = {
-                targetUserSeq: -1,
-                noticeType: "feedCreate",
-                noticeContentId: res.data.feedId,
-              };
-              this.send(noticeInfo);
           })
           .then(() => {
             this.$router.push({
@@ -745,7 +738,6 @@ export default {
     },
     google: gmapApi,
     ...mapState("account", ["nowGroup"]),
-    
   },
 };
 </script>

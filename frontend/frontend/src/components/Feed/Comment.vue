@@ -1,7 +1,7 @@
 <template>
-  <div class='comment-box d-flex justify-space-between align-center'>
-    <div class="d-inline-flex pt-3">
-      <div class="pl-2">
+  <div class='comment-box'>
+    <div class="d-inline-flex">
+      <div>
         <ProfilePhoto
           :size="50"
           :imgUrl="comment.userImgUrl"
@@ -9,16 +9,11 @@
           :userSeq="comment.authorId"
         />
       </div>
-      <div class="px-3">
+      <div>
         <div>{{ comment.uploadDate }}</div>
         <span class="hashtag"> @{{ comment.tag }} </span>
         <span> {{ comment.content }} </span>
       </div>
-    </div>
-    <div class="d-inline-flex pr-3">
-        <v-btn icon @click="deleteComment(comment.commentId)">
-          <v-icon size="32">delete_forever</v-icon>
-        </v-btn>  
     </div>
     <Emotion />
   </div>
@@ -31,22 +26,11 @@ export default {
   name: "Comment",
   props: {
     comment: Object,
-    feedId : Number,
   },
   components: {
     ProfilePhoto,
     Emotion,
   },
-  methods:{
-    deleteComment(commentId){
-      console.log(this.feedId)
-      let data ={
-        feedId : this.feedId,
-        commentId : commentId,
-      }
-      this.$store.dispatch('comments/deleteComment',data)
-    }
-  }
 };
 </script>
 

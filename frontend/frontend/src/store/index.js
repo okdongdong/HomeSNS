@@ -10,7 +10,6 @@ import calendar from "./modules/calendar";
 import notice from "./modules/notice";
 import snackbar from "./modules/snackbar";
 import group from "./modules/group";
-import comments from "./modules/comments";
 
 Vue.use(Vuex);
 
@@ -24,7 +23,6 @@ export default new Vuex.Store({
     notice,
     snackbar,
     group,
-    comments,
   },
   plugins: [createPersistedState({ paths: ["account"] })],
 });

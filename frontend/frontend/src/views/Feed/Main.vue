@@ -24,8 +24,9 @@
             <v-container>
               <v-row>
                 <v-col v-for="(file, idx3) in feed.fileList" :key="idx3" class="pa-0" cols="4">
+                  <!-- :src="require(`@/uploadImg/${file.fileUrl}`)" -->
                   <v-img
-                    :src="`https://i6e205.p.ssafy.io/${file.fileUrl}`"
+                    :src="`http://newsimg.hankookilbo.com/2020/01/22/202001222303092476_2.jpg`"
                     :lazy-src="`https://picsum.photos/200/300`"
                     aspect-ratio="1"
                     class="grey lighten-2"
@@ -99,7 +100,13 @@ export default {
               };
               let currFeed = res.data.mainFeedDtoList[i];
               feedData.feedId = currFeed.feedId;
-              feedData.feedEventDate = this.$moment(currFeed.feedEventDate).format("YYYY년 MM월 DD일");
+              feedData.feedEventDate =
+                currFeed.feedEventDate.year +
+                "년" +
+                currFeed.feedEventDate.month +
+                "월" +
+                currFeed.feedEventDate.day +
+                "일";
               feedData.feedLocation = currFeed.feedLocation; // 등록안된 곳은 빈값''
               feedData.feedTitle = currFeed.feedTitle;
               feedData.fileList = currFeed.fileList;
