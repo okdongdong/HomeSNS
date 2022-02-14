@@ -6,7 +6,15 @@
           <h1>{{ feeds[0].feedEventDate }}</h1>
         </div>
         <div class="feeds-group" v-for="(feed, idx2) in feeds" :key="idx2">
-          <div class="container content-box mb-2">
+          <div
+            class="container content-box mb-2"
+            @click.stop="
+              $router.push({
+                name: 'Detail',
+                params: { feedId: feed.feedId },
+              })
+            "
+          >
             <div class="d-flex align-center pa-0">
               <h2 class="d-flex align-center">{{ feed.feedTitle }}</h2>
               <span class="d-flex ml-auto" v-if="feed.feedLocation !== ''">{{
@@ -15,22 +23,25 @@
             </div>
             <v-container>
               <v-row>
-                <v-col v-for="(file, idx3) in feed.fileList" :key="idx3" class="pa-0" cols="4">
+                <v-col
+                  v-for="(file, idx3) in feed.fileList"
+                  :key="idx3"
+                  class="pa-0"
+                  cols="4"
+                >
                   <!-- :src="require(`@/uploadImg/${file.fileUrl}`)" -->
                   <v-img
-                    :src="`https://picsum.photos/200/300`"
+                    :src="`http://newsimg.hankookilbo.com/2020/01/22/202001222303092476_2.jpg`"
                     :lazy-src="`https://picsum.photos/200/300`"
                     aspect-ratio="1"
                     class="grey lighten-2"
-                    @click.stop="
-                      $router.push({
-                        name: 'Detail',
-                        params: { feedId: feed.feedId },
-                      })
-                    "
                   >
                     <template v-slot:placeholder>
-                      <v-row class="fill-height ma-0" align="center" justify="center">
+                      <v-row
+                        class="fill-height ma-0"
+                        align="center"
+                        justify="center"
+                      >
                         <v-progress-circular
                           indeterminate
                           color="grey lighten-5"
@@ -107,20 +118,12 @@ export default {
                 "일";
               feedData.feedLocation = currFeed.feedLocation; // 등록안된 곳은 빈값''
               feedData.feedTitle = currFeed.feedTitle;
-              feedData.fileList = [
-                "http://www.newsinside.kr/news/photo/202102/1103606_781901_5945.jpg",
-                "https://mblogthumb-phinf.pstatic.net/MjAyMDA0MThfMTA0/MDAxNTg3MTc1NTM2NDMw.l17QjLpVPqZcfTlvImeA15ObSuVmMPxt31b2ksSpZggg.uET2tQLrS7Il91L3SFMhyJ_54Ll-fiQgUdcb3I0H78sg.JPEG.eett7777/IMG_2543.jpg?type=w800",
-                "https://mblogthumb-phinf.pstatic.net/MjAyMDA0MThfMjgw/MDAxNTg3MTc1NTQ1MTQ2.ixQHurCge5vwo0Uk0X7gftDjfGSA6q7ur-0Pv0v8nS8g.amtkC8I_oemzssSS72vqYOM21mP16oEK6fEfukYyXBwg.JPEG.eett7777/IMG_2539.jpg?type=w800",
-                "https://mblogthumb-phinf.pstatic.net/MjAyMDA0MThfMjky/MDAxNTg3MTc1NTU3MTUz.aslYp9TZpSwYpKdSgSzNIR1_xhr6UYL83IPg6I_HgyUg.PSfXPMHLoRIeTVytsjXTxS-oLcYNz6oGbntPMFZ66_Qg.JPEG.eett7777/IMG_2540.jpg?type=w800",
-                "https://mblogthumb-phinf.pstatic.net/MjAyMDA0MThfMjgw/MDAxNTg3MTc1NTQ1MTQ2.ixQHurCge5vwo0Uk0X7gftDjfGSA6q7ur-0Pv0v8nS8g.amtkC8I_oemzssSS72vqYOM21mP16oEK6fEfukYyXBwg.JPEG.eett7777/IMG_2539.jpg?type=w800",
-                "https://mblogthumb-phinf.pstatic.net/MjAyMDA0MThfMTA0/MDAxNTg3MTc1NTM2NDMw.l17QjLpVPqZcfTlvImeA15ObSuVmMPxt31b2ksSpZggg.uET2tQLrS7Il91L3SFMhyJ_54Ll-fiQgUdcb3I0H78sg.JPEG.eett7777/IMG_2543.jpg?type=w800",
-                "https://mblogthumb-phinf.pstatic.net/MjAyMDA0MThfMjgw/MDAxNTg3MTc1NTQ1MTQ2.ixQHurCge5vwo0Uk0X7gftDjfGSA6q7ur-0Pv0v8nS8g.amtkC8I_oemzssSS72vqYOM21mP16oEK6fEfukYyXBwg.JPEG.eett7777/IMG_2539.jpg?type=w800",
-                "http://www.newsinside.kr/news/photo/202102/1103606_781901_5945.jpg",
-                "https://mblogthumb-phinf.pstatic.net/MjAyMDA0MThfMjky/MDAxNTg3MTc1NTU3MTUz.aslYp9TZpSwYpKdSgSzNIR1_xhr6UYL83IPg6I_HgyUg.PSfXPMHLoRIeTVytsjXTxS-oLcYNz6oGbntPMFZ66_Qg.JPEG.eett7777/IMG_2540.jpg?type=w800",
-              ];
+              feedData.fileList = currFeed.fileList;
               if (i === 0) {
                 feedByDateList.push(feedData);
-              } else if (feedByDateList[0].feedEventDate === feedData.feedEventDate) {
+              } else if (
+                feedByDateList[0].feedEventDate === feedData.feedEventDate
+              ) {
                 feedByDateList.push(feedData);
               } else {
                 // 날짜 다르면 날짜별로 모아놓은거 feedList에 push

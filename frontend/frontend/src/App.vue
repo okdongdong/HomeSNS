@@ -143,7 +143,7 @@ export default {
   align-items: center;
   justify-content: center;
   top: 35%;
-  text-align: center;
+  /* text-align: center; */
 }
 
 .curtain {

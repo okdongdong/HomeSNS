@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="pa-3">
+  <v-app class="container pa-0">
+    <div class="pa-3 pb-0">
       <v-overlay :value="nowLoading">
         <v-progress-circular
           :size="100"
@@ -10,26 +10,30 @@
         ></v-progress-circular>
       </v-overlay>
 
-      <div class="justify-space-between d-flex align-center px-3">
+      <v-row class="py-3">
+        <v-col cols="10">
         <div>
           <h1 class="d-inline-flex">{{ feed.title }}</h1>
-          <div class="d-inline-flex"><v-icon>location_on</v-icon>{{ feed.location }}</div>
         </div>
         <div>
-          <div class="d-inline-flex">{{ feed.eventDate }} 추억</div>
-          <FeedPopup
-            :feed-id="feedId"
-          />
-          <!-- <div>업로드 : {{ feed.uploadDate }}</div> -->
+          <div class="d-inline-flex">{{ feed.eventDate }}</div>
         </div>
-      </div>
+        </v-col>
+        <v-col cols="2" class="d-flex justify-center align-center">
+        <FeedPopup
+          :feed-id="feedId"
+          :feed-author-seq="feedAuthorSeq"
+          />
+        </v-col>
+      </v-row>
       <hr />
-      <div class="d-inline-flex align-center my-3">
-        <ProfilePhoto :size="50" />
+      <div class="d-flex align-center" style="margin-top:12px;margin-bottom:3px;">
+        <ProfilePhoto :size="40" />
         <h3 class="mx-3">
           {{ feed.author }}
         </h3>
       </div>
+      <div class="d-inline-flex"><v-icon>location_on</v-icon>{{ feed.location }}</div>
     </div>
     <div class="feed-photos">
       <!-- 사진 -->
@@ -39,36 +43,53 @@
         </v-carousel-item>
       </v-carousel>
     </div>
-    <v-row class="icon-group">
-      <v-col cols="10">
-      <span style="padding:3px;"></span>
-        <v-btn icon large @click="showEmotions ? (showEmotions = false) : (showEmotions = true)">
-          <v-icon>favorite_border</v-icon>
-        </v-btn>
-        <v-btn icon large>
-          <v-icon>chat_bubble_outline</v-icon>
-        </v-btn>
-      </v-col>
-      <v-col cols="2">
-        <v-btn icon large style="padding:0;">
-          <v-icon>bookmark_border</v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
-    <!-- 감정 버튼 -->
-    <Emotion
-      :show-emotions="showEmotions"
-      style="position:absolute;"
-    />
-    <div class="content-group" v-html="getContent()">
-    <!-- 댓글 부분 ! -->
-    <!-- <Comment v-for="comment in comments" :key="comment" :comment="comment" /> -->
+    <div>
+      <v-row class="icon-group">
+        <v-col cols="10">
+        <span style="padding:3px;"></span>
+          <v-btn icon large @click="showEmotions ? (showEmotions = false) : (showEmotions = true)">
+            <v-icon>favorite_border</v-icon>
+          </v-btn>
+          <!-- 댓글버튼 필요없음.. -->
+          <!-- <v-btn icon large>
+            <v-icon>chat_bubble_outline</v-icon>
+          </v-btn> -->
+        </v-col>
+        <v-col cols="2">
+          <v-btn icon large style="padding:0;">
+            <v-icon>bookmark_border</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+      <!-- 감정 버튼 -->
+      <Emotion
+        :show-emotions="showEmotions"
+        style="position:absolute;"
+      />
     </div>
-  </div>
+      <div class="content-group" v-html="getContent()"></div>
+      <!-- 댓글 부분 ! -->
+      <v-form class="px-3" ref="form" @submit.prevent="createComment">
+        <div class="d-flex">
+        <v-text-field label="댓글 달기" v-model="comment"></v-text-field>
+          <v-btn
+            class="my-5 ml-2"
+            elevation="3"
+            rounded
+            dark
+            color="indigo"
+            small
+            >
+          게시
+        </v-btn>
+        </div>
+      </v-form>
+      <Comment v-for="(comment,idx) in comments" :key="idx" :comment="comment" />
+  </v-app>
 </template>
 
 <script>
-// import Comment from "../../components/Feed/Comment.vue";
+import Comment from "../../components/Feed/Comment.vue";
 import FeedPopup from "../../components/Feed/FeedPopup.vue"
 import Emotion from "../../components/Feed/Emotion.vue";
 import ProfilePhoto from "../../components/ProfilePhoto.vue";
@@ -81,7 +102,7 @@ export default {
     feedId: Number,
   },
   components: {
-    // Comment,
+    Comment,
     FeedPopup,
     Emotion,
     ProfilePhoto,
@@ -90,7 +111,7 @@ export default {
     nowLoading: false,
     tab: 0,
     showEmotions: false,
-    feedAutorSeq : null,
+    feedAuthorSeq : null,
     feed: {
       // 샘플 데이터
       author: null,
@@ -106,8 +127,17 @@ export default {
       eventDate: null,
       location: null,
     },
-
+    comment:null,
+    memberList:[], // 해시태그위한 멤버리스트
+    memberToggle:false,
+    tagList:[], // 해시태그한 사람
     comments: [
+      {
+        author: "할매",
+        tag: "임시태그",
+        content: "댓글내용",
+        uploadDate: "2011-11-11",
+      },
       {
         author: "할매",
         tag: "임시태그",
@@ -125,6 +155,7 @@ export default {
         url: `${process.env.VUE_APP_MCS_URL}/feed/${this.feedId}`,
         headers: { Authorization: token },
       }).then((res) => {
+        console.log('피드상세')
         console.log(res.data)
         this.feedAuthorSeq = res.data.feedDto.feedAuthorSeq;
         this.feed.author = res.data.feedDto.feedAuthor;
@@ -145,11 +176,17 @@ export default {
       }else{
         return null;
       }
+    },
+    createComment(){
+
     }
   },
   created() {
     this.feedId *=1;
     this.getFeed();
+  },
+  computed: {
+
   },
 };
 </script>
