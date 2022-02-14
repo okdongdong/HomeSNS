@@ -1,11 +1,24 @@
 <template>
   <v-app class="container">
-    <h1 class="content-box mb-3">사다리타기 만들기</h1>
-    <div class="py-5 content-box">
+    <h1 class="text-center content-box mb-3">사다리타기 만들기</h1>
+    <div class="pb-5 content-box">
       <v-stepper v-model="step" flat style="background-color: rgba(0, 0, 0, 0)">
         <v-stepper-items>
           <!-- 페이지 1 : 플레이어 수 입력 -->
           <v-stepper-content step="1">
+            <div>
+              <h3>사다리타기 제목</h3>
+              <v-text-field
+                background-color="white"
+                label="사다리타기 제목"
+                solo
+                clearable
+                maxlength="20"
+                :rules="gameTitleRules"
+                v-model="gameTitle"
+                placeholder="사다리타기 제목을 입력하세요."
+              />
+            </div>
             <h3 class="text-center mb-5">플레이어 수를 선택하세요</h3>
 
             <div style="height: 50px"></div>
@@ -34,7 +47,7 @@
           <!-- 페이지 2 : 사다리 기초 생성 및 플레이어명, 결과값 입력 -->
           <v-stepper-content step="2" class="px-3">
             <h3>플레이어명과 결과값을 입력하세요</h3>
-            <div class="overflow-x-auto mb-5 ghostleg-box">
+            <div class="overflow-x-auto mb-5 mt-2 ghostleg-box px-3 py-1">
               <div
                 class="mb-5"
                 :style="'width:max(calc(80px * ' + playerNum + '),100%);'"
@@ -88,16 +101,20 @@
                 </div>
               </div>
             </div>
-            <div class="justify-space-between d-flex">
-              <v-btn icon text @click.stop="step = 1">
-                <v-icon size="48"> chevron_left </v-icon>
-              </v-btn>
+            <v-row class="d-flex justify-space-between">
+              <v-col cols="2">
+                <v-btn icon text @click.stop="step = 1">
+                  <v-icon size="48"> chevron_left </v-icon>
+                </v-btn>
+              </v-col>
+              <v-col cols="5">
+                <v-btn text color="rgb(98,101,232)" @click.stop="randomPick()">
+                  <h3 class="me-3">피드작성</h3>
 
-              <v-btn icon color="primary" @click.stop="randomPick()">
-                피드작성
-                <v-icon size="32" color="rgb(98,101,232)"> send </v-icon>
-              </v-btn>
-            </div>
+                  <v-icon size="32" color="rgb(98,101,232)"> send </v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
@@ -157,6 +174,13 @@ export default {
       "결과9",
       "결과10",
     ],
+    gameTitle: "사다리타기",
+    gameTitleRules: [
+      (v) => !!v || " 사다리타기 제목을 입력해주세요.",
+      (v) =>
+        !(v && v.length >= 20) ||
+        "사다리타기 제목은 20자 이상 입력할 수 없습니다.",
+    ],
     nowColorIdx: 0,
     nowPosX: null,
     nowPosY: null,
@@ -170,7 +194,7 @@ export default {
       // 임시용 경로변경
       const data = {
         groupId: this.nowGroup.groupId,
-        gameTitle: "GL",
+        gameTitle: this.gameTitle,
         ghostLegDto: {
           playerNum: this.playerNum,
           map: [],
