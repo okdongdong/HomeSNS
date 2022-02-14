@@ -4,7 +4,7 @@
 
 
 	<insert id="userRegister" parameterType="com.ssafy.homesns.dto.UserDto">
-		insert into user (  user_id,     user_password,     user_email,     user_name,     user_nickname,     user_phone,     user_bod,     user_profile_image_url,   user_register_date,   user_cls,     refresh_token   ) 
+		insert into USER (  user_id,     user_password,     user_email,     user_name,     user_nickname,     user_phone,     user_bod,     user_profile_image_url,   user_register_date,   user_cls,     refresh_token   ) 
 		          values (  #{userId},   #{userPassword},   #{userEmail},   #{userName},   #{userNickname},   #{userPhone},   #{userBod},   #{userProfileImageUrl},   now(),                #{userCls},   #{refreshToken} )
 	</insert>
 
@@ -14,7 +14,7 @@
 	</insert>
 	
 	<update id="userProfileImageUpdate" parameterType="com.ssafy.homesns.dto.ProfileImageDto">
-		UPDATE user
+		UPDATE USER
 		   SET USER_PROFILE_IMAGE_URL = #{profileImageUrl}
 		 WHERE USER_SEQ = #{userSeq}
 	</update>
@@ -30,12 +30,12 @@
 	</select>
 	
 	<update id="userUpdate" parameterType="com.ssafy.homesns.dto.UserDto">
-		UPDATE user SET USER_PASSWORD = #{userPassword}, USER_NAME = #{userName}, USER_NICKNAME = #{userNickname}, USER_BOD = #{userBod}, USER_PROFILE_IMAGE_URL = #{userProfileImageUrl}, REFRESH_TOKEN = #{refreshToken}  
+		UPDATE USER SET USER_PASSWORD = #{userPassword}, USER_NAME = #{userName}, USER_NICKNAME = #{userNickname}, USER_BOD = #{userBod}, USER_PROFILE_IMAGE_URL = #{userProfileImageUrl}, REFRESH_TOKEN = #{refreshToken}  
 		 WHERE USER_SEQ = #{userSeq}
 	</update>
 
 	<delete id="userDelete" parameterType="int">
-		DELETE FROM user WHERE USER_SEQ = #{userSeq}
+		DELETE FROM USER WHERE USER_SEQ = #{userSeq}
 	</delete>
 	
 	<select id="userExist" parameterType="string" resultType="com.ssafy.homesns.dto.UserDto">
@@ -83,7 +83,7 @@
 	</select>
 
 	<select id="userScrapSearch" parameterType="map" resultType="com.ssafy.homesns.dto.MainFeedDto">
-		SELECT FEED_ID, FEED_TITLE, FEED_EVENT_DATE, IFNULL(FEED_LOCATION_ID,'') AS FEED_LOCATION_ID
+		SELECT FEED.FEED_ID, FEED_TITLE, FEED_EVENT_DATE, IFNULL(FEED_LOCATION_ID,'') AS FEED_LOCATION_ID
 		  FROM SCRAP JOIN FEED
 		    ON SCRAP.FEED_ID = FEED.FEED_ID
 		 WHERE SCRAP.USER_SEQ = #{userSeq}

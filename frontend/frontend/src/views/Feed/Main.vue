@@ -140,7 +140,7 @@ export default {
     // getImg(url){
     //   const tmpUrl = '@assets/'+url
     //   return require(tmpUrl)
-    //   return require("@/assets/upload/test1.png");
+    // return require("@/assets/upload/test1.png");
     // },
   },
   computed: {

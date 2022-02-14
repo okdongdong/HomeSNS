@@ -12,7 +12,7 @@
 		SELECT USER_SEQ as userSeq, USER_ID as userId, USER_EMAIL as userEmail, 
 			   USER_NAME as userName, USER_NICKNAME as userNickname, USER_PHONE as userPhone, USER_BOD as userBod, 
 			   USER_PROFILE_IMAGE_URL as userProfileImageUrl,USER_REGISTER_DATE as userRegisterDate, USER_CLS as userCls
-		  FROM USER 
+		  FROM USER
 		 WHERE USER_ID = #{userId}
 	</select>
 	
