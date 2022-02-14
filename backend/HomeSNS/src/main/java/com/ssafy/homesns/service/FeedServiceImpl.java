@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.homesns.dao.FeedDao;
-import com.ssafy.homesns.dto.CommentDto;
 import com.ssafy.homesns.dto.EventMemberDto;
 import com.ssafy.homesns.dto.FeedDto;
 import com.ssafy.homesns.dto.FeedParamDto;
@@ -111,7 +110,7 @@ public class FeedServiceImpl implements FeedService {
 		try {
 			// 파일,댓글,해시태그 리스트들 Dao호출
 			List<FileDto> fileList = feedDao.fileList(feedId);
-			List<CommentDto> commentList = feedDao.commentList(feedId, userSeq);
+			// List<CommentDto> commentList = feedDao.commentList(feedId,userSeq);
 			List<HashtagDto> hashtagList = feedDao.hashtagList(feedId);
 			List<UserDto> userList = feedDao.eventMemberList(feedId);
 			LocationDto locationDto = feedDao.locationSearch(feedId);
@@ -121,7 +120,7 @@ public class FeedServiceImpl implements FeedService {
 
 			// feedDto에 담기
 			feedDto.setFileList(fileList);
-			feedDto.setCommentList(commentList);
+			// feedDto.setCommentList(commentList);
 			feedDto.setHashtagList(hashtagList);
 			feedDto.setUserList(userList);
 			feedDto.setLocationDto(locationDto);

@@ -3,6 +3,7 @@ package com.ssafy.homesns.service;
 import com.ssafy.homesns.dto.CommentDto;
 import com.ssafy.homesns.dto.CommentEmotionDto;
 import com.ssafy.homesns.dto.CommentEmotionResultDto;
+import com.ssafy.homesns.dto.CommentParamDto;
 import com.ssafy.homesns.dto.CommentResultDto;
 
 public interface CommentService {
@@ -14,6 +15,7 @@ public interface CommentService {
 	// 댓글 삭제 => 댓글 레코드 삭제 + 댓글 감정표현 레코드 삭제 + 댓글 감정표현 사용 레코드 삭제
 	public CommentResultDto commentDelete(int commentId);
 	
+	public CommentResultDto commentList(CommentParamDto commentParamDto);
 	// 감정표현 하기 => 댓글 감정표현 레코드 수정 + 댓글 감정표현 사용 레코드 추가
 	public CommentEmotionResultDto commentEmotionAdd(CommentEmotionDto commentEmotionDto);
 	// 감정표현 취소 => 댓글 감정표현 레코드 수정 + 댓글 감정표현 사용 레코드 삭제

@@ -206,11 +206,11 @@ export default {
       }
     },
     getComments($state){
-      let data={
+      let commentParamDto={
         feedId: this.feedId,
         limit:10,
       }
-      this.$store.dispatch('comments/getComments', data, $state)
+      this.$store.dispatch('comments/getComments', commentParamDto, $state)
 
     },
     createComment(event) {
@@ -222,7 +222,6 @@ export default {
         commentTag: this.tagList, // userName, userSeq있음
         commentContent: this.comment,
         },
-        feedId : this.feedId
       }
       this.$store.dispatch('comments/createComment',data)
       // let commentDto = {

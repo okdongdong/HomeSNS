@@ -8,6 +8,7 @@ import com.ssafy.homesns.dao.CommentDao;
 import com.ssafy.homesns.dto.CommentDto;
 import com.ssafy.homesns.dto.CommentEmotionDto;
 import com.ssafy.homesns.dto.CommentEmotionResultDto;
+import com.ssafy.homesns.dto.CommentParamDto;
 import com.ssafy.homesns.dto.CommentResultDto;
 
 @Service
@@ -37,6 +38,22 @@ public class CommentServiceImpl implements CommentService{
 		}
 		return commentResultDto;
 	}
+
+	// 댓글 수정 => 댓글 레코드 수정
+	@Override
+	public CommentResultDto commentList(CommentParamDto commentParamDto) {
+		
+		CommentResultDto commentResultDto = new CommentResultDto();
+		
+		if ( commentDao.commentList(commentParamDto) == 1 ) {
+			commentResultDto.setResult(SUCCESS);
+		} else {
+			commentResultDto.setResult(FAIL);
+		}
+		return commentResultDto;
+	}
+
+	
 
 	// 댓글 수정 => 댓글 레코드 수정
 	@Override

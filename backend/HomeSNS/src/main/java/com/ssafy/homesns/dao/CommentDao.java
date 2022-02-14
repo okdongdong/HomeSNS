@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.ssafy.homesns.dto.CommentDto;
 import com.ssafy.homesns.dto.CommentEmotionDto;
+import com.ssafy.homesns.dto.CommentParamDto;
 
 @Mapper
 // 댓글 목록 찾기 기능은 피드를 불러올 때 동시에 진행
@@ -16,6 +17,8 @@ public interface CommentDao {
 	public int commentUpdate(CommentDto commentDto);
 	// 댓글 삭제
 	public int commentDelete(int commentId);
+	// 댓글 읽기
+	public int commentList(CommentParamDto commentDto);
 	
 	
 	// 댓글 감정표현 추가, 댓글을 생성하면서 동시에 모든 값이 0인 댓글 감정표현 테이블 생성
