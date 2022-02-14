@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RootController implements ErrorController{
 	
-	@GetMapping(value="/error")
-	public String errorPage() {
-		return "/api/group";
-	}
+//	@GetMapping(value="/error")
+//	public String errorPage() {
+//		return "/api/group";
+//	}
 	
 //	@GetMapping(value="/error")
 //	public String redirectPage() {
