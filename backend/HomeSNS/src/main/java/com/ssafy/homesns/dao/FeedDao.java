@@ -3,6 +3,7 @@ package com.ssafy.homesns.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.ssafy.homesns.dto.CommentDto;
 import com.ssafy.homesns.dto.EventMemberDto;
@@ -27,7 +28,7 @@ public interface FeedDao {
 
 	public List<FileDto> fileList(int feedId);
 
-	public List<CommentDto> commentList(int feedId);
+	public List<CommentDto> commentList(@Param("feedId") int feedId,@Param("userSeq")int userSeq);
 	public List<HashtagDto> hashtagList(int feedId);
 	public List<UserDto> eventMemberList(int feedId);
 	public LocationDto locationSearch(int feedId);

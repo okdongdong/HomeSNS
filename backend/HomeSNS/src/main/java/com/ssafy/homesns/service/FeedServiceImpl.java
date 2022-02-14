@@ -46,14 +46,7 @@ public class FeedServiceImpl implements FeedService {
 	// F:\SSAFY\ssafy5\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\BoardWebFileUpload\
 
 	/* for eclipse development code */
-	// String uploadPath = "/Users" + File.separator + "sac" + File.separator +
-	// "ssafy" + File.separator + "2nd";
-	// String uploadPath = "C:" + File.separator + "Users" + File.separator +
-	// "SSAFY"+ File.separator+"Pictures"+ File.separator +"ssafy";
-	String uploadPath = "C:" + File.separator + "Users" + File.separator + "SSAFY" + File.separator + "Desktop"
-			+ File.separator + "2학기" + File.separator + "01_공통프로젝트" + File.separator + "깃랩" + File.separator + "02_sub_pjt"
-			+ File.separator + "S06P12E205" + File.separator + "frontend" + File.separator + "frontend" + File.separator
-			+ "src" + File.separator + "assets";
+	String uploadPath = "/usr" + File.separator + "share" + File.separator + "nginx" + File.separator + "html";
 
 	private static final int SUCCESS = 1;
 	private static final int FAIL = -1;
@@ -110,7 +103,7 @@ public class FeedServiceImpl implements FeedService {
 	// feedId를 이용하여 해당feed를 가져온다.
 	// 성공하면 Result를 SUCCESS로 set하고, 실패하면 Result를 FAIL로 set한다
 	@Override
-	public FeedResultDto feedDetail(int feedId) {
+	public FeedResultDto feedDetail(int feedId, int userSeq) {
 
 		FeedResultDto feedResultDto = new FeedResultDto();
 		FeedDto feedDto = new FeedDto();
@@ -118,7 +111,7 @@ public class FeedServiceImpl implements FeedService {
 		try {
 			// 파일,댓글,해시태그 리스트들 Dao호출
 			List<FileDto> fileList = feedDao.fileList(feedId);
-			List<CommentDto> commentList = feedDao.commentList(feedId);
+			List<CommentDto> commentList = feedDao.commentList(feedId, userSeq);
 			List<HashtagDto> hashtagList = feedDao.hashtagList(feedId);
 			List<UserDto> userList = feedDao.eventMemberList(feedId);
 			LocationDto locationDto = feedDao.locationSearch(feedId);

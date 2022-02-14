@@ -134,7 +134,7 @@ public class UserController {
 	}
 
 	// UserSeq를 받아서 해당 유저 검색 후 유저 정보 다 넘겨준다 -> 이름 + 프로필 사진
-	@GetMapping(value = "/user/{userSeq}")
+	@GetMapping(value = "/user/profile/{userSeq}")
 	public ResponseEntity<UserResultDto> userPage(@PathVariable int userSeq) {
 
 		UserResultDto userResultDto = userService.userPage(userSeq);

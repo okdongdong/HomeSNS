@@ -47,12 +47,7 @@ public class UserServiceImpl implements UserService{
 	String uploadFolder = "upload";
 
 
-	/* for production code */
-	//uploadPath = getServletContext().getRealPath("/");
-	// F:\SSAFY\ssafy5\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\BoardWebFileUpload\
-
-	/* for eclipse development code */
-	String uploadPath = "/Users" + File.separator + "sac" + File.separator + "ssafy" + File.separator + "2nd";
+	String uploadPath = "/usr" + File.separator + "share" + File.separator + "nginx" + File.separator + "html";
 
 
 
