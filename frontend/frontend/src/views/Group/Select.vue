@@ -1,18 +1,30 @@
 <template>
   <v-app class="box" style="background-color: rgba(0, 0, 0, 0)">
-    <v-spacer></v-spacer>
+    <v-btn
+      absolute
+      left
+      class="mt-5"
+      color="white"
+      text
+      large
+      @click.stop="logout()"
+      ><v-icon>arrow_back</v-icon>
+      <h3>로그아웃</h3></v-btn
+    >
+    <div style="height: 80px"></div>
     <div class="container">
       <v-card flat color="rgb(0,0,0,0)">
-        <div class="d-flex justify-center">
-          <v-img
-            class="logo-img"
-            src="@/assets/logo3.png"
-            alt="logo"
-            max-width="200"
-            max-height="200"
-          >
-          </v-img>
-        </div>
+        <v-row>
+          <v-col offset="3" cols="6">
+            <v-img
+              class="logo-img"
+              src="@/assets/logo3.png"
+              alt="logo"
+              aspect-ratio="1"
+            >
+            </v-img>
+          </v-col>
+        </v-row>
         <v-card-title class="main-text justify-center font-weight-bold"
           >우리집SNS</v-card-title
         >
@@ -21,9 +33,9 @@
     </div>
     <div class="container d-flex">
       <!-- 그룹 추가하는 곳 -->
-      <v-row class="ma-1">
+      <v-row class="ma-1" style="">
         <v-col class="pa-5" cols="6">
-          <group-create-popup  />
+          <group-create-popup />
 
           <h3 style="margin-top: 8px">그룹 추가</h3>
         </v-col>
@@ -46,13 +58,13 @@
       </v-row>
     </div>
     <v-spacer></v-spacer>
-    <v-spacer></v-spacer>
   </v-app>
 </template>
 
 <script>
 import axios from "axios";
 import GroupCreatePopup from "../../components/GroupCreatePopup.vue";
+import { mapActions } from "vuex";
 export default {
   components: { GroupCreatePopup },
   name: "Select",
@@ -64,6 +76,7 @@ export default {
   },
 
   methods: {
+    ...mapActions("account", ["logout"]),
     getGroup() {
       console.log("12333");
       const token = localStorage.getItem("jwt");
@@ -86,14 +99,13 @@ export default {
     },
     // 그룹 사진 클릭 시, 해당 그룹 메인페이지로 이동
     groupMainPage: function (groupInfo) {
-      console.log('groupInfo',groupInfo)
+      console.log("groupInfo", groupInfo);
       this.$store.dispatch("account/setNowGroup", groupInfo);
       this.$router.push({
         name: "Main",
         params: { groupId: groupInfo.groupId },
       });
     },
-   
   },
   created() {
     this.getGroup();
@@ -122,5 +134,12 @@ h1 {
 }
 h3 {
   color: white;
+}
+.group-box {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.group-box::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
 }
 </style>
