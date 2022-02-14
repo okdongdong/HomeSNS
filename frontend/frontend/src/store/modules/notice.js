@@ -62,6 +62,9 @@ const notice = {
                 case "voteCreate":
                   message = "새로운 투표를 작성했습니다.";
                   break;
+                case "voteEnd":
+                  message = "투표를 종료했습니다.";
+                  break;
                 case "ghostLegCreate":
                   message = "새로운 사다리타기를 작성했습니다.";
                   break;
@@ -185,6 +188,9 @@ const notice = {
                 case "voteCreate":
                   message = "새로운 투표를 작성했습니다.";
                   break;
+                case "voteEnd":
+                  message = "투표를 종료했습니다.";
+                  break;
                 case "ghostLegCreate":
                   message = "새로운 사다리타기를 작성했습니다.";
                   break;
@@ -278,6 +284,9 @@ const notice = {
                     break;
                   case "voteCreate":
                     message = "새로운 투표를 작성했습니다.";
+                    break;
+                  case "voteEnd":
+                    message = "투표를 종료했습니다.";
                     break;
                   case "ghostLegCreate":
                     message = "새로운 사다리타기를 작성했습니다.";
