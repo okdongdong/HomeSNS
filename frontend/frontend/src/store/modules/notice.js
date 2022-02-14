@@ -149,7 +149,7 @@ const notice = {
           noticeContentId: noticeInfo.noticeContentId,
         };
         this.stompClient.send(
-          `/notice/receive/${rootState.account.nowGroup.groupId}`,
+          `/api/notice/receive/${rootState.account.nowGroup.groupId}`,
           JSON.stringify(msg),
           {}
         );
@@ -160,7 +160,7 @@ const notice = {
       const token = localStorage.getItem("jwt");
       const headers = {
         Authorization: token,
-        destination: `/notice/send/${rootState.account.nowGroup.groupId}`,
+        destination: `/api/notice/send/${rootState.account.nowGroup.groupId}`,
       };
       let socket = new SockJS(serverURL);
       this.stompClient = Stomp.over(socket);
@@ -178,18 +178,19 @@ const notice = {
 
             // 이런형태를 pub sub 구조라고 한다.
             this.stompClient.subscribe(
-              `/notice/send/${rootState.account.nowGroup.groupId}`,
+              `/api/notice/send/${rootState.account.nowGroup.groupId}`,
               (res) => {
-                commit("CAL_NOTICE_COUNT", 1);
                 console.log("구독으로 받은 메시지 입니다.", res.body);
 
                 // 받은 데이터를 json으로 파싱하고 저장
                 state.recv = JSON.parse(res.body);
+
                 if (
                   state.recv.targetUserList.some(
                     (id) => id === rootState.account.userSeq
                   )
                 ) {
+                  commit("CAL_NOTICE_COUNT", 1);
                   commit("NOTICE_ALARM");
                 }
 

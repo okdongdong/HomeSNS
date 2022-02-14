@@ -1,3 +1,4 @@
+z
 <template>
   <v-app class="my-background">
     <v-spacer></v-spacer>
@@ -68,7 +69,7 @@
             required
           ></v-text-field>
           <!-- 비밀번호 확인 -->
-           <v-text-field
+          <v-text-field
             clearable
             background-color="white"
             solo
@@ -121,8 +122,8 @@ export default {
       groupname: null,
       image: null,
       previewImage: undefined,
-      password : null,
-      passwordConfirmation : null,
+      password: null,
+      passwordConfirmation: null,
       rules: {
         groupNameRules: [
           (v) => !!v || "그룹명을 입력해주세요.",
@@ -130,12 +131,14 @@ export default {
             !(v && v.length >= 20) || "그룹명은 20자 이상 입력할 수 없습니다.",
         ],
         passwordRules: [
-        (v) => !!v || " 비밀번호를 입력해주세요.",
-        (v) => !(v && v.length >= 20) || "패스워드는 20자 이상 입력할 수 없습니다.",
-      ],
-      passwordConfirmationRules: [
-        (v) => v === this.password || "패스워드가 일치하지 않습니다.",
-      ],
+          (v) => !!v || " 비밀번호를 입력해주세요.",
+          (v) =>
+            !(v && v.length >= 20) ||
+            "패스워드는 20자 이상 입력할 수 없습니다.",
+        ],
+        passwordConfirmationRules: [
+          (v) => v === this.password || "패스워드가 일치하지 않습니다.",
+        ],
       },
     };
   },
@@ -164,16 +167,16 @@ export default {
         data: data,
         headers: {
           "Content-Type": "multipart/form-data", // 연동할때 주석 풀기
-          Authorization:token,
+          Authorization: token,
         },
       })
-      .then(() => {
-        this.$router.push({ name: "Select" });
-        console.log("123");
-      })
-      .catch((error)=>{
-        console.log(error);
-      });
+        .then(() => {
+          this.$router.push({ name: "Select" });
+          console.log("123");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };
@@ -181,7 +184,7 @@ export default {
 
 <style scoped>
 .my-background {
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
   margin-left: auto;
   margin-right: auto;
   text-align: center;
