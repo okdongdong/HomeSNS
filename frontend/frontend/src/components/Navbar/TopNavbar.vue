@@ -231,8 +231,8 @@ export default {
   },
 
   mounted() {
-    // this.connect();
-    // this.getNoticeList();
+    this.connect();
+    this.getNoticeList();
   },
   beforeDestroy() {
     this.disconnect();

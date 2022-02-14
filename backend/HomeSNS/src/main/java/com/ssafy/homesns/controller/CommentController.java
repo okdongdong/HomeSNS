@@ -57,11 +57,9 @@ public class CommentController {
 	// 댓글 수정 => 댓글 레코드 수정
 	@PutMapping(value="/feed/comment")
 	public ResponseEntity<CommentResultDto> commentUpdate(@RequestBody CommentDto commentDto) {
-		// Security Context에서 UserSeq를 구한다
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		int userSeq = Integer.parseInt(authentication.getName());
-
-		commentDto.setCommentAuthorSeq(userSeq);
+		
+		// userSeq필요없어서 지움!
+		
 		CommentResultDto commentResultDto = commentService.commentUpdate(commentDto);
 
 		if ( commentResultDto.getResult() == SUCCESS ) {

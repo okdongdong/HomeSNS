@@ -3,16 +3,9 @@
     <v-stepper-items>
       <!-- 결과 출력 -->
       <v-stepper-content step="1" class="pa-0">
-        <div
-          class="d-flex justify-center mb-5"
-          style="
-            width: 100%;
-            box-shadow: inset 0 0 7px #888;
-            background-color: white;
-          "
-        >
+        <div class="d-flex justify-center mb-5 ghostleg-box">
           <div class="overflow-x-auto py-2">
-            <div :style="'width:calc(90px * ' + info.playerNum + ');'">
+            <div :style="'width:calc(80px * ' + info.playerNum + ');'">
               <!-- 플레이어명 -->
               <div class="my-2 d-flex justify-content-between">
                 <div
@@ -310,5 +303,10 @@ export default {
 }
 .edge {
   border-bottom: 4px solid black;
+}
+.ghostleg-box {
+  width: 100%;
+  box-shadow: inset 0 0 7px #888;
+  background-color: white;
 }
 </style>
