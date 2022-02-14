@@ -46,7 +46,8 @@ public interface CommentDao {
 	// 댓글 감정표현 삭제, 댓글을 삭제하면서 동시에 댓글 감정표현 테이블 삭제
 	public int commentEmotionDelete(int commendId);
 	
-	
+	// 댓글 태그 한 사람 생성
+	public int commentTagCreate(CommentDto commentDto);
 	// 댓글 감정표현 기록 추가, 댓글 감정표현의 수정에 따라 테이블 생성
 	public int commentEmotionUserUseCreate(CommentEmotionDto commentEmotionDto);
 	// 유저가 댓글에 어떤 감정표현을 했는지 찾기 => 결과값이 없으면 아직 감정표현을 하지 않은 것

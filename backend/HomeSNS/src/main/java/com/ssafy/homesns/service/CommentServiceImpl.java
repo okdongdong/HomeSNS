@@ -28,17 +28,33 @@ public class CommentServiceImpl implements CommentService{
 	public CommentResultDto commentCreate(CommentDto commentDto) {
 
 		CommentResultDto commentResultDto = new CommentResultDto();
+				
 		
-		// 댓글 레코드 생성했다면,
 		if ( commentDao.commentCreate(commentDto) == 1 ) {
-			// 댓글 감정표현 레코드도 생성한다
-			commentDao.commentEmotionCreate(commentDto.getCommentId());
+			
+			for (int commentTagSeq : commentDto.getCommentTags() ) {
+				commentDto.setCommentTagSeq(commentTagSeq);
+				commentDao.commentTagCreate(commentDto);
+			}
 
 			commentResultDto.setResult(SUCCESS);
 		} else {
 			commentResultDto.setResult(FAIL);
 		}
 		return commentResultDto;
+
+		
+//		
+//		// 댓글 레코드 생성했다면,
+//		if ( commentDao.commentCreate(commentDto) == 1 ) {
+//			// 댓글 감정표현 레코드도 생성한다
+//			commentDao.commentEmotionCreate(commentDto.getCommentId());
+//
+//			commentResultDto.setResult(SUCCESS);
+//		} else {
+//			commentResultDto.setResult(FAIL);
+//		}
+//		return commentResultDto;
 	}
 
 	// 댓글 가져오기 
