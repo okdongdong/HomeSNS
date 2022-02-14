@@ -129,7 +129,7 @@ public class FeedController {
 	// 나머지 feed데이터 관련해서는 update 하는 로직으로 구성
 	@PostMapping(value="/feed/update")
 	public ResponseEntity<FeedResultDto> feedUpdate(FeedDto feedDto, MultipartHttpServletRequest request){
-
+		System.out.println("update///"+feedDto);
 		
 		// 작성자 seq jwt에서 받아오기
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
