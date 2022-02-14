@@ -109,7 +109,7 @@ export default {
     },
   }),
   methods: {
-    ...mapActions(["voteCreate"]),
+    ...mapActions("notice", ["send"]),
     voteAddItem() {
       this.voteInfo.voteItems.push({
         voteItemName: `항목${this.voteInfo.voteItems.length + 1}`,
@@ -133,8 +133,14 @@ export default {
         data: data,
       })
         .then((res) => {
+          console.log("투표생성 완료: ", res);
           this.$router.push({ name: "EntFeedList" });
-          console.log(res);
+          const noticeInfo = {
+            targetUserSeq: -1,
+            noticeType: "voteCreate",
+            noticeContentId: res.data.gameId,
+          };
+          this.send(noticeInfo);
         })
         .catch((err) => {
           console.log(err);

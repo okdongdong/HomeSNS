@@ -107,7 +107,7 @@
 
 <script>
 import axios from "axios";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "GhostLeg",
@@ -165,6 +165,7 @@ export default {
     nowActiveIdx: null,
   }),
   methods: {
+    ...mapActions("notice", ["send"]),
     ghostLegCreate() {
       // 임시용 경로변경
       const data = {
@@ -194,6 +195,13 @@ export default {
       })
         .then((res) => {
           this.$router.push({ name: "EntFeedList" });
+          const noticeInfo = {
+            targetUserSeq: -1,
+            noticeType: "ghostLegCreate",
+            noticeContentId: res.data.gameId,
+          };
+          this.send(noticeInfo);
+
           console.log(res);
         })
         .catch((err) => {
