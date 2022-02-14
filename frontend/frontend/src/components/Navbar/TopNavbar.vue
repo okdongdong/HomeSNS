@@ -2,7 +2,7 @@
   <div>
     <v-card
       class="rounded-xl justify-center d-flex"
-      @click.stop="alarmMove(recv.noticeContentId, recv.noticeType)"
+      @click.stop="noticeMove(recv.noticeContentId, recv.noticeType)"
     >
       <v-alert
         v-show="noticeAlarm && !dialog"
@@ -80,7 +80,9 @@
               class="px-0"
               v-for="(notice, $idx) in noticeList"
               :key="$idx"
-              @click="dialog = false"
+              @click="
+                noticeMove(notice.noticeId, notice.noticeType), (dialog = false)
+              "
             >
               <v-hover>
                 <template v-slot:default="{ hover }">
@@ -92,15 +94,13 @@
                     :disabled="notice.noticeReadYn == 'y'"
                     :color="notice.noticeReadYn == 'y' ? '#DDDDDD' : ''"
                     @click.stop="
-                      noticeRead(
-                        notice.noticeId,
-                        notice.noticeContentId,
-                        notice.noticeType
-                      ),
-                        alarmMove(
+                      noticeMove(notice.noticeId, notice.noticeType),
+                        noticeRead(
                           notice.noticeId,
-                          notice.noticeContentId
-                        )((notice.noticeReadYn = 'y')),
+                          notice.noticeContentId,
+                          notice.noticeType
+                        ),
+                        (notice.noticeReadYn = 'y'),
                         (dialog = false)
                     "
                   >
@@ -279,7 +279,8 @@ export default {
     feedCreate() {
       this.$router.push({ name: "FeedCreate" });
     },
-    alarmMove(noticeContentId, noticeType) {
+    noticeMove(noticeContentId, noticeType) {
+      console.log(noticeType);
       switch (noticeType) {
         case "feedCreate":
         case "commentCreate":
@@ -293,7 +294,7 @@ export default {
 
         case "voteCreate":
         case "ghostLegCreate":
-          this.router.push({ name: "Minigame" });
+          this.$router.push({ name: "EntFeedList" });
           break;
         default:
       }
