@@ -1,9 +1,6 @@
 package com.ssafy.homesns.service;
 
-import com.ssafy.homesns.dao.CommentDao;
-import com.ssafy.homesns.dao.FeedDao;
-import com.ssafy.homesns.dao.GroupDao;
-import com.ssafy.homesns.dao.NoticeDao;
+import com.ssafy.homesns.dao.*;
 import com.ssafy.homesns.dto.NoticeDto;
 import com.ssafy.homesns.dto.NoticeResultDto;
 import com.ssafy.homesns.dto.NoticeResultListDto;
@@ -31,6 +28,9 @@ public class NoticeServiceImpl implements NoticeService {
     @Autowired
     CommentDao commentDao;
 
+    @Autowired
+    GameDao gameDao;
+
     private static final int SUCCESS = 1;
     private static final int FAIL = -1;
 
@@ -41,7 +41,7 @@ public class NoticeServiceImpl implements NoticeService {
         List<Integer> noticeTargetUserList = new ArrayList<>();
         int targetUser = noticeDto.getTargetUserSeq();
         // 요청의 타겟 유저가 -1로 들어온 경우 알람 생성유저 본인을 제외한 해당 그룹 내 모든 인원에게 알림 전송
-        boolean isTargetAll = targetUser == -1 ? true : false;
+        boolean isTargetAll = targetUser == -1;
         noticeResultListDto.setResult(SUCCESS);
         System.out.println(isTargetAll);
 
@@ -52,8 +52,8 @@ public class NoticeServiceImpl implements NoticeService {
             List<UserDto> nowGroupMemberList = groupDao.groupMemberListSearch(nowGroupId);
 
             // 그룹내 모든 인원에 대해서 하나하나 알람을 만들어줌
-            for (int i = 0; i < nowGroupMemberList.size(); i++) {
-                int nowTargetUser = nowGroupMemberList.get(i).getUserSeq();
+            for (UserDto userDto : nowGroupMemberList) {
+                int nowTargetUser = userDto.getUserSeq();
 
                 // 현재탐색중인 유저가 알림을 생성한 유저라면 넘어가야함
                 if (nowTargetUser == noticeDto.getUserSeq()) {
@@ -91,7 +91,7 @@ public class NoticeServiceImpl implements NoticeService {
 
         return noticeResultListDto;
     }
-    
+
     // 모든알림을 받아와서 반환
     @Override
     @Transactional
@@ -106,37 +106,31 @@ public class NoticeServiceImpl implements NoticeService {
                 String nowNoticeType = nowNoticeResultDto.getNoticeType();
                 int nowContentId = nowNoticeResultDto.getNoticeContentId();
 
-                if (nowNoticeType == "feed") {
-                    nowNoticeResultDto.setNoticeContentTitle(feedDao.feedDetail(nowContentId).getFeedTitle());
-                    nowNoticeResultDto.setNoticeContentContent(feedDao.feedDetail(nowContentId).getFeedContent());
-                } else if (nowNoticeType == "comment") {
-                    continue;
-//                    nowNoticeResultDto.setNoticeContentTitle(commentDao.feedDetail(nowContentId).getFeedTitle());
-//                    nowNoticeResultDto.setNoticeContentContent(commentDao.feedDetail(nowContentId).getFeedContent());
-                } else if (nowNoticeType == "emotion") {
-                    continue;
-//                    nowNoticeResultDto.setNoticeContentTitle(feedDao.feedDetail(nowContentId).getFeedTitle());
-//                    nowNoticeResultDto.setNoticeContentContent(feedDao.feedDetail(nowContentId).getFeedContent());
-                } else if (nowNoticeType == "share") {
-                    continue;
-//                    nowNoticeResultDto.setNoticeContentTitle(feedDao.feedDetail(nowContentId).getFeedTitle());
-//                    nowNoticeResultDto.setNoticeContentContent(feedDao.feedDetail(nowContentId).getFeedContent());
-                } else if (nowNoticeType == "vote") {
-                    continue;
-//                    nowNoticeResultDto.setNoticeContentTitle(feedDao.feedDetail(nowContentId).getFeedTitle());
-//                    nowNoticeResultDto.setNoticeContentContent(feedDao.feedDetail(nowContentId).getFeedContent());
-                } else if (nowNoticeType == "ghostleg") {
-                    continue;
-//                    nowNoticeResultDto.setNoticeContentTitle(feedDao.feedDetail(nowContentId).getFeedTitle());
-//                    nowNoticeResultDto.setNoticeContentContent(feedDao.feedDetail(nowContentId).getFeedContent());
-                } else {
-                    continue;
-
-
+                switch (nowNoticeType) {
+                    case "feedCreate":
+                        nowNoticeResultDto.setNoticeContentTitle(feedDao.feedDetail(nowContentId).getFeedTitle());
+                        nowNoticeResultDto.setNoticeContentContent(feedDao.feedDetail(nowContentId).getFeedContent());
+                        break;
+//                    case "commentCreate":
+////                        nowNoticeResultDto.setNoticeContentTitle(commentDao.feedDetail(nowContentId).getFeedTitle());
+////                        nowNoticeResultDto.setNoticeContentContent(commentDao.feedDetail(nowContentId).getFeedContent());
+//                        break;
+//                    case "emotionCreate":
+////                    nowNoticeResultDto.setNoticeContentTitle(feedDao.feedDetail(nowContentId).getFeedTitle());
+////                    nowNoticeResultDto.setNoticeContentContent(feedDao.feedDetail(nowContentId).getFeedContent());
+//                        break;
+//                    case "share":
+////                    nowNoticeResultDto.setNoticeContentTitle(feedDao.feedDetail(nowContentId).getFeedTitle());
+////                    nowNoticeResultDto.setNoticeContentContent(feedDao.feedDetail(nowContentId).getFeedContent());
+//                        break;
+                    case "voteCreate":
+                    case "ghostLegCreate":
+                        nowNoticeResultDto.setNoticeContentTitle(gameDao.gameDetailSearch(nowContentId).getGameTitle());
+                        break;
+                    default:
+                        break;
                 }
             }
-
-
             noticeResultListDto.setCount(noticeDao.noticeCount(userSeq, groupId));
             noticeResultListDto.setResult(SUCCESS);
 
