@@ -86,6 +86,7 @@ export default {
                     title: contentData.gameTitle,
                     authorId: contentData.gameAuthor,
                     author: contentData.gameAuthorName,
+                    updateYn: contentData.updateYn,
                     authorPicUrl: contentData.gameAuthorProfileImageUrl,
                     createdAt: contentData.gameRegisterDate,
                     contentId: contentData.gameId,

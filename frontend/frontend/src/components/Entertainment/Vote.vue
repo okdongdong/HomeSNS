@@ -46,21 +46,63 @@
         </div>
       </div>
     </div>
-
-    <div class="justify-center d-flex">
-      <v-btn v-if="nowVote" @click.stop="(nowVote = !nowVote), updateVote()"
-        >투표완료</v-btn
+    <v-row>
+      <v-col v-if="info.updateYn == 'y'" class="justify-center d-flex">
+        <v-btn v-if="!nowVote" @click.stop="nowVote = !nowVote">투표하기</v-btn>
+        <v-btn v-else @click.stop="(nowVote = !nowVote), updateVote()"
+          >투표완료</v-btn
+        >
+      </v-col>
+      <v-col v-else class="text-center">
+        <h4 class="py-3">마감된 투표입니다.</h4>
+      </v-col>
+      <v-col
+        class="justify-center d-flex"
+        v-if="!nowVote && info.updateYn == 'y' && userSeq == info.authorId"
       >
-      <v-btn v-else @click.stop="nowVote = !nowVote">투표하기</v-btn>
-    </div>
+        <v-dialog v-model="dialog" scrollable max-width="400px">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn v-bind="attrs" v-on="on" @click.stop="dialog = true"
+              >투표종료</v-btn
+            >
+          </template>
+          <v-card class="rounded-xl pa-3">
+            <div class="justify-center d-flex align-center">
+              <v-card-title>정말 종료하시겠습니까?</v-card-title>
+            </div>
+            <div style="height: 1.5rem"></div>
+            <v-card-text class="d-flex">
+              <v-btn
+                class="mx-auto pa-3 transition-swing d-flex align-center"
+                @click="endVote(info.contentId), (dialog = false)"
+                color="red"
+                width="100"
+                dark
+              >
+                <h3>종료</h3>
+              </v-btn>
+              <v-btn
+                width="100"
+                class="mx-auto pa-3 transition-swing d-flex align-center"
+                @click="dialog = false"
+              >
+                <h3>취소</h3>
+              </v-btn>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import { mapActions, mapState } from "vuex";
 export default {
   name: "Vote",
   data: () => ({
+    dialog: false,
     nowVote: false,
     preVoteItemId: null,
   }),
@@ -68,6 +110,29 @@ export default {
     info: Object,
   },
   methods: {
+    ...mapActions("notice", ["send"]),
+    endVote(gameId) {
+      const token = localStorage.getItem("jwt");
+      axios({
+        method: "put",
+        url: `${process.env.VUE_APP_MCS_URL}/game/vote/quit`,
+        headers: { Authorization: token },
+        data: { gameId: gameId },
+      })
+        .then((res) => {
+          console.log(res);
+          const noticeInfo = {
+            targetUserSeq: -1,
+            noticeType: "voteEnd",
+            noticeContentId: this.info.contentId,
+          };
+          this.send(noticeInfo);
+          this.info.updateYn = "n";
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     voteVote(voteItemId) {
       const token = localStorage.getItem("jwt");
       axios({
@@ -78,6 +143,7 @@ export default {
       })
         .then((res) => {
           console.log(res);
+
           this.preVoteItemId = null;
         })
         .catch((err) => {
@@ -133,6 +199,7 @@ export default {
     },
   },
   computed: {
+    ...mapState("account", ["userSeq"]),
     myVoteIdx() {
       if (!this.info.myVoteItem) {
         return null;
