@@ -39,19 +39,7 @@
 		WHERE FEED_ID =#{feedId}
 	</select>
 	
-	<!-- 댓글 가져오는 SQL  -->
-	<select id="commentList" parameterType="map" resultType="com.ssafy.homesns.dto.CommentDto"> 
-		SELECT c.comment_id,feed_id,comment_tag as comment_tag_seq, u2.user_name as comment_tag_name, comment_author as comment_author_seq, u1.user_name as comment_author,comment_content,comment_upload_date, 
-				ce.good, ce.sad, ce.check, ce.fun , ce.amaze, ceu.EMOTION_CODE as code
-		FROM HOME_SNS.COMMENT c
-        JOIN HOME_SNS.USER u1 ON c.comment_author = u1.user_seq 
-        JOIN HOME_SNS.USER u2 ON c.comment_tag = u2.user_seq 
-        LEFT OUTER JOIN HOME_SNS.COMMENT_EMOTION ce ON c.comment_id = ce.comment_id  
-        LEFT OUTER JOIN HOME_SNS.COMMENT_EMOTION_USER_USE ceu ON ce.COMMENT_ID = ceu.COMMENT_ID AND ceu.USER_SEQ = #{userSeq}
-       WHERE feed_id = #{feedId}
-       LIMIT #{limit} OFFSET #{offset}
-       
-	</select>
+	
 	
 	<!-- 해쉬태그 가져오는 SQL -->
 	<select id="hashtagList" parameterType="int" resultType="com.ssafy.homesns.dto.HashtagDto"> 

@@ -43,7 +43,7 @@ public class CommentController {
 	
 	// 댓글 가져오기 => 
 	@GetMapping(value="/feed/comment")
-	public ResponseEntity<CommentResultDto> commentList(@RequestBody CommentParamDto commentParamDto) {
+	public ResponseEntity<CommentResultDto> commentList(CommentParamDto commentParamDto) {
 		// Security Context에서 UserSeq를 구한다
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		int userSeq = Integer.parseInt(authentication.getName());

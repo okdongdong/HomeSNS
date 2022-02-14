@@ -1,5 +1,7 @@
 package com.ssafy.homesns.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ssafy.homesns.dto.CommentDto;
@@ -18,7 +20,7 @@ public interface CommentDao {
 	// 댓글 삭제
 	public int commentDelete(int commentId);
 	// 댓글 읽기
-	public int commentList(CommentParamDto commentDto);
+	public List<CommentDto> commentList(CommentParamDto commentParamDto);
 	
 	
 	// 댓글 감정표현 추가, 댓글을 생성하면서 동시에 모든 값이 0인 댓글 감정표현 테이블 생성

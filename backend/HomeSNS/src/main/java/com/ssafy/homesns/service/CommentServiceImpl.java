@@ -1,5 +1,7 @@
 package com.ssafy.homesns.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,15 +41,20 @@ public class CommentServiceImpl implements CommentService{
 		return commentResultDto;
 	}
 
-	// 댓글 수정 => 댓글 레코드 수정
+	// 댓글 가져오기 
 	@Override
 	public CommentResultDto commentList(CommentParamDto commentParamDto) {
 		
 		CommentResultDto commentResultDto = new CommentResultDto();
 		
-		if ( commentDao.commentList(commentParamDto) == 1 ) {
+		
+		try {
+			List<CommentDto> commentDtoList = commentDao.commentList(commentParamDto);
+ 
+			commentResultDto.setCommentList(commentDtoList);	
 			commentResultDto.setResult(SUCCESS);
-		} else {
+		}catch(Exception e ) {
+			e.printStackTrace();
 			commentResultDto.setResult(FAIL);
 		}
 		return commentResultDto;
