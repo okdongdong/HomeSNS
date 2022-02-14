@@ -40,13 +40,15 @@
 	</select>
 	
 	<!-- 댓글 가져오는 SQL  -->
-	<select id="commentList" parameterType="int" resultType="com.ssafy.homesns.dto.CommentDto"> 
-		SELECT c.comment_id,feed_id,comment_tag,comment_author as comment_author_seq, u.user_name as comment_author,comment_content,comment_upload_date, 
-				ce.good, ce.sad, ce.check, ce.fun , ce.amaze
+	<select id="commentList" parameterType="map" resultType="com.ssafy.homesns.dto.CommentDto"> 
+		SELECT c.comment_id,feed_id,comment_tag as comment_tag_seq, u2.user_name as comment_tag_name, comment_author as comment_author_seq, u1.user_name as comment_author,comment_content,comment_upload_date, 
+				ce.good, ce.sad, ce.check, ce.fun , ce.amaze, ceu.EMOTION_CODE as code
 		FROM HOME_SNS.COMMENT c
-        JOIN HOME_SNS.USER u ON comment_author = user_seq 
+        JOIN HOME_SNS.USER u1 ON c.comment_author = u1.user_seq 
+        JOIN HOME_SNS.USER u2 ON c.comment_tag = u2.user_seq 
         LEFT OUTER JOIN HOME_SNS.COMMENT_EMOTION ce ON c.comment_id = ce.comment_id  
-        WHERE feed_id = #{feedId}
+        LEFT OUTER JOIN HOME_SNS.COMMENT_EMOTION_USER_USE ceu ON ce.COMMENT_ID = ceu.COMMENT_ID AND ceu.USER_SEQ = #{userSeq}
+       WHERE feed_id = #{feedId};
 	</select>
 	
 	<!-- 해쉬태그 가져오는 SQL -->
@@ -131,7 +133,7 @@
 	<!-- 피드추가페이지 로딩시 프런트가 가지고 있어야하는 내용리턴  -->
 	<!-- favorite표시한 장소 담기 -->
 	<select id="userLocationList" parameterType="map" resultType="com.ssafy.homesns.dto.LocationDto">
-		SELECT LOCATION_NAME, LAT, CASE WHEN LF.USER_SEQ IS NULL THEN false
+		SELECT L.LOCATION_ID, LOCATION_NAME, LAT,LNG, CASE WHEN LF.USER_SEQ IS NULL THEN false
 										ELSE true
 			END as FAVORITE
 		FROM LOCATION L

@@ -13,7 +13,7 @@ public interface FeedService {
 
 	public MainFeedResultDto feedMain(FeedParamDto feedParamDto);
 	
-	public FeedResultDto feedDetail(int feedId);
+	public FeedResultDto feedDetail(int feedId, int userSeq);
 	
 	public FeedResultDto feedInsert(FeedDto feedDto, MultipartHttpServletRequest request);
 	

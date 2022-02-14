@@ -65,7 +65,10 @@ public class FeedController {
 	@GetMapping(value="/feed/{feedId}")
 	public ResponseEntity<FeedResultDto> feedDetail(@PathVariable int feedId){
 		
-		FeedResultDto feedResultDto = feedService.feedDetail(feedId);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		int userSeq = Integer.parseInt(authentication.getName());
+		
+		FeedResultDto feedResultDto = feedService.feedDetail(feedId, userSeq);
 		
 		if(feedResultDto.getResult() == SUCCESS) {
 			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);
@@ -130,7 +133,7 @@ public class FeedController {
 	@PostMapping(value="/feed/update")
 	public ResponseEntity<FeedResultDto> feedUpdate(FeedDto feedDto, MultipartHttpServletRequest request){
 
-		
+		System.out.println();
 		// 작성자 seq jwt에서 받아오기
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		int authorSeq = Integer.parseInt(authentication.getName());
