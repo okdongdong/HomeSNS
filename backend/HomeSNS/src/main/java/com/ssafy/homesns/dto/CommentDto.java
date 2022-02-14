@@ -1,6 +1,7 @@
 package com.ssafy.homesns.dto;
 
 import java.util.Date;
+import java.util.List;
 
 public class CommentDto {
 
@@ -12,6 +13,8 @@ public class CommentDto {
 	private String commentAuthor;
 	private String commentContent;
 	private Date commentUploadDate; 
+	
+	private List<Integer> commentTags;
 	
 	private int good;
 	private int sad;
@@ -133,15 +136,22 @@ public class CommentDto {
 		this.code = code;
 	}
 
+	public List<Integer> getCommentTags() {
+		return commentTags;
+	}
+
+	public void setCommentTags(List<Integer> commentTags) {
+		this.commentTags = commentTags;
+	}
+
 	@Override
 	public String toString() {
 		return "CommentDto [commentId=" + commentId + ", feedId=" + feedId + ", commentTagSeq=" + commentTagSeq
 				+ ", commentTagName=" + commentTagName + ", commentAuthorSeq=" + commentAuthorSeq + ", commentAuthor="
 				+ commentAuthor + ", commentContent=" + commentContent + ", commentUploadDate=" + commentUploadDate
-				+ ", good=" + good + ", sad=" + sad + ", check=" + check + ", fun=" + fun + ", amaze=" + amaze
-				+ ", code=" + code + "]";
-	} 
-	
-	
+				+ ", commentTags=" + commentTags + ", good=" + good + ", sad=" + sad + ", check=" + check + ", fun="
+				+ fun + ", amaze=" + amaze + ", code=" + code + "]";
+	}
+
 	
 }

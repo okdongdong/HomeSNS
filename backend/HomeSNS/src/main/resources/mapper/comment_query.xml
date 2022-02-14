@@ -7,6 +7,13 @@
 		             VALUES ( #{feedId},  #{commentTag},  #{commentAuthor},  #{commentContent},       now()                 )
 	</insert>
 	
+	<insert id="commentTagCreate" parameterType="map" >
+		INSERT INTO COMMENT_TAG ( COMMENT_ID,    COMMENT_TAG)
+		             VALUES ( #{commentId},  #{commentTag} )
+	</insert>
+	
+	
+	
 	<!-- 댓글 가져오는 SQL  -->
 	<select id="commentList" parameterType="map" resultType="com.ssafy.homesns.dto.CommentDto"> 
 		SELECT c.comment_id,feed_id,comment_tag as comment_tag_seq, u2.user_name as comment_tag_name, comment_author as comment_author_seq, u1.user_name as comment_author,comment_content,comment_upload_date, 
