@@ -1,5 +1,5 @@
 <template>
-  <v-stepper v-model="step" flat>
+  <v-stepper v-model="step" flat style="background-color: rgba(0, 0, 0, 0)">
     <v-stepper-items>
       <!-- 결과 출력 -->
       <v-stepper-content step="1" class="pa-0">
@@ -85,7 +85,7 @@
             class="align-center d-flex"
           >
             <div>모든결과보기</div>
-            <v-btn icon color="primary">
+            <v-btn icon color="rgb(98,101,232)">
               <v-icon> chevron_right </v-icon>
             </v-btn>
           </div>
@@ -93,14 +93,25 @@
       </v-stepper-content>
 
       <!-- 모든결과보기 -->
-      <v-stepper-content step="2">
-        <div v-for="i in info.playerNum" :key="i">
-          {{ info.playerNames[i] }} => {{ info.resultNames[result[i - 1]] }}
-        </div>
-
-        <div class="justify-start d-flex">
+      <v-stepper-content step="2" class="pa-0">
+        <v-row v-for="i in info.playerNum" :key="i" class="text-center">
+          <v-col offset="2" cols="3">
+            {{ info.playerNames[i] }}
+          </v-col>
+          <v-col cols="2">
+            <transition name="bounce">
+              <v-icon v-show="step == 2" color="rgb(98,101,232)"
+                >forward</v-icon
+              >
+            </transition>
+          </v-col>
+          <v-col cols="3">
+            {{ info.resultNames[result[i - 1]] }}
+          </v-col>
+        </v-row>
+        <div class="justify-start d-flex mt-5">
           <div @click.stop="step = 1" class="align-center d-flex">
-            <v-btn icon text color="primary">
+            <v-btn icon text color="rgb(98,101,232)">
               <v-icon> chevron_left </v-icon>
             </v-btn>
             <div>사다리보기</div>
@@ -308,5 +319,20 @@ export default {
   width: 100%;
   box-shadow: inset 0 0 7px #888;
   background-color: white;
+}
+.bounce-enter-active {
+  animation: bounce-in 1s;
+  animation-delay: 200ms;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.7);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>

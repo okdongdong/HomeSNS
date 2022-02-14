@@ -1,24 +1,25 @@
 <template>
   <v-app class="container">
-    <div class="px-3 content-box mb-3 py-3">
+    <div class="px-3 content-box mb-3 py-3 text-center">
       <!-- 투표제목 -->
       <h1>투표만들기</h1>
+    </div>
+
+    <!-- 투표내용 -->
+    <div class="px-3 content-box mb-3 py-3">
       <div>
-        <h3></h3>
+        <h3>투표제목</h3>
         <v-text-field
           background-color="white"
           label="투표제목"
           solo
+          clearable
           maxlength="20"
           :rules="rules.voteTitleRule"
           v-model="voteInfo.voteTitle"
           placeholder="투표제목을 입력하세요."
         />
       </div>
-    </div>
-
-    <!-- 투표내용 -->
-    <div class="px-3 content-box mb-3 py-3">
       <h3>투표항목</h3>
       <div
         v-for="(voteItem, idx) in voteInfo.voteItems"
@@ -55,27 +56,15 @@
         </v-btn>
       </div>
     </div>
-    <div class="px-5 py-3 content-box mb-3">
-      <v-row>
-        <v-col>
-          <v-btn
-            @click.stop="$router.go(-1)"
-            color="rgba(255, 255, 255, 0.5)"
-            large
-            ><span style="font-size: 1rem"
-              ><v-icon class="me-3">chevron_left</v-icon>뒤로가기</span
-            ></v-btn
-          >
-        </v-col>
-        <v-col>
-          <v-btn
-            @click.stop="voteCreate(voteInfo)"
-            large
-            color="rgb(98,101,232)"
-            ><span style="color: #fff">투표생성</span
-            ><v-icon class="ms-3" color="white">how_to_vote</v-icon></v-btn
-          >
-        </v-col></v-row
+    <div class="px-5 py-3 content-box mb-3 d-flex justify-space-around">
+      <v-btn @click.stop="$router.go(-1)" color="rgba(255, 255, 255, 0.5)" large
+        ><span style="font-size: 1rem"
+          ><v-icon class="me-3">chevron_left</v-icon>뒤로가기</span
+        ></v-btn
+      >
+      <v-btn @click.stop="voteCreate(voteInfo)" large color="rgb(98,101,232)"
+        ><span style="color: #fff">투표생성</span
+        ><v-icon class="ms-3" color="white">how_to_vote</v-icon></v-btn
       >
     </div>
   </v-app>
@@ -100,7 +89,7 @@ export default {
       ],
     },
     voteInfo: {
-      voteTitle: null,
+      voteTitle: "투표",
       voteItems: [
         { voteItemName: "항목1", voteCnt: 0 },
         { voteItemName: "항목2", voteCnt: 0 },
