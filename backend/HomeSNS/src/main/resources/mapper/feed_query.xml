@@ -48,7 +48,9 @@
         JOIN HOME_SNS.USER u2 ON c.comment_tag = u2.user_seq 
         LEFT OUTER JOIN HOME_SNS.COMMENT_EMOTION ce ON c.comment_id = ce.comment_id  
         LEFT OUTER JOIN HOME_SNS.COMMENT_EMOTION_USER_USE ceu ON ce.COMMENT_ID = ceu.COMMENT_ID AND ceu.USER_SEQ = #{userSeq}
-       WHERE feed_id = #{feedId};
+       WHERE feed_id = #{feedId}
+       LIMIT #{limit} OFFSET #{offset}
+       
 	</select>
 	
 	<!-- 해쉬태그 가져오는 SQL -->
