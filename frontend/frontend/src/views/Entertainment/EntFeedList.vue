@@ -4,6 +4,11 @@
       <h1>ENTERTAINMENT</h1>
       <EntCreatePopup />
     </div>
+    <div v-if="!contentDataList.length" class="content-box pb-5">
+      <div class="justify-center d-flex">
+        <h3 class="mt-5">아직 작성된 피드가 없습니다.</h3>
+      </div>
+    </div>
     <div v-for="(content, idx) in contentDataList" :key="idx">
       <EntFeedContainer
         :content="content"
@@ -118,4 +123,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.content-box {
+  /* border: solid 2px black; */
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.329);
+}
+</style>

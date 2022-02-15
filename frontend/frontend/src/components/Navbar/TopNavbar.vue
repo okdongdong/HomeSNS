@@ -68,7 +68,7 @@
         </template>
         <v-card class="rounded-xl pa-0">
           <v-card-title>
-            <span>알람</span>
+            <span>알림</span>
             <v-spacer></v-spacer>
             <v-btn text class="body-1" @click.stop="noticeReadAll()">
               모두읽기
@@ -76,6 +76,9 @@
           </v-card-title>
           <v-divider></v-divider>
           <v-card-text style="height: 500px">
+            <v-container class="text-center mt-5" v-if="!noticeList.length"
+              ><h3>알림이 없습니다.</h3>
+            </v-container>
             <v-container
               class="px-0"
               v-for="(notice, $idx) in noticeList"

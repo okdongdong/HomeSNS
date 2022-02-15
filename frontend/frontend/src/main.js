@@ -22,9 +22,14 @@ Vue.use(require('vue-moment'));
 
 
 // 인피니티 스크롤 기초작업
-Vue.use(InfiniteLoading,{ 
+Vue.use(InfiniteLoading, {
   props: {
-    spinner: 'spiral',  // 로딩중임을 알리는 아이콘 모양
+    spinner: "spiral", // 로딩중임을 알리는 아이콘 모양
+  },
+  slots: {
+    noMore: "", // you can pass a string value
+    noResults: "",
+    error: "--", // you also can pass a Vue component as a slot
   },
 });
 
