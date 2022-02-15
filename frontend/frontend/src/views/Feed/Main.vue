@@ -39,6 +39,7 @@
                 >
                   <!-- :src="require(`@/uploadImg/${file.fileUrl}`)" -->
                   <v-img
+                    v-if="file.type == 'img'"
                     :src="`https://i6e205.p.ssafy.io/${file.fileUrl}`"
                     :lazy-src="`https://picsum.photos/200/300`"
                     aspect-ratio="1"
@@ -57,6 +58,26 @@
                       </v-row>
                     </template>
                   </v-img>
+                  <v-video
+                    v-else
+                    :src="`https://i6e205.p.ssafy.io/${file.fileUrl}`"
+                    :lazy-src="`https://picsum.photos/200/300`"
+                    aspect-ratio="1"
+                    class="grey lighten-2"
+                  >
+                  <template v-slot:placeholder>
+                      <v-row
+                        class="fill-height ma-0"
+                        align="center"
+                        justify="center"
+                      >
+                        <v-progress-circular
+                          indeterminate
+                          color="grey lighten-5"
+                        ></v-progress-circular>
+                      </v-row>
+                    </template>
+                  </v-video>
                 </v-col>
               </v-row>
             </v-container>
@@ -129,7 +150,23 @@ export default {
               // feedData.feedEventDate = this.$moment(currFeed.feedEventDate).format("YYYY년 MM월 DD일");
               feedData.feedLocation = currFeed.feedLocation; // 등록안된 곳은 빈값''
               feedData.feedTitle = currFeed.feedTitle;
-              feedData.fileList = currFeed.fileList;
+              feedData.fileList = [];
+              console.log('=======================================')
+              for (let i = 0; i < currFeed.fileList.length; i++){
+                if (currFeed.fileList[i].fileContentType.includes("image")){
+                  feedData.fileList.push({
+                    fileUrl : currFeed.fileList[i].fileUrl,
+                    type : 'img',
+                  })
+                }else{
+                  feedData.fileList.push({
+                    fileUrl : currFeed.fileList[i].fileUrl,
+                    type : 'video',
+                  })
+                }
+              } 
+              
+              console.log(currFeed.fileList)
               if (i === 0) {
                 feedByDateList.push(feedData);
               } else if (
