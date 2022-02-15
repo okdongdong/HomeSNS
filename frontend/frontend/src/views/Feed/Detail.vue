@@ -296,6 +296,8 @@ export default {
         }).then(()=>{
           console.log("감정삭제 완료")
           // 감정 숫자 빼줘야함!
+        }).catch((err)=>{
+          console.log(err)
         })
 
       } else { // 감정 수정
@@ -310,6 +312,7 @@ export default {
           feedId : this.feedId
         }
         selectEmotion[this.currEmotion.status]=1
+        console.log(selectEmotion)
         axios({
           method : "PUT",
           url : `${process.env.VUE_APP_MCS_URL}/feed/emotion/add`,
@@ -318,6 +321,9 @@ export default {
         })
         .then(()=>{
           console.log("감정 수정 완료")
+        })
+        .catch((err)=>{
+          console.log(err)
         })
       }
     },
