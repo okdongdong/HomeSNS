@@ -82,7 +82,7 @@
     <!-- 댓글 부분 ! -->
     <v-form class="px-3" ref="form" @submit.prevent="createComment">
       <div class="d-flex">
-        <v-text-field label="댓글 달기" v-model="comment"> </v-text-field>
+        <v-text-field label="댓글 달기" v-model="currComment"> </v-text-field>
         <v-btn
           class="my-5 ml-2"
           elevation="3"
@@ -165,7 +165,7 @@ export default {
     //북마크
     bookmark : false,
     // 댓글쪽
-    comment: null,
+    currComment: null,
     members: [], // 해시태그위한 멤버리스트
     memberToggle: false,
     tagList: [], // 해시태그한 사람
@@ -242,11 +242,14 @@ export default {
       }
     },
     getComments($state){
-      let commentParamDto={
-        feedId: this.feedId,
-        limit:10,
+      let data={
+        commentParamDto : {
+          feedId: this.feedId,
+          limit:10,
+        },
+        state : $state,
       }
-      this.$store.dispatch('comments/getComments', commentParamDto, $state)
+      this.$store.dispatch('comments/getComments', data)
 
     },
     createComment(event) {
@@ -259,33 +262,14 @@ export default {
       let data ={
         commentDto : {
         feedId: this.feedId,
-        commentTags: commentTag, // userName, userSeq있음
-        commentContent: this.comment,
+        commentTags: commentTag,
+        commentContent: this.currComment,
         },
       }
       console.log('댓글작성 전')
       console.log(data)
       this.$store.dispatch('comments/createComment',data)
-      // let commentDto = {
-      //   feedId: this.feedId,
-      //   commentTag: this.tagList, // userName, userSeq있음
-      //   commentContent: this.comment,
-      // };
-      // axios({
-      //   method: "POST",
-      //   url: `${process.env.VUE_APP_MCS_URL}/feed/comment`,
-      //   data: commentDto,
-      //   headers: { Authorization: token },
-      // }).then(() => {
-      //   this.comments.push({
-      //     author: this.userName,
-      //     tag: this.tagList,
-      //     content: this.comment,
-      //     uploadDate: "방금",
-      //   });
-      //   this.comment = null;
-      //   this.tagList = null;
-      // });
+      this.currComment = null
     },
     selectTagMember(member) {
       // 원래는 자동으로 토글되야하는데 안되서 일단 수동으로 구현(comment내에 태그 지우면 없어짐)
@@ -302,7 +286,7 @@ export default {
           userSeq: member.userSeq,
           userName: member.userName,
         });
-        this.comment += member.userName + " ";
+        this.currComment += member.userName + " ";
       }
     },
     changeEmotion(data){
@@ -327,7 +311,7 @@ export default {
     this.feedId *= 1;
     this.getFeed();
     this.getMember();
-    this.getComments();
+    // this.getComments();
     this.getAuthorProfileImageUrl();
   },
   beforeDestroy(){
@@ -335,9 +319,9 @@ export default {
   },
   computed: {
     ...mapState("account", ["nowGroup", "userName"]),
-    ...mapState("comments",["comments","isPageEnd"]),
+    ...mapState("comments",["comments","offset"]),
     commentInTag() {
-      if (this.comment != null && this.comment.substr(-1) == "@") {
+      if (this.currComment != null && this.currComment.substr(-1) == "@") {
         return true;
       } else {
         return false;
@@ -345,7 +329,7 @@ export default {
     },
   },
   watch: {
-    comment: function (val) {
+    currComment: function (val) {
       for (let i = 0; i < this.tagList.length; i++) {
         if (!val.includes(this.tagList[i].userName)) {
           this.tagList.splice(i, 1);
