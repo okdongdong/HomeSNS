@@ -29,7 +29,8 @@
 	</select>
 	
 	<select id="groupListSearch" parameterType="int" resultType="com.ssafy.homesns.dto.GroupDto">
-		SELECT USER_SEQ as userSeq, GROUP_LIST.GROUP_ID as groupId, GROUP_NAME as groupName, GROUP_PROFILE_IMAGE_URL as groupProfileImageUrl
+		SELECT USER_SEQ as userSeq, GROUP_LIST.GROUP_ID as groupId, GROUP_NAME as groupName, GROUP_PROFILE_IMAGE_URL as groupProfileImageUrl,
+			   GROUP_LIST.GROUP_LEADER_SEQ as groupLeaderSeq
 		  FROM GROUP_LIST JOIN GROUP_MEMBER
 		    ON GROUP_LIST.GROUP_ID = GROUP_MEMBER.GROUP_ID
 		 WHERE USER_SEQ = #{userSeq}
@@ -89,7 +90,7 @@
 	<select id="groupMemberListSearch" parameterType="int" resultType="com.ssafy.homesns.dto.UserDto">
 		SELECT USER.USER_SEQ as userSeq, USER.USER_ID as userId, USER.USER_EMAIL as userEmail, 
 			   USER.USER_NAME as userName, USER.USER_NICKNAME as userNickname, 
-			   USER.USER_PHONE as userPhone, USER_PROFILE_IMAGE_URL as userProfileImageUrl
+			   USER.USER_PHONE as userPhone, USER_PROFILE_IMAGE_URL as userProfileImageUrl, GROUP_MEMBER.MANAGER_YN as managerYn
 		  FROM GROUP_MEMBER JOIN USER
 		    ON GROUP_MEMBER.USER_SEQ = USER.USER_SEQ
 		 WHERE GROUP_ID = #{groupId}
