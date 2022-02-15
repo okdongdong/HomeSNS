@@ -66,6 +66,12 @@ public class CommentServiceImpl implements CommentService{
 		
 		try {
 			List<CommentDto> commentDtoList = commentDao.commentList(commentParamDto);
+			
+			for(int i =0 ; i < commentDtoList.size(); i++) {
+				
+				List<String> commentTagList =commentDao.commentTagList(commentDtoList.get(i).getCommentId());
+				commentDtoList.get(i).setCommentTagNameList(commentTagList);
+			}
  
 			commentResultDto.setCommentList(commentDtoList);	
 			commentResultDto.setResult(SUCCESS);
