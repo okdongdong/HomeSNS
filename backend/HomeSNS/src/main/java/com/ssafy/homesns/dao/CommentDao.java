@@ -22,6 +22,7 @@ public interface CommentDao {
 	// 댓글 읽기
 	public List<CommentDto> commentList(CommentParamDto commentParamDto);
 	
+	public List<String> commentTagList(int commentId);
 	
 	// 댓글 감정표현 추가, 댓글을 생성하면서 동시에 모든 값이 0인 댓글 감정표현 테이블 생성
 	public int commentEmotionCreate(int commentId);

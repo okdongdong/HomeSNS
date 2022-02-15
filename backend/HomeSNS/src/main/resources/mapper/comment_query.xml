@@ -3,8 +3,8 @@
 <mapper namespace="com.ssafy.homesns.dao.CommentDao">
 
 	<insert id="commentCreate" parameterType="com.ssafy.homesns.dto.CommentDto" useGeneratedKeys="true" keyProperty="commentId">
-		INSERT INTO COMMENT ( FEED_ID,    COMMENT_TAG,    COMMENT_AUTHOR,    COMMENT_CONTENT,  COMMENT_UPLOAD_DATE   )
-		             VALUES ( #{feedId},  #{commentTag},  #{commentAuthor},  #{commentContent},       now()                 )
+		INSERT INTO COMMENT ( FEED_ID,    COMMENT_AUTHOR,    COMMENT_CONTENT,  COMMENT_UPLOAD_DATE   )
+		             VALUES ( #{feedId},   #{commentAuthor},  #{commentContent},       now()                 )
 	</insert>
 	
 	<insert id="commentTagCreate" parameterType="map" >
@@ -13,8 +13,8 @@
 	</insert>
 	
 	
-	
-	<!-- 댓글 가져오는 SQL  -->
+<!-- 	감정 기능
+	댓글 가져오는 SQL 
 	<select id="commentList" parameterType="map" resultType="com.ssafy.homesns.dto.CommentDto"> 
 		SELECT c.comment_id,feed_id,comment_tag as comment_tag_seq, u2.user_name as comment_tag_name, comment_author as comment_author_seq, u1.user_name as comment_author,comment_content,comment_upload_date, 
 				ce.good, ce.sad, ce.check, ce.fun , ce.amaze, ceu.EMOTION_CODE as code
@@ -26,7 +26,26 @@
        WHERE feed_id = #{feedId}
        LIMIT #{limit} OFFSET #{offset}
 	</select>
-	
+ -->	
+
+<!-- 댓글리스트 불러오기  -->
+	<select id="commentList" parameterType="map" resultType="com.ssafy.homesns.dto.CommentDto"> 
+		SELECT c.comment_id,feed_id, comment_author as comment_author_seq, u1.user_name as comment_author,comment_content,comment_upload_date
+		FROM HOME_SNS.COMMENT c
+        JOIN HOME_SNS.USER u1 ON c.comment_author = u1.user_seq 
+       WHERE feed_id = #{feedId}
+       LIMIT #{limit} OFFSET #{offset}
+	</select>
+ 
+ <!-- 댓글 태그 리스트 불러오기 -->
+ 	<select id="commentTagList" parameterType="int" resultType="String"> 
+		SELECT USER_NAME as  CommentTagName
+		  FROM  COMMENT_TAG ct 
+		  JOIN USER u 
+		    ON ct.COMMENT_TAG = u.USER_NAME
+		 WHERE COMMENT_ID = #{commentId}
+	</select>
+ 
 	<update id="commentUpdate" parameterType="com.ssafy.homesns.dto.CommentDto">
 		UPDATE COMMENT
 		   SET COMMENT_CONTENT = #{commentContent}
