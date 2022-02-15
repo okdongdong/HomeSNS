@@ -247,7 +247,7 @@ public class FeedServiceImpl implements FeedService {
 					feedDao.feedFileInsert(fileDto);
 				}
 			}
-
+			feedDao.feedEmotionCreate(feedId);
 			System.out.println("Service feedDto --------- ");
 			System.out.println(feedDto);
 			feedResultDto.setResult(SUCCESS);
