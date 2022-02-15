@@ -25,7 +25,12 @@
       </v-row>
       <hr />
       <div class="d-flex align-center" style="margin-top: 12px; margin-bottom: 3px">
-        <ProfilePhoto :size="25" :img-url="feedAuthorProfileImageUrl" :name="author" :user-seq="feedAuthorSeq"/>
+        <ProfilePhoto
+          :size="25"
+          :img-url="feedAuthorProfileImageUrl"
+          :name="feed.author"
+          :user-seq="feedAuthorSeq"
+        />
         <h3 class="mx-3">
           {{ feed.author }}
         </h3>
@@ -44,37 +49,36 @@
       <v-row class="icon-group">
         <!-- 하트 -->
         <v-col cols="10">
-          <span style="padding: 8px;"></span>
-          <v-btn style="width:25px;" icon large @click="showEmotions ? (showEmotions = false) : (showEmotions = true)">
-            <v-img :src="currEmotion.emoji" style="width:10px; height:auto"></v-img>
+          <span style="padding: 8px"></span>
+          <v-btn
+            style="width: 25px"
+            icon
+            large
+            @click="showEmotions ? (showEmotions = false) : (showEmotions = true)"
+          >
+            <v-img :src="currEmotion.emoji" style="width: 10px; height: auto"></v-img>
           </v-btn>
         </v-col>
         <!-- 북마크 -->
         <v-col cols="2">
           <v-btn icon large style="padding: 0" @click="bookmarkToggle">
-            <v-icon v-if="bookmark== false">bookmark_border</v-icon>
+            <v-icon v-if="bookmark == false">bookmark_border</v-icon>
             <v-icon v-else>bookmark</v-icon>
           </v-btn>
         </v-col>
       </v-row>
       <!-- 감정 버튼 -->
-      <Emotion 
-      :show-emotions="showEmotions"
-      @select-emotion="changeEmotion" 
-      style="position: absolute" />
+      <Emotion
+        :show-emotions="showEmotions"
+        @select-emotion="changeEmotion"
+        style="position: absolute"
+      />
     </div>
     <div class="content-group" v-html="getContent()"></div>
     <!-- 해시태그 부분 -->
     <div class="px-3">
-      <v-chip-group
-        active-class="primary--text"
-        column
-      >
-        <v-chip
-          v-for="hashtag in feed.hashtagList"
-          :key="hashtag.hashtagContent"
-          color="white"
-        >
+      <v-chip-group active-class="primary--text" column>
+        <v-chip v-for="hashtag in feed.hashtagList" :key="hashtag.hashtagContent" color="white">
           #{{ hashtag.hashtagContent }}
         </v-chip>
       </v-chip-group>
@@ -111,7 +115,7 @@
       </v-card>
     </v-form>
     <Comment v-for="(comment, idx) in comments" :key="idx" :comment="comment" :feed-id="feedId"/>
-  <infinite-loading @infinite="getComments"></infinite-loading>
+    <infinite-loading @infinite="getComments"></infinite-loading>
   </v-app>
 </template>
 
@@ -139,7 +143,7 @@ export default {
     tab: 0,
     showEmotions: false,
     feedAuthorSeq: null,
-    feedAuthorProfileImageUrl : null,
+    feedAuthorProfileImageUrl: null,
     feed: {
       // 샘플 데이터
       author: null,
@@ -150,42 +154,30 @@ export default {
       uploadDate: null,
       eventDate: null,
       location: null,
-      hashtagList:[],
+      hashtagList: [],
     },
     // 감정
     emotions: [
-        {emoji : require('@/assets/emotions/heart_off.png'), status:'null'},
-        {emoji : require('@/assets/emotions/heart_on.png'), status:'good'},
-        {emoji : require('@/assets/emotions/sad.png'), status:'sad'},
-        {emoji : require('@/assets/emotions/check.png'), status:'check'},
-        {emoji : require('@/assets/emotions/fun.png'), status:'fun'},
-        {emoji : require('@/assets/emotions/amaze.png'), status:'amaze'}
-      ],
-    currEmotion:{emoji : require('@/assets/emotions/heart_off.png'), status:'null'},
+      { emoji: require("@/assets/emotions/heart_off.png"), status: "null", code: 0 },
+      { emoji: require("@/assets/emotions/heart_on.png"), status: "good", code: 30001 },
+      { emoji: require("@/assets/emotions/sad.png"), status: "sad", code: 30002 },
+      { emoji: require("@/assets/emotions/check.png"), status: "check", code: 30003 },
+      { emoji: require("@/assets/emotions/fun.png"), status: "fun", code: 30004 },
+      { emoji: require("@/assets/emotions/amaze.png"), status: "amaze", code: 30005 },
+    ],
+    beforeEmotion: null,
+    currEmotion: { emoji: require("@/assets/emotions/heart_off.png"), status: "null" },
     //북마크
-    bookmark : false,
+    bookmark: false,
     // 댓글쪽
     currComment: null,
     members: [], // 해시태그위한 멤버리스트
     memberToggle: false,
     tagList: [], // 해시태그한 사람
-    // comments: [ // vuex로 넘겨줬으니까 지우기
-    //   {
-    //     author: "할매",
-    //     tag: "임시태그",
-    //     content: "댓글내용",
-    //     uploadDate: "2011-11-11",
-    //   },
-    //   {
-    //     author: "할매",
-    //     tag: "임시태그",
-    //     content: "댓글내용",
-    //     uploadDate: "2011-11-11",
-    //   },
-    // ],
   }),
   methods: {
-    getMember() { // 해시태그용
+    getMember() {
+      // 해시태그용
       let groupId = this.nowGroup.groupId;
       const token = localStorage.getItem("jwt");
       axios({
@@ -242,35 +234,34 @@ export default {
         return null;
       }
     },
-    getComments($state){
-      let data={
-        commentParamDto : {
+    getComments($state) {
+      let data = {
+        commentParamDto: {
           feedId: this.feedId,
-          limit:10,
+          limit: 10,
         },
-        state : $state,
-      }
-      this.$store.dispatch('comments/getComments', data)
-
+        state: $state,
+      };
+      this.$store.dispatch("comments/getComments", data);
     },
     createComment(event) {
       event.preventDefault();
       // const token = localStorage.getItem("jwt");
-      let commentTag = []
-      for(let i=0;i<this.tagList.length;i++){
-        commentTag.push(this.tagList[i].userSeq)
+      let commentTag = [];
+      for (let i = 0; i < this.tagList.length; i++) {
+        commentTag.push(this.tagList[i].userSeq);
       }
-      let data ={
-        commentDto : {
-        feedId: this.feedId,
-        commentTags: commentTag,
-        commentContent: this.currComment,
+      let data = {
+        commentDto: {
+          feedId: this.feedId,
+          commentTags: commentTag,
+          commentContent: this.currComment,
         },
-      }
-      console.log('댓글작성 전')
-      console.log(data)
-      this.$store.dispatch('comments/createComment',data)
-      this.currComment = null
+      };
+      console.log("댓글작성 전");
+      console.log(data);
+      this.$store.dispatch("comments/createComment", data);
+      this.currComment = null;
     },
     selectTagMember(member) {
       // 원래는 자동으로 토글되야하는데 안되서 일단 수동으로 구현(comment내에 태그 지우면 없어짐)
@@ -290,37 +281,64 @@ export default {
         this.currComment += member.userName + " ";
       }
     },
-    changeEmotion(data){
-      if(data==undefined){
-        this.currEmotion = this.emotions[0]
-      }
-      else{
-        for(let i=0;i<this.emotions.length;i++){
-          if(this.emotions[i].status == data){
-            this.currEmotion = this.emotions[i]
-            break
+    changeEmotion(data) {
+      const token = localStorage.getItem("jwt");
+      if (data == undefined) { // 선택한 감정 없음(감정 삭제)
+        this.currEmotion = this.emotions[0];
+        let deleteEmotion={
+          feedId : this.feedId,
+        }
+        deleteEmotion[this.beforeEmotion.status]=1
+        axios({
+          method : "PUT",
+          url : `${process.env.VUE_APP_MCS_URL}/feed/emotion/sub`,
+          data : deleteEmotion,
+          headers : { Authorization: token },
+        }).then(()=>{
+          console.log("감정삭제 완료")
+          // 감정 숫자 빼줘야함!
+        })
+
+      } else { // 감정 수정
+        for (let i = 0; i < this.emotions.length; i++) {
+          if (this.emotions[i].status == data) {
+            this.currEmotion = this.emotions[i];
+            this.beforeEmotion = this.emotions[i];
+            break;
           }
         }
+        let selectEmotion = {
+          feedId : this.feedId
+        }
+        selectEmotion[this.currEmotion.status]=1
+        axios({
+          method : "PUT",
+          url : `${process.env.VUE_APP_MCS_URL}/feed/emotion/add`,
+          data : selectEmotion,
+          headers : {Authorization : token},
+        })
+        .then(()=>{
+          console.log("감정 수정 완료")
+        })
       }
     },
-    bookmarkToggle(){
-      this.bookmark = !this.bookmark
-      console.log(this.bookmark)
-    }
+    bookmarkToggle() {
+      this.bookmark = !this.bookmark;
+      console.log(this.bookmark);
+    },
   },
   created() {
     this.feedId *= 1;
     this.getFeed();
     this.getMember();
-    // this.getComments();
     this.getAuthorProfileImageUrl();
   },
-  beforeDestroy(){
-    this.$store.dispatch('comments/resetOffset')
+  beforeDestroy() {
+    this.$store.dispatch("comments/resetOffset");
   },
   computed: {
     ...mapState("account", ["nowGroup", "userName"]),
-    ...mapState("comments",["comments","offset"]),
+    ...mapState("comments", ["comments", "offset"]),
     commentInTag() {
       if (this.currComment != null && this.currComment.substr(-1) == "@") {
         return true;
