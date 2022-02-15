@@ -1,8 +1,94 @@
 <template>
   <v-app class="container">
+    <!-- 유저 프로필사진 수정 팝업 -->
+    <v-dialog v-model="dialog" max-width="400px">
+      <v-card class="rounded-xl pa-3">
+        <div class="justify-center d-flex align-center">
+          <v-card-title>정말 삭제하시겠습니까?</v-card-title>
+        </div>
+
+        <v-form
+          class="form-data my-5"
+          ref="form"
+          v-model="valid"
+          lazy-validation
+        >
+          <div class="justify-center d-flex">
+               <v-avatar size="160px" elevation="12" color="#846543">
+            <div v-if="image" class="d-flex align-items-center">
+          <v-img
+            :src="previewImage"
+            size=160
+            aspect-ratio=1
+            style="overflow: hidden; object-fit: cover"
+            alt=""
+          ></v-img>
+              <profile-photo :size="160" :imgUrl="previewImage" :name="userName" />
+            </div>
+            <div v-else>
+               
+          <v-img
+            :src="`https://i6e205.p.ssafy.io/img/emptyImg.png`"
+            size=160
+            aspect-ratio=1
+            style="overflow: hidden; object-fit: cover"
+            alt=""
+          ></v-img>
+            </div>
+      </v-avatar>
+
+          </div>
+          <v-file-input
+            type="file"
+            accept="image/*"
+            @change="selectFile"
+            class="form-control-file"
+            id="profile_path"
+            enctype="multipart/form-data"
+          ></v-file-input
+        ></v-form>
+        <v-card-text class="d-flex">
+          <v-btn
+            class="mx-auto pa-3 transition-swing d-flex align-center"
+            @click="updateProfileImage(), (dialog = false)"
+            color="rgba(98, 101, 232)"
+            width="100"
+            dark
+          >
+            <h3>변경</h3>
+          </v-btn>
+          <v-btn
+            width="100"
+            class="mx-auto pa-3 transition-swing d-flex align-center"
+            @click="dialog = false"
+          >
+            <h3>취소</h3>
+          </v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
     <div class="content-box mb-3 pb-5">
       <div class="d-flex justify-center ma-5">
-        <ProfilePhoto :size="120" :imgUrl="userProfileImageUrl" />
+        <p style="position: relative" class="ma-0" @click.stop="dialog = true">
+          <v-icon
+            class="pa-2"
+            @click.stop="dialog = true"
+            v-if="mySeq == userSeq"
+            style="
+              position: absolute;
+              z-index: 5;
+              right: -15px;
+              bottom: -10px;
+              background-color: rgba(255, 255, 255, 0.8);
+              border-radius: 50%;
+            "
+            color="black"
+            size="32"
+            >edit</v-icon
+          >
+          <ProfilePhoto :size="120" :imgUrl="userProfileImageUrl" />
+        </p>
         <v-btn
           color="rgba(255, 255, 255, 0.5)"
           absolute
@@ -68,6 +154,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import axios from "axios";
 import ProfilePhoto from "../../components/ProfilePhoto.vue";
 
 export default {
@@ -80,11 +167,10 @@ export default {
   },
   data: function () {
     return {
-      userInfo: {
-        imgUrl:
-          "https://image.ajunews.com/content/image/2016/12/26/20161226142046950664.jpg",
-        name: "김영철",
-      },
+      dialog: false,
+      userInfo: {},
+      image: null,
+      previewImage: undefined,
     };
   },
   created() {
@@ -92,6 +178,34 @@ export default {
   },
   methods: {
     ...mapActions("group", ["getProfile"]),
+    selectFile: function (file) {
+      this.image = file;
+      this.previewImage = URL.createObjectURL(this.image);
+    },
+    updateProfileImage() {
+      let data = new FormData();
+      data.append("profileImage", this.image);
+      axios({
+        method: "POST",
+        url: `${process.env.VUE_APP_MCS_URL}/mypage/profileImage`,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        data: data,
+      })
+        .then((res) => {
+          console.log(res);
+          console.log(res.data);
+        })
+        .catch((err) => {
+          this.$store.commit(
+            "snackbar/SET_SNACKBAR",
+            "양식을 다시 확인해주세요."
+          );
+          console.log(err);
+          console.log(err.response);
+        });
+    },
   },
   computed: {
     ...mapState("account", { mySeq: (state) => state.userSeq }),
