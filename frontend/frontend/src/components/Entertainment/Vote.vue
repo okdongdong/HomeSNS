@@ -104,11 +104,11 @@ export default {
   data: () => ({
     dialog: false,
     nowVote: false,
-    preVoteItemId: null,
   }),
   props: {
     info: Object,
   },
+  created() {},
   methods: {
     ...mapActions("notice", ["send"]),
     endVote(gameId) {
@@ -134,6 +134,7 @@ export default {
         });
     },
     voteVote(voteItemId) {
+      console.log("투표", voteItemId);
       const token = localStorage.getItem("jwt");
       axios({
         method: "post",
@@ -143,14 +144,14 @@ export default {
       })
         .then((res) => {
           console.log(res);
-
-          this.preVoteItemId = null;
+          this.info.preVoteItem = voteItemId;
         })
         .catch((err) => {
           console.log(err);
         });
     },
     voteCancel(voteItemId) {
+      console.log("투표취소", voteItemId);
       const token = localStorage.getItem("jwt");
       axios({
         method: "delete",
@@ -159,6 +160,7 @@ export default {
         data: { voteItemId: voteItemId },
       })
         .then((res) => {
+          this.info.preVoteItem = null;
           console.log(res);
         })
         .catch((err) => {
@@ -166,26 +168,27 @@ export default {
         });
     },
     updateVote() {
-      if (this.preVoteItemId) {
-        this.voteCancel(this.preVoteItemId);
-      }
-      if (this.info.myVoteItem) {
-        this.voteVote(this.info.myVoteItem);
+      if (!this.info.myVoteItem && this.info.preVoteItem) {
+        this.voteCancel(this.info.preVoteItem);
+      } else if (this.info.myVoteItem != this.info.preVoteItem) {
+        if (this.info.preVoteItem) {
+          this.voteCancel(this.info.preVoteItem);
+        }
+        if (this.info.myVoteItem) {
+          this.voteVote(this.info.myVoteItem);
+        }
       }
     },
     myVote(idx) {
       if (this.myVoteIdx === null) {
         this.info.voteItems[idx].count += 1;
-        this.preVoteItemId = null;
         this.info.myVoteItem = this.info.voteItems[idx].voteItemId;
       } else if (this.myVoteIdx === idx) {
         this.info.voteItems[this.myVoteIdx].count -= 1;
-        this.preVoteItemId = this.info.myVoteItem;
         this.info.myVoteItem = null;
       } else {
         this.info.voteItems[this.myVoteIdx].count -= 1;
         this.info.voteItems[idx].count += 1;
-        this.preVoteItemId = this.info.myVoteItem;
         this.info.myVoteItem = this.info.voteItems[idx].voteItemId;
       }
     },

@@ -81,7 +81,8 @@
               v-for="(notice, $idx) in noticeList"
               :key="$idx"
               @click="
-                noticeMove(notice.noticeId, notice.noticeType), (dialog = false)
+                noticeMove(notice.noticeContentId, notice.noticeType),
+                  (dialog = false)
               "
             >
               <v-hover>
@@ -94,7 +95,7 @@
                     :disabled="notice.noticeReadYn == 'y'"
                     :color="notice.noticeReadYn == 'y' ? '#DDDDDD' : ''"
                     @click.stop="
-                      noticeMove(notice.noticeId, notice.noticeType),
+                      noticeMove(notice.noticeContentId, notice.noticeType),
                         noticeRead(
                           notice.noticeId,
                           notice.noticeContentId,
@@ -293,8 +294,24 @@ export default {
           break;
 
         case "voteCreate":
+        case "voteEnd":
+          this.$router.push({
+            name: "EntFeedDetail",
+            params: {
+              contentType: "vote",
+              contentId: noticeContentId,
+            },
+          });
+          break;
+
         case "ghostLegCreate":
-          this.$router.push({ name: "EntFeedList" });
+          this.$router.push({
+            name: "EntFeedDetail",
+            params: {
+              contentType: "ghostLeg",
+              contentId: noticeContentId,
+            },
+          });
           break;
         default:
       }

@@ -4,6 +4,7 @@
       v-model="snackbar"
       :multi-line="multiLine"
       color="red accent-1"
+      :timeout="timeout"
       tile
     >
       <h3>{{ text }}</h3>
