@@ -213,8 +213,8 @@
 	<!-- 피드 감정 -->
 	
 	<insert id="feedEmotionCreate" parameterType="int" >
-		INSERT INTO FEED_EMOTION ( FEED_ID,    GOOD,    SAD,    CHECK,    FUN,    AMAZE    )
-		                     VALUES ( #{feedId},  #{good}, #{sad}, #{check}, #{fun}, #{amaze} )
+		INSERT INTO FEED_EMOTION ( FEED_ID,    GOOD, SAD,CHECK,FUN,AMAZE)
+		                     VALUES ( #{feedId},  0,  0,  0,    0 ,  0)
 	</insert>
 	
 	<select id="feedEmotionSearch" parameterType="int" resultType="com.ssafy.homesns.dto.FeedDto">
