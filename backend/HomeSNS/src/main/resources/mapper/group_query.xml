@@ -89,7 +89,7 @@
 	<select id="groupMemberListSearch" parameterType="int" resultType="com.ssafy.homesns.dto.UserDto">
 		SELECT USER.USER_SEQ as userSeq, USER.USER_ID as userId, USER.USER_EMAIL as userEmail, 
 			   USER.USER_NAME as userName, USER.USER_NICKNAME as userNickname, 
-			   USER.USER_PHONE as userPhone, USER_PROFILE_IMAGE_URL as userProfileImageUrl
+			   USER.USER_PHONE as userPhone, USER_PROFILE_IMAGE_URL as userProfileImageUrl, GROUP_MEMBER.MANAGER_YN
 		  FROM GROUP_MEMBER JOIN USER
 		    ON GROUP_MEMBER.USER_SEQ = USER.USER_SEQ
 		 WHERE GROUP_ID = #{groupId}
