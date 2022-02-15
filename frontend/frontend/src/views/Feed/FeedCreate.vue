@@ -60,12 +60,12 @@
               v-else-if="file.type == 'video' && feedId != -1"
               autoplay
               muted
-              :src="`https://dimg.donga.com/wps/NEWS/IMAGE/2021/05/14/106923490.2.jpg`"
+              :src="`https://i6e205.p.ssafy.io/${file.fileUrl}`"
               @click="deleteFile(i,file)"
             ></video>
             <v-img
               v-else-if="file.type == 'img' && feedId != -1"
-              :src="`https://dimg.donga.com/wps/NEWS/IMAGE/2021/05/14/106923490.2.jpg`"
+              :src="`https://i6e205.p.ssafy.io/${file.fileUrl}`"
               :lazy-src="`https://picsum.photos/200/300`"
               aspect-ratio="1"
               class="grey lighten-2"

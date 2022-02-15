@@ -1,24 +1,24 @@
 <template>
   <!-- <v-row class='comment-box d-flex justify-space-between align-center'> -->
-  <div class="comment-box">
+  <div class="comment-box-987987">
     <v-row class="justify-space-between align-center pt-2">
       <v-col cols="3" class="pl-3">
         <ProfilePhoto
           :size="40"
-          :imgUrl="comment.userImgUrl"
+          :imgUrl="comment.commentUserProfileImageUrl"
           :name="comment.commentAuthor"
-          :userSeq="comment.commentUserProfileImageUrl"
+          :userSeq="comment.commentAuthorSeq"
         />
       </v-col>
-      <v-col cols="7" class="pr-3" v-if="comment.commentAuthorSeq == userSeq">
+      <v-col class="comment-content-987987 pr-3" :id="`comment${comment.commentId}`" cols="7" v-if="comment.commentAuthorSeq == userSeq">
         <div>{{ comment.uploadDate }}</div>
-        <span class="hashtag"> @{{ comment.commentContent }} </span>
-        <span> {{ comment.commentContent }} </span>
+        <!-- <span class="hashtag"> @{{ comment.commentContent }} </span>
+        <span> {{ comment.commentContent }} </span> -->
       </v-col>
-      <v-col cols="9" class="pr-4" v-else>
+      <v-col class="comment-content pr-4" :id="`comment${comment.commentId}`" cols="9" v-else>
         <div>{{ comment.uploadDate }}</div>
-        <span class="hashtag"> @{{ comment.commentContent }} </span>
-        <span> {{ comment.commentContent }} </span>
+        <!-- <span class="hashtag"> @{{ comment.commentContent }} </span> -->
+        <!-- <span> {{ comment.commentContent }} </span> -->
       </v-col>
       <v-col cols="2" class="d-inline-flex pr-3" v-if="comment.commentAuthorSeq == userSeq">
         <v-btn icon @click="deleteComment(comment.commentId)">
@@ -58,15 +58,47 @@ export default {
   },
   computed:{
     ...mapState("account",["userSeq"]),
+    ...mapState("comments",["comments"])
+  },
+  mounted () {
+    console.log('현재댓글')
+
+    const commentList = this.comment.commentContent.split(" ");
+    let commentTag = document.querySelector('#comment'+this.comment.commentId)
+    console.log('선택한 태그')
+    console.log(commentTag)
+    console.log(commentList)
+    for(let i=0; i<commentList.length;i++){
+      if(commentList[i].substring(0,1)=='@'){
+        let tagSpanTag = document.createElement('div')
+        tagSpanTag.innerText = commentList[i]+" "
+        console.log('댓글xorm=======================')
+        console.log(tagSpanTag)
+        commentTag.appendChild(tagSpanTag)
+      }else{
+        let commentSpanTag = document.createElement('span')
+        commentSpanTag.innerText = commentList[i]+" "
+        console.log('댓글=======================')
+        console.log(commentSpanTag)
+        commentTag.appendChild(commentSpanTag)
+      }
+    }
   }
 };
+
 </script>
 
-<style scoped>
-.comment-box{
+<style>
+.comment-box-987987{
   background-color: rgba(251, 251, 251, 0.705);
 }
-.hashtag {
+/* .hashtag {
   color: rgb(110, 110, 252);
+} */
+.comment-content-987987 div{
+  display: inline;
+  font-weight: bold;
+  text-decoration: underline;
+  color: rgb(87, 75, 255);
 }
 </style>
