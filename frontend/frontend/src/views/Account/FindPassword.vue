@@ -22,22 +22,22 @@
           </v-img>
         </div>
         <div class="text-left">
-        <v-card-title class="main-text justify-center font-weight-bold"
-          >비밀번호 찾기</v-card-title
-        >
-        <br />
-        <v-card-text class="main-text justify-left font-weight-bold"
-          >가입 시</v-card-text
-        >
-        <v-card-text class="main-text justify-left font-weight-bold"
-          >사용한 이메일로</v-card-text
-        >
-        <v-card-text class="main-text justify-left font-weight-bold"
-          >비밀번호가</v-card-text
-        >
-        <v-card-text class="main-text justify-left font-weight-bold"
-          >발송됩니다.</v-card-text
-        >
+          <v-card-title class="main-text justify-center font-weight-bold"
+            >비밀번호 찾기</v-card-title
+          >
+          <br />
+          <v-card-text class="main-text justify-left font-weight-bold"
+            >가입 시</v-card-text
+          >
+          <v-card-text class="main-text justify-left font-weight-bold"
+            >사용한 이메일로</v-card-text
+          >
+          <v-card-text class="main-text justify-left font-weight-bold"
+            >비밀번호가</v-card-text
+          >
+          <v-card-text class="main-text justify-left font-weight-bold"
+            >발송됩니다.</v-card-text
+          >
         </div>
       </v-card>
     </div>
@@ -146,6 +146,10 @@ export default {
           this.$router.push("Login");
         })
         .catch((err) => {
+          this.$store.commit(
+            "snackbar/SET_SNACKBAR",
+            "아이디 또는 이메일을 다시 확인해주세요."
+          );
           this.nowLoading = false;
           console.log(err);
           console.log(err.response);

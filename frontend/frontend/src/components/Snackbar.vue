@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center">
+  <div>
     <v-snackbar
       v-model="snackbar"
       :multi-line="multiLine"
@@ -7,18 +7,18 @@
       :timeout="timeout"
       tile
     >
-      <h3>{{ text }}</h3>
+      <h3 class="text-center">{{ text }}</h3>
 
-<!--      <template v-slot:action="{ attrs }">-->
-<!--        <v-btn-->
-<!--          color="black"-->
-<!--          text-->
-<!--          v-bind="attrs"-->
-<!--          @click="close"-->
-<!--        >-->
-<!--          Close-->
-<!--        </v-btn>-->
-<!--      </template>-->
+      <!--      <template v-slot:action="{ attrs }">-->
+      <!--        <v-btn-->
+      <!--          color="black"-->
+      <!--          text-->
+      <!--          v-bind="attrs"-->
+      <!--          @click="close"-->
+      <!--        >-->
+      <!--          Close-->
+      <!--        </v-btn>-->
+      <!--      </template>-->
     </v-snackbar>
   </div>
 </template>
@@ -43,12 +43,10 @@ export default {
 
   methods: {
     close() {
-      this.$store.commit('CLOSE_SNACKBAR')
-    }
-  }
-}
+      this.$store.commit("CLOSE_SNACKBAR");
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

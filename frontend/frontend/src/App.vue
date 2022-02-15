@@ -1,5 +1,7 @@
 <template>
   <v-app id="app">
+    <Snackbar/>
+
     <div class="d-flex justify-center">
       <div class="curtain"></div>
 
@@ -37,11 +39,13 @@
 <script>
 import BottomNavbar from "./components/Navbar/BottomNavbar.vue";
 import TopNavbar from "./components/Navbar/TopNavbar.vue";
+import Snackbar from './components/Snackbar.vue';
 export default {
   name: "App",
   components: {
     BottomNavbar,
     TopNavbar,
+    Snackbar,
   },
   data: () => ({
     noneNavPages: [

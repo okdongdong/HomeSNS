@@ -208,6 +208,10 @@ export default {
           this.$router.push("Login");
         })
         .catch((err) => {
+          this.$store.commit(
+            "snackbar/SET_SNACKBAR",
+            "양식을 다시 확인해주세요."
+          );
           console.log(err);
           console.log(err.response);
         });

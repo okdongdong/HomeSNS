@@ -45,7 +45,7 @@
                 @click="$router.push({ name: 'GroupEnter' })"
               >
                 <v-icon large class="mx-3">login</v-icon>
-                <h2>새 그룹입장</h2>
+                <h2>다른 그룹입장</h2>
               </v-card>
             </template>
           </v-hover>
