@@ -13,6 +13,7 @@ import Calendar from "../views/Collection/Calendar.vue";
 import Timeline from "../views/Collection/Timeline.vue";
 
 import EntFeedList from "../views/Entertainment/EntFeedList.vue";
+import EntFeedDetail from "../views/Entertainment/EntFeedDetail.vue";
 import MiniGame from "../views/Entertainment/MiniGameList.vue";
 import VoteList from "../views/Entertainment/VoteList.vue";
 import VoteCreate from "../views/Entertainment/VoteCreate.vue";
@@ -99,6 +100,12 @@ const routes = [
     path: "/EntFeed",
     name: "EntFeedList",
     component: EntFeedList,
+  },
+  {
+    path: "/EntFeed/:contentType/:contentId",
+    name: "EntFeedDetail",
+    component: EntFeedDetail,
+    props: true,
   },
   {
     path: "/minigame",

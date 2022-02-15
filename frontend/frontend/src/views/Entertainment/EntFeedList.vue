@@ -65,7 +65,7 @@ export default {
                 const tempResultNamse =
                   contentData.ghostLegDto.result.split(",");
                 this.contentDataList.push({
-                  type: "ghost",
+                  type: "ghostLeg",
                   info: {
                     title: contentData.gameTitle,
                     authorId: contentData.gameAuthor,
@@ -91,6 +91,9 @@ export default {
                     createdAt: contentData.gameRegisterDate,
                     contentId: contentData.gameId,
                     myVoteItem: contentData.voteItemId
+                      ? contentData.voteItemId
+                      : null,
+                    preVoteItem: contentData.voteItemId
                       ? contentData.voteItemId
                       : null,
                     voteItems: contentData.voteItemDtoList,

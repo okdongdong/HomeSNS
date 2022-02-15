@@ -40,7 +40,7 @@
       <div v-if="content.type == 'vote'">
         <Vote :info="content.info" />
       </div>
-      <div v-else-if="content.type == 'ghost'">
+      <div v-else-if="content.type == 'ghostLeg'">
         <GhostLeg :info="content.info" />
       </div>
     </div>
@@ -92,7 +92,7 @@ export default {
     contentType() {
       if (this.content.type === "vote") {
         return "투표";
-      } else if (this.content.type === "ghost") {
+      } else if (this.content.type === "ghostLeg") {
         return "사다리타기";
       } else {
         return null;
