@@ -37,6 +37,8 @@ public class CommentServiceImpl implements CommentService{
 					commentDto.setCommentTagSeq(commentTagSeq);
 					commentDao.commentTagCreate(commentDto);
 				}
+				
+				commentResultDto.setComment(commentDao.commentSearch(commentDto.getCommentId()) );
 				commentResultDto.setResult(SUCCESS);
 			}
 			else {

@@ -20,7 +20,9 @@ public interface CommentDao {
 	// 댓글 삭제
 	public int commentDelete(int commentId);
 	// 댓글 읽기
+	public CommentDto commentSearch(int commentId);
 	public List<CommentDto> commentList(CommentParamDto commentParamDto);
+	
 	
 	public List<String> commentTagList(int commentId);
 	
