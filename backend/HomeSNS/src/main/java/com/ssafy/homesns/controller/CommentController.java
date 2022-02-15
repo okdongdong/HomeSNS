@@ -68,6 +68,8 @@ public class CommentController {
 		int userSeq = Integer.parseInt(authentication.getName());
 
 		commentDto.setCommentAuthorSeq(userSeq);
+		
+		System.out.println("commentDTO ===="+commentDto);
 		CommentResultDto commentResultDto = commentService.commentCreate(commentDto);
 
 		if ( commentResultDto.getResult() == SUCCESS ) {
@@ -77,10 +79,9 @@ public class CommentController {
 	}
 
 	// 댓글 수정 => 댓글 레코드 수정
+	// 댓글 수정 기능 없애기로 함! 
 	@PutMapping(value="/feed/comment")
 	public ResponseEntity<CommentResultDto> commentUpdate(@RequestBody CommentDto commentDto) {
-		
-		// userSeq필요없어서 지움!
 		
 		CommentResultDto commentResultDto = commentService.commentUpdate(commentDto);
 
