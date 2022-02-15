@@ -183,12 +183,14 @@ export default {
       this.previewImage = URL.createObjectURL(this.image);
     },
     updateProfileImage() {
+      const token = localStorage.getItem("jwt");
       let data = new FormData();
       data.append("profileImage", this.image);
       axios({
         method: "POST",
         url: `${process.env.VUE_APP_MCS_URL}/mypage/profileImage`,
         headers: {
+          Authorization: token,
           "Content-Type": "multipart/form-data",
         },
         data: data,
