@@ -146,7 +146,13 @@ public class GroupServiceImpl implements GroupService{
 				
 				// Group 테이블의 ProfileImageUrl 수정
 				groupDao.groupProfileImageUpdate(profileImageDto);
-			}
+			}else {
+                ProfileImageDto profileImageDto = new ProfileImageDto();
+                profileImageDto.setGroupId(groupId);
+                profileImageDto.setProfileImageUrl("/img/noimage.png");
+                // Group List테이블의 ProfileImageUrl 수정
+                groupDao.groupProfileImageUpdate(profileImageDto);
+            }
 			
 			groupResultDto.setResult(SUCCESS);
 		} catch(Exception e) {

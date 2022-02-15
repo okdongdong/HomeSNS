@@ -208,4 +208,111 @@
 		 WHERE LOCATION_ID =#{locationId} AND USER_SEQ ={userSeq} 
 	</delete>
 	
+	
+	
+	<!-- 피드 감정 -->
+	
+	<insert id="feedEmotionCreate" parameterType="int" >
+		INSERT INTO FEED_EMOTION ( FEED_ID,    GOOD,    SAD,    CHECK,    FUN,    AMAZE    )
+		                     VALUES ( #{feedId},  #{good}, #{sad}, #{check}, #{fun}, #{amaze} )
+	</insert>
+	
+	<select id="feedEmotionSearch" parameterType="int" resultType="com.ssafy.homesns.dto.FeedDto">
+		SELECT FEED_ID as feedId, GOOD as good, SAD as sad, 
+			   CHECK as check, FUN as fun, AMAZE as amaze
+		  FROM FEED_EMOTION
+		 WHERE FEED_ID = #{feedId}
+	</select>
+	
+	<update id="feedGoodAdd" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET GOOD = GOOD + 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedGoodSub" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET GOOD = GOOD - 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedSadAdd" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET SAD = SAD + 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedSadSub" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET SAD = SAD - 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedCheckAdd" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET CHECK = CHECK + 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedCheckSub" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET CHECK = CHECK - 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedFunAdd" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET FUN = FUN + 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedFunSub" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET FUN = FUN - 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedAmazeAdd" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET AMAZE = AMAZE + 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedAmazeSub" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET AMAZE = AMAZE - 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<!-- 피드 지우면 다 지워짐 
+	<delete id="feedEmotionDelete" parameterType="int" >
+		DELETE FROM FEED_EMOTION 
+		      WHERE FEED_ID = #{feedId}
+	</delete>
+	 -->
+	 
+	 
+	<insert id="feedEmotionUserUseCreate" parameterType="com.ssafy.homesns.dto.FeedEmotionDto" >
+		INSERT INTO FEED_EMOTION_USER_USE ( FEED_ID,    USER_SEQ,    EMOTION_CODE )
+		                              VALUES ( #{feedId},  #{userSeq},  #{code}      )
+	</insert>
+	
+	<select id="feedEmotionUserUseSearch" parameterType="com.ssafy.homesns.dto.FeedEmotionDto" resultType="com.ssafy.homesns.dto.FeedEmotionDto">
+		SELECT FEED_ID as feedId, USER_SEQ as userSeq, EMOTION_CODE as code
+		  FROM FEED_EMOTION_USER_USE
+		 WHERE FEED_ID = #{feedId}
+		   AND USER_SEQ = #{userSeq}
+	</select>
+	
+	
+	<delete id="feedEmotionUserUseDelete" parameterType="com.ssafy.homesns.dto.FeedEmotionDto" >
+		DELETE FROM FEED_EMOTION_USER_USE 
+		      WHERE FEED_ID = #{feedId}
+		        AND USER_SEQ = #{userSeq}
+	</delete>
+	 
+	 
+	 
+	 
+	 
 </mapper>

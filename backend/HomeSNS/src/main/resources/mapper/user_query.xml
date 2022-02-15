@@ -4,8 +4,8 @@
 
 
 	<insert id="userRegister" parameterType="com.ssafy.homesns.dto.UserDto">
-		insert into USER (  user_id,     user_password,     user_email,     user_name,     user_nickname,     user_phone,     user_bod,     user_profile_image_url,   user_register_date,   user_cls,     refresh_token   ) 
-		          values (  #{userId},   #{userPassword},   #{userEmail},   #{userName},   #{userNickname},   #{userPhone},   #{userBod},   #{userProfileImageUrl},   now(),                #{userCls},   #{refreshToken} )
+		insert into USER (  user_id,     user_password,     user_email,     user_name,     user_nickname,     user_phone,     user_bod,     user_register_date,   user_cls,     refresh_token   ) 
+		          values (  #{userId},   #{userPassword},   #{userEmail},   #{userName},   #{userNickname},   #{userPhone},   #{userBod},      now(),                #{userCls},   #{refreshToken} )
 	</insert>
 
 	<insert id="userProfileImageInsert" parameterType="com.ssafy.homesns.dto.ProfileImageDto" useGeneratedKeys="true" keyProperty="profileImageId">

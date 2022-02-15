@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.ssafy.homesns.dto.CommentDto;
 import com.ssafy.homesns.dto.EventMemberDto;
 import com.ssafy.homesns.dto.FeedDto;
+import com.ssafy.homesns.dto.FeedEmotionDto;
 import com.ssafy.homesns.dto.FeedParamDto;
 import com.ssafy.homesns.dto.FileDto;
 import com.ssafy.homesns.dto.GroupMemberDto;
@@ -66,5 +67,39 @@ public interface FeedDao {
 	// feed지우면 fk 테이블 자동삭제 cascade
 	public int feedDelete(int feedId);
 	public int locationFavoriteDelete(LocationFavoriteDto locationFavoriteDto);
+	
+	
+	// 피드 감정표현 추가, 피드를 생성하면서 동시에 모든 값이 0인 피드 감정표현 테이블 생성
+	public int feedEmotionCreate(int feedId);
+	// 해당 피드의 감정표현 현황 찾기
+	public FeedDto feedEmotionSearch(int feedId);
+	// 해당 피드에 감정표현을 추가 / 삭제
+	//// Good
+	public int feedGoodAdd(int feedId);
+	public int feedGoodSub(int feedId);
+	//// Sad
+	public int feedSadAdd(int feedId);
+	public int feedSadSub(int feedId);
+	//// Check
+	public int feedCheckAdd(int feedId);
+	public int feedCheckSub(int feedId);
+	//// Fun
+	public int feedFunAdd(int feedId);
+	public int feedFunSub(int feedId);
+	//// Amaze
+	public int feedAmazeAdd(int feedId);
+	public int feedAmazeSub(int feedId);
+	// 피드 감정표현 삭제, 피드을 삭제하면서 동시에 피드 감정표현 테이블 삭제
+	public int feedEmotionDelete(int commendId);
+	
+	
+	// 피드 감정표현 기록 추가, 피드 감정표현의 수정에 따라 테이블 생성
+	public int feedEmotionUserUseCreate(FeedEmotionDto feedEmotionDto);
+	// 유저가 피드에 어떤 감정표현을 했는지 찾기 => 결과값이 없으면 아직 감정표현을 하지 않은 것
+	public FeedEmotionDto feedEmotionUserUseSearch(FeedEmotionDto feedEmotionDto);
+	// 피드 감정표현 기록 삭제, 피드 감정표현의 수정에 따라 테이블 삭제
+	public int feedEmotionUserUseDelete(FeedEmotionDto feedEmotionDto);
+	
+	
 
 }
