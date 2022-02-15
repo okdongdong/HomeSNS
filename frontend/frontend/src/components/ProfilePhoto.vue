@@ -1,10 +1,10 @@
 <template>
   <div
-    @click.stop="
+    @click.stop="$router.app._route.name != 'UserPage'?
       $router.push({
         name: 'UserPage',
         params: { userSeq: userSeq },
-      }),
+      }):'',
       clicked()
     "
   >
