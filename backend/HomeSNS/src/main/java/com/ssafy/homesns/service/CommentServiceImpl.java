@@ -28,23 +28,29 @@ public class CommentServiceImpl implements CommentService{
 	public CommentResultDto commentCreate(CommentDto commentDto) {
 
 		CommentResultDto commentResultDto = new CommentResultDto();
-				
 		
-		if ( commentDao.commentCreate(commentDto) == 1 ) {
-			
-			for (int commentTagSeq : commentDto.getCommentTags() ) {
-				commentDto.setCommentTagSeq(commentTagSeq);
-				commentDao.commentTagCreate(commentDto);
-			}
 
-			commentResultDto.setResult(SUCCESS);
-		} else {
+		try {
+			if ( commentDao.commentCreate(commentDto) == 1 ) {
+				
+				for (int commentTagSeq : commentDto.getCommentTags() ) {
+					commentDto.setCommentTagSeq(commentTagSeq);
+					commentDao.commentTagCreate(commentDto);
+				}
+				commentResultDto.setResult(SUCCESS);
+			}
+			else {
+				System.out.println("comment Create Err");
+				commentResultDto.setResult(FAIL);
+			}
+		}catch(Exception e ) {
+			System.out.println("tagCreate Err");
+			e.printStackTrace();
 			commentResultDto.setResult(FAIL);
 		}
 		return commentResultDto;
-
 		
-//		
+		// 감정관련 해서 생성 할때 사용한 코드
 //		// 댓글 레코드 생성했다면,
 //		if ( commentDao.commentCreate(commentDto) == 1 ) {
 //			// 댓글 감정표현 레코드도 생성한다

@@ -4,12 +4,12 @@
 
 	<insert id="commentCreate" parameterType="com.ssafy.homesns.dto.CommentDto" useGeneratedKeys="true" keyProperty="commentId">
 		INSERT INTO COMMENT ( FEED_ID,    COMMENT_AUTHOR,    COMMENT_CONTENT,  COMMENT_UPLOAD_DATE   )
-		             VALUES ( #{feedId},   #{commentAuthor},  #{commentContent},       now()                 )
+		             VALUES ( #{feedId},   #{commentAuthor},  #{commentContent},       now() )
 	</insert>
 	
 	<insert id="commentTagCreate" parameterType="map" >
 		INSERT INTO COMMENT_TAG ( COMMENT_ID,    COMMENT_TAG)
-		             VALUES ( #{commentId},  #{commentTag} )
+		             VALUES ( #{commentId},  #{commentTagSeq} )
 	</insert>
 	
 	
@@ -30,7 +30,8 @@
 
 <!-- 댓글리스트 불러오기  -->
 	<select id="commentList" parameterType="map" resultType="com.ssafy.homesns.dto.CommentDto"> 
-		SELECT c.comment_id,feed_id, comment_author as comment_author_seq, u1.user_name as comment_author,comment_content,comment_upload_date
+		SELECT c.comment_id,feed_id, comment_author as comment_author_seq, u1.user_name as comment_author,comment_content,comment_upload_date,
+		u1.USER_PROFILE_IMAGE_URL as commentUserProfileImageUrl
 		FROM HOME_SNS.COMMENT c
         JOIN HOME_SNS.USER u1 ON c.comment_author = u1.user_seq 
        WHERE feed_id = #{feedId}
@@ -42,7 +43,7 @@
 		SELECT USER_NAME as  CommentTagName
 		  FROM  COMMENT_TAG ct 
 		  JOIN USER u 
-		    ON ct.COMMENT_TAG = u.USER_NAME
+		    ON ct.COMMENT_TAG = u.USER_SEQ
 		 WHERE COMMENT_ID = #{commentId}
 	</select>
  
