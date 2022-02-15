@@ -105,37 +105,37 @@ public class CommentController {
 		return new ResponseEntity<CommentResultDto>(commentResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	// 감정표현 하기 => 댓글 감정표현 레코드 수정 + 댓글 감정표현 사용 레코드 추가
-	@PutMapping(value="/feed/comment/emotion/add")
-	public ResponseEntity<CommentEmotionResultDto> commentEmotionAdd(CommentEmotionDto commentEmotionDto) {
-		// Security Context에서 UserSeq를 구한다
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		int userSeq = Integer.parseInt(authentication.getName());
-
-		commentEmotionDto.setUserSeq(userSeq);
-		CommentEmotionResultDto commentEmotionResultDto = commentService.commentEmotionAdd(commentEmotionDto);
-		
-		if ( commentEmotionResultDto.getResult() == SUCCESS ) {
-			return new ResponseEntity<CommentEmotionResultDto>(commentEmotionResultDto, HttpStatus.OK);
-		}
-		return new ResponseEntity<CommentEmotionResultDto>(commentEmotionResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-
-	// 감정표현 취소 => 댓글 감정표현 레코드 수정 + 댓글 감정표현 사용 레코드 삭제
-	@PutMapping(value="/feed/comment/emotion/sub")
-	public ResponseEntity<CommentEmotionResultDto> commentEmotionSub(CommentEmotionDto commentEmotionDto) {
-		// Security Context에서 UserSeq를 구한다
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		int userSeq = Integer.parseInt(authentication.getName());
-		
-		commentEmotionDto.setUserSeq(userSeq);
-		CommentEmotionResultDto commentEmotionResultDto = commentService.commentEmotionSub(commentEmotionDto);
-
-		if ( commentEmotionResultDto.getResult() == SUCCESS ) {
-			return new ResponseEntity<CommentEmotionResultDto>(commentEmotionResultDto, HttpStatus.OK);
-		}
-		return new ResponseEntity<CommentEmotionResultDto>(commentEmotionResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+//	// 감정표현 하기 => 댓글 감정표현 레코드 수정 + 댓글 감정표현 사용 레코드 추가
+//	@PutMapping(value="/feed/comment/emotion/add")
+//	public ResponseEntity<CommentEmotionResultDto> commentEmotionAdd(CommentEmotionDto commentEmotionDto) {
+//		// Security Context에서 UserSeq를 구한다
+//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//		int userSeq = Integer.parseInt(authentication.getName());
+//
+//		commentEmotionDto.setUserSeq(userSeq);
+//		CommentEmotionResultDto commentEmotionResultDto = commentService.commentEmotionAdd(commentEmotionDto);
+//		
+//		if ( commentEmotionResultDto.getResult() == SUCCESS ) {
+//			return new ResponseEntity<CommentEmotionResultDto>(commentEmotionResultDto, HttpStatus.OK);
+//		}
+//		return new ResponseEntity<CommentEmotionResultDto>(commentEmotionResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+//	}
+//
+//	// 감정표현 취소 => 댓글 감정표현 레코드 수정 + 댓글 감정표현 사용 레코드 삭제
+//	@PutMapping(value="/feed/comment/emotion/sub")
+//	public ResponseEntity<CommentEmotionResultDto> commentEmotionSub(CommentEmotionDto commentEmotionDto) {
+//		// Security Context에서 UserSeq를 구한다
+//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//		int userSeq = Integer.parseInt(authentication.getName());
+//		
+//		commentEmotionDto.setUserSeq(userSeq);
+//		CommentEmotionResultDto commentEmotionResultDto = commentService.commentEmotionSub(commentEmotionDto);
+//
+//		if ( commentEmotionResultDto.getResult() == SUCCESS ) {
+//			return new ResponseEntity<CommentEmotionResultDto>(commentEmotionResultDto, HttpStatus.OK);
+//		}
+//		return new ResponseEntity<CommentEmotionResultDto>(commentEmotionResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+//	}
 }
 
 

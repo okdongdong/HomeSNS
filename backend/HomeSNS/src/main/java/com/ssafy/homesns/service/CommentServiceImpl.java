@@ -107,7 +107,7 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	// 댓글 삭제 => 댓글 레코드 삭제 + 댓글 감정표현 레코드 삭제 + 댓글 감정표현 사용 레코드 삭제
-	// CASCADE 한다는 가정 하에 생성한 코드
+	// CASCADE 한다는 가정 하에 생성한 코드 but 태그 comment ID pk설정을 안해서 그거는 그냥 따로 실행 
 	@Override
 	public CommentResultDto commentDelete(int commentId) {
 		
@@ -164,23 +164,18 @@ public class CommentServiceImpl implements CommentService{
 		
 		if ( commentEmotionDto.getGood() == 1 ) {
 			commentDao.commentGoodSub(commentEmotionDto.getCommentId());
-			commentEmotionDto.setCode("30001");
 			commentDao.commentEmotionUserUseDelete(commentEmotionDto);
 		} else if ( commentEmotionDto.getSad() == 1 ) {
 			commentDao.commentSadSub(commentEmotionDto.getCommentId());
-			commentEmotionDto.setCode("30002");
 			commentDao.commentEmotionUserUseDelete(commentEmotionDto);
 		} else if ( commentEmotionDto.getCheck() == 1 ) {
 			commentDao.commentCheckSub(commentEmotionDto.getCommentId());
-			commentEmotionDto.setCode("30003");
 			commentDao.commentEmotionUserUseDelete(commentEmotionDto);
 		} else if ( commentEmotionDto.getFun() == 1 ) {
 			commentDao.commentFunSub(commentEmotionDto.getCommentId());
-			commentEmotionDto.setCode("30004");
 			commentDao.commentEmotionUserUseDelete(commentEmotionDto);
 		} else if ( commentEmotionDto.getAmaze() == 1 ) {
 			commentDao.commentAmazeSub(commentEmotionDto.getCommentId());
-			commentEmotionDto.setCode("30005");
 			commentDao.commentEmotionUserUseDelete(commentEmotionDto);
 		} else {
 			commentEmotionResultDto.setResult(FAIL);

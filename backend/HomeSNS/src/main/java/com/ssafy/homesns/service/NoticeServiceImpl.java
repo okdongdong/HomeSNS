@@ -124,6 +124,7 @@ public class NoticeServiceImpl implements NoticeService {
 ////                    nowNoticeResultDto.setNoticeContentContent(feedDao.feedDetail(nowContentId).getFeedContent());
 //                        break;
                     case "voteCreate":
+                    case "voteEnd":
                     case "ghostLegCreate":
                         nowNoticeResultDto.setNoticeContentTitle(gameDao.gameDetailSearch(nowContentId).getGameTitle());
                         break;

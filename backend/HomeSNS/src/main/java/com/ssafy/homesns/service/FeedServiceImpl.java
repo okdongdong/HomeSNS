@@ -18,6 +18,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.homesns.dao.FeedDao;
 import com.ssafy.homesns.dto.EventMemberDto;
 import com.ssafy.homesns.dto.FeedDto;
+import com.ssafy.homesns.dto.FeedEmotionDto;
+import com.ssafy.homesns.dto.FeedEmotionResultDto;
 import com.ssafy.homesns.dto.FeedParamDto;
 import com.ssafy.homesns.dto.FeedResultDto;
 import com.ssafy.homesns.dto.FileDto;
@@ -191,6 +193,7 @@ public class FeedServiceImpl implements FeedService {
 				}
 			}
 
+<<<<<<< HEAD
 			// 참가 인원 추가
 			String attendeeStr = feedDto.getFeedAttendees();
 
@@ -246,6 +249,9 @@ public class FeedServiceImpl implements FeedService {
 				}
 			}
 
+=======
+			feedDao.feedEmotionCreate(feedId);
+>>>>>>> 79893823c8f737578bd2229d239530a22ffbff5f
 			System.out.println("Service feedDto --------- ");
 			System.out.println(feedDto);
 			feedResultDto.setResult(SUCCESS);
@@ -481,5 +487,76 @@ public class FeedServiceImpl implements FeedService {
 
 		return feedResultDto;
 	}
+<<<<<<< HEAD
+=======
+	
+	
+	
+	// 감정표현 하기 :  감정표현 레코드 수정 + 감정표현 사용 레코드 추가
+		@Override
+		@Transactional
+		public FeedEmotionResultDto feedEmotionAdd(FeedEmotionDto feedEmotionDto) {
+			
+			FeedEmotionResultDto feedEmotionResultDto = new FeedEmotionResultDto();
+			
+			
+			if ( feedEmotionDto.getGood() == 1 ) {
+				feedDao.feedGoodAdd(feedEmotionDto.getFeedId());
+				feedEmotionDto.setCode("30001");
+				feedDao.feedEmotionUserUseCreate(feedEmotionDto);
+			} else if ( feedEmotionDto.getSad() == 1 ) {
+				feedDao.feedSadAdd(feedEmotionDto.getFeedId());
+				feedEmotionDto.setCode("30002");
+				feedDao.feedEmotionUserUseCreate(feedEmotionDto);
+			} else if ( feedEmotionDto.getCheck() == 1 ) {
+				feedDao.feedCheckAdd(feedEmotionDto.getFeedId());
+				feedEmotionDto.setCode("30003");
+				feedDao.feedEmotionUserUseCreate(feedEmotionDto);
+			} else if ( feedEmotionDto.getFun() == 1 ) {
+				feedDao.feedFunAdd(feedEmotionDto.getFeedId());
+				feedEmotionDto.setCode("30004");
+				feedDao.feedEmotionUserUseCreate(feedEmotionDto);
+			} else if ( feedEmotionDto.getAmaze() == 1 ) {
+				feedDao.feedAmazeAdd(feedEmotionDto.getFeedId());
+				feedEmotionDto.setCode("30005");
+				feedDao.feedEmotionUserUseCreate(feedEmotionDto);
+			} else {
+				feedEmotionResultDto.setResult(FAIL);
+			}
+			
+			return feedEmotionResultDto;
+		}
+
+		// 감정표현 취소 => 댓글 감정표현 레코드 수정 + 댓글 감정표현 사용 레코드 삭제
+		@Override
+		@Transactional
+		public FeedEmotionResultDto feedEmotionSub(FeedEmotionDto feedEmotionDto) {
+			
+			FeedEmotionResultDto feedEmotionResultDto = new FeedEmotionResultDto();
+			
+			if ( feedEmotionDto.getGood() == 1 ) {
+				feedDao.feedGoodSub(feedEmotionDto.getFeedId());
+				feedDao.feedEmotionUserUseDelete(feedEmotionDto);
+			} else if ( feedEmotionDto.getSad() == 1 ) {
+				feedDao.feedSadSub(feedEmotionDto.getFeedId());
+				feedDao.feedEmotionUserUseDelete(feedEmotionDto);
+			} else if ( feedEmotionDto.getCheck() == 1 ) {
+				feedDao.feedCheckSub(feedEmotionDto.getFeedId());
+				feedDao.feedEmotionUserUseDelete(feedEmotionDto);
+			} else if ( feedEmotionDto.getFun() == 1 ) {
+				feedDao.feedFunSub(feedEmotionDto.getFeedId());
+				feedDao.feedEmotionUserUseDelete(feedEmotionDto);
+			} else if ( feedEmotionDto.getAmaze() == 1 ) {
+				feedDao.feedAmazeSub(feedEmotionDto.getFeedId());
+				feedDao.feedEmotionUserUseDelete(feedEmotionDto);
+			} else {
+				feedEmotionResultDto.setResult(FAIL);
+			}
+			
+			return feedEmotionResultDto;
+		}
+	
+
+>>>>>>> 79893823c8f737578bd2229d239530a22ffbff5f
 
 }

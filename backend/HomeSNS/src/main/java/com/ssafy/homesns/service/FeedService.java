@@ -3,6 +3,8 @@ package com.ssafy.homesns.service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.ssafy.homesns.dto.FeedDto;
+import com.ssafy.homesns.dto.FeedEmotionDto;
+import com.ssafy.homesns.dto.FeedEmotionResultDto;
 import com.ssafy.homesns.dto.FeedParamDto;
 import com.ssafy.homesns.dto.FeedResultDto;
 import com.ssafy.homesns.dto.GroupMemberDto;
@@ -24,4 +26,9 @@ public interface FeedService {
 	public FeedResultDto feedDelete(int feedId);
 	
 	public FeedResultDto locationFavoriteDelete(LocationFavoriteDto locationFavoriteDto);
+	
+	// 피드 감정 추가
+	public FeedEmotionResultDto feedEmotionAdd(FeedEmotionDto feedEmotionDto);
+	// 피드 감정 삭제 
+	public FeedEmotionResultDto feedEmotionSub(FeedEmotionDto feedEmotionDto);
 }

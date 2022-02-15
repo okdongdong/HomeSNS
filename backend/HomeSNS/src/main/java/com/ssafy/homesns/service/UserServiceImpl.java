@@ -157,7 +157,13 @@ public class UserServiceImpl implements UserService{
 
 				// User테이블의 ProfileImageUrl 수정
 				userDao.userProfileImageUpdate(profileImageDto);
-			}
+			}else {
+                ProfileImageDto profileImageDto = new ProfileImageDto();
+                profileImageDto.setUserSeq(userSeq);
+                profileImageDto.setProfileImageUrl("/img/noimage.png");
+                // User테이블의 ProfileImageUrl 수정
+                userDao.userProfileImageUpdate(profileImageDto);
+            }
 
 			userResultDto.setResult(SUCCESS);
 		} catch (Exception e) {

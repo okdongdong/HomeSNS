@@ -4,7 +4,7 @@
 
 	<insert id="commentCreate" parameterType="com.ssafy.homesns.dto.CommentDto" useGeneratedKeys="true" keyProperty="commentId">
 		INSERT INTO COMMENT ( FEED_ID,    COMMENT_AUTHOR,    COMMENT_CONTENT,  COMMENT_UPLOAD_DATE   )
-		             VALUES ( #{feedId},   #{commentAuthor},  #{commentContent},       now() )
+		             VALUES ( #{feedId},   #{commentAuthorSeq},  #{commentContent},       now() )
 	</insert>
 	
 	<insert id="commentTagCreate" parameterType="map" >
@@ -41,12 +41,14 @@
 
 <!-- 댓글리스트 불러오기  -->
 	<select id="commentList" parameterType="map" resultType="com.ssafy.homesns.dto.CommentDto"> 
-		SELECT c.comment_id,feed_id, comment_author as comment_author_seq, u1.user_name as comment_author,comment_content,comment_upload_date,
-		u1.USER_PROFILE_IMAGE_URL as commentUserProfileImageUrl
+	  SELECT c.COMMENT_ID,FEED_ID, COMMENT_AUTHOR as commentAuthorSeq, u1.USER_NAME as commentAuthor,COMMENT_CONTENT,COMMENT_UPLOAD_DATE,
+	  		   u1.USER_PROFILE_IMAGE_URL as commentUserProfileImageUrl
 		FROM HOME_SNS.COMMENT c
         JOIN HOME_SNS.USER u1 ON c.comment_author = u1.user_seq 
        WHERE feed_id = #{feedId}
-       LIMIT #{limit} OFFSET #{offset}
+    ORDER BY COMMENT_UPLOAD_DATE DESC
+   	   LIMIT #{limit} OFFSET #{offset}
+    
 	</select>
  
  <!-- 댓글 태그 리스트 불러오기 -->
