@@ -3,75 +3,83 @@ import axios from "axios";
 const comments = {
   namespaced: true,
   state: {
-    comments: [],
-    offset: 0,
+    comments:[],
+    offset :0,
   },
   mutations: {
-    GET_COMMENTS: function (state, comments) {
-      console.log("getcomment=====================");
-      console.log(comments);
-      state.comments = comments.commentList;
-      console.log(state.comments);
+    GET_COMMENTS : function(state, comments){
+      state.comments.push(...comments.commentList);
     },
+    CREATE_COMMENT:function(state, comment){
+      state.comments.unshift(comment.comment)
+      console.log(state.comments)
+    },
+    DELETE_COMMENT : function(state,data){
+      for(let i=0; i< state.comments.length;i++){
+        if(state.comments[i].commentId == data.commentId){
+          state.comments.splice(i,1)
+          break
+        }
+      }
+    }
   },
   actions: {
-    getComments: function ({ commit, state }, commentParamDto, $state) {
+    
+    getComments:function({commit,state},data){
       const token = localStorage.getItem("jwt");
-      console.log("offset");
-      console.log(state.offset);
-      commentParamDto["offset"] = state.offset;
+      data.commentParamDto["offset"]=state.offset
       axios({
-        method: "GET",
-        url: `${process.env.VUE_APP_MCS_URL}/feed/comment`,
-        params: commentParamDto, //피드 아이디는 어디다가 넣어서 주면 되쥬?
+        method : "GET",
+        url :`${process.env.VUE_APP_MCS_URL}/feed/comment`,
+        params : data.commentParamDto, //피드 아이디는 어디다가 넣어서 주면 되쥬?
         headers: { Authorization: token },
       })
-        .then((res) => {
-          console.log("댓글들고옴");
-          console.log(res.data);
-          if (res.data.commentList.length) {
-            commit("GET_COMMENTS", res.data);
-            state.offset += 10;
-            $state.loaded();
-          } else {
-            $state.complete();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      .then((res)=>{
+        console.log('댓글들고옴')
+        console.log(res.data)
+        if(res.data.commentList.length){
+          commit(('GET_COMMENTS'),res.data);
+          state.offset += 10;
+          data.state.loaded();
+        }else{
+          console.log('더이상 들고올 데이터 없음')
+          data.state.complete();
+        }
+      })
+      .catch((err)=>{
+        console.log(err);
+      })
     },
-    createComment: function ({ dispatch }, data) {
+    createComment:function({commit},data){
       const token = localStorage.getItem("jwt");
       axios({
         method: "POST",
         url: `${process.env.VUE_APP_MCS_URL}/feed/comment`,
         data: data.commentDto,
         headers: { Authorization: token },
-      }).then((res) => {
-        console.log("댓글 생성완료!!");
-        console.log(res.data);
-        //일단 가지고오는걸로 실행 , createComment 하고나서 던져주는 값 있으면
-        //위로 올려보내서 리스트에 하나 추가하는걸로!
-        dispatch("comments/getComments", data.commentDto.feedId, {
-          root: true,
-        });
+      })
+      .then((res) => {
+        console.log('댓글 생성완료!!')
+        console.log(res.data)
+        commit(('CREATE_COMMENT'),res.data)
       });
     },
-    deleteComment({ dispatch }, data) {
+    deleteComment({commit},data){
       const token = localStorage.getItem("jwt");
-      console.log(data);
+      console.log(data)
       axios({
-        method: "DELETE",
+        method : "DELETE",
         url: `${process.env.VUE_APP_MCS_URL}/feed/comment/${data.commentId}`,
-        headers: { Authorization: token },
-      }).then(() => {
-        dispatch("comments/getComments", data.feedId, { root: true });
-      });
+        headers : { Authorization: token },
+      })
+      .then(()=>{
+        commit(('DELETE_COMMENT'),data);
+      })
     },
-    resetOffset({ state }) {
-      state.offset = 0;
-    },
+    resetOffset({state}){
+      state.offset = 0
+      state.comments =[]
+    }
   },
   getters: {},
 };

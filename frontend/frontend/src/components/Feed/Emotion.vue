@@ -9,6 +9,7 @@
       class="emoji-position"
       >
       <v-chip-group
+        v-model="selectEmotion"
         class="emoji-position"
         active-class="primary--text"
         column
@@ -16,27 +17,13 @@
         <v-chip
           v-for="(emotion, idx) in emotions"
           :key="idx"
+          :value="emotion.status"
         >
-        {{ emotion.emoji }}
+        <v-avatar center>
+          <v-img :src="emotion.emoji"></v-img>
+        </v-avatar>
         </v-chip>
       </v-chip-group>
-      <!-- <v-btn-toggle class="emoji-position" rounded v-model="toggle_exclusive" multiple >
-          <v-btn icon>
-            <v-icon>😊</v-icon>
-          </v-btn>
-          <v-btn icon>
-            <v-icon>😢</v-icon>
-          </v-btn>
-          <v-btn icon>
-            <v-icon>✅</v-icon>
-          </v-btn>
-          <v-btn icon>
-            <v-icon>🤣</v-icon>
-          </v-btn>
-          <v-btn icon>
-            <v-icon>👍</v-icon>
-          </v-btn>
-        </v-btn-toggle> -->
       </v-sheet>
   </v-expand-x-transition>
 </template>
@@ -50,15 +37,22 @@ export default {
   data() {
     return {
       toggle_exclusive: undefined,
+      selectEmotion:null,
       emotions: [
-        {emoji : '😊', status:'good'},
-        {emoji : '😢', status:'sad'},
-        {emoji : '✅', status:'check'},
-        {emoji : '🤣', status:'fun'},
-        {emoji : '👍', status:'amaze'}
+        {emoji : require('@/assets/emotions/heart_on.png'), status:'good'},
+        {emoji : require('@/assets/emotions/sad.png'), status:'sad'},
+        {emoji : require('@/assets/emotions/check.png'), status:'check'},
+        {emoji : require('@/assets/emotions/fun.png'), status:'fun'},
+        {emoji : require('@/assets/emotions/amaze.png'), status:'amaze'}
       ],
     };
   },
+  watch:{
+    selectEmotion: function(val){
+      // console.log(val);
+      this.$emit('select-emotion',val)
+    }
+  }
 };
 </script>
 

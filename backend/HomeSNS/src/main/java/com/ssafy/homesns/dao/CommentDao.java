@@ -1,9 +1,12 @@
 package com.ssafy.homesns.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ssafy.homesns.dto.CommentDto;
 import com.ssafy.homesns.dto.CommentEmotionDto;
+import com.ssafy.homesns.dto.CommentParamDto;
 
 @Mapper
 // 댓글 목록 찾기 기능은 피드를 불러올 때 동시에 진행
@@ -16,7 +19,12 @@ public interface CommentDao {
 	public int commentUpdate(CommentDto commentDto);
 	// 댓글 삭제
 	public int commentDelete(int commentId);
+	// 댓글 읽기
+	public CommentDto commentSearch(int commentId);
+	public List<CommentDto> commentList(CommentParamDto commentParamDto);
 	
+	
+	public List<String> commentTagList(int commentId);
 	
 	// 댓글 감정표현 추가, 댓글을 생성하면서 동시에 모든 값이 0인 댓글 감정표현 테이블 생성
 	public int commentEmotionCreate(int commentId);
@@ -41,7 +49,8 @@ public interface CommentDao {
 	// 댓글 감정표현 삭제, 댓글을 삭제하면서 동시에 댓글 감정표현 테이블 삭제
 	public int commentEmotionDelete(int commendId);
 	
-	
+	// 댓글 태그 한 사람 생성
+	public int commentTagCreate(CommentDto commentDto);
 	// 댓글 감정표현 기록 추가, 댓글 감정표현의 수정에 따라 테이블 생성
 	public int commentEmotionUserUseCreate(CommentEmotionDto commentEmotionDto);
 	// 유저가 댓글에 어떤 감정표현을 했는지 찾기 => 결과값이 없으면 아직 감정표현을 하지 않은 것

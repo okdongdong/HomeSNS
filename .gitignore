@@ -4,3 +4,4 @@ application.properties
 .meta
 static/
 vue.config.js
+key.p12

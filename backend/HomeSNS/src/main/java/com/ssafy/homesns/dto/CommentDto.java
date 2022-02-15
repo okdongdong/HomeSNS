@@ -1,6 +1,7 @@
 package com.ssafy.homesns.dto;
 
 import java.util.Date;
+import java.util.List;
 
 public class CommentDto {
 
@@ -11,8 +12,12 @@ public class CommentDto {
 	private int commentAuthorSeq;
 	private String commentAuthor;
 	private String commentContent;
-	private Date commentUploadDate; 
+	private Date commentUploadDate;
 	
+	private String commentUserProfileImageUrl;
+	
+	private List<Integer> commentTags;
+	private List<String> commentTagNameList;
 	private int good;
 	private int sad;
 	private int check; 
@@ -133,15 +138,43 @@ public class CommentDto {
 		this.code = code;
 	}
 
+	public List<Integer> getCommentTags() {
+		return commentTags;
+	}
+
+	public void setCommentTags(List<Integer> commentTags) {
+		this.commentTags = commentTags;
+	}
+
+	public List<String> getCommentTagNameList() {
+		return commentTagNameList;
+	}
+
+	public void setCommentTagNameList(List<String> commentTagNameList) {
+		this.commentTagNameList = commentTagNameList;
+	}
+	
+	
+
+	public String getCommentUserProfileImageUrl() {
+		return commentUserProfileImageUrl;
+	}
+
+	public void setCommentUserProfileImageUrl(String commentUserProfileImageUrl) {
+		this.commentUserProfileImageUrl = commentUserProfileImageUrl;
+	}
+
 	@Override
 	public String toString() {
 		return "CommentDto [commentId=" + commentId + ", feedId=" + feedId + ", commentTagSeq=" + commentTagSeq
 				+ ", commentTagName=" + commentTagName + ", commentAuthorSeq=" + commentAuthorSeq + ", commentAuthor="
 				+ commentAuthor + ", commentContent=" + commentContent + ", commentUploadDate=" + commentUploadDate
-				+ ", good=" + good + ", sad=" + sad + ", check=" + check + ", fun=" + fun + ", amaze=" + amaze
-				+ ", code=" + code + "]";
-	} 
-	
-	
+				+ ", commentUserProfileImageUrl=" + commentUserProfileImageUrl + ", commentTags=" + commentTags
+				+ ", commentTagNameList=" + commentTagNameList + ", good=" + good + ", sad=" + sad + ", check=" + check
+				+ ", fun=" + fun + ", amaze=" + amaze + ", code=" + code + "]";
+	}
+
+
+
 	
 }

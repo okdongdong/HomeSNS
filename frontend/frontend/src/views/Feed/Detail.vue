@@ -42,26 +42,47 @@
     </div>
     <div>
       <v-row class="icon-group">
+        <!-- 하트 -->
         <v-col cols="10">
-          <span style="padding: 3px"></span>
-          <v-btn icon large @click="showEmotions ? (showEmotions = false) : (showEmotions = true)">
-            <v-icon>favorite_border</v-icon>
+          <span style="padding: 8px;"></span>
+          <v-btn style="width:25px;" icon large @click="showEmotions ? (showEmotions = false) : (showEmotions = true)">
+            <v-img :src="currEmotion.emoji" style="width:10px; height:auto"></v-img>
           </v-btn>
         </v-col>
+        <!-- 북마크 -->
         <v-col cols="2">
-          <v-btn icon large style="padding: 0">
-            <v-icon>bookmark_border</v-icon>
+          <v-btn icon large style="padding: 0" @click="bookmarkToggle">
+            <v-icon v-if="bookmark== false">bookmark_border</v-icon>
+            <v-icon v-else>bookmark</v-icon>
           </v-btn>
         </v-col>
       </v-row>
       <!-- 감정 버튼 -->
-      <Emotion :show-emotions="showEmotions" style="position: absolute" />
+      <Emotion 
+      :show-emotions="showEmotions"
+      @select-emotion="changeEmotion" 
+      style="position: absolute" />
     </div>
     <div class="content-group" v-html="getContent()"></div>
+    <!-- 해시태그 부분 -->
+    <div class="px-3">
+      <v-chip-group
+        active-class="primary--text"
+        column
+      >
+        <v-chip
+          v-for="hashtag in feed.hashtagList"
+          :key="hashtag.hashtagContent"
+          color="white"
+        >
+          #{{ hashtag.hashtagContent }}
+        </v-chip>
+      </v-chip-group>
+    </div>
     <!-- 댓글 부분 ! -->
     <v-form class="px-3" ref="form" @submit.prevent="createComment">
       <div class="d-flex">
-        <v-text-field label="댓글 달기" v-model="comment"> </v-text-field>
+        <v-text-field label="댓글 달기" v-model="currComment"> </v-text-field>
         <v-btn
           class="my-5 ml-2"
           elevation="3"
@@ -118,6 +139,7 @@ export default {
     tab: 0,
     showEmotions: false,
     feedAuthorSeq: null,
+    feedAuthorProfileImageUrl : null,
     feed: {
       // 샘플 데이터
       author: null,
@@ -128,26 +150,39 @@ export default {
       uploadDate: null,
       eventDate: null,
       location: null,
+      hashtagList:[],
     },
+    // 감정
+    emotions: [
+        {emoji : require('@/assets/emotions/heart_off.png'), status:'null'},
+        {emoji : require('@/assets/emotions/heart_on.png'), status:'good'},
+        {emoji : require('@/assets/emotions/sad.png'), status:'sad'},
+        {emoji : require('@/assets/emotions/check.png'), status:'check'},
+        {emoji : require('@/assets/emotions/fun.png'), status:'fun'},
+        {emoji : require('@/assets/emotions/amaze.png'), status:'amaze'}
+      ],
+    currEmotion:{emoji : require('@/assets/emotions/heart_off.png'), status:'null'},
+    //북마크
+    bookmark : false,
     // 댓글쪽
-    comment: null,
+    currComment: null,
     members: [], // 해시태그위한 멤버리스트
     memberToggle: false,
     tagList: [], // 해시태그한 사람
-    comments: [ // vuex로 넘겨줬으니까 지우기
-      {
-        author: "할매",
-        tag: "임시태그",
-        content: "댓글내용",
-        uploadDate: "2011-11-11",
-      },
-      {
-        author: "할매",
-        tag: "임시태그",
-        content: "댓글내용",
-        uploadDate: "2011-11-11",
-      },
-    ],
+    // comments: [ // vuex로 넘겨줬으니까 지우기
+    //   {
+    //     author: "할매",
+    //     tag: "임시태그",
+    //     content: "댓글내용",
+    //     uploadDate: "2011-11-11",
+    //   },
+    //   {
+    //     author: "할매",
+    //     tag: "임시태그",
+    //     content: "댓글내용",
+    //     uploadDate: "2011-11-11",
+    //   },
+    // ],
   }),
   methods: {
     getMember() {
@@ -176,8 +211,8 @@ export default {
         url: `${process.env.VUE_APP_MCS_URL}/feed/${this.feedId}`,
         headers: { Authorization: token },
       }).then((res) => {
-        // console.log("피드상세");
-        // console.log(res.data);
+        console.log("피드상세");
+        console.log(res.data);
         this.feedAuthorSeq = res.data.feedDto.feedAuthorSeq;
         this.feed.author = res.data.feedDto.feedAuthor;
         this.feed.title = res.data.feedDto.feedTitle;
@@ -196,6 +231,7 @@ export default {
         this.feed.location = res.data.feedDto.locationDto.locationName;
         this.nowLoading = false;
         this.memberList = res.data.feedDto.userList;
+        this.feed.hashtagList = res.data.feedDto.hashtagList;
       });
     },
     getContent() {
@@ -207,44 +243,33 @@ export default {
     },
     getComments($state){
       let data={
-        feedId: this.feedId,
-        limit:10,
+        commentParamDto : {
+          feedId: this.feedId,
+          limit:10,
+        },
+        state : $state,
       }
-      this.$store.dispatch('comments/getComments', data, $state)
+      this.$store.dispatch('comments/getComments', data)
 
     },
     createComment(event) {
       event.preventDefault();
       // const token = localStorage.getItem("jwt");
+      let commentTag = []
+      for(let i=0;i<this.tagList.length;i++){
+        commentTag.push(this.tagList[i].userSeq)
+      }
       let data ={
         commentDto : {
         feedId: this.feedId,
-        commentTag: this.tagList, // userName, userSeq있음
-        commentContent: this.comment,
+        commentTags: commentTag,
+        commentContent: this.currComment,
         },
-        feedId : this.feedId
       }
+      console.log('댓글작성 전')
+      console.log(data)
       this.$store.dispatch('comments/createComment',data)
-      // let commentDto = {
-      //   feedId: this.feedId,
-      //   commentTag: this.tagList, // userName, userSeq있음
-      //   commentContent: this.comment,
-      // };
-      // axios({
-      //   method: "POST",
-      //   url: `${process.env.VUE_APP_MCS_URL}/feed/comment`,
-      //   data: commentDto,
-      //   headers: { Authorization: token },
-      // }).then(() => {
-      //   this.comments.push({
-      //     author: this.userName,
-      //     tag: this.tagList,
-      //     content: this.comment,
-      //     uploadDate: "방금",
-      //   });
-      //   this.comment = null;
-      //   this.tagList = null;
-      // });
+      this.currComment = null
     },
     selectTagMember(member) {
       // 원래는 자동으로 토글되야하는데 안되서 일단 수동으로 구현(comment내에 태그 지우면 없어짐)
@@ -261,24 +286,42 @@ export default {
           userSeq: member.userSeq,
           userName: member.userName,
         });
-        this.comment += member.userName + " ";
+        this.currComment += member.userName + " ";
       }
     },
+    changeEmotion(data){
+      if(data==undefined){
+        this.currEmotion = this.emotions[0]
+      }
+      else{
+        for(let i=0;i<this.emotions.length;i++){
+          if(this.emotions[i].status == data){
+            this.currEmotion = this.emotions[i]
+            break
+          }
+        }
+      }
+    },
+    bookmarkToggle(){
+      this.bookmark = !this.bookmark
+      console.log(this.bookmark)
+    }
   },
   created() {
     this.feedId *= 1;
     this.getFeed();
     this.getMember();
-    this.getComments();
+    // this.getComments();
+    this.getAuthorProfileImageUrl();
   },
   beforeDestroy(){
     this.$store.dispatch('comments/resetOffset')
   },
   computed: {
     ...mapState("account", ["nowGroup", "userName"]),
-    ...mapState("comments",["comments","isPageEnd"]),
+    ...mapState("comments",["comments","offset"]),
     commentInTag() {
-      if (this.comment != null && this.comment.substr(-1) == "@") {
+      if (this.currComment != null && this.currComment.substr(-1) == "@") {
         return true;
       } else {
         return false;
@@ -286,7 +329,7 @@ export default {
     },
   },
   watch: {
-    comment: function (val) {
+    currComment: function (val) {
       for (let i = 0; i < this.tagList.length; i++) {
         if (!val.includes(this.tagList[i].userName)) {
           this.tagList.splice(i, 1);

@@ -12,6 +12,7 @@ public class FeedDto {
 	private int groupId;
 	private int feedAuthorSeq;
 	private String feedAuthor;
+	private String authorProfileImageUrl;
 	private String feedTitle; 
 	private String feedContent;
 	private String feedHashtags;
@@ -62,6 +63,14 @@ public class FeedDto {
 	}
 	public void setFeedAuthor(String feedAuthor) {
 		this.feedAuthor = feedAuthor;
+	}
+	
+	
+	public String getAuthorProfileImageUrl() {
+		return authorProfileImageUrl;
+	}
+	public void setAuthorProfileImageUrl(String authorProfileImageUrl) {
+		this.authorProfileImageUrl = authorProfileImageUrl;
 	}
 	public String getFeedTitle() {
 		return feedTitle;
@@ -184,13 +193,13 @@ public class FeedDto {
 	@Override
 	public String toString() {
 		return "FeedDto [feedId=" + feedId + ", groupId=" + groupId + ", feedAuthorSeq=" + feedAuthorSeq
-				+ ", feedAuthor=" + feedAuthor + ", feedTitle=" + feedTitle + ", feedContent=" + feedContent
-				+ ", feedHashtags=" + feedHashtags + ", feedAttendees=" + feedAttendees + ", feedLocationId="
-				+ feedLocationId + ", feedUploadDate=" + feedUploadDate + ", feedLocationStr=" + feedLocationStr
-				+ ", fileDeleteStr=" + fileDeleteStr + ", feedEventDate=" + feedEventDate + ", locationDto="
-				+ locationDto + ", good=" + good + ", sad=" + sad + ", check=" + check + ", fun=" + fun + ", amaze="
-				+ amaze + ", fileList=" + fileList + ", commentList=" + commentList + ", hashtagList=" + hashtagList
-				+ ", userList=" + userList + "]";
+				+ ", feedAuthor=" + feedAuthor + ", authorProfileImageUrl=" + authorProfileImageUrl + ", feedTitle="
+				+ feedTitle + ", feedContent=" + feedContent + ", feedHashtags=" + feedHashtags + ", feedAttendees="
+				+ feedAttendees + ", feedLocationId=" + feedLocationId + ", feedUploadDate=" + feedUploadDate
+				+ ", feedLocationStr=" + feedLocationStr + ", fileDeleteStr=" + fileDeleteStr + ", feedEventDate="
+				+ feedEventDate + ", locationDto=" + locationDto + ", good=" + good + ", sad=" + sad + ", check="
+				+ check + ", fun=" + fun + ", amaze=" + amaze + ", fileList=" + fileList + ", commentList="
+				+ commentList + ", hashtagList=" + hashtagList + ", userList=" + userList + "]";
 	}
 	
 	

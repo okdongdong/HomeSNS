@@ -1,5 +1,7 @@
 package com.ssafy.homesns.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +10,7 @@ import com.ssafy.homesns.dao.CommentDao;
 import com.ssafy.homesns.dto.CommentDto;
 import com.ssafy.homesns.dto.CommentEmotionDto;
 import com.ssafy.homesns.dto.CommentEmotionResultDto;
+import com.ssafy.homesns.dto.CommentParamDto;
 import com.ssafy.homesns.dto.CommentResultDto;
 
 @Service
@@ -26,17 +29,68 @@ public class CommentServiceImpl implements CommentService{
 
 		CommentResultDto commentResultDto = new CommentResultDto();
 		
-		// 댓글 레코드 생성했다면,
-		if ( commentDao.commentCreate(commentDto) == 1 ) {
-			// 댓글 감정표현 레코드도 생성한다
-			commentDao.commentEmotionCreate(commentDto.getCommentId());
 
+		try {
+			if ( commentDao.commentCreate(commentDto) == 1 ) {
+				
+				for (int commentTagSeq : commentDto.getCommentTags() ) {
+					commentDto.setCommentTagSeq(commentTagSeq);
+					commentDao.commentTagCreate(commentDto);
+				}
+				
+				commentResultDto.setComment(commentDao.commentSearch(commentDto.getCommentId()) );
+				commentResultDto.setResult(SUCCESS);
+			}
+			else {
+				System.out.println("comment Create Err");
+				commentResultDto.setResult(FAIL);
+			}
+		}catch(Exception e ) {
+			System.out.println("tagCreate Err");
+			e.printStackTrace();
+			commentResultDto.setResult(FAIL);
+		}
+		return commentResultDto;
+		
+		// 감정관련 해서 생성 할때 사용한 코드
+//		// 댓글 레코드 생성했다면,
+//		if ( commentDao.commentCreate(commentDto) == 1 ) {
+//			// 댓글 감정표현 레코드도 생성한다
+//			commentDao.commentEmotionCreate(commentDto.getCommentId());
+//
+//			commentResultDto.setResult(SUCCESS);
+//		} else {
+//			commentResultDto.setResult(FAIL);
+//		}
+//		return commentResultDto;
+	}
+
+	// 댓글 가져오기 
+	@Override
+	public CommentResultDto commentList(CommentParamDto commentParamDto) {
+		
+		CommentResultDto commentResultDto = new CommentResultDto();
+		
+		
+		try {
+			List<CommentDto> commentDtoList = commentDao.commentList(commentParamDto);
+			
+			for(int i =0 ; i < commentDtoList.size(); i++) {
+				
+				List<String> commentTagList =commentDao.commentTagList(commentDtoList.get(i).getCommentId());
+				commentDtoList.get(i).setCommentTagNameList(commentTagList);
+			}
+ 
+			commentResultDto.setCommentList(commentDtoList);	
 			commentResultDto.setResult(SUCCESS);
-		} else {
+		}catch(Exception e ) {
+			e.printStackTrace();
 			commentResultDto.setResult(FAIL);
 		}
 		return commentResultDto;
 	}
+
+	
 
 	// 댓글 수정 => 댓글 레코드 수정
 	@Override
