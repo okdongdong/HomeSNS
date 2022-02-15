@@ -193,7 +193,6 @@ public class FeedServiceImpl implements FeedService {
 				}
 			}
 
-<<<<<<< HEAD
 			// 참가 인원 추가
 			String attendeeStr = feedDto.getFeedAttendees();
 
@@ -249,9 +248,6 @@ public class FeedServiceImpl implements FeedService {
 				}
 			}
 
-=======
-			feedDao.feedEmotionCreate(feedId);
->>>>>>> 79893823c8f737578bd2229d239530a22ffbff5f
 			System.out.println("Service feedDto --------- ");
 			System.out.println(feedDto);
 			feedResultDto.setResult(SUCCESS);
@@ -487,8 +483,6 @@ public class FeedServiceImpl implements FeedService {
 
 		return feedResultDto;
 	}
-<<<<<<< HEAD
-=======
 	
 	
 	
@@ -557,6 +551,5 @@ public class FeedServiceImpl implements FeedService {
 		}
 	
 
->>>>>>> 79893823c8f737578bd2229d239530a22ffbff5f
 
 }
