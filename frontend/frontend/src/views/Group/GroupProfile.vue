@@ -14,7 +14,6 @@
 
     <div class=" content-box my-5">
       <h2>그룹원</h2>
-
       <div class="justify-space-around d-flex flex-wrap">
         <ProfilePhoto
           class="ma-3"

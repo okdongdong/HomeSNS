@@ -6,7 +6,7 @@
       </v-btn>
     </template>
     <v-card class="rounded-xl">
-      <div>
+      <div v-if="userSeq == feedAuthorSeq">
         <v-card-title class="justify-center card-title red--text" @click="deleteFeed()">삭제</v-card-title>
       </div>
       <v-divider></v-divider>
@@ -28,6 +28,7 @@ export default {
   name: "FeedPopup",
   props:{
     feedId : Number,
+    feedAuthorSeq : Number,
   },
   data: () => ({
     dialog:false,
@@ -53,7 +54,7 @@ export default {
     }
   },
   computed:{
-    ...mapState("account",["nowGroup"])
+    ...mapState("account",["nowGroup","userSeq"])
   }
 };
 </script>
