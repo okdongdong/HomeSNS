@@ -213,13 +213,13 @@
 	<!-- 피드 감정 -->
 	
 	<insert id="feedEmotionCreate" parameterType="int" >
-		INSERT INTO FEED_EMOTION ( FEED_ID,    GOOD, SAD,CHECK,FUN,AMAZE)
+		INSERT INTO FEED_EMOTION    ( FEED_ID,    GOOD, SAD, FEED_EMOTION.CHECK, FUN, AMAZE)
 		                     VALUES ( #{feedId},  0,  0,  0,    0 ,  0)
 	</insert>
 	
 	<select id="feedEmotionSearch" parameterType="int" resultType="com.ssafy.homesns.dto.FeedDto">
 		SELECT FEED_ID as feedId, GOOD as good, SAD as sad, 
-			   CHECK as check, FUN as fun, AMAZE as amaze
+			   FEED_EMOTION.CHECK as check, FUN as fun, AMAZE as amaze
 		  FROM FEED_EMOTION
 		 WHERE FEED_ID = #{feedId}
 	</select>
@@ -250,13 +250,13 @@
 	
 	<update id="feedCheckAdd" parameterType="int">
 		UPDATE FEED_EMOTION
-		   SET CHECK = CHECK + 1
+		   SET FEED_EMOTION.CHECK = FEED_EMOTION.CHECK + 1
 		 WHERE FEED_ID = #{feedId}
 	</update>
 	
 	<update id="feedCheckSub" parameterType="int">
 		UPDATE FEED_EMOTION
-		   SET CHECK = CHECK - 1
+		   SET FEED_EMOTION.CHECK = FEED_EMOTION.CHECK - 1
 		 WHERE FEED_ID = #{feedId}
 	</update>
 	
