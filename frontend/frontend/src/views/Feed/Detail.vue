@@ -28,7 +28,6 @@
         <ProfilePhoto
           :size="25"
           :img-url="feedAuthorProfileImageUrl"
-          :name="feed.author"
           :user-seq="feedAuthorSeq"
         />
         <h3 class="mx-3">

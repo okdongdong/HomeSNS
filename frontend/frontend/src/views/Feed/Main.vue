@@ -109,7 +109,16 @@ export default {
               };
               let currFeed = res.data.mainFeedDtoList[i];
               feedData.feedId = currFeed.feedId;
-              feedData.feedEventDate = this.$moment(currFeed.feedEventDate).format("YYYY년 MM월 DD일");
+              feedData.feedEventDate =
+                currFeed.feedEventDate.year +
+                "년" +
+                " " +
+                currFeed.feedEventDate.month +
+                "월" +
+                " " +
+                currFeed.feedEventDate.day +
+                "일";
+              // feedData.feedEventDate = this.$moment(currFeed.feedEventDate).format("YYYY년 MM월 DD일");
               feedData.feedLocation = currFeed.feedLocation; // 등록안된 곳은 빈값''
               feedData.feedTitle = currFeed.feedTitle;
               feedData.fileList = currFeed.fileList;
