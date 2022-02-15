@@ -7,7 +7,7 @@
           :size="40"
           :imgUrl="comment.userImgUrl"
           :name="comment.commentAuthor"
-          :userSeq="comment.commentAuthorSeq"
+          :userSeq="comment.commentUserProfileImageUrl"
         />
       </v-col>
       <v-col cols="7" class="pr-3" v-if="comment.commentAuthorSeq == userSeq">

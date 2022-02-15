@@ -25,7 +25,7 @@
       </v-row>
       <hr />
       <div class="d-flex align-center" style="margin-top: 12px; margin-bottom: 3px">
-        <ProfilePhoto :size="25" />
+        <ProfilePhoto :size="25" :img-url="feedAuthorProfileImageUrl" :name="author" :user-seq="feedAuthorSeq"/>
         <h3 class="mx-3">
           {{ feed.author }}
         </h3>
@@ -185,7 +185,7 @@ export default {
     // ],
   }),
   methods: {
-    getMember() {
+    getMember() { // 해시태그용
       let groupId = this.nowGroup.groupId;
       const token = localStorage.getItem("jwt");
       axios({
@@ -214,6 +214,7 @@ export default {
         console.log("피드상세");
         console.log(res.data);
         this.feedAuthorSeq = res.data.feedDto.feedAuthorSeq;
+        this.feedAuthorProfileImageUrl = res.data.feedDto.authorProfileImageUrl;
         this.feed.author = res.data.feedDto.feedAuthor;
         this.feed.title = res.data.feedDto.feedTitle;
         this.feed.content = res.data.feedDto.feedContent;
