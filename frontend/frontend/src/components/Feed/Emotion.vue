@@ -39,17 +39,16 @@ export default {
       toggle_exclusive: undefined,
       selectEmotion:null,
       emotions: [
-        {emoji : require('@/assets/emotions/heart_on.png'), status:'good'},
-        {emoji : require('@/assets/emotions/sad.png'), status:'sad'},
-        {emoji : require('@/assets/emotions/check.png'), status:'check'},
-        {emoji : require('@/assets/emotions/fun.png'), status:'fun'},
-        {emoji : require('@/assets/emotions/amaze.png'), status:'amaze'}
+        {emoji : require('@/assets/emotions/heart_on.png'), status:'good', code:30001},
+        {emoji : require('@/assets/emotions/sad.png'), status:'sad', code:30002},
+        {emoji : require('@/assets/emotions/check.png'), status:'check', code:30003},
+        {emoji : require('@/assets/emotions/fun.png'), status:'fun', code:30004},
+        {emoji : require('@/assets/emotions/amaze.png'), status:'amaze', code:30005}
       ],
     };
   },
   watch:{
     selectEmotion: function(val){
-      // console.log(val);
       this.$emit('select-emotion',val)
     }
   }
