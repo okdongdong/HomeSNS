@@ -134,7 +134,7 @@ export default {
       })
         .then((res) => {
           console.log("입장성공", res);
-          const groupInfo = res.data.groupDto
+          const groupInfo = res.data.groupDto;
           this.$store.dispatch("account/setNowGroup", groupInfo);
           this.$router.push({
             name: "Main",
@@ -142,7 +142,7 @@ export default {
           });
         })
         .then(() => {
-          console.log("알림요청")
+          console.log("알림요청");
           this.connect({
             targetUserSeq: -1,
             noticeType: "member",
@@ -150,7 +150,10 @@ export default {
           });
         })
         .catch((err) => {
-
+          this.$store.commit(
+            "snackbar/SET_SNACKBAR",
+            "그룹아이디와 비밀번호를 다시 확인해주세요."
+          );
           console.log(err);
           console.log(err.request);
           console.log(err.message);
@@ -158,9 +161,10 @@ export default {
           console.log(err.response);
         });
     },
-  },computed: {
-    ...mapState('account', ['userSeq'])
-  }
+  },
+  computed: {
+    ...mapState("account", ["userSeq"]),
+  },
 };
 </script>
 

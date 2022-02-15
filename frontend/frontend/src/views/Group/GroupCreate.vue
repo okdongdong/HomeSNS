@@ -175,6 +175,10 @@ export default {
           console.log("123");
         })
         .catch((error) => {
+          this.$store.commit(
+            "snackbar/SET_SNACKBAR",
+            "해당 그룹이름을 사용할 수 없습니다."
+          );
           console.log(error);
         });
     },

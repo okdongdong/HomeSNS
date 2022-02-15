@@ -22,6 +22,9 @@ const notice = {
     dialog: false,
   },
   mutations: {
+    NOTICE_DISCONNECT(state) {
+      state.noticeList = [];
+    },
     NOTICE_ALARM(state, recv) {
       state.recv = recv;
       state.noticeAlarm = true;
@@ -315,8 +318,9 @@ const notice = {
         );
       }
     },
-    disconnect() {
+    disconnect({ commit }) {
       this.stompClient.disconnect();
+      commit("NOTICE_DISCONNECT");
       console.log("연결해제");
     },
   },
