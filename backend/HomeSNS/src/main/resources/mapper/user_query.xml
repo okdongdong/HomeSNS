@@ -9,7 +9,7 @@
 	</insert>
 
 	<insert id="userProfileImageInsert" parameterType="com.ssafy.homesns.dto.ProfileImageDto" useGeneratedKeys="true" keyProperty="profileImageId">
-		INSERT INTO PROFILE_IMAGE ( USER_SEQ,    PROFILE_IMAGE_NAME,   PROFILE_IMAGE_SIZE,   PROFILE_IMAGE_Url,   REGDT  )
+		INSERT INTO PROFILE_IMAGE ( USER_SEQ,    PROFILE_IMAGE_NAME,   PROFILE_IMAGE_SIZE,   PROFILE_IMAGE_Url,   REG_DT  )
 		                   VALUES ( #{userSeq},  #{profileImageName},  #{profileImageSize},  #{profileImageUrl},  now()  )
 	</insert>
 	

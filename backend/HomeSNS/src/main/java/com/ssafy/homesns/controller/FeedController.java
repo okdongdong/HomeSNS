@@ -14,13 +14,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.ssafy.homesns.dto.CommentEmotionDto;
-import com.ssafy.homesns.dto.CommentEmotionResultDto;
 import com.ssafy.homesns.dto.FeedDto;
 import com.ssafy.homesns.dto.FeedEmotionDto;
 import com.ssafy.homesns.dto.FeedEmotionResultDto;
@@ -184,7 +183,7 @@ public class FeedController {
 	
 	// 감정표현 하기 => 댓글 감정표현 레코드 수정 + 댓글 감정표현 사용 레코드 추가
 		@PutMapping(value="/feed/emotion/add")
-		public ResponseEntity<FeedEmotionResultDto> feedEmotionAdd(FeedEmotionDto feedEmotionDto) {
+		public ResponseEntity<FeedEmotionResultDto> feedEmotionAdd(@RequestBody FeedEmotionDto feedEmotionDto) {
 			// Security Context에서 UserSeq를 구한다
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			int userSeq = Integer.parseInt(authentication.getName());
@@ -201,7 +200,7 @@ public class FeedController {
 
 		// 감정표현 취소 => 댓글 감정표현 레코드 수정 + 댓글 감정표현 사용 레코드 삭제
 		@PutMapping(value="/feed/emotion/sub")
-		public ResponseEntity<FeedEmotionResultDto> feedEmotionSub(FeedEmotionDto feedEmotionDto) {
+		public ResponseEntity<FeedEmotionResultDto> feedEmotionSub(@RequestBody FeedEmotionDto feedEmotionDto) {
 			// Security Context에서 UserSeq를 구한다
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			int userSeq = Integer.parseInt(authentication.getName());
