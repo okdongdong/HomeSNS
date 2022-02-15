@@ -6,6 +6,7 @@ public class CommentResultDto {
 	
 	private int result;
 	private List<CommentDto> commentList;
+	private CommentDto comment;
 	
 	public int getResult() {
 		return result;
@@ -20,9 +21,18 @@ public class CommentResultDto {
 	public void setCommentList(List<CommentDto> commentList) {
 		this.commentList = commentList;
 	}
+	
+	
+	
+	public CommentDto getComment() {
+		return comment;
+	}
+	public void setComment(CommentDto comment) {
+		this.comment = comment;
+	}
 	@Override
 	public String toString() {
-		return "CommentResultDto [result=" + result + ", commentList=" + commentList + "]";
+		return "CommentResultDto [result=" + result + ", commentList=" + commentList + ", comment=" + comment + "]";
 	}
 	
 	

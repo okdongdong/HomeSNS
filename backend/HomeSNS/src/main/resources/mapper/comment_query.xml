@@ -28,6 +28,17 @@
 	</select>
  -->	
 
+<!-- 댓글 불러오기 -->
+	<select id="commentSearch" parameterType="int" resultType="com.ssafy.homesns.dto.CommentDto"> 
+		SELECT c.COMMENT_ID,FEED_ID, COMMENT_AUTHOR as comment_author_seq, u1.USER_NAME as comment_author,COMMENT_CONTENT,COMMENT_UPLOAD_DATE,
+		u1.USER_PROFILE_IMAGE_URL as commentUserProfileImageUrl
+		FROM HOME_SNS.COMMENT c
+        JOIN HOME_SNS.USER u1 ON c.COMMENT_AUTHOR = u1.USER_SEQ 
+       WHERE COMMENT_ID = #{commentId}
+	</select>
+
+
+
 <!-- 댓글리스트 불러오기  -->
 	<select id="commentList" parameterType="map" resultType="com.ssafy.homesns.dto.CommentDto"> 
 		SELECT c.comment_id,feed_id, comment_author as comment_author_seq, u1.user_name as comment_author,comment_content,comment_upload_date,
