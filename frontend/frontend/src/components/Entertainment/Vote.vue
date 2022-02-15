@@ -47,7 +47,7 @@
       </div>
     </div>
     <v-row>
-      <v-col v-if="info.updateYn == 'y'" class="justify-center d-flex">
+      <v-col v-if="info.updateYn == 'Y'||info.updateYn == 'y' " class="justify-center d-flex">
         <v-btn v-if="!nowVote" @click.stop="nowVote = !nowVote">투표하기</v-btn>
         <v-btn v-else @click.stop="(nowVote = !nowVote), updateVote()"
           >투표완료</v-btn
@@ -58,7 +58,7 @@
       </v-col>
       <v-col
         class="justify-center d-flex"
-        v-if="!nowVote && info.updateYn == 'y' && userSeq == info.authorId"
+        v-if="!nowVote && (info.updateYn == 'Y'||info.updateYn == 'y') && userSeq == info.authorId"
       >
         <v-dialog v-model="dialog" scrollable max-width="400px">
           <template v-slot:activator="{ on, attrs }">
