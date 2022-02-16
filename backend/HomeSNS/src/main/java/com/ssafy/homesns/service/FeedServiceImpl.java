@@ -549,7 +549,20 @@ public class FeedServiceImpl implements FeedService {
 			
 			return feedEmotionResultDto;
 		}
-	
 
+		
+		// 피드 타임라인 변경 -> 등록 안된것을 등록 or 등록 된것을 등록 취소
+		@Override
+		public FeedResultDto feedTimeline(int feedId) {
+			FeedResultDto feedResultDto = new FeedResultDto();
+			
+			if ( feedDao.feedTimeline(feedId) == 1 ) {
+				feedResultDto.setResult(SUCCESS);
+			} else {
+				feedResultDto.setResult(FAIL);
+			}
+			
+			return feedResultDto;
+		}
 
 }

@@ -312,7 +312,11 @@
 	</delete>
 	 
 	 
-	 
+	 <update id="feedTimeline" parameterType="int">
+		UPDATE FEED
+		   SET FEED_TIMELINE = FEED_TIMELINE XOR 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
 	 
 	 
 </mapper>
