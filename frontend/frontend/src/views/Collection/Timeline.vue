@@ -113,8 +113,8 @@ export default {
       })
         .then((res) => {
           console.log("피드받음", res);
-          if (res.data.feedDtoList.length) {
-            res.data.feedDtoList.forEach((feed) => {
+          if (res.data.timelineDtoList.length) {
+            res.data.timelineDtoList.forEach((feed) => {
               this.feedList.push(...feed);
             });
             this.offset += 10;
