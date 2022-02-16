@@ -38,7 +38,7 @@
 	
 	<update id="userInfoUpdate" parameterType="com.ssafy.homesns.dto.UserDto">
 		UPDATE USER 
-		   SET USER_EMAIL = #{userEmail}
+		   SET USER_EMAIL = #{userEmail},
 		       USER_NAME = #{userName},
 		       USER_PHONE = #{userPhone},
 		       USER_BOD = #{userBod}

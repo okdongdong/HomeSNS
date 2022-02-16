@@ -103,4 +103,13 @@ public interface FeedDao {
 	
 	// 피드 타임라인 변경
 	public int feedTimeline(int feedId);
+	
+	// 피드 스크랩 추가 
+	public int feedScrapAdd(@Param("feedId") int feedId,@Param("userSeq")int userSeq);
+	// 피드 스크랩 삭제 
+	public int feedScrapSub(@Param("feedId") int feedId,@Param("userSeq")int userSeq);
+	// 사용자 피드 스크랩 여부
+	
+	public String feedScrapUserUse(@Param("feedId") int feedId,@Param("userSeq")int userSeq);
+
 }
