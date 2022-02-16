@@ -19,27 +19,27 @@
         </v-icon>
     </a>
     <div class="align-center" style="width: 100%">
-      <v-row class="text-center pa-5">
+      <v-row class="text-center px-5">
         <v-col cols="3" class="px-0">
-          <v-btn @click.stop="move('Main')">
+          <v-btn @click.stop="move('Main')" class="bottom-navbar-btn py-5">
             <h3 class="mt-1">게시물</h3>
             <v-icon>mdi-history</v-icon>
           </v-btn>
         </v-col>
         <v-col cols="3" class="px-0">
-          <v-btn @click.stop="move('Timeline')">
+          <v-btn @click.stop="move('Timeline')" class="bottom-navbar-btn py-5">
             <h3 class="mt-1">시간여행</h3>
             <v-icon>mdi-heart</v-icon>
           </v-btn>
         </v-col>
         <v-col cols="3" class="px-0">
-          <v-btn @click.stop="move('Location')">
+          <v-btn @click.stop="move('Location')" class="bottom-navbar-btn py-5">
             <h3 class="mt-1">추억의 장소</h3>
             <v-icon>airplane_ticket</v-icon>
           </v-btn>
         </v-col>
         <v-col cols="3" class="px-0">
-          <v-btn @click.stop="move('Calendar')">
+          <v-btn @click.stop="move('Calendar')" class="bottom-navbar-btn py-5">
             <h3 class="mt-1">일정표</h3>
             <v-icon>mdi-map-marker</v-icon>
           </v-btn>
@@ -88,5 +88,8 @@ export default {
   transition-duration: 1s;
   border-radius: 50%;
   background-color:rgba(255,255,255,0.8)
+}
+.bottom-navbar-btn {
+background-color:rgba(0,0,0,0)
 }
 </style>

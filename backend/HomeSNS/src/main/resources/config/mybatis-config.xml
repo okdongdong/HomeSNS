@@ -22,6 +22,8 @@
 		<mapper resource="mapper/notice_query.xml" />
 		<mapper resource="mapper/game_query.xml" />
 		<mapper resource="mapper/comment_query.xml" />
+		<mapper resource="mapper/history_query.xml" />
+		
 	</mappers>
 	
 </configuration>
