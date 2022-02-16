@@ -118,7 +118,15 @@ public class FeedServiceImpl implements FeedService {
 			LocationDto locationDto = feedDao.locationSearch(feedId);
 
 			// feed 정보 호출
-			feedDto = feedDao.feedDetail(feedId,userSeq);
+			feedDto = feedDao.feedDetail(feedId);
+			// 감정표시 여부 code 정보 호출
+			String code = feedDao.feedEmotionUserUseSearch(feedId,userSeq);
+			
+			if (code == null) {
+				feedDto.setCode("30000");				
+			}else {
+				feedDto.setCode(code);				
+			}
 
 			// feedDto에 담기
 			feedDto.setFileList(fileList);
@@ -128,6 +136,7 @@ public class FeedServiceImpl implements FeedService {
 			feedDto.setLocationDto(locationDto);
 
 			// feedDto를 feedResultDto에 담아서 전달
+			System.out.println("DB에서 가져온 feedDto======" + feedDto);
 			feedResultDto.setFeedDto(feedDto);
 			feedResultDto.setResult(SUCCESS);
 		} catch (Exception e) {

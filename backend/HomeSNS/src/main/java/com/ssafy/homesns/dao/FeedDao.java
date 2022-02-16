@@ -35,7 +35,7 @@ public interface FeedDao {
 	public LocationDto locationSearch(int feedId);
 	public List<LocationFavoriteDto> locationFavoriteSearch(int userSeq);
 	
-	public FeedDto feedDetail(@Param("feedId") int feedId,@Param("userSeq")int userSeq);
+	public FeedDto feedDetail(int feedId);
 	
 	// feed추가
 	public int feedInsert(FeedDto feedDto);
@@ -96,7 +96,8 @@ public interface FeedDao {
 	// 피드 감정표현 기록 추가, 피드 감정표현의 수정에 따라 테이블 생성
 	public int feedEmotionUserUseCreate(FeedEmotionDto feedEmotionDto);
 	// 유저가 피드에 어떤 감정표현을 했는지 찾기 => 결과값이 없으면 아직 감정표현을 하지 않은 것
-	public FeedEmotionDto feedEmotionUserUseSearch(FeedEmotionDto feedEmotionDto);
+	public String feedEmotionUserUseSearch(@Param("feedId") int feedId,@Param("userSeq")int userSeq);
+	
 	// 피드 감정표현 기록 삭제, 피드 감정표현의 수정에 따라 테이블 삭제
 	public int feedEmotionUserUseDelete(FeedEmotionDto feedEmotionDto);
 	
