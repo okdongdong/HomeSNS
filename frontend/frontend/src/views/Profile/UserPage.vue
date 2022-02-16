@@ -6,7 +6,6 @@
         <div class="justify-center d-flex align-center">
           <v-card-title>프로필사진 변경</v-card-title>
         </div>
-
         <v-form
           class="form-data my-5"
           ref="form"
@@ -15,29 +14,21 @@
         >
           <div class="justify-center d-flex">
             <v-avatar size="160px" elevation="12" color="#846543">
-              <div v-if="image" class="d-flex align-items-center">
                 <v-img
+                  v-if="image"
                   :src="previewImage"
                   size="160"
                   aspect-ratio="1"
                   style="overflow: hidden; object-fit: cover"
                   alt=""
                 ></v-img>
-                <profile-photo
-                  :size="160"
-                  :imgUrl="previewImage"
-                  :name="userName"
-                />
-              </div>
-              <div v-else>
-                <v-img
+                <v-img v-else
                   :src="`https://i6e205.p.ssafy.io/img/emptyImg.png`"
                   size="160"
                   aspect-ratio="1"
                   style="overflow: hidden; object-fit: cover"
                   alt=""
                 ></v-img>
-              </div>
             </v-avatar>
           </div>
           <v-file-input
@@ -243,7 +234,7 @@ export default {
     ...mapActions("group", ["getProfile"]),
     selectFile: function (file) {
       this.image = file;
-      this.previewImage = URL.createObjectURL(this.image);
+      this.previewImage = URL.createObjectURL(file);
     },
     updateProfileImage() {
       const token = localStorage.getItem("jwt");

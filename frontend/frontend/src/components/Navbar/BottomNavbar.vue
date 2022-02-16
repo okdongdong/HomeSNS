@@ -28,20 +28,20 @@
         </v-col>
         <v-col cols="3" class="px-0">
           <v-btn @click.stop="move('Timeline')">
-            <h3 class="mt-1">추억여행</h3>
+            <h3 class="mt-1">시간여행</h3>
             <v-icon>mdi-heart</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col cols="3" class="px-0">
+          <v-btn @click.stop="move('Location')">
+            <h3 class="mt-1">추억의 장소</h3>
+            <v-icon>airplane_ticket</v-icon>
           </v-btn>
         </v-col>
         <v-col cols="3" class="px-0">
           <v-btn @click.stop="move('Calendar')">
             <h3 class="mt-1">일정표</h3>
             <v-icon>mdi-map-marker</v-icon>
-          </v-btn>
-        </v-col>
-        <v-col cols="3" class="px-0">
-          <v-btn @click.stop="move('EntFeedList')">
-            <h3 class="mt-1">투표/미니게임</h3>
-            <v-icon>extension</v-icon>
           </v-btn>
         </v-col>
       </v-row>
