@@ -1,9 +1,24 @@
 <template>
   <v-app class="container">
-    <p class="main-text ml-5 mt-5">개인 정보 수정</p>
-    <div class="container">
-      <v-row justify="center">
-        <v-form class="form-data" ref="form" v-model="valid" lazy-validation>
+    <h2 class="my-3 py-3 content-box text-center">개인 정보 수정</h2>
+    <div class="content-box py-5 justify-center d-flex">
+        <v-form class="form-data my-5" ref="form" v-model="valid" lazy-validation>
+          <div class="border">
+            <div v-if="image" class="d-flex align-items-center">
+              <profile-photo :size="160" :imgUrl="image" :name="userName" />
+            </div>
+            <div v-else>
+              <profile-photo :size="160" :imgUrl="'@/assets/emptyImg.png'" :name="userName" />
+            </div>
+          </div>
+          <v-file-input
+            type="file"
+            accept="image/*"
+            @change="selectFile"
+            class="form-control-file"
+            id="profile_path"
+            enctype="multipart/form-data"
+          ></v-file-input>
           <!-- 이메일 -->
           <v-text-field
             clearable
@@ -45,7 +60,7 @@
             solo
             v-model="credentials.phone"
             :rules="rules.phoneRules"
-            label="연락처"
+            label="휴대전화"
             type="tel"
             required
           ></v-text-field>
@@ -85,18 +100,21 @@
             취소
           </v-btn>
         </v-form>
-      </v-row>
     </div>
   </v-app>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
-
+import axios from "axios";
+import ProfilePhoto from "../../components/ProfilePhoto.vue";
 export default {
+  components: { ProfilePhoto },
   name: "MyPage",
   data: () => ({
     valid: true,
+    image: null,
+    previewImage: undefined,
     credentials: {
       email: null,
       password: null,
@@ -127,19 +145,54 @@ export default {
 
   methods: {
     ...mapActions(["signup"]),
+    selectFile: function (file) {
+      this.image = file;
+      this.previewImage = URL.createObjectURL(this.image);
+    },
+    updateProfile() {
+      let data = new FormData();
+      data.append("userEmail", this.credentials.email);
+      data.append("userPassword", this.credentials.password);
+      data.append("userName", this.credentials.name);
+      data.append("userPhone", this.credentials.phone);
+      data.append("userBod", this.credentials.bod);
+      data.append("profileImage", this.image);
+      axios({
+        method: "POST",
+        url: `${process.env.VUE_APP_MCS_URL}/register`,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        data: data,
+      })
+        .then((res) => {
+          console.log(res);
+          console.log(res.data);
+          this.$router.push("Login");
+        })
+        .catch((err) => {
+          this.$store.commit(
+            "snackbar/SET_SNACKBAR",
+            "양식을 다시 확인해주세요."
+          );
+          console.log(err);
+          console.log(err.response);
+        });
+    },
+
     validate() {
       this.$refs.form.validate();
     },
   },
   computed: {
-    ...mapState("account", ["userSeq"]),
+    ...mapState("account", ["userSeq", "userName"]),
   },
 };
 </script>
 
 <style scoped>
 .my-background {
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .form-data {
@@ -149,5 +202,22 @@ export default {
 .main-text {
   /* color: #fff !important; */
   font-size: 30px;
+}
+.profile-img {
+  display: block;
+  margin: 0px auto;
+  /* height: 70%; */
+  width: 50%;
+  object-fit: cover;
+  border: 4px solid white;
+  border-radius: 20%;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.329);
+  padding-bottom: 5%;
+}
+.content-box {
+  /* border: solid 2px black; */
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.329);
 }
 </style>
