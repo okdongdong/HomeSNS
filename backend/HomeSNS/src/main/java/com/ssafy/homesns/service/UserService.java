@@ -12,7 +12,11 @@ public interface UserService {
 	public UserResultDto profileImageUpdate( MultipartHttpServletRequest request);
 	
 	public UserResultDto userMypageSearch();
-	public UserResultDto userUpdate(UserDto userDto);
+	
+	public UserResultDto passwordCheck(UserDto userDto);
+	public UserResultDto userInfoUpdate(UserDto userDto);
+	public UserResultDto userPasswordUpdate(UserDto userDto);
+	
 	public UserResultDto userDelete(int userSeq);
 	public UserResultDto userExist(String userPhone);
 	public UserResultDto userPage(int userSeq);

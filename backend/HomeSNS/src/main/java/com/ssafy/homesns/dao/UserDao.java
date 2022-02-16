@@ -22,8 +22,13 @@ public interface UserDao {
 	// userSeq를 받아서 DB에 있는 유저 정보를 가져온다.
 	public UserDto userMypageSearch(int userSeq);
 	
+	// userSeq를 받아서 패스워드를 찾는다
+	public String userPasswordSearch(int userSeq);
 	// userDto를 받아서 DB에 유저 정보를 수정한다
-	public int userUpdate(UserDto userDto);
+	public int userInfoUpdate(UserDto userDto);
+	// userDto를 받아서 DB에 유저 정보를 수정한다
+	public int userPasswordUpdate(UserDto userDto);
+	
 	
 	// userSeq를 받아서 DB에 유저 정보를 삭제한다
 	public int userDelete(int userSeq);
