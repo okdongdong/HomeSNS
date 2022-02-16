@@ -216,7 +216,7 @@ public class FeedController {
 		return new ResponseEntity<FeedEmotionResultDto>(feedEmotionResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@GetMapping(value="/feed/timeline/{groupId}")
+	@GetMapping(value="/feed/timeline")
 	public ResponseEntity<TimelineResultDto> feedTimelineSearch(FeedParamDto feedParamDto) {
 		
 		TimelineResultDto timelineResultDto = feedService.feedTimelineSearch(feedParamDto);
