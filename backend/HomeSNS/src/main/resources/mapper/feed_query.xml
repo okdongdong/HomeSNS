@@ -75,9 +75,10 @@
 	<!-- feed table값만 가져오는 SQL -->
 	<select id="feedDetail" parameterType="int" resultType="com.ssafy.homesns.dto.FeedDto"> 
 		SELECT f.FEED_ID, GROUP_ID, FEED_AUTHOR as feed_author_seq ,u.user_name as FEED_AUTHOR, u.USER_PROFILE_IMAGE_URL as authorProfileImageUrl, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION_ID ,fe.good, fe.sad, fe.check, fe.fun, fe.amaze
-		  FROM HOME_SNS.FEED f JOIN USER u ON f.feed_author = u.user_seq
-          LEFT OUTER JOIN HOME_SNS.FEED_EMOTION fe  ON f.feed_id = fe.feed_id
-		 WHERE f.FEED_ID = #{feed_id};
+	  		FROM HOME_SNS.FEED f JOIN USER u ON f.feed_author = u.user_seq
+	  		JOIN HOME_SNS.FEED_EMOTION fe  ON f.feed_id = fe.feed_id
+	     WHERE  f.FEED_ID = #{feedId}
+   		   
 	</select>
 
 	
@@ -297,8 +298,8 @@
 		                              VALUES ( #{feedId},  #{userSeq},  #{code}      )
 	</insert>
 	
-	<select id="feedEmotionUserUseSearch" parameterType="com.ssafy.homesns.dto.FeedEmotionDto" resultType="com.ssafy.homesns.dto.FeedEmotionDto">
-		SELECT FEED_ID as feedId, USER_SEQ as userSeq, EMOTION_CODE as code
+	<select id="feedEmotionUserUseSearch" parameterType="map" resultType="String">
+		SELECT EMOTION_CODE as code
 		  FROM FEED_EMOTION_USER_USE
 		 WHERE FEED_ID = #{feedId}
 		   AND USER_SEQ = #{userSeq}
@@ -312,7 +313,11 @@
 	</delete>
 	 
 	 
-	 
+	 <update id="feedTimeline" parameterType="int">
+		UPDATE FEED
+		   SET FEED_TIMELINE = FEED_TIMELINE XOR 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
 	 
 	 
 </mapper>

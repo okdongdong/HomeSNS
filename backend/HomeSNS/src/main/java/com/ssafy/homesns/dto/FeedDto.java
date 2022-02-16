@@ -33,12 +33,23 @@ public class FeedDto {
 	private int check; 
 	private int fun;
 	private int amaze;
+	private String code;
 	
 	private List<FileDto> fileList;
 	private List<CommentDto> commentList;
 	private List<HashtagDto> hashtagList;
 	private List<UserDto> userList;
 	
+	private boolean timeline;
+	
+	
+	
+	public boolean isTimeline() {
+		return timeline;
+	}
+	public void setTimeline(boolean timeline) {
+		this.timeline = timeline;
+	}
 	
 	public int getFeedId() {
 		return feedId;
@@ -190,6 +201,15 @@ public class FeedDto {
 	public void setFeedLocationStr(String feedLocationStr) {
 		this.feedLocationStr = feedLocationStr;
 	}
+	
+	
+	
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
 	@Override
 	public String toString() {
 		return "FeedDto [feedId=" + feedId + ", groupId=" + groupId + ", feedAuthorSeq=" + feedAuthorSeq
@@ -198,11 +218,10 @@ public class FeedDto {
 				+ feedAttendees + ", feedLocationId=" + feedLocationId + ", feedUploadDate=" + feedUploadDate
 				+ ", feedLocationStr=" + feedLocationStr + ", fileDeleteStr=" + fileDeleteStr + ", feedEventDate="
 				+ feedEventDate + ", locationDto=" + locationDto + ", good=" + good + ", sad=" + sad + ", check="
-				+ check + ", fun=" + fun + ", amaze=" + amaze + ", fileList=" + fileList + ", commentList="
-				+ commentList + ", hashtagList=" + hashtagList + ", userList=" + userList + "]";
+				+ check + ", fun=" + fun + ", amaze=" + amaze + ", code=" + code + ", fileList=" + fileList
+				+ ", commentList=" + commentList + ", hashtagList=" + hashtagList + ", userList=" + userList
+				+ ", timeline=" + timeline + "]";
 	}
 	
-	
-	
-	
+
 }
