@@ -1,7 +1,7 @@
 <template>
-  <v-app class="container" style="padding : 0px;">
-    <div style="height:100%;">
-    <GmapMap class="gmap-marker-clustering" :center="center" :zoom="12">
+<div class="gmap-marker-clustering">
+
+    <GmapMap id="부엉부엉시부엉" style="height:100%" :center="center" :zoom="12">
       <GmapCluster
         :zoomOnClick="true"
         :enableRetinaIcons="true"
@@ -23,8 +23,8 @@
         />
       </GmapCluster>
     </GmapMap>
-    </div>
-  </v-app>
+</div>
+
 </template>
 
 <script>
@@ -118,10 +118,10 @@ export default {
 
 <style scoped>
 .gmap-marker-clustering {
-  /* width:300px;
-  height:300px; */
+  position:fixed;
+  top:80px;
   width: 100%;
-  height: calc(100% - 160px);
+  height: calc(100vh - 160px);
 }
 
 
