@@ -110,7 +110,7 @@
           >
           <v-img
             aspect-ratio="1"
-            :src="nowGroup.groupProfileImageUrl"
+            :src="`https://i6e205.p.ssafy.io/${nowGroup.groupProfileImageUrl}`"
             alt="그룹 사진입니다."
             class="group-img"
             width="150"
@@ -160,12 +160,15 @@ export default {
       this.previewImage = URL.createObjectURL(this.image);
     },
     updateProfileImage() {
+       const token = localStorage.getItem("jwt");
       let data = new FormData();
       data.append("profileImage", this.image);
+      data.append("groupId", this.nowGroup.groupId);
       axios({
         method: "POST",
-        url: `${process.env.VUE_APP_MCS_URL}/mypage/profileImage`,
+        url: `${process.env.VUE_APP_MCS_URL}/group/profileImage`,
         headers: {
+          Authorization: token,
           "Content-Type": "multipart/form-data",
         },
         data: data,
@@ -173,6 +176,7 @@ export default {
         .then((res) => {
           console.log(res);
           console.log(res.data);
+          this.getProfile(this.userSeq);
         })
         .catch((err) => {
           this.$store.commit(
