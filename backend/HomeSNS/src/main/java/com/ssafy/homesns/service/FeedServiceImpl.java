@@ -127,6 +127,14 @@ public class FeedServiceImpl implements FeedService {
 			}else {
 				feedDto.setCode(code);				
 			}
+			
+			String scrapYn = feedDao.feedScrapUserUse(feedId,userSeq);
+			if (scrapYn == null) {
+				feedDto.setScrapYn("n");				
+			}else {
+				feedDto.setScrapYn("y");				
+			}
+			
 
 			// feedDto에 담기
 			feedDto.setFileList(fileList);
@@ -178,13 +186,12 @@ public class FeedServiceImpl implements FeedService {
 				feedDto.setFeedLocationId(locationId);
 				// feed table 추가
 				feedDao.feedInsert(feedDto);
-
 			} else {
 				// feed table 추가
 				feedDao.feedInsert(feedDto);
 			}
-
 			int feedId = feedDto.getFeedId();
+			feedDao.feedEmotionCreate(feedId);
 
 			// hashtag 추가
 			String hashtagStr = feedDto.getFeedHashtags();
@@ -256,7 +263,6 @@ public class FeedServiceImpl implements FeedService {
 					feedDao.feedFileInsert(fileDto);
 				}
 			}
-			feedDao.feedEmotionCreate(feedId);
 			System.out.println("Service feedDto --------- ");
 			System.out.println(feedDto);
 			feedResultDto.setResult(SUCCESS);
@@ -502,6 +508,7 @@ public class FeedServiceImpl implements FeedService {
 			
 			FeedEmotionResultDto feedEmotionResultDto = new FeedEmotionResultDto();
 
+			feedDao.feedEmotionUserUseDelete(feedEmotionDto);
 			
 			if ( feedEmotionDto.getGood() == 1 ) {
 				feedDao.feedGoodAdd(feedEmotionDto.getFeedId());
@@ -574,6 +581,35 @@ public class FeedServiceImpl implements FeedService {
 			FeedResultDto feedResultDto = new FeedResultDto();
 			
 			if ( feedDao.feedTimeline(feedId) == 1 ) {
+				feedResultDto.setResult(SUCCESS);
+			} else {
+				feedResultDto.setResult(FAIL);
+			}
+			
+			return feedResultDto;
+		}
+		
+		
+		// 피드 스크랩 추가
+		@Override
+		public FeedResultDto feedScrapAdd(int feedId , int userSeq) {
+			FeedResultDto feedResultDto = new FeedResultDto();
+			
+			if ( feedDao.feedScrapAdd(feedId,userSeq) == 1 ) {
+				feedResultDto.setResult(SUCCESS);
+			} else {
+				feedResultDto.setResult(FAIL);
+			}
+			
+			return feedResultDto;
+		}
+		
+		//피드 스크랩 삭제
+		@Override
+		public FeedResultDto feedScrapSub(int feedId, int userSeq) {
+			FeedResultDto feedResultDto = new FeedResultDto();
+			
+			if ( feedDao.feedScrapSub(feedId,userSeq) == 1 ) {
 				feedResultDto.setResult(SUCCESS);
 			} else {
 				feedResultDto.setResult(FAIL);

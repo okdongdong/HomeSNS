@@ -226,4 +226,39 @@ public class FeedController {
 		return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	
+	
+	@PostMapping(value="/feed/scrap/{feedId}")
+	public ResponseEntity<FeedResultDto> feedScrapAdd(@PathVariable int feedId){
+		// Security Context에서 UserSeq를 구한다
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		int userSeq = Integer.parseInt(authentication.getName());
+				
+		FeedResultDto feedResultDto = feedService.feedScrapAdd(feedId,userSeq);
+		
+		if ( feedResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@DeleteMapping(value="/feed/scrap/{feedId}")
+	public ResponseEntity<FeedResultDto> feedScrapSub(@PathVariable int feedId){
+		// Security Context에서 UserSeq를 구한다
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		int userSeq = Integer.parseInt(authentication.getName());
+							
+		FeedResultDto feedResultDto = feedService.feedScrapSub(feedId,userSeq);
+		
+		if ( feedResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	
+	
+	
+	
+	
 }

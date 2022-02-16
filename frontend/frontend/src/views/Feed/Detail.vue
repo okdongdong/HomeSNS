@@ -256,6 +256,11 @@ export default {
         this.emotions[3].cnt = res.data.feedDto.check;
         this.emotions[4].cnt = res.data.feedDto.fun;
         this.emotions[5].cnt = res.data.feedDto.amaze;
+        if(res.data.feedDto.scrapYn == 'y'){
+          this.bookmark = true
+        }else{
+          this.bookmark = false
+        }
       });
     },
     getContent() {
@@ -376,8 +381,35 @@ export default {
       }
     },
     bookmarkToggle() {
-      this.bookmark = !this.bookmark;
-      console.log(this.bookmark);
+      const token = localStorage.getItem("jwt");
+      if(this.bookmark){ // 북마크 true이면 삭제해줘야함
+        axios({
+          method : "DELETE",
+          url : `${process.env.VUE_APP_MCS_URL}/feed/scrap/${this.feedId}`,
+          headers : {Authorization : token}
+        })
+        .then(()=>{
+          console.log('북마크 삭제완료')
+          this.bookmark = !this.bookmark;
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+      }else{
+        axios({
+          method : "PUT",
+          url : `${process.env.VUE_APP_MCS_URL}/feed/scrap/${this.feedId}`,
+          headers : {Authorization : token}
+        })
+        .then(()=>{
+          console.log('북마크 등록완료')
+          this.bookmark = !this.bookmark;
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+      }
+      
     },
   },
   mounted() {
