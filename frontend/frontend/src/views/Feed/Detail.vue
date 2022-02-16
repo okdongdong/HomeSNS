@@ -282,22 +282,27 @@ export default {
     },
     createComment(event) {
       event.preventDefault();
-      // const token = localStorage.getItem("jwt");
-      let commentTag = [];
-      for (let i = 0; i < this.tagList.length; i++) {
-        commentTag.push(this.tagList[i].userSeq);
+      if(this.currComment == null || this.currComment.trim() == ''){
+        this.$store.commit(
+          "snackbar/SET_SNACKBAR",
+          "댓글을 입력해주세요."
+        )
       }
-      let data = {
-        commentDto: {
-          feedId: this.feedId,
-          commentTags: commentTag,
-          commentContent: this.currComment,
-        },
-      };
-      console.log("댓글작성 전");
-      console.log(data);
-      this.$store.dispatch("comments/createComment", data);
-      this.currComment = null;
+      else{
+        let commentTag = [];
+        for (let i = 0; i < this.tagList.length; i++) {
+          commentTag.push(this.tagList[i].userSeq);
+        }
+        let data = {
+          commentDto: {
+            feedId: this.feedId,
+            commentTags: commentTag,
+            commentContent: this.currComment,
+          },
+        };
+        this.$store.dispatch("comments/createComment", data);
+        this.currComment = null;
+      }
     },
     selectTagMember(member) {
       // 원래는 자동으로 토글되야하는데 안되서 일단 수동으로 구현(comment내에 태그 지우면 없어짐)
