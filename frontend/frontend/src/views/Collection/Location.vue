@@ -118,9 +118,8 @@ export default {
 
 <style scoped>
 .gmap-marker-clustering {
-  position:fixed;
   top:80px;
-  width: 100%;
+  width:100%;
   height: calc(100vh - 160px);
 }
 
