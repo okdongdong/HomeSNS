@@ -150,6 +150,7 @@ public class FeedController {
 	public ResponseEntity<FeedResultDto> feedDelete(@PathVariable int feedId) {
 
 		FeedResultDto feedResultDto = feedService.feedDelete(feedId);
+		
 
 		if (feedResultDto.getResult() == SUCCESS) {
 			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);

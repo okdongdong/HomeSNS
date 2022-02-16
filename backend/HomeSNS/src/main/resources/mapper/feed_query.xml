@@ -203,6 +203,16 @@
 		 WHERE FEED_ID = #{feedId}
 	</delete>
 		
+	<delete id="noticeFeedDelete" parameterType="int">
+		DELETE FROM HOME_SNS.NOTICE
+		 WHERE NOTICE_CONTENT_ID =  #{feedId} 
+		   AND NOTICE_TYPE = "feedCreate"
+	</delete>	
+		
+		
+		
+		
+		
 	<!-- 장소 즐겨찾기 삭제 -->
 	<delete id="locationFavoriteDelete" parameterType="com.ssafy.homesns.dto.LocationFavoriteDto">
 		DELETE FROM HOME_SNS.FEED
@@ -331,8 +341,9 @@
 
 	 <insert id="feedScrapAdd" parameterType="map">
 		INSERT INTO HOME_SNS.SCRAP ( USER_SEQ,  FEED_ID )
-							VALUES (#{feedId},#{userSeq})		
+							VALUES (#{userSeq},#{feedId})		
 	</insert>	
+	
 	
 	<delete id="feedScrapSub" parameterType="map" >
 		DELETE FROM SCRAP
