@@ -68,7 +68,7 @@ public class UserController {
 			return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
 	// 마이페이지 조회
 	@GetMapping(value = "/mypage")
 	public ResponseEntity<UserResultDto> mypage() {
@@ -81,13 +81,15 @@ public class UserController {
 		return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.OK);
 
 	}
-
-	// 마이페이지 수정
-	@PutMapping(value = "/mypage")
-	public ResponseEntity<UserResultDto> update(@RequestBody UserDto userDto) {
-		System.out.print("update - mypage");
-		System.out.println(userDto);
-		UserResultDto userResultDto = userService.userUpdate(userDto);
+	
+	
+	
+	// 비밀번호 확인
+	@PostMapping(value = "/mypage")
+	public ResponseEntity<UserResultDto> passwordCheck(@RequestBody UserDto userDto) {
+		
+		UserResultDto userResultDto = userService.passwordCheck(userDto);
+		
 		if (userResultDto.getResult() == SUCCESS) {
 			return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.OK);
 		} else {
@@ -95,6 +97,34 @@ public class UserController {
 		}
 	}
 
+	// 개인정보 수정
+	@PutMapping(value = "/mypage/info")
+	public ResponseEntity<UserResultDto> userInfoUpdate(@RequestBody UserDto userDto) {
+		
+		UserResultDto userResultDto = userService.userInfoUpdate(userDto);
+		
+		if (userResultDto.getResult() == SUCCESS) {
+			return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	// 패스워드 수정
+	@PutMapping(value = "/mypage/password")
+	public ResponseEntity<UserResultDto> userPasswordUpdate(@RequestBody UserDto userDto) {
+
+		UserResultDto userResultDto = userService.userPasswordUpdate(userDto);
+		
+		if (userResultDto.getResult() == SUCCESS) {
+			return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<UserResultDto>(userResultDto, HttpStatus.NOT_FOUND);
+		}
+	}
+
+	
+	
 	// 유저 프로필사진 수정
 	@PostMapping(consumes = MediaType.ALL_VALUE, value = "/mypage/profileImage")
 	public ResponseEntity<UserResultDto> userProfileImageUpdate(MultipartHttpServletRequest request) {
