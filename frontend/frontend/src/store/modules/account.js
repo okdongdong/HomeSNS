@@ -9,6 +9,7 @@ const account = {
     userName: null,
     userImgUrl: null,
     nowGroup: {
+      groupLeaderSeq: null,
       groupId: null,
       groupName: null,
       groupProfileImageUrl: null,

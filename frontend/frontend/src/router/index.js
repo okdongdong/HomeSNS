@@ -26,7 +26,7 @@ import Main from "../views/Feed/Main.vue";
 
 import GroupCreate from "../views/Group/GroupCreate.vue";
 import GroupEnter from "../views/Group/GroupEnter.vue";
-// import Management from '../views/Group/Management.vue'
+import Management from "../views/Group/Management.vue";
 import GroupProfile from "../views/Group/GroupProfile.vue";
 import Select from "../views/Group/Select.vue";
 
@@ -151,11 +151,11 @@ const routes = [
   //   component: Update
   // },
 
-  // {
-  //   path: '/management',
-  //   name: 'Management',
-  //   component: Management
-  // },
+  {
+    path: "/management",
+    name: "Management",
+    component: Management,
+  },
   {
     path: "/groupprofile",
     name: "GroupProfile",

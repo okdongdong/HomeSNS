@@ -4,7 +4,7 @@
     <v-dialog v-model="dialog" max-width="400px">
       <v-card class="rounded-xl pa-3">
         <div class="justify-center d-flex align-center">
-          <v-card-title>정말 삭제하시겠습니까?</v-card-title>
+          <v-card-title>프로필사진 변경</v-card-title>
         </div>
 
         <v-form
@@ -14,29 +14,31 @@
           lazy-validation
         >
           <div class="justify-center d-flex">
-               <v-avatar size="160px" elevation="12" color="#846543">
-            <div v-if="image" class="d-flex align-items-center">
-          <v-img
-            :src="previewImage"
-            size=160
-            aspect-ratio=1
-            style="overflow: hidden; object-fit: cover"
-            alt=""
-          ></v-img>
-              <profile-photo :size="160" :imgUrl="previewImage" :name="userName" />
-            </div>
-            <div v-else>
-               
-          <v-img
-            :src="`https://i6e205.p.ssafy.io/img/emptyImg.png`"
-            size=160
-            aspect-ratio=1
-            style="overflow: hidden; object-fit: cover"
-            alt=""
-          ></v-img>
-            </div>
-      </v-avatar>
-
+            <v-avatar size="160px" elevation="12" color="#846543">
+              <div v-if="image" class="d-flex align-items-center">
+                <v-img
+                  :src="previewImage"
+                  size="160"
+                  aspect-ratio="1"
+                  style="overflow: hidden; object-fit: cover"
+                  alt=""
+                ></v-img>
+                <profile-photo
+                  :size="160"
+                  :imgUrl="previewImage"
+                  :name="userName"
+                />
+              </div>
+              <div v-else>
+                <v-img
+                  :src="`https://i6e205.p.ssafy.io/img/emptyImg.png`"
+                  size="160"
+                  aspect-ratio="1"
+                  style="overflow: hidden; object-fit: cover"
+                  alt=""
+                ></v-img>
+              </div>
+            </v-avatar>
           </div>
           <v-file-input
             type="file"
@@ -68,6 +70,7 @@
       </v-card>
     </v-dialog>
 
+    <!-- 프로필 페이지 -->
     <div class="content-box mb-3 pb-5">
       <div class="d-flex justify-center ma-5">
         <p style="position: relative" class="ma-0" @click.stop="dialog = true">
@@ -90,6 +93,7 @@
           <ProfilePhoto :size="120" :imgUrl="userProfileImageUrl" />
         </p>
         <v-btn
+          class="px-2"
           color="rgba(255, 255, 255, 0.5)"
           absolute
           right
@@ -121,7 +125,7 @@
                 : ''
             "
           >
-            게시물
+            피드
           </v-btn>
         </v-col>
         <v-col>
