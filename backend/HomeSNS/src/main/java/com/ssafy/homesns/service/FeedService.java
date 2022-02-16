@@ -34,4 +34,11 @@ public interface FeedService {
 	
 	// 피드 타임라인 변경
 	public FeedResultDto feedTimeline(int feedId);
+	
+	// 피드 스크랩 추가 
+	public FeedResultDto feedScrapAdd(int feedId, int userSeq);
+	// 피드 스크랩 삭제 
+	public FeedResultDto feedScrapSub(int feedId, int userSeq);
+		
+	
 }

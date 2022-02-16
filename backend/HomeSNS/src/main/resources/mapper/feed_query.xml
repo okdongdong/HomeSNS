@@ -319,5 +319,27 @@
 		 WHERE FEED_ID = #{feedId}
 	</update>
 	 
-	 
+	<!-- 피드 스크랩 -->
+
+
+	 <select id="feedScrapAdd" parameterType="map">
+		SELECT 'y' as scrapYn 
+		  FROM HOME_SNS.SCRAP 
+		      WHERE FEED_ID = #{feedId}
+		        AND USER_SEQ = #{userSeq}		
+	</select>	
+	
+
+
+
+	 <insert id="feedScrapAdd" parameterType="map">
+		INSERT INTO HOME_SNS.SCRAP ( USER_SEQ,  FEED_ID )
+							VALUES (#{feedId},#{userSeq})		
+	</insert>	
+	
+	<delete id="feedScrapSub" parameterType="map" >
+		DELETE FROM SCRAP
+		      WHERE FEED_ID = #{feedId}
+		        AND USER_SEQ = #{userSeq}
+	</delete>
 </mapper>
