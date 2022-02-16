@@ -118,7 +118,7 @@ public class FeedServiceImpl implements FeedService {
 			LocationDto locationDto = feedDao.locationSearch(feedId);
 
 			// feed 정보 호출
-			feedDto = feedDao.feedDetail(feedId);
+			feedDto = feedDao.feedDetail(feedId,userSeq);
 
 			// feedDto에 담기
 			feedDto.setFileList(fileList);
@@ -492,64 +492,72 @@ public class FeedServiceImpl implements FeedService {
 		public FeedEmotionResultDto feedEmotionAdd(FeedEmotionDto feedEmotionDto) {
 			
 			FeedEmotionResultDto feedEmotionResultDto = new FeedEmotionResultDto();
-			
+
 			
 			if ( feedEmotionDto.getGood() == 1 ) {
 				feedDao.feedGoodAdd(feedEmotionDto.getFeedId());
 				feedEmotionDto.setCode("30001");
 				feedDao.feedEmotionUserUseCreate(feedEmotionDto);
+				feedEmotionResultDto.setResult(SUCCESS);
 			} else if ( feedEmotionDto.getSad() == 1 ) {
 				feedDao.feedSadAdd(feedEmotionDto.getFeedId());
 				feedEmotionDto.setCode("30002");
 				feedDao.feedEmotionUserUseCreate(feedEmotionDto);
+				feedEmotionResultDto.setResult(SUCCESS);
 			} else if ( feedEmotionDto.getCheck() == 1 ) {
 				feedDao.feedCheckAdd(feedEmotionDto.getFeedId());
 				feedEmotionDto.setCode("30003");
 				feedDao.feedEmotionUserUseCreate(feedEmotionDto);
+				feedEmotionResultDto.setResult(SUCCESS);
 			} else if ( feedEmotionDto.getFun() == 1 ) {
 				feedDao.feedFunAdd(feedEmotionDto.getFeedId());
 				feedEmotionDto.setCode("30004");
 				feedDao.feedEmotionUserUseCreate(feedEmotionDto);
+				feedEmotionResultDto.setResult(SUCCESS);
 			} else if ( feedEmotionDto.getAmaze() == 1 ) {
 				feedDao.feedAmazeAdd(feedEmotionDto.getFeedId());
 				feedEmotionDto.setCode("30005");
 				feedDao.feedEmotionUserUseCreate(feedEmotionDto);
+				feedEmotionResultDto.setResult(SUCCESS);
 			} else {
 				feedEmotionResultDto.setResult(FAIL);
 			}
 			
 			return feedEmotionResultDto;
 		}
-
 		// 감정표현 취소 => 댓글 감정표현 레코드 수정 + 댓글 감정표현 사용 레코드 삭제
 		@Override
 		@Transactional
 		public FeedEmotionResultDto feedEmotionSub(FeedEmotionDto feedEmotionDto) {
 			
 			FeedEmotionResultDto feedEmotionResultDto = new FeedEmotionResultDto();
-			
+
 			if ( feedEmotionDto.getGood() == 1 ) {
 				feedDao.feedGoodSub(feedEmotionDto.getFeedId());
 				feedDao.feedEmotionUserUseDelete(feedEmotionDto);
+				feedEmotionResultDto.setResult(SUCCESS);
 			} else if ( feedEmotionDto.getSad() == 1 ) {
 				feedDao.feedSadSub(feedEmotionDto.getFeedId());
 				feedDao.feedEmotionUserUseDelete(feedEmotionDto);
+				feedEmotionResultDto.setResult(SUCCESS);
 			} else if ( feedEmotionDto.getCheck() == 1 ) {
 				feedDao.feedCheckSub(feedEmotionDto.getFeedId());
 				feedDao.feedEmotionUserUseDelete(feedEmotionDto);
+				feedEmotionResultDto.setResult(SUCCESS);
 			} else if ( feedEmotionDto.getFun() == 1 ) {
 				feedDao.feedFunSub(feedEmotionDto.getFeedId());
 				feedDao.feedEmotionUserUseDelete(feedEmotionDto);
+				feedEmotionResultDto.setResult(SUCCESS);
 			} else if ( feedEmotionDto.getAmaze() == 1 ) {
 				feedDao.feedAmazeSub(feedEmotionDto.getFeedId());
 				feedDao.feedEmotionUserUseDelete(feedEmotionDto);
+				feedEmotionResultDto.setResult(SUCCESS);
 			} else {
 				feedEmotionResultDto.setResult(FAIL);
 			}
 			
 			return feedEmotionResultDto;
 		}
-
 		
 		// 피드 타임라인 변경 -> 등록 안된것을 등록 or 등록 된것을 등록 취소
 		@Override

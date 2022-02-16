@@ -108,8 +108,8 @@ public class NoticeServiceImpl implements NoticeService {
 
                 switch (nowNoticeType) {
                     case "feedCreate":
-                        nowNoticeResultDto.setNoticeContentTitle(feedDao.feedDetail(nowContentId).getFeedTitle());
-                        nowNoticeResultDto.setNoticeContentContent(feedDao.feedDetail(nowContentId).getFeedContent());
+                        nowNoticeResultDto.setNoticeContentTitle(feedDao.feedDetail(nowContentId,userSeq).getFeedTitle());
+                        nowNoticeResultDto.setNoticeContentContent(feedDao.feedDetail(nowContentId,userSeq).getFeedContent());
                         break;
 //                    case "commentCreate":
 ////                        nowNoticeResultDto.setNoticeContentTitle(commentDao.feedDetail(nowContentId).getFeedTitle());

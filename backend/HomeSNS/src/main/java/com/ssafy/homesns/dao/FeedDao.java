@@ -35,7 +35,7 @@ public interface FeedDao {
 	public LocationDto locationSearch(int feedId);
 	public List<LocationFavoriteDto> locationFavoriteSearch(int userSeq);
 	
-	public FeedDto feedDetail(int feedId);
+	public FeedDto feedDetail(@Param("feedId") int feedId,@Param("userSeq")int userSeq);
 	
 	// feed추가
 	public int feedInsert(FeedDto feedDto);

@@ -33,6 +33,7 @@ public class FeedDto {
 	private int check; 
 	private int fun;
 	private int amaze;
+	private String code;
 	
 	private List<FileDto> fileList;
 	private List<CommentDto> commentList;
@@ -201,6 +202,14 @@ public class FeedDto {
 		this.feedLocationStr = feedLocationStr;
 	}
 	
+	
+	
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
 	@Override
 	public String toString() {
 		return "FeedDto [feedId=" + feedId + ", groupId=" + groupId + ", feedAuthorSeq=" + feedAuthorSeq
@@ -209,9 +218,10 @@ public class FeedDto {
 				+ feedAttendees + ", feedLocationId=" + feedLocationId + ", feedUploadDate=" + feedUploadDate
 				+ ", feedLocationStr=" + feedLocationStr + ", fileDeleteStr=" + fileDeleteStr + ", feedEventDate="
 				+ feedEventDate + ", locationDto=" + locationDto + ", good=" + good + ", sad=" + sad + ", check="
-				+ check + ", fun=" + fun + ", amaze=" + amaze + ", fileList=" + fileList + ", commentList="
-				+ commentList + ", hashtagList=" + hashtagList + ", userList=" + userList + ", timeline=" + timeline
-				+ "]";
+				+ check + ", fun=" + fun + ", amaze=" + amaze + ", code=" + code + ", fileList=" + fileList
+				+ ", commentList=" + commentList + ", hashtagList=" + hashtagList + ", userList=" + userList
+				+ ", timeline=" + timeline + "]";
 	}
+	
 
 }
