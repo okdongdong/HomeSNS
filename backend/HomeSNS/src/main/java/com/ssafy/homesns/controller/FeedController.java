@@ -32,7 +32,7 @@ import com.ssafy.homesns.service.FeedService;
 
 @CrossOrigin(origins = { "http://localhost:5500", "http://172.30.1.59:5500", "http://192.168.0.100:5500",
 		"http://192.168.0.40:5500", "https://i6e205.p.ssafy.io" }, allowCredentials = "true", // axios가 sessionId를 계속 다른것을
-																																													// 보내는데, 이것을 고정시켜준다
+		// 보내는데, 이것을 고정시켜준다
 		allowedHeaders = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
 				RequestMethod.DELETE, RequestMethod.HEAD, RequestMethod.OPTIONS })
 
@@ -179,42 +179,51 @@ public class FeedController {
 			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	
+
+
 	// 감정표현 하기 => 댓글 감정표현 레코드 수정 + 댓글 감정표현 사용 레코드 추가
-		@PutMapping(value="/feed/emotion/add")
-		public ResponseEntity<FeedEmotionResultDto> feedEmotionAdd(@RequestBody FeedEmotionDto feedEmotionDto) {
-			// Security Context에서 UserSeq를 구한다
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			int userSeq = Integer.parseInt(authentication.getName());
+	@PutMapping(value="/feed/emotion/add")
+	public ResponseEntity<FeedEmotionResultDto> feedEmotionAdd(@RequestBody FeedEmotionDto feedEmotionDto) {
+		// Security Context에서 UserSeq를 구한다
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		int userSeq = Integer.parseInt(authentication.getName());
 
-			feedEmotionDto.setUserSeq(userSeq);
-			FeedEmotionResultDto feedEmotionResultDto = feedService.feedEmotionAdd(feedEmotionDto);
+		feedEmotionDto.setUserSeq(userSeq);
+		FeedEmotionResultDto feedEmotionResultDto = feedService.feedEmotionAdd(feedEmotionDto);
 
-			
-			if ( feedEmotionResultDto.getResult() == SUCCESS ) {
-				return new ResponseEntity<FeedEmotionResultDto>(feedEmotionResultDto, HttpStatus.OK);
-			}
-			return new ResponseEntity<FeedEmotionResultDto>(feedEmotionResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+
+		if ( feedEmotionResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<FeedEmotionResultDto>(feedEmotionResultDto, HttpStatus.OK);
 		}
+		return new ResponseEntity<FeedEmotionResultDto>(feedEmotionResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
-		// 감정표현 취소 => 댓글 감정표현 레코드 수정 + 댓글 감정표현 사용 레코드 삭제
-		@PutMapping(value="/feed/emotion/sub")
-		public ResponseEntity<FeedEmotionResultDto> feedEmotionSub(@RequestBody FeedEmotionDto feedEmotionDto) {
-			// Security Context에서 UserSeq를 구한다
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			int userSeq = Integer.parseInt(authentication.getName());
-			
-			feedEmotionDto.setUserSeq(userSeq);
-			FeedEmotionResultDto feedEmotionResultDto = feedService.feedEmotionSub(feedEmotionDto);
+	// 감정표현 취소 => 댓글 감정표현 레코드 수정 + 댓글 감정표현 사용 레코드 삭제
+	@PutMapping(value="/feed/emotion/sub")
+	public ResponseEntity<FeedEmotionResultDto> feedEmotionSub(@RequestBody FeedEmotionDto feedEmotionDto) {
+		// Security Context에서 UserSeq를 구한다
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		int userSeq = Integer.parseInt(authentication.getName());
 
-			if ( feedEmotionResultDto.getResult() == SUCCESS ) {
-				return new ResponseEntity<FeedEmotionResultDto>(feedEmotionResultDto, HttpStatus.OK);
-			}
-			return new ResponseEntity<FeedEmotionResultDto>(feedEmotionResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+		feedEmotionDto.setUserSeq(userSeq);
+		FeedEmotionResultDto feedEmotionResultDto = feedService.feedEmotionSub(feedEmotionDto);
+
+		if ( feedEmotionResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<FeedEmotionResultDto>(feedEmotionResultDto, HttpStatus.OK);
 		}
-	
-	
-	
-	
+		return new ResponseEntity<FeedEmotionResultDto>(feedEmotionResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+
+	@PutMapping(value="/feed/timeline/{feedId}")
+	public ResponseEntity<FeedResultDto> feedTimeline(@PathVariable int feedId) {
+		
+		FeedResultDto feedResultDto = feedService.feedTimeline(feedId);
+		
+		if ( feedResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
 }

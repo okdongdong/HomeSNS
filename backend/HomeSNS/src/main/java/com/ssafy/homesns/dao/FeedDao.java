@@ -100,6 +100,6 @@ public interface FeedDao {
 	// 피드 감정표현 기록 삭제, 피드 감정표현의 수정에 따라 테이블 삭제
 	public int feedEmotionUserUseDelete(FeedEmotionDto feedEmotionDto);
 	
-	
-
+	// 피드 타임라인 변경
+	public int feedTimeline(int feedId);
 }
