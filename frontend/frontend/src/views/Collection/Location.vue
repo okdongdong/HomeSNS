@@ -1,16 +1,15 @@
 <template>
-  <v-app>
+  <v-app class="container" style="padding : 0px;">
+    <div style="height:100%;">
     <GmapMap class="gmap-marker-clustering" :center="center" :zoom="12">
       <GmapCluster
-
         :zoomOnClick="true"
         :enableRetinaIcons="true"
         :minimumClusterSize="3"
         @click="checkcluster($event)"
         :styles="clusterStyles"
-
       >
-              <GmapMarker
+        <GmapMarker
           :key="index"
           v-for="(m, index) in markers"
           :position="m.position"
@@ -23,13 +22,13 @@
           }"
         />
       </GmapCluster>
-
     </GmapMap>
+    </div>
   </v-app>
 </template>
 
 <script>
-// import {gmapApi} from 'vue2-google-maps'
+import {gmapApi} from 'vue2-google-maps'
 import GmapCluster from 'vue2-google-maps/dist/components/cluster';
 export default {
   name: "Location",
@@ -38,7 +37,7 @@ export default {
   },
   data() {
     return {
-       clusterStyles:[
+      clusterStyles:[
         {
           textColor : 'white',
           url : require('@/assets/pin1.png'),
@@ -101,14 +100,16 @@ export default {
       ],
     };
   },
-  created() {
-    this.$gmapApiPromiseLazy().then(() => {
-      this.initialize(); //init once  library has been loaded
-    });
+  // created() {
+  //   this.$gmapApiPromiseLazy().then(() => {
+  //     this.initialize(); //init once  library has been loaded
+  //   });
+  // },
+  computed : {
+    google : gmapApi,
   },
-
   methods: {
-       checkcluster(data) {
+    checkcluster(data) {
       console.log(data.getMarkers());
       }
   },
@@ -117,8 +118,10 @@ export default {
 
 <style scoped>
 .gmap-marker-clustering {
+  /* width:300px;
+  height:300px; */
   width: 100%;
-  height: calc(100vh - 160px);
+  height: calc(100% - 160px);
 }
 
 

@@ -55,6 +55,7 @@
             large
             @click="showEmotions ? (showEmotions = false) : (showEmotions = true)"
           >
+            <!-- <v-img v-if="currEmotion == undefined" :src="emotions[0].emoji" style="width: 10px; height: auto"></v-img> -->
             <v-img :src="currEmotion.emoji" style="width: 10px; height: auto"></v-img>
           </v-btn>
         </v-col>
@@ -71,6 +72,7 @@
         :show-emotions="showEmotions"
         @select-emotion="changeEmotion"
         style="position: absolute"
+        @emotion-show-toggle="emotionShowToggle"
       />
     </div>
     <div class="content-group" v-html="getContent()"></div>
@@ -80,6 +82,19 @@
         <v-chip v-for="hashtag in feed.hashtagList" :key="hashtag.hashtagContent" color="white">
           #{{ hashtag.hashtagContent }}
         </v-chip>
+      </v-chip-group>
+    </div>
+    <!-- 감정 숫자표현 -->
+    <div class="px-3">
+      <v-chip-group active-class="primary--text" column>
+        <span v-for="emotion in emotions" :key="emotion.code">
+        <v-chip class="px-2" small color="white" v-if="emotion.cnt != 0">
+          <v-avatar center>
+            <v-img :src="emotion.emoji"></v-img>
+          </v-avatar>
+          <span class="pl-1">{{ emotion.cnt }}</span>
+        </v-chip>
+        </span>
       </v-chip-group>
     </div>
     <!-- 댓글 부분 ! -->
@@ -157,15 +172,15 @@ export default {
     },
     // 감정
     emotions: [
-      { emoji: require("@/assets/emotions/heart_off.png"), status: "null", code: 0 },
-      { emoji: require("@/assets/emotions/heart_on.png"), status: "good", code: 30001 },
-      { emoji: require("@/assets/emotions/sad.png"), status: "sad", code: 30002 },
-      { emoji: require("@/assets/emotions/check.png"), status: "check", code: 30003 },
-      { emoji: require("@/assets/emotions/fun.png"), status: "fun", code: 30004 },
-      { emoji: require("@/assets/emotions/amaze.png"), status: "amaze", code: 30005 },
+      { emoji: require("@/assets/emotions/heart_off.png"), status: "null", code: 30000, cnt:0},
+      { emoji: require("@/assets/emotions/heart_on.png"), status: "good", code: 30001, cnt:0},
+      { emoji: require("@/assets/emotions/sad.png"), status: "sad", code: 30002, cnt:0},
+      { emoji: require("@/assets/emotions/check.png"), status: "check", code: 30003 , cnt:0},
+      { emoji: require("@/assets/emotions/fun.png"), status: "fun", code: 30004, cnt:0},
+      { emoji: require("@/assets/emotions/amaze.png"), status: "amaze", code: 30005, cnt:0},
     ],
     beforeEmotion: null,
-    currEmotion: { emoji: require("@/assets/emotions/heart_off.png"), status: "null" },
+    currEmotion: { emoji: require("@/assets/emotions/heart_off.png"), status: "null", code: 30000 },
     //북마크
     bookmark: false,
     // 댓글쪽
@@ -175,6 +190,9 @@ export default {
     tagList: [], // 해시태그한 사람
   }),
   methods: {
+    emotionShowToggle(){
+      this.showEmotions = false
+    },
     getMember() {
       // 해시태그용
       let groupId = this.nowGroup.groupId;
@@ -224,6 +242,20 @@ export default {
         this.nowLoading = false;
         this.memberList = res.data.feedDto.userList;
         this.feed.hashtagList = res.data.feedDto.hashtagList;
+        if(res.data.feedDto.code != "30000"){
+          for(let i=0;i<this.emotions.length;i++){
+          if(this.emotions[i].code == res.data.feedDto.code){
+            this.currEmotion = this.emotions[i]
+            this.beforeEmotion = this.emotions[i]
+            break
+            }
+          }
+        }
+        this.emotions[1].cnt = res.data.feedDto.good;
+        this.emotions[2].cnt = res.data.feedDto.sad;
+        this.emotions[3].cnt = res.data.feedDto.check;
+        this.emotions[4].cnt = res.data.feedDto.fun;
+        this.emotions[5].cnt = res.data.feedDto.amaze;
       });
     },
     getContent() {
@@ -282,12 +314,18 @@ export default {
     },
     changeEmotion(data) {
       const token = localStorage.getItem("jwt");
-      if (data == undefined) { // 선택한 감정 없음(감정 삭제)
+      if (data == undefined || this.currEmotion.status == data) { // 선택한 감정 없음(감정 삭제)
         this.currEmotion = this.emotions[0];
         let deleteEmotion={
           feedId : this.feedId,
         }
         deleteEmotion[this.beforeEmotion.status]=1
+        console.log(this.beforeEmotion.status)
+        for(let i=0;i<this.emotions.length;i++){
+          if(this.emotions[i].status == this.beforeEmotion.status){
+            this.emotions[i].cnt -= 1
+          }
+        }
         axios({
           method : "PUT",
           url : `${process.env.VUE_APP_MCS_URL}/feed/emotion/sub`,
@@ -301,13 +339,23 @@ export default {
         })
 
       } else { // 감정 수정
-        for (let i = 0; i < this.emotions.length; i++) {
-          if (this.emotions[i].status == data) {
-            this.currEmotion = this.emotions[i];
-            this.beforeEmotion = this.emotions[i];
-            break;
-          }
+        if(this.beforeEmotion != null && this.beforeEmotion.cnt > 0){
+          for (let i = 0; i < this.emotions.length; i++) {
+              if (this.emotions[i].status == this.beforeEmotion.status) {
+                this.emotions[i].cnt -= 1;
+                break
+              }
+            }
         }
+          for (let i = 0; i < this.emotions.length; i++) {
+            if (this.emotions[i].status == data) {
+              this.emotions[i].cnt += 1;
+              this.currEmotion = this.emotions[i];
+              this.beforeEmotion = this.emotions[i];
+              break
+            }
+          }
+        
         let selectEmotion = {
           feedId : this.feedId
         }
@@ -332,11 +380,11 @@ export default {
       console.log(this.bookmark);
     },
   },
-  created() {
+  mounted() {
     this.feedId *= 1;
     this.getFeed();
     this.getMember();
-    this.getAuthorProfileImageUrl();
+    // this.getAuthorProfileImageUrl();
   },
   beforeDestroy() {
     this.$store.dispatch("comments/resetOffset");
