@@ -31,4 +31,7 @@ public interface FeedService {
 	public FeedEmotionResultDto feedEmotionAdd(FeedEmotionDto feedEmotionDto);
 	// 피드 감정 삭제 
 	public FeedEmotionResultDto feedEmotionSub(FeedEmotionDto feedEmotionDto);
+	
+	// 피드 타임라인 변경
+	public FeedResultDto feedTimeline(int feedId);
 }

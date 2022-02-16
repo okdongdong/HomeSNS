@@ -83,7 +83,10 @@ export default {
         commentTag.appendChild(commentSpanTag)
       }
     }
-  }
+  },
+  // updated(){
+
+  // }
 };
 
 </script>
