@@ -331,8 +331,9 @@
 
 	 <insert id="feedScrapAdd" parameterType="map">
 		INSERT INTO HOME_SNS.SCRAP ( USER_SEQ,  FEED_ID )
-							VALUES (#{feedId},#{userSeq})		
+							VALUES (#{userSeq},#{feedId})		
 	</insert>	
+	
 	
 	<delete id="feedScrapSub" parameterType="map" >
 		DELETE FROM SCRAP
