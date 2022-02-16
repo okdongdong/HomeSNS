@@ -245,6 +245,27 @@ export default {
       this.image = file;
       this.previewImage = URL.createObjectURL(this.image);
     },
+    getMyProfile() {
+      const token = localStorage.getItem("jwt");
+      axios({
+        method: "get",
+        url: `${process.env.VUE_APP_MCS_URL}/mypage`,
+        headers: { Authorization: token },
+      })
+        .then((res) => {
+          console.log(res);
+          const userInfo = res.data.userDto;
+          this.$store.commit("account/LOGIN", userInfo);
+        })
+        .catch((err) => {
+          this.$store.commit(
+            "snackbar/SET_SNACKBAR",
+            "유저정보 조회에 실패했습니다."
+          );
+          console.log(err);
+          console.log(err.response);
+        });
+    },
     updateProfileImage() {
       const token = localStorage.getItem("jwt");
       let data = new FormData();
@@ -262,6 +283,7 @@ export default {
           console.log(res);
           console.log(res.data);
           this.getProfile(this.userSeq);
+          this.getMyProfile(this.userSeq);
         })
         .catch((err) => {
           this.$store.commit(
@@ -273,7 +295,7 @@ export default {
         });
     },
     passwordCheck() {
-      localStorage.setItem('checkPasswordFlag', true)
+      localStorage.setItem("checkPasswordFlag", true);
       const token = localStorage.getItem("jwt");
       axios({
         method: "POST",
@@ -295,7 +317,7 @@ export default {
           );
           console.log(err);
           console.log(err.response);
-          localStorage.removeItem('checkPasswordFlag')
+          localStorage.removeItem("checkPasswordFlag");
         });
     },
   },
