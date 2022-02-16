@@ -19,7 +19,7 @@
             <div class="d-inline-flex">{{ feed.eventDate }}</div>
           </div>
         </v-col>
-        <v-col cols="2" class="d-flex justify-center align-center" v-if="userSeq == feedAuthorSeq">
+        <v-col v-if="userSeq == feedAuthorSeq" cols="2" class="d-flex justify-center align-center" >
           <FeedPopup :feed-id="feedId" :feed-author-seq="feedAuthorSeq" />
         </v-col>
       </v-row>
@@ -34,7 +34,16 @@
           {{ feed.author }}
         </h3>
       </div>
-      <div class="d-inline-flex"><v-icon>location_on</v-icon>{{ feed.location }}</div>
+      <v-row justify="space-around">
+      <v-col cols="9">
+        <v-icon>location_on</v-icon>{{ feed.location }}
+      </v-col>
+      <v-col cols="3">
+        <v-btn rounded small @click="sendNotice()">
+          추억공유
+        </v-btn>
+      </v-col>
+      </v-row>
     </div>
     <div class="feed-photos">
       <!-- 사진 -->
@@ -139,7 +148,7 @@ import FeedPopup from "../../components/Feed/FeedPopup.vue";
 import Emotion from "../../components/Feed/Emotion.vue";
 import ProfilePhoto from "../../components/ProfilePhoto.vue";
 import axios from "axios";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "Detail",
@@ -190,6 +199,15 @@ export default {
     tagList: [], // 해시태그한 사람
   }),
   methods: {
+    ...mapActions("notice", ["send"]),
+    sendNotice(){
+      const noticeInfo ={
+        targetUserSeq : -1,
+        noticeType : "shareCreate",
+        noticeContentId: this.feedId,
+      };
+      this.send(noticeInfo);
+    },
     emotionShowToggle(){
       this.showEmotions = false
     },
@@ -427,7 +445,7 @@ export default {
     this.$store.dispatch("comments/resetOffset");
   },
   computed: {
-    ...mapState("account", ["nowGroup", "userName"]),
+    ...mapState("account", ["nowGroup", "userName","userSeq"]),
     ...mapState("comments", ["comments", "offset"]),
     commentInTag() {
       if (this.currComment != null && this.currComment.substr(-1) == "@") {
