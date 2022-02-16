@@ -397,7 +397,7 @@ export default {
         })
       }else{
         axios({
-          method : "PUT",
+          method : "POST",
           url : `${process.env.VUE_APP_MCS_URL}/feed/scrap/${this.feedId}`,
           headers : {Authorization : token}
         })
