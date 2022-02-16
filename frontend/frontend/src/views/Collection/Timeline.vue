@@ -20,7 +20,7 @@
                   alt="피드사진"
                   aspect-ratio="1"
                   width="120px"
-                  :src="feed.feedFileUrls?feed.feedFileUrls[0]:''"
+                  :src="feed.fileList?feed.fileList[0]:''"
                 ></v-img>
               </div>
               <div>
@@ -55,10 +55,10 @@
                   <v-col
                     class="pa-1"
                     cols="4"
-                    v-for="fileUrl in feed.fileList"
-                    :key="fileUrl"
+                    v-for="(file,idx) in feed.fileList"
+                    :key="idx"
                   >
-                    <v-img :src="fileUrl" aspect-ratio="1" width="120px">
+                    <v-img :src="file.fileUrl" aspect-ratio="1" width="120px">
                       <template v-slot:placeholder>
                         <v-row
                           class="fill-height ma-0"
