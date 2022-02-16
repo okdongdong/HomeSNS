@@ -39,15 +39,7 @@
 		WHERE FEED_ID =#{feedId}
 	</select>
 	
-	<!-- 댓글 가져오는 SQL  -->
-	<select id="commentList" parameterType="int" resultType="com.ssafy.homesns.dto.CommentDto"> 
-		SELECT c.comment_id,feed_id,comment_tag,comment_author as comment_author_seq, u.user_name as comment_author,comment_content,comment_upload_date, 
-				ce.good, ce.sad, ce.check, ce.fun , ce.amaze
-		FROM HOME_SNS.COMMENT c
-        JOIN HOME_SNS.USER u ON comment_author = user_seq 
-        LEFT OUTER JOIN HOME_SNS.COMMENT_EMOTION ce ON c.comment_id = ce.comment_id  
-        WHERE feed_id = #{feedId}
-	</select>
+	
 	
 	<!-- 해쉬태그 가져오는 SQL -->
 	<select id="hashtagList" parameterType="int" resultType="com.ssafy.homesns.dto.HashtagDto"> 
@@ -82,10 +74,11 @@
 	
 	<!-- feed table값만 가져오는 SQL -->
 	<select id="feedDetail" parameterType="int" resultType="com.ssafy.homesns.dto.FeedDto"> 
-		SELECT f.FEED_ID, GROUP_ID, FEED_AUTHOR as feed_author_seq ,u.user_name as FEED_AUTHOR, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION_ID ,fe.good, fe.sad, fe.check, fe.fun, fe.amaze
-		  FROM HOME_SNS.FEED f JOIN USER u ON f.feed_author = u.user_seq
-          LEFT OUTER JOIN HOME_SNS.FEED_EMOTION fe  ON f.feed_id = fe.feed_id
-		 WHERE f.FEED_ID = #{feed_id};
+		SELECT f.FEED_ID, GROUP_ID, FEED_AUTHOR as feed_author_seq ,u.user_name as FEED_AUTHOR, u.USER_PROFILE_IMAGE_URL as authorProfileImageUrl, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION_ID ,fe.good, fe.sad, fe.check, fe.fun, fe.amaze
+	  		FROM HOME_SNS.FEED f JOIN USER u ON f.feed_author = u.user_seq
+	  		JOIN HOME_SNS.FEED_EMOTION fe  ON f.feed_id = fe.feed_id
+	     WHERE  f.FEED_ID = #{feedId}
+   		   
 	</select>
 
 	
@@ -131,7 +124,7 @@
 	<!-- 피드추가페이지 로딩시 프런트가 가지고 있어야하는 내용리턴  -->
 	<!-- favorite표시한 장소 담기 -->
 	<select id="userLocationList" parameterType="map" resultType="com.ssafy.homesns.dto.LocationDto">
-		SELECT LOCATION_NAME, LAT, CASE WHEN LF.USER_SEQ IS NULL THEN false
+		SELECT L.LOCATION_ID, LOCATION_NAME, LAT,LNG, CASE WHEN LF.USER_SEQ IS NULL THEN false
 										ELSE true
 			END as FAVORITE
 		FROM LOCATION L
@@ -216,4 +209,134 @@
 		 WHERE LOCATION_ID =#{locationId} AND USER_SEQ ={userSeq} 
 	</delete>
 	
+	
+	
+	<!-- 피드 감정 -->
+	
+	<insert id="feedEmotionCreate" parameterType="int" >
+		INSERT INTO FEED_EMOTION    ( FEED_ID,    GOOD, SAD, FEED_EMOTION.CHECK, FUN, AMAZE)
+		                     VALUES ( #{feedId},  0,  0,  0,    0 ,  0)
+	</insert>
+	
+	<select id="feedEmotionSearch" parameterType="int" resultType="com.ssafy.homesns.dto.FeedDto">
+		SELECT FEED_ID as feedId, GOOD as good, SAD as sad, 
+			   FEED_EMOTION.CHECK as check, FUN as fun, AMAZE as amaze
+		  FROM FEED_EMOTION
+		 WHERE FEED_ID = #{feedId}
+	</select>
+	
+	<update id="feedGoodAdd" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET GOOD = GOOD + 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedGoodSub" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET GOOD = GOOD - 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedSadAdd" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET SAD = SAD + 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedSadSub" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET SAD = SAD - 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedCheckAdd" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET FEED_EMOTION.CHECK = FEED_EMOTION.CHECK + 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedCheckSub" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET FEED_EMOTION.CHECK = FEED_EMOTION.CHECK - 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedFunAdd" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET FUN = FUN + 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedFunSub" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET FUN = FUN - 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedAmazeAdd" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET AMAZE = AMAZE + 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<update id="feedAmazeSub" parameterType="int">
+		UPDATE FEED_EMOTION
+		   SET AMAZE = AMAZE - 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	
+	<!-- 피드 지우면 다 지워짐 
+	<delete id="feedEmotionDelete" parameterType="int" >
+		DELETE FROM FEED_EMOTION 
+		      WHERE FEED_ID = #{feedId}
+	</delete>
+	 -->
+	 
+	 
+	<insert id="feedEmotionUserUseCreate" parameterType="com.ssafy.homesns.dto.FeedEmotionDto" >
+		INSERT INTO FEED_EMOTION_USER_USE ( FEED_ID,    USER_SEQ,    EMOTION_CODE )
+		                              VALUES ( #{feedId},  #{userSeq},  #{code}      )
+	</insert>
+	
+	<select id="feedEmotionUserUseSearch" parameterType="map" resultType="string">
+		SELECT EMOTION_CODE as code
+		  FROM FEED_EMOTION_USER_USE
+		 WHERE FEED_ID = #{feedId}
+		   AND USER_SEQ = #{userSeq}
+	</select>
+	
+	
+	<delete id="feedEmotionUserUseDelete" parameterType="com.ssafy.homesns.dto.FeedEmotionDto" >
+		DELETE FROM FEED_EMOTION_USER_USE 
+		      WHERE FEED_ID = #{feedId}
+		        AND USER_SEQ = #{userSeq}
+	</delete>
+	 
+	 
+	 <update id="feedTimeline" parameterType="int">
+		UPDATE FEED
+		   SET FEED_TIMELINE = FEED_TIMELINE XOR 1
+		 WHERE FEED_ID = #{feedId}
+	</update>
+	 
+	<!-- 피드 스크랩 -->
+
+
+	 <select id="feedScrapUserUse" parameterType="map" resultType="string">
+		SELECT 'y' as scrapYn 
+		  FROM HOME_SNS.SCRAP 
+		      WHERE FEED_ID = #{feedId}
+		        AND USER_SEQ = #{userSeq}		
+	</select>	
+
+	 <insert id="feedScrapAdd" parameterType="map">
+		INSERT INTO HOME_SNS.SCRAP ( USER_SEQ,  FEED_ID )
+							VALUES (#{feedId},#{userSeq})		
+	</insert>	
+	
+	<delete id="feedScrapSub" parameterType="map" >
+		DELETE FROM SCRAP
+		      WHERE FEED_ID = #{feedId}
+		        AND USER_SEQ = #{userSeq}
+	</delete>
 </mapper>

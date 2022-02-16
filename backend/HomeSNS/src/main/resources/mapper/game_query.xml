@@ -22,7 +22,7 @@
 	<select id="gameSearch" parameterType="com.ssafy.homesns.dto.GameParamDto" resultType="com.ssafy.homesns.dto.GameDto">
 		SELECT GAME_ID as gameId, GROUP_ID as groupId, GAME_TITLE as gameTitle, GAME_AUTHOR as gameAuthor,
 			   CODE as code, GAME_REGISTER_DATE as gameRegisterDate, 
-			   USER_NAME as gameAuthorName, USER_PROFILE_IMAGE_URL as gameAuthorProfileImageUrl
+			   USER_NAME as gameAuthorName, USER_PROFILE_IMAGE_URL as gameAuthorProfileImageUrl, UPDATE_YN as updateYn
 		  FROM GAME JOIN USER
 		    ON GAME.GAME_AUTHOR = USER.USER_SEQ
 		 WHERE GROUP_ID = #{groupId}
@@ -34,7 +34,7 @@
 	<select id="gameDetailSearch" parameterType="int" resultType="com.ssafy.homesns.dto.GameDto">
 		SELECT GAME_ID as gameId, GROUP_ID as groupId, GAME_TITLE as gameTitle, GAME_AUTHOR as gameAuthor,
 			   CODE as code, GAME_REGISTER_DATE as gameRegisterDate, 
-			   USER_NAME as gameAuthorName, USER_PROFILE_IMAGE_URL as gameAuthorProfileImageUrl
+			   USER_NAME as gameAuthorName, USER_PROFILE_IMAGE_URL as gameAuthorProfileImageUrl, UPDATE_YN as updateYn
 		  FROM GAME JOIN USER
 		    ON GAME.GAME_AUTHOR = USER.USER_SEQ
 		 WHERE GAME_ID = #{gameId}

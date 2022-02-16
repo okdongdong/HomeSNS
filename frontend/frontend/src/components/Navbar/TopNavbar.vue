@@ -1,6 +1,9 @@
 <template>
   <div>
-    <v-card class="rounded-xl justify-center d-flex">
+    <v-card
+      class="rounded-xl justify-center d-flex"
+      @click.stop="noticeMove(recv.noticeContentId, recv.noticeType)"
+    >
       <v-alert
         v-show="noticeAlarm && !dialog"
         transition="slide-y-transition"
@@ -14,7 +17,9 @@
             :imgUrl="recv.userProfileUrl"
             :userSeq="recv.userSeq"
           />
-          <div class="mx-5">{{ recv.userName }} 님이 뭔가를 했습니다.</div>
+          <div class="mx-5">
+            {{ recv.userName }}님이 {{ recv.noticeMessage }}
+          </div>
         </div>
       </v-alert>
     </v-card>
@@ -39,7 +44,14 @@
         "
       />
       <v-spacer></v-spacer>
-      <v-btn rounded text @click.stop="$router.push({ name: 'FeedCreate', params: { feedId: -1 }})">추억담기 </v-btn>
+      <v-btn
+        rounded
+        text
+        @click.stop="
+          $router.push({ name: 'FeedCreate', params: { feedId: -1 } })
+        "
+        >추억담기
+      </v-btn>
 
       <v-dialog v-model="dialog" scrollable max-width="400px">
         <template v-slot:activator="{ on, attrs }">
@@ -54,9 +66,9 @@
             <v-icon v-else>notifications_none</v-icon>
           </v-btn>
         </template>
-        <v-card class="rounded-xl">
+        <v-card class="rounded-xl pa-0">
           <v-card-title>
-            <span>알람</span>
+            <span>알림</span>
             <v-spacer></v-spacer>
             <v-btn text class="body-1" @click.stop="noticeReadAll()">
               모두읽기
@@ -64,10 +76,17 @@
           </v-card-title>
           <v-divider></v-divider>
           <v-card-text style="height: 500px">
+            <v-container class="text-center mt-5" v-if="!noticeList.length"
+              ><h3>알림이 없습니다.</h3>
+            </v-container>
             <v-container
+              class="px-0"
               v-for="(notice, $idx) in noticeList"
               :key="$idx"
-              @click="dialog = false"
+              @click="
+                noticeMove(notice.noticeContentId, notice.noticeType),
+                  (dialog = false)
+              "
             >
               <v-hover>
                 <template v-slot:default="{ hover }">
@@ -79,33 +98,39 @@
                     :disabled="notice.noticeReadYn == 'y'"
                     :color="notice.noticeReadYn == 'y' ? '#DDDDDD' : ''"
                     @click.stop="
-                      noticeRead(
-                        notice.noticeId,
-                        notice.noticeContentId,
-                        notice.noticeType
-                      ),
+                      noticeMove(notice.noticeContentId, notice.noticeType),
+                        noticeRead(
+                          notice.noticeId,
+                          notice.noticeContentId,
+                          notice.noticeType
+                        ),
                         (notice.noticeReadYn = 'y'),
                         (dialog = false)
                     "
                   >
-                    <ProfilePhoto
-                      :size="50"
-                      :imgUrl="notice.userProfileImageUrl"
-                      :userSeq="notice.userSeq"
-                      @clicked="dialog = false"
-                    />
-                    <div class="mx-3">
+                    <div class="mx-3" style="width: 100%">
                       <div>
-                        {{ notice.userName }} 님이 {{ notice.noticeType }}을
-                        작성했슈
+                        <ProfilePhoto
+                          class="d-inline-flex"
+                          :size="24"
+                          :imgUrl="notice.userProfileImageUrl"
+                          :userSeq="notice.userSeq"
+                          @clicked="dialog = false"
+                        />
+                        {{ notice.userName }}님이 {{ notice.noticeMessage }}
                       </div>
-                      <div>
+                      <div class="my-2">
+                        <v-icon class="ps-2" v-if="notice.noticeContentTitle"
+                          >subdirectory_arrow_right</v-icon
+                        >
                         {{ notice.noticeContentTitle }}
                       </div>
                       <div>
                         {{ notice.noticeContentContent }}
                       </div>
-                      <div>{{ notice.noticeTime }}</div>
+                      <div class="text-right">
+                        {{ notice.noticeTime }}
+                      </div>
                     </div>
                   </v-card>
                 </template>
@@ -115,7 +140,12 @@
           </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
-            <v-btn color="blue darken-1" text @click="dialog = false">
+            <v-btn
+              text
+              class="body-1"
+              color="rgb(98,101,232)"
+              @click="dialog = false"
+            >
               닫기
             </v-btn>
           </v-card-actions>
@@ -181,6 +211,24 @@
               <h1>그룹 목록</h1>
             </v-list-item-title>
           </v-list-item>
+          <v-list-item @click.stop="move('Main')">
+            <v-list-item-title class="d-flex align-center">
+              <v-icon class="mx-3">mdi-history</v-icon>
+              <h1>게시물</h1>
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click.stop="move('Timeline')">
+            <v-list-item-title class="d-flex align-center">
+              <v-icon class="mx-3">mdi-heart</v-icon>
+              <h1>추억여행</h1>
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click.stop="move('Calendar')">
+            <v-list-item-title class="d-flex align-center">
+              <v-icon class="mx-3">mdi-map-marker</v-icon>
+              <h1>일정표</h1>
+            </v-list-item-title>
+          </v-list-item>
           <v-list-item @click.stop="move('EntFeedList')">
             <v-list-item-title class="d-flex align-center">
               <v-icon class="mx-3">extension</v-icon>
@@ -203,6 +251,13 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
+      <div style="position: absolute; bottom: 0px; width: 100%" class="pa-5 d-flex justify-center">
+        <div>
+
+        <span class="d-flex justify-end">SSAFY 공통PJT.</span>
+        <p class="d-flex justify-end">© 2022. 우家우가.</p>
+        </div>
+      </div>
     </v-navigation-drawer>
   </div>
 </template>
@@ -252,6 +307,42 @@ export default {
     ...mapActions("group", ["getProfile"]),
     feedCreate() {
       this.$router.push({ name: "FeedCreate" });
+    },
+    noticeMove(noticeContentId, noticeType) {
+      console.log(noticeType);
+      switch (noticeType) {
+        case "feedCreate":
+        case "commentCreate":
+        case "emotionCreate":
+        case "shareCreate":
+          this.$router.push({
+            name: "Detail",
+            params: { feeedId: noticeContentId },
+          });
+          break;
+
+        case "voteCreate":
+        case "voteEnd":
+          this.$router.push({
+            name: "EntFeedDetail",
+            params: {
+              contentType: "vote",
+              contentId: noticeContentId,
+            },
+          });
+          break;
+
+        case "ghostLegCreate":
+          this.$router.push({
+            name: "EntFeedDetail",
+            params: {
+              contentType: "ghostLeg",
+              contentId: noticeContentId,
+            },
+          });
+          break;
+        default:
+      }
     },
     move(page) {
       this.$router.push({ name: page });

@@ -12,6 +12,7 @@ public class FeedDto {
 	private int groupId;
 	private int feedAuthorSeq;
 	private String feedAuthor;
+	private String authorProfileImageUrl;
 	private String feedTitle; 
 	private String feedContent;
 	private String feedHashtags;
@@ -32,12 +33,24 @@ public class FeedDto {
 	private int check; 
 	private int fun;
 	private int amaze;
+	private String code;
+	private String scrapYn; 
 	
 	private List<FileDto> fileList;
 	private List<CommentDto> commentList;
 	private List<HashtagDto> hashtagList;
 	private List<UserDto> userList;
 	
+	private boolean timeline;
+	
+	
+	
+	public boolean isTimeline() {
+		return timeline;
+	}
+	public void setTimeline(boolean timeline) {
+		this.timeline = timeline;
+	}
 	
 	public int getFeedId() {
 		return feedId;
@@ -62,6 +75,14 @@ public class FeedDto {
 	}
 	public void setFeedAuthor(String feedAuthor) {
 		this.feedAuthor = feedAuthor;
+	}
+	
+	
+	public String getAuthorProfileImageUrl() {
+		return authorProfileImageUrl;
+	}
+	public void setAuthorProfileImageUrl(String authorProfileImageUrl) {
+		this.authorProfileImageUrl = authorProfileImageUrl;
 	}
 	public String getFeedTitle() {
 		return feedTitle;
@@ -181,19 +202,35 @@ public class FeedDto {
 	public void setFeedLocationStr(String feedLocationStr) {
 		this.feedLocationStr = feedLocationStr;
 	}
+	
+	
+	
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
+	public String getScrapYn() {
+		return scrapYn;
+	}
+	public void setScrapYn(String scrapYn) {
+		this.scrapYn = scrapYn;
+	}
 	@Override
 	public String toString() {
 		return "FeedDto [feedId=" + feedId + ", groupId=" + groupId + ", feedAuthorSeq=" + feedAuthorSeq
-				+ ", feedAuthor=" + feedAuthor + ", feedTitle=" + feedTitle + ", feedContent=" + feedContent
-				+ ", feedHashtags=" + feedHashtags + ", feedAttendees=" + feedAttendees + ", feedLocationId="
-				+ feedLocationId + ", feedUploadDate=" + feedUploadDate + ", feedLocationStr=" + feedLocationStr
-				+ ", fileDeleteStr=" + fileDeleteStr + ", feedEventDate=" + feedEventDate + ", locationDto="
-				+ locationDto + ", good=" + good + ", sad=" + sad + ", check=" + check + ", fun=" + fun + ", amaze="
-				+ amaze + ", fileList=" + fileList + ", commentList=" + commentList + ", hashtagList=" + hashtagList
-				+ ", userList=" + userList + "]";
+				+ ", feedAuthor=" + feedAuthor + ", authorProfileImageUrl=" + authorProfileImageUrl + ", feedTitle="
+				+ feedTitle + ", feedContent=" + feedContent + ", feedHashtags=" + feedHashtags + ", feedAttendees="
+				+ feedAttendees + ", feedLocationId=" + feedLocationId + ", feedUploadDate=" + feedUploadDate
+				+ ", feedLocationStr=" + feedLocationStr + ", fileDeleteStr=" + fileDeleteStr + ", feedEventDate="
+				+ feedEventDate + ", locationDto=" + locationDto + ", good=" + good + ", sad=" + sad + ", check="
+				+ check + ", fun=" + fun + ", amaze=" + amaze + ", code=" + code + ", scrapYn=" + scrapYn
+				+ ", fileList=" + fileList + ", commentList=" + commentList + ", hashtagList=" + hashtagList
+				+ ", userList=" + userList + ", timeline=" + timeline + "]";
 	}
 	
 	
 	
-	
+
 }

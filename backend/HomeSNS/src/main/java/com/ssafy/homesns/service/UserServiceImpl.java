@@ -47,12 +47,7 @@ public class UserServiceImpl implements UserService{
 	String uploadFolder = "upload";
 
 
-	/* for production code */
-	//uploadPath = getServletContext().getRealPath("/");
-	// F:\SSAFY\ssafy5\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\BoardWebFileUpload\
-
-	/* for eclipse development code */
-	String uploadPath = "/Users" + File.separator + "sac" + File.separator + "ssafy" + File.separator + "2nd";
+	String uploadPath = "/usr" + File.separator + "share" + File.separator + "nginx" + File.separator + "html";
 
 
 
@@ -162,7 +157,13 @@ public class UserServiceImpl implements UserService{
 
 				// User테이블의 ProfileImageUrl 수정
 				userDao.userProfileImageUpdate(profileImageDto);
-			}
+			}else {
+                ProfileImageDto profileImageDto = new ProfileImageDto();
+                profileImageDto.setUserSeq(userSeq);
+                profileImageDto.setProfileImageUrl("/img/noimage.png");
+                // User테이블의 ProfileImageUrl 수정
+                userDao.userProfileImageUpdate(profileImageDto);
+            }
 
 			userResultDto.setResult(SUCCESS);
 		} catch (Exception e) {
@@ -195,10 +196,36 @@ public class UserServiceImpl implements UserService{
 	}
 
 
+	// 비밀번호 확인
 	@Override
-	public UserResultDto userUpdate(UserDto userDto) {
+	public UserResultDto passwordCheck(UserDto userDto) {
+		// Security Context에서 UserSeq를 구한다
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		int userSeq = Integer.parseInt(authentication.getName());
+		
 		UserResultDto userResultDto = new UserResultDto();
-		if ( userDao.userUpdate(userDto) == 1 ) {
+		
+		// 비밀번호 비교
+		BCryptPasswordEncoder b = new BCryptPasswordEncoder();
+		if ( b.matches(userDto.getUserPassword(), userDao.userPasswordSearch(userSeq)))	{
+			userResultDto.setResult(SUCCESS);
+		} else {
+			userResultDto.setResult(FAIL);
+		}
+		
+		return userResultDto;
+	}
+	
+	@Override
+	public UserResultDto userInfoUpdate(UserDto userDto) {
+		// Security Context에서 UserSeq를 구한다
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		int userSeq = Integer.parseInt(authentication.getName());
+		userDto.setUserSeq(userSeq);
+		
+		UserResultDto userResultDto = new UserResultDto();
+		
+		if ( userDao.userInfoUpdate(userDto) == 1 ) {
 			userResultDto.setResult(SUCCESS);
 		} else {
 			userResultDto.setResult(FAIL);
@@ -206,6 +233,29 @@ public class UserServiceImpl implements UserService{
 		return userResultDto;
 	}
 
+	@Override
+	public UserResultDto userPasswordUpdate(UserDto userDto) {
+		// Security Context에서 UserSeq를 구한다
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		int userSeq = Integer.parseInt(authentication.getName());
+		userDto.setUserSeq(userSeq);
+		
+		UserResultDto userResultDto = new UserResultDto();
+		
+		BCryptPasswordEncoder b = new BCryptPasswordEncoder();
+		userDto.setUserPassword(b.encode(userDto.getUserPassword()));
+		
+		if ( userDao.userPasswordUpdate(userDto) == 1 ) {
+			userResultDto.setResult(SUCCESS);
+		} else {
+			userResultDto.setResult(FAIL);
+		}
+		return userResultDto;
+	}
+	
+	
+	
+	
 	@Override
 	public UserResultDto userDelete(int userSeq) {
 		UserResultDto userResultDto = new UserResultDto();
@@ -446,7 +496,7 @@ public class UserServiceImpl implements UserService{
 		}
 		return userResultDto;
 	}
-	
+
 }
 
 

@@ -1,8 +1,10 @@
 /* eslint-disable no-console */
 
 import { register } from 'register-service-worker'
-
+// * front server로 실행 할 경우 development 
+// * back server와 같이 실행 할 경우 production
 if (process.env.NODE_ENV === 'production') {
+  
   register(`${process.env.BASE_URL}service-worker.js`, {
     ready () {
       console.log(

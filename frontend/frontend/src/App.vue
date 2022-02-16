@@ -1,5 +1,7 @@
 <template>
   <v-app id="app">
+    <Snackbar />
+
     <div class="d-flex justify-center">
       <div class="curtain"></div>
 
@@ -17,6 +19,8 @@
           ></div>
 
           <router-view />
+
+          
           <!-- 하단 내비바 높이맞추기 위한 태그 -->
           <div
             v-if="noneNav"
@@ -37,11 +41,13 @@
 <script>
 import BottomNavbar from "./components/Navbar/BottomNavbar.vue";
 import TopNavbar from "./components/Navbar/TopNavbar.vue";
+import Snackbar from "./components/Snackbar.vue";
 export default {
   name: "App",
   components: {
     BottomNavbar,
     TopNavbar,
+    Snackbar,
   },
   data: () => ({
     noneNavPages: [
@@ -66,10 +72,10 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap");
 
 #app {
-  font-family: 'Gowun Dodum', sans-serif;
+  font-family: "Gowun Dodum", sans-serif;
   background-color: rgba(255, 255, 255, 0.5);
 }
 @-webkit-keyframes AnimationName {

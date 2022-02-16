@@ -1,7 +1,8 @@
 {
-  "name": "우리집SNS",
-  "theme_color": "#E01A1A",
-  "background_color": "#FF0000",
+  "name": "우리집 SNS",
+  "short_name": "우리집 SNS",
+  "theme_color": "#fff",
+  "background_color": "#6761e7",
   "display": "standalone",
   "scope": "/",
   "start_url": "/",

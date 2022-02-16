@@ -1,6 +1,14 @@
 <template>
   <v-app class="container">
     <div class="align-center">
+      <div v-if="!feedList.length" class="content-box pb-5">
+        <div class="justify-center d-flex">
+          <h3 class="mt-5">아직 작성된 피드가 없습니다.</h3>
+        </div>
+        <div class="justify-center d-flex">
+          <h3 class="my-5">어서 추억을 담아보아요 :)</h3>
+        </div>
+      </div>
       <div class="mb-5" v-for="(feeds, idx) in feedList" :key="idx">
         <div class="d-flex align-center">
           <h1>{{ feeds[0].feedEventDate }}</h1>
@@ -31,7 +39,8 @@
                 >
                   <!-- :src="require(`@/uploadImg/${file.fileUrl}`)" -->
                   <v-img
-                    :src="`http://newsimg.hankookilbo.com/2020/01/22/202001222303092476_2.jpg`"
+                    v-if="file.type == 'img'"
+                    :src="`https://i6e205.p.ssafy.io/${file.fileUrl}`"
                     :lazy-src="`https://picsum.photos/200/300`"
                     aspect-ratio="1"
                     class="grey lighten-2"
@@ -49,6 +58,26 @@
                       </v-row>
                     </template>
                   </v-img>
+                  <v-video
+                    v-else
+                    :src="`https://i6e205.p.ssafy.io/${file.fileUrl}`"
+                    :lazy-src="`https://picsum.photos/200/300`"
+                    aspect-ratio="1"
+                    class="grey lighten-2"
+                  >
+                  <template v-slot:placeholder>
+                      <v-row
+                        class="fill-height ma-0"
+                        align="center"
+                        justify="center"
+                      >
+                        <v-progress-circular
+                          indeterminate
+                          color="grey lighten-5"
+                        ></v-progress-circular>
+                      </v-row>
+                    </template>
+                  </v-video>
                 </v-col>
               </v-row>
             </v-container>
@@ -112,13 +141,32 @@ export default {
               feedData.feedEventDate =
                 currFeed.feedEventDate.year +
                 "년" +
+                " " +
                 currFeed.feedEventDate.month +
                 "월" +
+                " " +
                 currFeed.feedEventDate.day +
                 "일";
+              // feedData.feedEventDate = this.$moment(currFeed.feedEventDate).format("YYYY년 MM월 DD일");
               feedData.feedLocation = currFeed.feedLocation; // 등록안된 곳은 빈값''
               feedData.feedTitle = currFeed.feedTitle;
-              feedData.fileList = currFeed.fileList;
+              feedData.fileList = [];
+              console.log('=======================================')
+              for (let i = 0; i < currFeed.fileList.length; i++){
+                if (currFeed.fileList[i].fileContentType.includes("image")){
+                  feedData.fileList.push({
+                    fileUrl : currFeed.fileList[i].fileUrl,
+                    type : 'img',
+                  })
+                }else{
+                  feedData.fileList.push({
+                    fileUrl : currFeed.fileList[i].fileUrl,
+                    type : 'video',
+                  })
+                }
+              } 
+              
+              console.log(currFeed.fileList)
               if (i === 0) {
                 feedByDateList.push(feedData);
               } else if (

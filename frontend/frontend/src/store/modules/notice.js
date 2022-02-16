@@ -6,7 +6,14 @@ import router from "../../router";
 const notice = {
   namespaced: true,
   state: {
-    recv: { userProfileUrl: null, userSeq: null, userName: null },
+    recv: {
+      userProfileUrl: null,
+      userSeq: null,
+      noticeType: null,
+      noticeContentId: null,
+      userName: null,
+      noticeMessage: null,
+    },
     noticeAlarm: false,
     unreadNoticeCount: 0,
     noticeList: [],
@@ -15,7 +22,11 @@ const notice = {
     dialog: false,
   },
   mutations: {
-    NOTICE_ALARM(state) {
+    NOTICE_DISCONNECT(state) {
+      state.noticeList = [];
+    },
+    NOTICE_ALARM(state, recv) {
+      state.recv = recv;
       state.noticeAlarm = true;
       setTimeout(() => (state.noticeAlarm = false), 2500);
     },
@@ -33,12 +44,51 @@ const notice = {
         },
       })
         .then((res) => {
-          console.log(res);
+          const noticeList = [];
+          const count = res.data.count;
           if (res.data.noticeResultDtoList.length) {
+            res.data.noticeResultDtoList.forEach((notice) => {
+              let message = "";
+              switch (notice.noticeType) {
+                case "feedCreate":
+                  message = "새로운 피드를 작성했습니다.";
+                  break;
+                case "commentCreate":
+                  message = "회원님의 글에 댓글을 작성했습니다.";
+                  break;
+                case "emotionCreate":
+                  message = "회원님의 글에 감정표현을 했습니다.";
+                  break;
+                case "shareCreate":
+                  message = "추억을 공유했습니다.";
+                  break;
+                case "voteCreate":
+                  message = "새로운 투표를 작성했습니다.";
+                  break;
+                case "voteEnd":
+                  message = "투표를 종료했습니다.";
+                  break;
+                case "ghostLegCreate":
+                  message = "새로운 사다리타기를 작성했습니다.";
+                  break;
+                default:
+                  message = notice.noticeType + "이 작성되었습니다.";
+              }
+              notice["noticeMessage"] = message;
+              noticeList.push(notice);
+            });
+          }
+
+          return { noticeList, count };
+        })
+
+        .then((res) => {
+          console.log(res);
+          if (res.noticeList.length) {
             // 20개씩 인피니티스크롤로 구현
             state.start += 20;
-            state.noticeList.push(...res.data.noticeResultDtoList);
-            state.unreadNoticeCount = res.data.count;
+            state.noticeList.push(...res.noticeList);
+            state.unreadNoticeCount = res.count;
           }
         })
         .catch((err) => {
@@ -120,12 +170,50 @@ const notice = {
         },
       })
         .then((res) => {
-          console.log(res);
+          const noticeList = [];
+          const count = res.data.count;
           if (res.data.noticeResultDtoList.length) {
+            res.data.noticeResultDtoList.forEach((notice) => {
+              let message = "";
+              switch (notice.noticeType) {
+                case "feedCreate":
+                  message = "새로운 피드를 작성했습니다.";
+                  break;
+                case "commentCreate":
+                  message = "회원님의 글에 댓글을 작성했습니다.";
+                  break;
+                case "emotionCreate":
+                  message = "회원님의 글에 감정표현을 했습니다.";
+                  break;
+                case "shareCreate":
+                  message = "추억을 공유했습니다.";
+                  break;
+                case "voteCreate":
+                  message = "새로운 투표를 작성했습니다.";
+                  break;
+                case "voteEnd":
+                  message = "투표를 종료했습니다.";
+                  break;
+                case "ghostLegCreate":
+                  message = "새로운 사다리타기를 작성했습니다.";
+                  break;
+                default:
+                  message = notice.noticeType + "이 작성되었습니다.";
+              }
+              notice["noticeMessage"] = message;
+              noticeList.push(notice);
+            });
+          }
+
+          return { noticeList, count };
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.noticeList.length) {
             // 20개씩 인피니티스크롤로 구현
             commit("GET_NOTICE_LIST", {
-              noticeList: res.data.noticeResultDtoList,
-              count: res.data.count,
+              noticeList: res.noticeList,
+              count: res.count,
             });
             $state.loaded();
           } else {
@@ -155,7 +243,7 @@ const notice = {
         );
       }
     },
-    connect({ state, commit, rootState }) {
+    connect({ commit, rootState }) {
       const serverURL = `${process.env.VUE_APP_MCS_URL}/notice`;
       const token = localStorage.getItem("jwt");
       const headers = {
@@ -181,17 +269,42 @@ const notice = {
               `/api/notice/send/${rootState.account.nowGroup.groupId}`,
               (res) => {
                 console.log("구독으로 받은 메시지 입니다.", res.body);
-
                 // 받은 데이터를 json으로 파싱하고 저장
-                state.recv = JSON.parse(res.body);
-
+                const recv = JSON.parse(res.body);
+                let message = "";
+                switch (recv.noticeType) {
+                  case "feedCreate":
+                    message = "새로운 피드를 작성했습니다.";
+                    break;
+                  case "commentCreate":
+                    message = "회원님의 글에 댓글을 작성했습니다.";
+                    break;
+                  case "emotionCreate":
+                    message = "회원님의 글에 감정표현을 했습니다.";
+                    break;
+                  case "shareCreate":
+                    message = "추억을 공유했습니다.";
+                    break;
+                  case "voteCreate":
+                    message = "새로운 투표를 작성했습니다.";
+                    break;
+                  case "voteEnd":
+                    message = "투표를 종료했습니다.";
+                    break;
+                  case "ghostLegCreate":
+                    message = "새로운 사다리타기를 작성했습니다.";
+                    break;
+                  default:
+                    message = notice.noticeType + "이 작성되었습니다.";
+                }
+                recv["noticeMessage"] = message;
                 if (
-                  state.recv.targetUserList.some(
+                  recv.targetUserList.some(
                     (id) => id === rootState.account.userSeq
                   )
                 ) {
                   commit("CAL_NOTICE_COUNT", 1);
-                  commit("NOTICE_ALARM");
+                  commit("NOTICE_ALARM", recv);
                 }
 
                 commit("NOTICE_CLEAR");
@@ -205,8 +318,9 @@ const notice = {
         );
       }
     },
-    disconnect() {
+    disconnect({ commit }) {
       this.stompClient.disconnect();
+      commit("NOTICE_DISCONNECT");
       console.log("연결해제");
     },
   },

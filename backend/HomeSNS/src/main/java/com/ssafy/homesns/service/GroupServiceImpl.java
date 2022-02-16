@@ -35,12 +35,7 @@ public class GroupServiceImpl implements GroupService{
 	
 	String uploadFolder = "upload";
 	
-	/* for production code */
-	//uploadPath = getServletContext().getRealPath("/");
-	// F:\SSAFY\ssafy5\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\BoardWebFileUpload\
-
-	/* for eclipse development code */
-	String uploadPath = "/Users" + File.separator + "sac" + File.separator + "ssafy" + File.separator + "2nd";
+	String uploadPath = "/usr" + File.separator + "share" + File.separator + "nginx" + File.separator + "html";
 	
 	@Override
 	@Transactional
@@ -93,6 +88,9 @@ public class GroupServiceImpl implements GroupService{
 						
 					// Profile Image 추가
 					groupDao.groupProfileImageInsert(profileImageDto);
+					
+					// Group_List에 그룹 프로필 이미지 추가,이미만들어진 테이블 update
+                    groupDao.groupProfileImageUpdate(profileImageDto);
 				}
 
 				groupResultDto.setResult(SUCCESS);
@@ -148,7 +146,13 @@ public class GroupServiceImpl implements GroupService{
 				
 				// Group 테이블의 ProfileImageUrl 수정
 				groupDao.groupProfileImageUpdate(profileImageDto);
-			}
+			}else {
+                ProfileImageDto profileImageDto = new ProfileImageDto();
+                profileImageDto.setGroupId(groupId);
+                profileImageDto.setProfileImageUrl("/img/noimage.png");
+                // Group List테이블의 ProfileImageUrl 수정
+                groupDao.groupProfileImageUpdate(profileImageDto);
+            }
 			
 			groupResultDto.setResult(SUCCESS);
 		} catch(Exception e) {

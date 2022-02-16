@@ -1,6 +1,9 @@
 <template>
   <div class="container content-box mb-2">
     <v-row class="ma-1">
+       <v-col class="text-center" v-if="!feeds.length"
+        ><h3>스크랩한 피드가 없습니다.</h3>
+      </v-col>
       <v-col class="pa-0" cols="4" v-for="feed in feeds" :key="feed.id">
         <v-img
           class="feed-img"

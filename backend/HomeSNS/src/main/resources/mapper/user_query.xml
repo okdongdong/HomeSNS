@@ -4,12 +4,12 @@
 
 
 	<insert id="userRegister" parameterType="com.ssafy.homesns.dto.UserDto">
-		insert into USER (  user_id,     user_password,     user_email,     user_name,     user_nickname,     user_phone,     user_bod,     user_profile_image_url,   user_register_date,   user_cls,     refresh_token   ) 
-		          values (  #{userId},   #{userPassword},   #{userEmail},   #{userName},   #{userNickname},   #{userPhone},   #{userBod},   #{userProfileImageUrl},   now(),                #{userCls},   #{refreshToken} )
+		insert into USER (  user_id,     user_password,     user_email,     user_name,     user_nickname,     user_phone,     user_bod,     user_register_date,   user_cls,     refresh_token   ) 
+		          values (  #{userId},   #{userPassword},   #{userEmail},   #{userName},   #{userNickname},   #{userPhone},   #{userBod},      now(),                #{userCls},   #{refreshToken} )
 	</insert>
 
 	<insert id="userProfileImageInsert" parameterType="com.ssafy.homesns.dto.ProfileImageDto" useGeneratedKeys="true" keyProperty="profileImageId">
-		INSERT INTO PROFILE_IMAGE ( USER_SEQ,    PROFILE_IMAGE_NAME,   PROFILE_IMAGE_SIZE,   PROFILE_IMAGE_Url,   REGDT  )
+		INSERT INTO PROFILE_IMAGE ( USER_SEQ,    PROFILE_IMAGE_NAME,   PROFILE_IMAGE_SIZE,   PROFILE_IMAGE_Url,   REG_DT  )
 		                   VALUES ( #{userSeq},  #{profileImageName},  #{profileImageSize},  #{profileImageUrl},  now()  )
 	</insert>
 	
@@ -29,10 +29,28 @@
 		 WHERE USER_SEQ = #{userSeq}
 	</select>
 	
-	<update id="userUpdate" parameterType="com.ssafy.homesns.dto.UserDto">
-		UPDATE USER SET USER_PASSWORD = #{userPassword}, USER_NAME = #{userName}, USER_NICKNAME = #{userNickname}, USER_BOD = #{userBod}, USER_PROFILE_IMAGE_URL = #{userProfileImageUrl}, REFRESH_TOKEN = #{refreshToken}  
+	
+	<select id="userPasswordSearch" parameterType="int" resultType="string">
+		SELECT USER_PASSWORD as userPassword
+		  FROM USER 
+		 WHERE USER_SEQ = #{userSeq}
+	</select>
+	
+	<update id="userInfoUpdate" parameterType="com.ssafy.homesns.dto.UserDto">
+		UPDATE USER 
+		   SET USER_EMAIL = #{userEmail},
+		       USER_NAME = #{userName},
+		       USER_PHONE = #{userPhone},
+		       USER_BOD = #{userBod}
 		 WHERE USER_SEQ = #{userSeq}
 	</update>
+	
+	<update id="userPasswordUpdate" parameterType="com.ssafy.homesns.dto.UserDto">
+		UPDATE USER 
+		   SET USER_PASSWORD = #{userPassword}  
+		 WHERE USER_SEQ = #{userSeq}
+	</update>
+
 
 	<delete id="userDelete" parameterType="int">
 		DELETE FROM USER WHERE USER_SEQ = #{userSeq}

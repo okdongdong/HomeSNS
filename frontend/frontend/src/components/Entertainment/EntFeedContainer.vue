@@ -10,21 +10,23 @@
     </v-overlay>
 
     <div class="d-flex px-3 mt-5 align-center">
-      <h2 class="d-inline-flex">{{ content.info.createdAt }}</h2>
+      <h2 class="d-inline-flex">
+        {{ content.info.createdAt | moment("YYYY년 MM월 DD일") }}
+      </h2>
       <span class="d-flex ml-auto">{{ contentType }}</span>
     </div>
     <div class="container content-box">
       <div class="d-flex">
-        <div class="d-flex align-center">
-          <ProfilePhoto
-            :size="50"
-            :userSeq="content.info.authorId"
-            :imgUrl="content.info.authorPicUrl"
-            class="mx-3"
-          />
-          <div>
-            <h2>{{ content.info.title }}</h2>
-            <p>{{ content.info.author }}</p>
+        <div class="align-center">
+          <h2>{{ content.info.title }}</h2>
+          <div class="d-flex align-center">
+            <ProfilePhoto
+              :size="24"
+              :userSeq="content.info.authorId"
+              :imgUrl="content.info.authorPicUrl"
+              class="mx-3"
+            />
+            <div>{{ content.info.author }}</div>
           </div>
         </div>
         <div class="ma-2 d-flex ml-auto align-center">
@@ -38,7 +40,7 @@
       <div v-if="content.type == 'vote'">
         <Vote :info="content.info" />
       </div>
-      <div v-else-if="content.type == 'ghost'">
+      <div v-else-if="content.type == 'ghostLeg'">
         <GhostLeg :info="content.info" />
       </div>
     </div>
@@ -90,7 +92,7 @@ export default {
     contentType() {
       if (this.content.type === "vote") {
         return "투표";
-      } else if (this.content.type === "ghost") {
+      } else if (this.content.type === "ghostLeg") {
         return "사다리타기";
       } else {
         return null;

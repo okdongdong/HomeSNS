@@ -2,6 +2,7 @@ package com.ssafy.homesns.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,7 +49,8 @@ public class GroupController {
 	// 1. 그룹을 생성
 	// 2. 해당 그룹의 아이디 찾기
 	// 3. 찾은 그룹의 아이디와 자신을 그룹 멤버로 등록
-	@PostMapping(value="/group")
+
+	@PostMapping(consumes = MediaType.ALL_VALUE, value="/group") 
 	public ResponseEntity<GroupResultDto> groupListCreate(
 			@ModelAttribute GroupDto groupDto,
 			MultipartHttpServletRequest request) {
@@ -111,7 +113,7 @@ public class GroupController {
 	
 	@PostMapping(value="/group/profileImage")
 	public ResponseEntity<GroupResultDto> groupProfileImageUpdate(
-				@RequestParam int groupId,
+				@RequestBody int groupId,
 				MultipartHttpServletRequest request
 			) {
 		
@@ -199,18 +201,11 @@ public class GroupController {
 	// 그룹장이 그룹에서 나가기 위해서는 마이페이지 같은 부분에서 나가는 것도 좋은 방법일 것
 	// 프론트에서 그룹장과 현재 유저가 같다면 알아서 기능을 사용 못하도록 해줄 수 있을 것
 	// ==> 프론트에서 처리할 일, 그룹장이 그룹을 삭제하는 것은 따로 구현할 수 있을 것 ( 프론트에서 막는다 )
-	@DeleteMapping(value="/group/member/{groupId}")
-	public ResponseEntity<GroupMemberResultDto> groupMemberDelete(@PathVariable(value="groupId") int groupId) {
-		// Security Context에서 UserSeq를 구한다
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		int userSeq = Integer.parseInt(authentication.getName());
+	@DeleteMapping(value="/group/member")
+	public ResponseEntity<GroupMemberResultDto> groupMemberKick(@RequestBody GroupMemberDto groupMemberDto) {
 		
-		GroupMemberDto groupMemberDto = new GroupMemberDto();
-		groupMemberDto.setGroupId(groupId);
-		groupMemberDto.setUserSeq(userSeq);
-
 		GroupMemberResultDto groupResultDto = groupService.groupMemberDelete(groupMemberDto);
-
+		
 		if ( groupResultDto.getResult() == SUCCESS ) {
 			return new ResponseEntity<GroupMemberResultDto>(groupResultDto, HttpStatus.OK);
 		}

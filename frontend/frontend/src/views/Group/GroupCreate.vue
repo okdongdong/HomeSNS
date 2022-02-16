@@ -1,4 +1,3 @@
-z
 <template>
   <v-app class="my-background">
     <v-spacer></v-spacer>
@@ -155,7 +154,7 @@ export default {
       let data = new FormData();
       data.append("groupName", this.groupname);
       data.append("groupPassword", this.password);
-      data.append("groupProfileImageUrl", this.image);
+      data.append("profileImage", this.image);
       // let data ={ // 연동할때 주석 처리하기
       //   groupName : this.groupname,
       //   groupPassword : this.password,
@@ -175,6 +174,10 @@ export default {
           console.log("123");
         })
         .catch((error) => {
+          this.$store.commit(
+            "snackbar/SET_SNACKBAR",
+            "해당 그룹이름을 사용할 수 없습니다."
+          );
           console.log(error);
         });
     },

@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.*;
 		allowedHeaders = "*",
 		methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, 
 				RequestMethod.DELETE, RequestMethod.HEAD, RequestMethod.OPTIONS })
-
 @RestController
-@RequestMapping(value="/api")
 public class NoticeController {
     @Autowired
     NoticeService noticeService;
@@ -28,10 +26,10 @@ public class NoticeController {
     private static final int FAIL = -1;
 
     // receive를 메시지를 받을 endpoint로 설정합니다.
-    @MessageMapping("/notice/receive/{groupId}")
+    @MessageMapping("/api/notice/receive/{groupId}")
 
     // send로 메시지를 반환합니다.
-    @SendTo("/notice/send/{groupId}")
+    @SendTo("/api/notice/send/{groupId}")
     public NoticeDto noticeCreate(NoticeDto noticeDto) {
 
         NoticeResultListDto noticeResultListDto = noticeService.noticeCreate(noticeDto);
@@ -41,7 +39,7 @@ public class NoticeController {
     }
 
     // 현재 유저가 들어가 있는 그룹의 리스트를 가져온다
-    @GetMapping(value = "/noticelist")
+    @GetMapping(value = "/api/noticelist")
     public ResponseEntity<NoticeResultListDto> noticeListSearch(
             @RequestParam("groupId") int groupId,
             @RequestParam("start") int start
@@ -59,7 +57,7 @@ public class NoticeController {
         return new ResponseEntity<NoticeResultListDto>(noticeResultListDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PutMapping(value = "/noticeread/{noticeId}")
+    @PutMapping(value = "/api/noticeread/{noticeId}")
     @ResponseBody
     public ResponseEntity noticeRead(@PathVariable int noticeId) {
         if (noticeService.noticeRead(noticeId) == SUCCESS) {
@@ -68,7 +66,7 @@ public class NoticeController {
         return new ResponseEntity(FAIL, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PutMapping(value = "/noticelist/{groupId}")
+    @PutMapping(value = "/api/noticelist/{groupId}")
     @ResponseBody
     public ResponseEntity noticeReadAll(@PathVariable int groupId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

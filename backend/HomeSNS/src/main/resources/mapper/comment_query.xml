@@ -3,10 +3,63 @@
 <mapper namespace="com.ssafy.homesns.dao.CommentDao">
 
 	<insert id="commentCreate" parameterType="com.ssafy.homesns.dto.CommentDto" useGeneratedKeys="true" keyProperty="commentId">
-		INSERT INTO COMMENT ( FEED_ID,    COMMENT_TAG,    COMMENT_AUTHOR,    COMMENT_CONTENT,  COMMENT_UPLOAD_DATE   )
-		             VALUES ( #{feedId},  #{commentTag},  #{commentAuthor},  #{commentContent},       now()                 )
+		INSERT INTO COMMENT ( FEED_ID,    COMMENT_AUTHOR,    COMMENT_CONTENT,  COMMENT_UPLOAD_DATE   )
+		             VALUES ( #{feedId},   #{commentAuthorSeq},  #{commentContent},       now() )
 	</insert>
 	
+	<insert id="commentTagCreate" parameterType="map" >
+		INSERT INTO COMMENT_TAG ( COMMENT_ID,    COMMENT_TAG)
+		             VALUES ( #{commentId},  #{commentTagSeq} )
+	</insert>
+	
+	
+<!-- 	감정 기능
+	댓글 가져오는 SQL 
+	<select id="commentList" parameterType="map" resultType="com.ssafy.homesns.dto.CommentDto"> 
+		SELECT c.comment_id,feed_id,comment_tag as comment_tag_seq, u2.user_name as comment_tag_name, comment_author as comment_author_seq, u1.user_name as comment_author,comment_content,comment_upload_date, 
+				ce.good, ce.sad, ce.check, ce.fun , ce.amaze, ceu.EMOTION_CODE as code
+		FROM HOME_SNS.COMMENT c
+        JOIN HOME_SNS.USER u1 ON c.comment_author = u1.user_seq 
+        JOIN HOME_SNS.USER u2 ON c.comment_tag = u2.user_seq 
+        LEFT OUTER JOIN HOME_SNS.COMMENT_EMOTION ce ON c.comment_id = ce.comment_id  
+        LEFT OUTER JOIN HOME_SNS.COMMENT_EMOTION_USER_USE ceu ON ce.COMMENT_ID = ceu.COMMENT_ID AND ceu.USER_SEQ = #{userSeq}
+       WHERE feed_id = #{feedId}
+       LIMIT #{limit} OFFSET #{offset}
+	</select>
+ -->	
+
+<!-- 댓글 불러오기 -->
+	<select id="commentSearch" parameterType="int" resultType="com.ssafy.homesns.dto.CommentDto"> 
+		SELECT c.COMMENT_ID,FEED_ID, COMMENT_AUTHOR as comment_author_seq, u1.USER_NAME as comment_author,COMMENT_CONTENT,COMMENT_UPLOAD_DATE,
+		u1.USER_PROFILE_IMAGE_URL as commentUserProfileImageUrl
+		FROM HOME_SNS.COMMENT c
+        JOIN HOME_SNS.USER u1 ON c.COMMENT_AUTHOR = u1.USER_SEQ 
+       WHERE COMMENT_ID = #{commentId}
+	</select>
+
+
+
+<!-- 댓글리스트 불러오기  -->
+	<select id="commentList" parameterType="map" resultType="com.ssafy.homesns.dto.CommentDto"> 
+	  SELECT c.COMMENT_ID,FEED_ID, COMMENT_AUTHOR as commentAuthorSeq, u1.USER_NAME as commentAuthor,COMMENT_CONTENT,COMMENT_UPLOAD_DATE,
+	  		   u1.USER_PROFILE_IMAGE_URL as commentUserProfileImageUrl
+		FROM HOME_SNS.COMMENT c
+        JOIN HOME_SNS.USER u1 ON c.comment_author = u1.user_seq 
+       WHERE feed_id = #{feedId}
+    ORDER BY COMMENT_UPLOAD_DATE DESC
+   	   LIMIT #{limit} OFFSET #{offset}
+    
+	</select>
+ 
+ <!-- 댓글 태그 리스트 불러오기 -->
+ 	<select id="commentTagList" parameterType="int" resultType="String"> 
+		SELECT USER_NAME as  CommentTagName
+		  FROM  COMMENT_TAG ct 
+		  JOIN USER u 
+		    ON ct.COMMENT_TAG = u.USER_SEQ
+		 WHERE COMMENT_ID = #{commentId}
+	</select>
+ 
 	<update id="commentUpdate" parameterType="com.ssafy.homesns.dto.CommentDto">
 		UPDATE COMMENT
 		   SET COMMENT_CONTENT = #{commentContent}

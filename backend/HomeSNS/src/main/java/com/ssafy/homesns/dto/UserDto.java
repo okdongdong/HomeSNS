@@ -20,7 +20,18 @@ public class UserDto {
 	// 세션 로그인용 refreshtoken
 	private String refreshToken;
 
+	// 그룹 멤버의 권한 확인용
+	private String managerYn;
 	
+	
+	public String getManagerYn() {
+		return managerYn;
+	}
+
+	public void setManagerYn(String managerYn) {
+		this.managerYn = managerYn;
+	}
+
 	public int getUserSeq() {
 		return userSeq;
 	}
@@ -122,7 +133,8 @@ public class UserDto {
 		return "UserDto [userSeq=" + userSeq + ", userId=" + userId + ", userPassword=" + userPassword + ", userEmail="
 				+ userEmail + ", userName=" + userName + ", userNickname=" + userNickname + ", userPhone=" + userPhone
 				+ ", userBod=" + userBod + ", userProfileImageUrl=" + userProfileImageUrl + ", userRegisterDate="
-				+ userRegisterDate + ", userCls=" + userCls + ", refreshToken=" + refreshToken + "]";
+				+ userRegisterDate + ", userCls=" + userCls + ", refreshToken=" + refreshToken + ", managerYn="
+				+ managerYn + "]";
 	}
-	
+
 }

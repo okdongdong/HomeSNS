@@ -2,6 +2,6 @@
 application.properties
 /Servers/
 .meta
-frontend/
 static/
 vue.config.js
+key.p12

@@ -12,7 +12,7 @@
 
     <v-form ref="form" @submit.prevent="submit">
       <v-container fluid>
-        <h1>피드작성{{ feedId }}</h1>
+        <h1>피드작성</h1>
         <v-row>
           <!-- 날짜 -->
           <v-col cols="12">
@@ -60,12 +60,12 @@
               v-else-if="file.type == 'video' && feedId != -1"
               autoplay
               muted
-              :src="`https://dimg.donga.com/wps/NEWS/IMAGE/2021/05/14/106923490.2.jpg`"
+              :src="`https://i6e205.p.ssafy.io/${file.fileUrl}`"
               @click="deleteFile(i,file)"
             ></video>
             <v-img
               v-else-if="file.type == 'img' && feedId != -1"
-              :src="`https://dimg.donga.com/wps/NEWS/IMAGE/2021/05/14/106923490.2.jpg`"
+              :src="`https://i6e205.p.ssafy.io/${file.fileUrl}`"
               :lazy-src="`https://picsum.photos/200/300`"
               aspect-ratio="1"
               class="grey lighten-2"
@@ -242,7 +242,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import axios from "axios";
 import { gmapApi } from "vue2-google-maps";
 // import Snackbar from "@/components/Snackbar.vue";
@@ -298,6 +298,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions("notice", ["send"]),
     // 장소,
     getFeedInfo() {
       let groupId = this.nowGroup.groupId;
@@ -670,9 +671,15 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         })
-          .then(() => {
+          .then((res) => {
             console.log("피드작성 성공");
             this.nowLoading = false;
+            const noticeInfo = {
+                targetUserSeq: -1,
+                noticeType: "feedCreate",
+                noticeContentId: res.data.feedId,
+              };
+              this.send(noticeInfo);
           })
           .then(() => {
             this.$router.push({
@@ -738,6 +745,7 @@ export default {
     },
     google: gmapApi,
     ...mapState("account", ["nowGroup"]),
+    
   },
 };
 </script>

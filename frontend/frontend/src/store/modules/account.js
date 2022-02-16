@@ -9,6 +9,7 @@ const account = {
     userName: null,
     userImgUrl: null,
     nowGroup: {
+      groupLeaderSeq: null,
       groupId: null,
       groupName: null,
       groupProfileImageUrl: null,
@@ -16,11 +17,11 @@ const account = {
     isLogin: localStorage.getItem("jwt") ? true : false,
   },
   mutations: {
-    LOGIN: function (state, res) {
+    LOGIN: function (state, data) {
       state.isLogin = true;
-      state.userSeq = res.data.userSeq;
-      state.userName = res.data.userName;
-      state.userImgUrl = res.data.userProfileImageUrl;
+      state.userSeq = data.userSeq;
+      state.userName = data.userName;
+      state.userImgUrl = data.userProfileImageUrl;
     },
     LOGOUT: function (state) {
       state.isLogin = false;
@@ -35,8 +36,6 @@ const account = {
   },
   actions: {
     login: function ({ commit }, credentials) {
-      // 로그인 임시연결
-      // router.push({name:"Select"})
       axios({
         method: "POST",
         url: `${process.env.VUE_APP_MCS_URL}/login`,
@@ -45,10 +44,18 @@ const account = {
         .then((res) => {
           localStorage.setItem("jwt", res.headers.authorization);
           console.log(res);
-          commit("LOGIN", res);
+          commit("LOGIN", res.data);
           router.push({ name: "Select" });
         })
         .catch((err) => {
+          // commit("CLOSE_SNACKBAR", null, { root: true });
+          commit(
+            "snackbar/SET_SNACKBAR",
+            "아이디와 비밀번호가 일치하지 않습니다.",
+            {
+              root: true,
+            }
+          );
           console.log(err);
         });
     },

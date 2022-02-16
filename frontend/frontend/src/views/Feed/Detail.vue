@@ -12,23 +12,24 @@
 
       <v-row class="py-3">
         <v-col cols="10">
-        <div>
-          <h1 class="d-inline-flex">{{ feed.title }}</h1>
-        </div>
-        <div>
-          <div class="d-inline-flex">{{ feed.eventDate }}</div>
-        </div>
+          <div>
+            <h1 class="d-inline-flex">{{ feed.title }}</h1>
+          </div>
+          <div>
+            <div class="d-inline-flex">{{ feed.eventDate }}</div>
+          </div>
         </v-col>
         <v-col cols="2" class="d-flex justify-center align-center">
-        <FeedPopup
-          :feed-id="feedId"
-          :feed-author-seq="feedAuthorSeq"
-          />
+          <FeedPopup :feed-id="feedId" :feed-author-seq="feedAuthorSeq" />
         </v-col>
       </v-row>
       <hr />
-      <div class="d-flex align-center" style="margin-top:12px;margin-bottom:3px;">
-        <ProfilePhoto :size="40" />
+      <div class="d-flex align-center" style="margin-top: 12px; margin-bottom: 3px">
+        <ProfilePhoto
+          :size="25"
+          :img-url="feedAuthorProfileImageUrl"
+          :user-seq="feedAuthorSeq"
+        />
         <h3 class="mx-3">
           {{ feed.author }}
         </h3>
@@ -39,62 +40,106 @@
       <!-- 사진 -->
       <v-carousel height="400" hide-delimiter-background show-arrows-on-hover>
         <v-carousel-item v-for="(imgUrl, i) in feed.imgUrls" :key="i">
-          <v-img :src="imgUrl" aspect-ratio="1"></v-img>
+          <v-img :src="`https://i6e205.p.ssafy.io/${imgUrl.fileUrl}`" aspect-ratio="1"></v-img>
         </v-carousel-item>
       </v-carousel>
     </div>
     <div>
       <v-row class="icon-group">
+        <!-- 하트 -->
         <v-col cols="10">
-        <span style="padding:3px;"></span>
-          <v-btn icon large @click="showEmotions ? (showEmotions = false) : (showEmotions = true)">
-            <v-icon>favorite_border</v-icon>
+          <span style="padding: 8px"></span>
+          <v-btn
+            style="width: 25px"
+            icon
+            large
+            @click="showEmotions ? (showEmotions = false) : (showEmotions = true)"
+          >
+            <!-- <v-img v-if="currEmotion == undefined" :src="emotions[0].emoji" style="width: 10px; height: auto"></v-img> -->
+            <v-img :src="currEmotion.emoji" style="width: 10px; height: auto"></v-img>
           </v-btn>
-          <!-- 댓글버튼 필요없음.. -->
-          <!-- <v-btn icon large>
-            <v-icon>chat_bubble_outline</v-icon>
-          </v-btn> -->
         </v-col>
+        <!-- 북마크 -->
         <v-col cols="2">
-          <v-btn icon large style="padding:0;">
-            <v-icon>bookmark_border</v-icon>
+          <v-btn icon large style="padding: 0" @click="bookmarkToggle">
+            <v-icon v-if="bookmark == false">bookmark_border</v-icon>
+            <v-icon v-else>bookmark</v-icon>
           </v-btn>
         </v-col>
       </v-row>
       <!-- 감정 버튼 -->
       <Emotion
         :show-emotions="showEmotions"
-        style="position:absolute;"
+        @select-emotion="changeEmotion"
+        style="position: absolute"
+        @emotion-show-toggle="emotionShowToggle"
       />
     </div>
-      <div class="content-group" v-html="getContent()"></div>
-      <!-- 댓글 부분 ! -->
-      <v-form class="px-3" ref="form" @submit.prevent="createComment">
-        <div class="d-flex">
-        <v-text-field label="댓글 달기" v-model="comment"></v-text-field>
-          <v-btn
-            class="my-5 ml-2"
-            elevation="3"
-            rounded
-            dark
-            color="indigo"
-            small
-            >
+    <div class="content-group" v-html="getContent()"></div>
+    <!-- 해시태그 부분 -->
+    <div class="px-3">
+      <v-chip-group active-class="primary--text" column>
+        <v-chip v-for="hashtag in feed.hashtagList" :key="hashtag.hashtagContent" color="white">
+          #{{ hashtag.hashtagContent }}
+        </v-chip>
+      </v-chip-group>
+    </div>
+    <!-- 감정 숫자표현 -->
+    <div class="px-3">
+      <v-chip-group active-class="primary--text" column>
+        <span v-for="emotion in emotions" :key="emotion.code">
+        <v-chip class="px-2" small color="white" v-if="emotion.cnt != 0">
+          <v-avatar center>
+            <v-img :src="emotion.emoji"></v-img>
+          </v-avatar>
+          <span class="pl-1">{{ emotion.cnt }}</span>
+        </v-chip>
+        </span>
+      </v-chip-group>
+    </div>
+    <!-- 댓글 부분 ! -->
+    <v-form class="px-3" ref="form" @submit.prevent="createComment">
+      <div class="d-flex">
+        <v-text-field label="댓글 달기" v-model="currComment"> </v-text-field>
+        <v-btn
+          class="my-5 ml-2"
+          elevation="3"
+          rounded
+          dark
+          color="indigo"
+          small
+          @click="createComment"
+        >
           게시
         </v-btn>
-        </div>
-      </v-form>
-      <Comment v-for="(comment,idx) in comments" :key="idx" :comment="comment" />
+      </div>
+      <v-card class="ml-1" max-width="400" v-if="commentInTag">
+        <v-list>
+          <v-list-item-group v-model="tagList" multiple color="indigo">
+            <v-list-item v-for="member in members" :key="member.userName">
+              <v-list-item-content>
+                <v-list-item-title
+                  v-text="member.userName"
+                  @click.stop="selectTagMember(member)"
+                ></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-card>
+    </v-form>
+    <Comment v-for="(comment, idx) in comments" :key="idx" :comment="comment" :feed-id="feedId"/>
+    <infinite-loading @infinite="getComments"></infinite-loading>
   </v-app>
 </template>
 
 <script>
 import Comment from "../../components/Feed/Comment.vue";
-import FeedPopup from "../../components/Feed/FeedPopup.vue"
+import FeedPopup from "../../components/Feed/FeedPopup.vue";
 import Emotion from "../../components/Feed/Emotion.vue";
 import ProfilePhoto from "../../components/ProfilePhoto.vue";
 import axios from "axios";
-// import { mapState } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "Detail",
@@ -111,42 +156,62 @@ export default {
     nowLoading: false,
     tab: 0,
     showEmotions: false,
-    feedAuthorSeq : null,
+    feedAuthorSeq: null,
+    feedAuthorProfileImageUrl: null,
     feed: {
       // 샘플 데이터
       author: null,
       title: null,
       //author profile img 필요
       content: null,
-      imgUrls: [
-        "https://bbs.bepick.in/bbs/2021/12/085af6f07ceabed2af78ce0646341f8c_1103933013.jpeg",
-        "https://img.hankyung.com/photo/202112/BF.28426974.1.jpg",
-        "http://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2021/07/05/41bdae8f-ae62-490e-9f28-f790ab37fe67.jpg",
-      ],
+      imgUrls: [],
       uploadDate: null,
       eventDate: null,
       location: null,
+      hashtagList: [],
     },
-    comment:null,
-    memberList:[], // 해시태그위한 멤버리스트
-    memberToggle:false,
-    tagList:[], // 해시태그한 사람
-    comments: [
-      {
-        author: "할매",
-        tag: "임시태그",
-        content: "댓글내용",
-        uploadDate: "2011-11-11",
-      },
-      {
-        author: "할매",
-        tag: "임시태그",
-        content: "댓글내용",
-        uploadDate: "2011-11-11",
-      },
+    // 감정
+    emotions: [
+      { emoji: require("@/assets/emotions/heart_off.png"), status: "null", code: 30000, cnt:0},
+      { emoji: require("@/assets/emotions/heart_on.png"), status: "good", code: 30001, cnt:0},
+      { emoji: require("@/assets/emotions/sad.png"), status: "sad", code: 30002, cnt:0},
+      { emoji: require("@/assets/emotions/check.png"), status: "check", code: 30003 , cnt:0},
+      { emoji: require("@/assets/emotions/fun.png"), status: "fun", code: 30004, cnt:0},
+      { emoji: require("@/assets/emotions/amaze.png"), status: "amaze", code: 30005, cnt:0},
     ],
+    beforeEmotion: null,
+    currEmotion: { emoji: require("@/assets/emotions/heart_off.png"), status: "null", code: 30000 },
+    //북마크
+    bookmark: false,
+    // 댓글쪽
+    currComment: null,
+    members: [], // 해시태그위한 멤버리스트
+    memberToggle: false,
+    tagList: [], // 해시태그한 사람
   }),
   methods: {
+    emotionShowToggle(){
+      this.showEmotions = false
+    },
+    getMember() {
+      // 해시태그용
+      let groupId = this.nowGroup.groupId;
+      const token = localStorage.getItem("jwt");
+      axios({
+        method: "get",
+        url: `${process.env.VUE_APP_MCS_URL}/feed/info/${groupId}`,
+        headers: { Authorization: token },
+      })
+        .then((res) => {
+          console.log("그룹멤버들");
+          console.log(res);
+          this.members = res.data.members;
+          console.log(this.members);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     getFeed() {
       this.nowLoading = true;
       const token = localStorage.getItem("jwt");
@@ -155,48 +220,235 @@ export default {
         url: `${process.env.VUE_APP_MCS_URL}/feed/${this.feedId}`,
         headers: { Authorization: token },
       }).then((res) => {
-        console.log('피드상세')
-        console.log(res.data)
+        console.log("피드상세");
+        console.log(res.data);
         this.feedAuthorSeq = res.data.feedDto.feedAuthorSeq;
+        this.feedAuthorProfileImageUrl = res.data.feedDto.authorProfileImageUrl;
         this.feed.author = res.data.feedDto.feedAuthor;
         this.feed.title = res.data.feedDto.feedTitle;
-        console.log(res.data.feedDto.feedContent)
         this.feed.content = res.data.feedDto.feedContent;
-        console.log(this.feed.content)
-        // this.feed.imgUrls = res.data.feedDto.feedImgUrls;
+        this.feed.imgUrls = res.data.feedDto.fileList;
         this.feed.uploadDate = res.data.feedDto.feedUploadDate;
-        this.feed.eventDate = res.data.feedDto.feedEventDate.year+'년'+' '+res.data.feedDto.feedEventDate.month+'월'+' '+res.data.feedDto.feedEventDate.day+'일';
+        this.feed.eventDate =
+          res.data.feedDto.feedEventDate.year +
+          "년" +
+          " " +
+          res.data.feedDto.feedEventDate.month +
+          "월" +
+          " " +
+          res.data.feedDto.feedEventDate.day +
+          "일";
         this.feed.location = res.data.feedDto.locationDto.locationName;
         this.nowLoading = false;
+        this.memberList = res.data.feedDto.userList;
+        this.feed.hashtagList = res.data.feedDto.hashtagList;
+        if(res.data.feedDto.code != "30000"){
+          for(let i=0;i<this.emotions.length;i++){
+          if(this.emotions[i].code == res.data.feedDto.code){
+            this.currEmotion = this.emotions[i]
+            this.beforeEmotion = this.emotions[i]
+            break
+            }
+          }
+        }
+        this.emotions[1].cnt = res.data.feedDto.good;
+        this.emotions[2].cnt = res.data.feedDto.sad;
+        this.emotions[3].cnt = res.data.feedDto.check;
+        this.emotions[4].cnt = res.data.feedDto.fun;
+        this.emotions[5].cnt = res.data.feedDto.amaze;
+        if(res.data.feedDto.scrapYn == 'y'){
+          this.bookmark = true
+        }else{
+          this.bookmark = false
+        }
       });
     },
-    getContent(){
-      if(this.feed.content){
+    getContent() {
+      if (this.feed.content) {
         return this.feed.content.replaceAll("\r\n", "<br />");
-      }else{
+      } else {
         return null;
       }
     },
-    createComment(){
+    getComments($state) {
+      let data = {
+        commentParamDto: {
+          feedId: this.feedId,
+          limit: 10,
+        },
+        state: $state,
+      };
+      this.$store.dispatch("comments/getComments", data);
+    },
+    createComment(event) {
+      event.preventDefault();
+      // const token = localStorage.getItem("jwt");
+      let commentTag = [];
+      for (let i = 0; i < this.tagList.length; i++) {
+        commentTag.push(this.tagList[i].userSeq);
+      }
+      let data = {
+        commentDto: {
+          feedId: this.feedId,
+          commentTags: commentTag,
+          commentContent: this.currComment,
+        },
+      };
+      console.log("댓글작성 전");
+      console.log(data);
+      this.$store.dispatch("comments/createComment", data);
+      this.currComment = null;
+    },
+    selectTagMember(member) {
+      // 원래는 자동으로 토글되야하는데 안되서 일단 수동으로 구현(comment내에 태그 지우면 없어짐)
+      let flag = 0;
+      for (let i = 0; i < this.tagList.length; i++) {
+        if (this.tagList[i].userName == member.userName) {
+          this.tagList.splice(i, 1);
+          flag = 1;
+          break;
+        }
+      }
+      if (flag == 0) {
+        this.tagList.push({
+          userSeq: member.userSeq,
+          userName: member.userName,
+        });
+        this.currComment += member.userName + " ";
+      }
+    },
+    changeEmotion(data) {
+      const token = localStorage.getItem("jwt");
+      if (data == undefined || this.currEmotion.status == data) { // 선택한 감정 없음(감정 삭제)
+        this.currEmotion = this.emotions[0];
+        let deleteEmotion={
+          feedId : this.feedId,
+        }
+        deleteEmotion[this.beforeEmotion.status]=1
+        console.log(this.beforeEmotion.status)
+        for(let i=0;i<this.emotions.length;i++){
+          if(this.emotions[i].status == this.beforeEmotion.status){
+            this.emotions[i].cnt -= 1
+          }
+        }
+        axios({
+          method : "PUT",
+          url : `${process.env.VUE_APP_MCS_URL}/feed/emotion/sub`,
+          data : deleteEmotion,
+          headers : { Authorization: token },
+        }).then(()=>{
+          console.log("감정삭제 완료")
+          // 감정 숫자 빼줘야함!
+        }).catch((err)=>{
+          console.log(err)
+        })
 
-    }
+      } else { // 감정 수정
+        if(this.beforeEmotion != null && this.beforeEmotion.cnt > 0){
+          for (let i = 0; i < this.emotions.length; i++) {
+              if (this.emotions[i].status == this.beforeEmotion.status) {
+                this.emotions[i].cnt -= 1;
+                break
+              }
+            }
+        }
+          for (let i = 0; i < this.emotions.length; i++) {
+            if (this.emotions[i].status == data) {
+              this.emotions[i].cnt += 1;
+              this.currEmotion = this.emotions[i];
+              this.beforeEmotion = this.emotions[i];
+              break
+            }
+          }
+        
+        let selectEmotion = {
+          feedId : this.feedId
+        }
+        selectEmotion[this.currEmotion.status]=1
+        console.log(selectEmotion)
+        axios({
+          method : "PUT",
+          url : `${process.env.VUE_APP_MCS_URL}/feed/emotion/add`,
+          data : selectEmotion,
+          headers : {Authorization : token},
+        })
+        .then(()=>{
+          console.log("감정 수정 완료")
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+      }
+    },
+    bookmarkToggle() {
+      const token = localStorage.getItem("jwt");
+      if(this.bookmark){ // 북마크 true이면 삭제해줘야함
+        axios({
+          method : "DELETE",
+          url : `${process.env.VUE_APP_MCS_URL}/feed/scrap/${this.feedId}`,
+          headers : {Authorization : token}
+        })
+        .then(()=>{
+          console.log('북마크 삭제완료')
+          this.bookmark = !this.bookmark;
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+      }else{
+        axios({
+          method : "PUT",
+          url : `${process.env.VUE_APP_MCS_URL}/feed/scrap/${this.feedId}`,
+          headers : {Authorization : token}
+        })
+        .then(()=>{
+          console.log('북마크 등록완료')
+          this.bookmark = !this.bookmark;
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+      }
+      
+    },
   },
-  created() {
-    this.feedId *=1;
+  mounted() {
+    this.feedId *= 1;
     this.getFeed();
+    this.getMember();
+    // this.getAuthorProfileImageUrl();
+  },
+  beforeDestroy() {
+    this.$store.dispatch("comments/resetOffset");
   },
   computed: {
-
+    ...mapState("account", ["nowGroup", "userName"]),
+    ...mapState("comments", ["comments", "offset"]),
+    commentInTag() {
+      if (this.currComment != null && this.currComment.substr(-1) == "@") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
+  watch: {
+    currComment: function (val) {
+      for (let i = 0; i < this.tagList.length; i++) {
+        if (!val.includes(this.tagList[i].userName)) {
+          this.tagList.splice(i, 1);
+        }
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
-  .icon-group{
-    padding : 0px 3px;
-  }
-  .content-group{
-    padding : 3px 15px;
-  }
-
+.icon-group {
+  padding: 0px 3px;
+}
+.content-group {
+  padding: 3px 15px;
+}
 </style>

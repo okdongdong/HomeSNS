@@ -131,6 +131,10 @@ export default {
           this.nowLoading = false;
         })
         .catch((err) => {
+          this.$store.commit(
+            "snackbar/SET_SNACKBAR",
+            "이메일을 다시 확인해주세요."
+          );
           console.log(err);
           console.log(err.response);
           this.nowLoading = false;

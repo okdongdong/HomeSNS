@@ -13,6 +13,7 @@ import Calendar from "../views/Collection/Calendar.vue";
 import Timeline from "../views/Collection/Timeline.vue";
 
 import EntFeedList from "../views/Entertainment/EntFeedList.vue";
+import EntFeedDetail from "../views/Entertainment/EntFeedDetail.vue";
 import MiniGame from "../views/Entertainment/MiniGameList.vue";
 import VoteList from "../views/Entertainment/VoteList.vue";
 import VoteCreate from "../views/Entertainment/VoteCreate.vue";
@@ -25,7 +26,7 @@ import Main from "../views/Feed/Main.vue";
 
 import GroupCreate from "../views/Group/GroupCreate.vue";
 import GroupEnter from "../views/Group/GroupEnter.vue";
-// import Management from '../views/Group/Management.vue'
+import Management from "../views/Group/Management.vue";
 import GroupProfile from "../views/Group/GroupProfile.vue";
 import Select from "../views/Group/Select.vue";
 
@@ -101,6 +102,12 @@ const routes = [
     component: EntFeedList,
   },
   {
+    path: "/EntFeed/:contentType/:contentId",
+    name: "EntFeedDetail",
+    component: EntFeedDetail,
+    props: true,
+  },
+  {
     path: "/minigame",
     name: "MiniGame",
     component: MiniGame,
@@ -144,11 +151,11 @@ const routes = [
   //   component: Update
   // },
 
-  // {
-  //   path: '/management',
-  //   name: 'Management',
-  //   component: Management
-  // },
+  {
+    path: "/management",
+    name: "Management",
+    component: Management,
+  },
   {
     path: "/groupprofile",
     name: "GroupProfile",
@@ -183,6 +190,18 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const passwordChecked = localStorage.getItem("checkPasswordFlag");
+  // 패스워드 확인을 거치지않고 정보수정페이지에 접근하려는 경우
+  if (to.name == "MyPage" && !passwordChecked) {
+    console.log("접근할 수 없습니다.");
+    next({ name: "Select" });
+  }
+
+  if (from.name == "MyPage") {
+    localStorage.removeItem("checkPasswordFlag");
+    next();
+  }
+
   // console.log(to);
   // console.log(from);
   const token = localStorage.getItem("jwt");

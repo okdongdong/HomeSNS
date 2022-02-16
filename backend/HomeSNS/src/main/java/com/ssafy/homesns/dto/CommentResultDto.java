@@ -5,9 +5,8 @@ import java.util.List;
 public class CommentResultDto {
 	
 	private int result;
-	private int count;
 	private List<CommentDto> commentList;
-	private int commentResultDto; 
+	private CommentDto comment;
 	
 	public int getResult() {
 		return result;
@@ -15,12 +14,7 @@ public class CommentResultDto {
 	public void setResult(int result) {
 		this.result = result;
 	}
-	public int getCount() {
-		return count;
-	}
-	public void setCount(int count) {
-		this.count = count;
-	}
+	
 	public List<CommentDto> getCommentList() {
 		return commentList;
 	}
@@ -30,17 +24,18 @@ public class CommentResultDto {
 	
 	
 	
-	public int getCommentResultDto() {
-		return commentResultDto;
+	public CommentDto getComment() {
+		return comment;
 	}
-	public void setCommentResultDto(int commentResultDto) {
-		this.commentResultDto = commentResultDto;
+	public void setComment(CommentDto comment) {
+		this.comment = comment;
 	}
 	@Override
 	public String toString() {
-		return "CommentResultDto [result=" + result + ", count=" + count + ", commentList=" + commentList
-				+ ", commentResultDto=" + commentResultDto + "]";
+		return "CommentResultDto [result=" + result + ", commentList=" + commentList + ", comment=" + comment + "]";
 	}
+	
+	
 	
 	
 }
