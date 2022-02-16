@@ -317,7 +317,7 @@ export default {
         case "shareCreate":
           this.$router.push({
             name: "Detail",
-            params: { feeedId: noticeContentId },
+            params: { feedId: noticeContentId },
           });
           break;
 
