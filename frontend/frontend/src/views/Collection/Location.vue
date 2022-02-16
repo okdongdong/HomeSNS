@@ -28,8 +28,10 @@
 </template>
 
 <script>
+import axios from 'axios';
 import {gmapApi} from 'vue2-google-maps'
 import GmapCluster from 'vue2-google-maps/dist/components/cluster';
+import { mapState } from "vuex";
 export default {
   name: "Location",
   components: {
@@ -100,27 +102,39 @@ export default {
       ],
     };
   },
-  // created() {
-  //   this.$gmapApiPromiseLazy().then(() => {
-  //     this.initialize(); //init once  library has been loaded
-  //   });
-  // },
-  computed : {
-    google : gmapApi,
-  },
-  methods: {
+  methods :{
+    getLocation(){
+      const token = localStorage.getItem("jwt");
+      axios({
+        method : "GET",
+        url : `${process.env.VUE_APP_MCS_URL}/location/${this.nowGroup.groupId}`,
+        headers: { Authorization: token },
+      })
+      .then((res)=>{
+        console.log(res.data)
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+    },
     checkcluster(data) {
       console.log(data.getMarkers());
-      }
+      },
+  },
+  created() {
+    this.getLocation();
+  },
+  computed : {
+    ...mapState("account",["nowGroup"]),
+    google : gmapApi,
   },
 };
 </script>
 
 <style scoped>
 .gmap-marker-clustering {
-  position:fixed;
   top:80px;
-  width: 100%;
+  width:100%;
   height: calc(100vh - 160px);
 }
 

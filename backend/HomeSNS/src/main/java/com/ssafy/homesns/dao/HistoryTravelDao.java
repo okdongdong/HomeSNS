@@ -11,4 +11,5 @@ public interface HistoryTravelDao {
 
 	public List<Integer> groupFeedIdList(int groupId);
 	public LocationDto locationInfo(int feedId);
+//	public List<FileDto> groupFileList(int feedId);
 }

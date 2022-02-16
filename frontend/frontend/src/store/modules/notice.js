@@ -197,6 +197,9 @@ const notice = {
                 case "ghostLegCreate":
                   message = "새로운 사다리타기를 작성했습니다.";
                   break;
+                case "commentTagged":
+                  message = "회원님을 댓글에 태그했습니다.";
+                  break;
                 default:
                   message = notice.noticeType + "이 작성되었습니다.";
               }

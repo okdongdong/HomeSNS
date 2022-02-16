@@ -19,8 +19,10 @@ public class HistoryTravelServiceImpl implements HistoryTravelService {
 
 	@Autowired
 	HistoryTravelDao historyTravelDao;
+	@Autowired
 	FeedDao feedDao; 
-		
+	
+	
 	private static final int SUCCESS = 1;
 	private static final int FAIL = -1;
 	
@@ -66,7 +68,5 @@ public class HistoryTravelServiceImpl implements HistoryTravelService {
 		
 		return historyTravelResultDto;
 	}
-
-
 
 }

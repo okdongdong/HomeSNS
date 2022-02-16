@@ -54,8 +54,8 @@ const comments = {
         headers: { Authorization: token },
       })
         .then((res) => {
-          console.log("댓글들고옴");
-          console.log(res.data);
+          // console.log("댓글들고옴");
+          // console.log(res.data);
           if (res.data.commentList.length) {
             commit("GET_COMMENTS", res.data);
             state.offset += 10;
@@ -69,17 +69,27 @@ const comments = {
           console.log(err);
         });
     },
-    createComment: function ({ commit }, data) {
+    createComment: function ({ commit,dispatch }, data) {
       const token = localStorage.getItem("jwt");
+      // console.log('내가 방금 작성한 댓글!')
+      // console.log(data.commentDto)
       axios({
         method: "POST",
         url: `${process.env.VUE_APP_MCS_URL}/feed/comment`,
         data: data.commentDto,
         headers: { Authorization: token },
       }).then((res) => {
-        console.log("댓글 생성완료!!");
-        console.log(res.data);
+        // console.log("댓글 생성완료!!");
+        // console.log(res.data);
         commit("CREATE_COMMENT", res.data.comment);
+        for(let i=0; i<data.commentDto.commentTags.length; i++){
+          let noticeInfo = {
+            targetUserSeq : data.commentDto.commentTags[i],
+            noticeType : "commentTagged",
+            noticeContentId : data.commentDto.feedId,
+          }
+          dispatch('notice/send',noticeInfo,{root:true})
+        }
       });
     },
     deleteComment({ commit }, data) {
