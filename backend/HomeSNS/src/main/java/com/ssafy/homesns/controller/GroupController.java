@@ -113,7 +113,7 @@ public class GroupController {
 	
 	@PostMapping(value="/group/profileImage")
 	public ResponseEntity<GroupResultDto> groupProfileImageUpdate(
-				@RequestParam int groupId,
+				@RequestBody int groupId,
 				MultipartHttpServletRequest request
 			) {
 		

@@ -298,7 +298,7 @@
 		                              VALUES ( #{feedId},  #{userSeq},  #{code}      )
 	</insert>
 	
-	<select id="feedEmotionUserUseSearch" parameterType="map" resultType="String">
+	<select id="feedEmotionUserUseSearch" parameterType="map" resultType="string">
 		SELECT EMOTION_CODE as code
 		  FROM FEED_EMOTION_USER_USE
 		 WHERE FEED_ID = #{feedId}
@@ -319,5 +319,24 @@
 		 WHERE FEED_ID = #{feedId}
 	</update>
 	 
-	 
+	<!-- 피드 스크랩 -->
+
+
+	 <select id="feedScrapUserUse" parameterType="map" resultType="string">
+		SELECT 'y' as scrapYn 
+		  FROM HOME_SNS.SCRAP 
+		      WHERE FEED_ID = #{feedId}
+		        AND USER_SEQ = #{userSeq}		
+	</select>	
+
+	 <insert id="feedScrapAdd" parameterType="map">
+		INSERT INTO HOME_SNS.SCRAP ( USER_SEQ,  FEED_ID )
+							VALUES (#{feedId},#{userSeq})		
+	</insert>	
+	
+	<delete id="feedScrapSub" parameterType="map" >
+		DELETE FROM SCRAP
+		      WHERE FEED_ID = #{feedId}
+		        AND USER_SEQ = #{userSeq}
+	</delete>
 </mapper>
