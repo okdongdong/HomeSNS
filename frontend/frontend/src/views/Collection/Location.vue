@@ -16,7 +16,7 @@
           @click="center = m.position"
           :clickable="true"
           :icon="{
-            url: m.markerImg,
+            url: m.files[0].markerImg,
             scaledSize: { width: 100, height: 100 },
             position: m.position,
           }"
@@ -61,45 +61,7 @@ export default {
       ],
       center: { lat: -31.56391, lng: 147.154312 }, // 처음 센터 값
       currentPlace: null, // 현재위치
-      markers: [
-        
-          {
-          position: { lat: -31.56391, lng: 147.154312 },
-          markerImg: "https://cdn.iworldtoday.com/news/photo/201603/188668_62908_1934.png",
-        },
-        {
-          position: { lat: -33.718234, lng: 150.363181 },
-          markerImg:
-            "https://images.chosun.com/resizer/KRM2YgbS9kVVz7QMgCMhH5eUaro=/596x795/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/B6DG6T572KT44ELDCUB5IYGTKU.jpg",
-        },
-        {
-          position: { lat: -33.727111, lng: 150.371124 },
-          markerImg: "http://image.newsis.com/2021/07/05/NISI20210705_0000781122_web.jpg",
-        },
-        {
-          position: { lat: -33.848588, lng: 151.209834 },
-          markerImg: "https://news.imaeil.com/photos/2021/03/05/2021030509243023923_l.jpg",
-        },
-        {
-          position: { lat: -33.851702, lng: 151.216968 },
-          markerImg:
-            "https://w.namu.la/s/76fae914da2d988202808b9f68f39d49631dd668dd31403910ed389d13db136fda62fe2be3b7a2d88168359f60d1f4fa780ffcb475c4cccafac35b703cc15a718a59320897465d17bb376dc67a8842601c0b1120428fa86d75ad2f8fce154bae",
-        },
-        {
-          position: { lat: -34.671264, lng: 150.863657 },
-          markerImg: "http://img.segye.com/content/image/2019/04/12/20190412504845.jpg",
-        },
-        {
-          position: { lat: -35.304724, lng: 148.662905 },
-          markerImg: "https://t1.daumcdn.net/cfile/tistory/998E2C4B5E17DD5C32",
-        },
-        {
-          position: { lat: -36.817685, lng: 175.699196 },
-          markerImg: "https://photo.newsen.com/mphoto/2019/07/18/201907181902081910_1.jpg",
-        },
-
-        
-      ],
+      markers: [],
     };
   },
   methods :{
@@ -112,6 +74,53 @@ export default {
       })
       .then((res)=>{
         console.log(res.data)
+        for(let i=0;i<res.data.groupFeedList.length;i++){
+          if(this.markers.length == 0){
+            this.markers.push({
+              position:{
+                lat : res.data.groupFeedList[i].lat,
+                lng : res.data.groupFeedList[i].lng
+              },
+              files : [],
+            })
+          }else{
+            let flag = 0
+            for(let j=0;j<this.markers.length;j++){
+              if(res.data.groupFeedList[i].lat == this.markers[j].position.lat && res.data.groupFeedList[i].lng == this.markers[j].position.lng){
+                flag = 1
+                break
+              }
+            }
+            if(!flag){
+              this.markers.push({
+              position:{
+                lat : res.data.groupFeedList[i].lat,
+                lng : res.data.groupFeedList[i].lng
+                },
+                files : [],
+              })
+            }
+          }
+        }
+        console.log('==================')
+        console.log(this.markers)
+        return res
+      })
+      .then((res)=>{
+        for(let k=0;k<res.data.groupFeedList.length;k++){
+          console.log('시부레')
+          for(let m=0;m<this.markers.length;m++){
+            if(this.markers[m].position.lat == res.data.groupFeedList[k].lat && this.markers[m].position.lng == res.data.groupFeedList[k].lng){
+              for(let n=0;n<res.data.groupFeedList[k].fileDto.length;n++){
+                this.markers[m].files.push({
+                    markerImg : res.data.groupFeedList[k].fileDto[n].fileUrl,
+                    feedId : res.data.groupFeedList[k].feedId
+                  })
+                }
+              }
+            }
+          }
+        console.log(this.markers)
       })
       .catch((err)=>{
         console.log(err)
