@@ -70,6 +70,54 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="passwordCheckDialog" max-width="400px">
+      <v-card class="rounded-xl pa-3">
+        <div class="justify-center d-flex align-center">
+          <v-card-title>비밀번호 확인</v-card-title>
+        </div>
+
+        <v-form
+          class="form-data"
+          ref="form"
+          v-model="valid"
+          lazy-validation
+          style="width: 100%"
+        >
+          <!-- 비밀번호 -->
+
+          <v-text-field
+            clearable
+            background-color="white"
+            solo
+            v-model="password"
+            :rules="rules.passwordRules"
+            label="변경할 비밀번호"
+            type="password"
+            required
+          ></v-text-field>
+        </v-form>
+        <v-card-text class="d-flex">
+          <v-btn
+            class="mx-auto pa-3 transition-swing d-flex align-center"
+            @click="passwordCheck()"
+            color="rgba(98, 101, 232)"
+            :disabled="!valid"
+            width="100"
+            dark
+          >
+            <h3>확인</h3>
+          </v-btn>
+          <v-btn
+            width="100"
+            class="mx-auto pa-3 transition-swing d-flex align-center"
+            @click="passwordCheckDialog = false"
+          >
+            <h3>취소</h3>
+          </v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
     <!-- 프로필 페이지 -->
     <div class="content-box mb-3 pb-5">
       <div class="d-flex justify-center ma-5">
@@ -98,7 +146,7 @@
           absolute
           right
           v-if="mySeq == userSeq"
-          @click.stop="$router.push({ name: 'MyPage' })"
+          @click.stop="passwordCheckDialog = true"
           >정보수정<v-icon>edit</v-icon>
         </v-btn>
       </div>
@@ -172,7 +220,18 @@ export default {
   data: function () {
     return {
       dialog: false,
+      vaild: false,
+      password: null,
+      passwordCheckDialog: false,
       userInfo: {},
+      rules: {
+        passwordRules: [
+          (v) => !!v || " 비밀번호를 입력해주세요.",
+          (v) =>
+            !(v && v.length >= 20) ||
+            "패스워드는 20자 이상 입력할 수 없습니다.",
+        ],
+      },
       image: null,
       previewImage: undefined,
     };
@@ -202,6 +261,7 @@ export default {
         .then((res) => {
           console.log(res);
           console.log(res.data);
+          this.getProfile(this.userSeq);
         })
         .catch((err) => {
           this.$store.commit(
@@ -210,6 +270,32 @@ export default {
           );
           console.log(err);
           console.log(err.response);
+        });
+    },
+    passwordCheck() {
+      localStorage.setItem('checkPasswordFlag', true)
+      const token = localStorage.getItem("jwt");
+      axios({
+        method: "POST",
+        url: `${process.env.VUE_APP_MCS_URL}/mypage`,
+        headers: {
+          Authorization: token,
+        },
+        data: { userPassword: this.password },
+      })
+        .then((res) => {
+          console.log(res);
+          this.dialog = false;
+          this.$router.push({ name: "MyPage" });
+        })
+        .catch((err) => {
+          this.$store.commit(
+            "snackbar/SET_SNACKBAR",
+            "비밀번호가 일치하지 않습니다."
+          );
+          console.log(err);
+          console.log(err.response);
+          localStorage.removeItem('checkPasswordFlag')
         });
     },
   },
