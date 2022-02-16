@@ -3,7 +3,7 @@
     <v-sheet
       color="white"
       elevation="14"
-      height="50"
+      height="45"
       rounded="xl"
       v-show="showEmotions"
       class="emoji-position"
@@ -18,6 +18,7 @@
           v-for="(emotion, idx) in emotions"
           :key="idx"
           :value="emotion.status"
+          @click="$emit('emotion-show-toggle')"
         >
         <v-avatar center>
           <v-img :src="emotion.emoji"></v-img>
