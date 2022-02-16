@@ -20,7 +20,7 @@
                   alt="피드사진"
                   aspect-ratio="1"
                   width="120px"
-                  :src="feed.feedFileUrls[0]"
+                  :src="feed.feedFileUrls.length?feed.feedFileUrls[0]:''"
                 ></v-img>
               </div>
               <div>
