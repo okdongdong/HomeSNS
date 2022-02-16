@@ -1,7 +1,7 @@
 <template>
   <v-app class="container">
     <v-timeline dense align-top class="content-box pe-3">
-      <div v-for="feed in feeds" :key="feed.feedId">
+      <div v-for="(feed, idx) in feeds" :key="idx">
         <v-timeline-item>
           <template v-slot:icon>
             <v-avatar>
@@ -79,8 +79,8 @@
           </v-expand-transition>
         </v-timeline-item>
       </div>
-      <infinite-loading @infinite="getFeed"></infinite-loading>
     </v-timeline>
+      <infinite-loading @infinite="getFeed"></infinite-loading>
   </v-app>
 </template>
 
@@ -115,7 +115,7 @@ export default {
           console.log("피드받음", res);
           if (res.data.timelineDtoList.length) {
             res.data.timelineDtoList.forEach((feed) => {
-              this.feeds.push(...feed);
+              this.feeds.push({ ...feed });
             });
             this.offset += 10;
             $state.loaded();
