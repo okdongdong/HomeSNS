@@ -16,7 +16,7 @@
           @click="center = m.position"
           :clickable="true"
           :icon="{
-            url: m.files[0].markerImg,
+            url: 'https://i6e205.p.ssafy.io/'+m.files[0].markerImg,
             scaledSize: { width: 100, height: 100 },
             position: m.position,
           }"
