@@ -476,6 +476,7 @@ public class FeedServiceImpl implements FeedService {
 
 		// feed지우면 file,hashtag,comment등등 fk 다 지워짐
 		if (feedDao.feedDelete(feedId) == 1) {
+			feedDao.noticeFeedDelete(feedId);
 			feedResultDto.setResult(SUCCESS);
 		} else {
 			feedResultDto.setResult(FAIL);
