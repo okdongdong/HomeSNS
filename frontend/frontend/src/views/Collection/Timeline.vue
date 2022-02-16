@@ -115,7 +115,7 @@ export default {
           console.log("피드받음", res);
           if (res.data.timelineDtoList.length) {
             res.data.timelineDtoList.forEach((feed) => {
-              this.feedList.push(...feed);
+              this.feeds.push(...feed);
             });
             this.offset += 10;
             $state.loaded();
@@ -126,7 +126,6 @@ export default {
         .catch((err) => {
           console.log("피드못받음", err);
         });
-      this.start += 10;
     },
   },
   computed: {
