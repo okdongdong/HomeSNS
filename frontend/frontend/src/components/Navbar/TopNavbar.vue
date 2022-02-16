@@ -211,6 +211,24 @@
               <h1>그룹 목록</h1>
             </v-list-item-title>
           </v-list-item>
+          <v-list-item @click.stop="move('Main')">
+            <v-list-item-title class="d-flex align-center">
+              <v-icon class="mx-3">mdi-history</v-icon>
+              <h1>게시물</h1>
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click.stop="move('Timeline')">
+            <v-list-item-title class="d-flex align-center">
+              <v-icon class="mx-3">mdi-heart</v-icon>
+              <h1>추억여행</h1>
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click.stop="move('Calendar')">
+            <v-list-item-title class="d-flex align-center">
+              <v-icon class="mx-3">mdi-map-marker</v-icon>
+              <h1>일정표</h1>
+            </v-list-item-title>
+          </v-list-item>
           <v-list-item @click.stop="move('EntFeedList')">
             <v-list-item-title class="d-flex align-center">
               <v-icon class="mx-3">extension</v-icon>
@@ -233,6 +251,13 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
+      <div style="position: absolute; bottom: 0px; width: 100%" class="pa-5 d-flex justify-center">
+        <div>
+
+        <span class="d-flex justify-end">SSAFY 공통PJT.</span>
+        <p class="d-flex justify-end">© 2022. 우家우가.</p>
+        </div>
+      </div>
     </v-navigation-drawer>
   </div>
 </template>

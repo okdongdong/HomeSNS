@@ -1,4 +1,3 @@
-z
 <template>
   <v-app class="my-background">
     <v-spacer></v-spacer>
