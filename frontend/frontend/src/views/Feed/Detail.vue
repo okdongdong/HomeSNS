@@ -19,7 +19,7 @@
             <div class="d-inline-flex">{{ feed.eventDate }}</div>
           </div>
         </v-col>
-        <v-col cols="2" class="d-flex justify-center align-center">
+        <v-col cols="2" class="d-flex justify-center align-center" v-if="userSeq == feedAuthorSeq">
           <FeedPopup :feed-id="feedId" :feed-author-seq="feedAuthorSeq" />
         </v-col>
       </v-row>
