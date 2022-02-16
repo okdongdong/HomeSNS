@@ -162,7 +162,7 @@ export default {
                   feedData.fileList.push({
                     fileUrl : currFeed.fileList[i].fileUrl,
                     type : 'video',
-                  })
+                  }) 
                 }
               } 
               
