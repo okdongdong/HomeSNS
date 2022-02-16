@@ -3,7 +3,7 @@
     <v-snackbar
       v-model="snackbar"
       :multi-line="multiLine"
-      color="red accent-1"
+      :color="color"
       :timeout="timeout"
       tile
     >
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Snackbar",
 
@@ -33,12 +34,7 @@ export default {
   }),
 
   computed: {
-    snackbar() {
-      return this.$store.state.snackbar.snackbar;
-    },
-    text() {
-      return this.$store.state.snackbar.text;
-    },
+    ...mapState("snackbar", ["color", "snackbar", "text"]),
   },
 
   methods: {

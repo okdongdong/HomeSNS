@@ -17,11 +17,11 @@ const account = {
     isLogin: localStorage.getItem("jwt") ? true : false,
   },
   mutations: {
-    LOGIN: function (state, res) {
+    LOGIN: function (state, data) {
       state.isLogin = true;
-      state.userSeq = res.data.userSeq;
-      state.userName = res.data.userName;
-      state.userImgUrl = res.data.userProfileImageUrl;
+      state.userSeq = data.userSeq;
+      state.userName = data.userName;
+      state.userImgUrl = data.userProfileImageUrl;
     },
     LOGOUT: function (state) {
       state.isLogin = false;
@@ -44,7 +44,7 @@ const account = {
         .then((res) => {
           localStorage.setItem("jwt", res.headers.authorization);
           console.log(res);
-          commit("LOGIN", res);
+          commit("LOGIN", res.data);
           router.push({ name: "Select" });
         })
         .catch((err) => {
