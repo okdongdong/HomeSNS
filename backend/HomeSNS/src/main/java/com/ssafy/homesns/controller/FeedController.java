@@ -185,7 +185,7 @@ public class FeedController {
 	// 장소 즐겨찾기 추가
 	// 받은locationId 와 JWT토큰에서 userSeq를 받아서 추가한다.
 	@PostMapping(value = "/locationFav")
-	public ResponseEntity<FeedResultDto> LocationFavoriteAdd(@RequestParam int locationId) {
+	public ResponseEntity<FeedResultDto> LocationFavoriteAdd( int locationId) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		System.out.println(authentication);
