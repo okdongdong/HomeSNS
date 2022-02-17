@@ -327,6 +327,7 @@ export default {
             commentTags: commentTag,
             commentContent: this.currComment,
           },
+          feedAuthorSeq : this.feedAuthorSeq,
         };
         this.$store.dispatch("comments/createComment", data);
         this.currComment = null;
