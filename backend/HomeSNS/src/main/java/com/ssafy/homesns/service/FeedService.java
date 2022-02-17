@@ -26,7 +26,10 @@ public interface FeedService {
 	
 	public FeedResultDto feedDelete(int feedId);
 	
+	// 피드 장소 삭제
 	public FeedResultDto locationFavoriteDelete(LocationFavoriteDto locationFavoriteDto);
+	// 피드 장소 추가
+	public FeedResultDto locationFavoriteAdd(LocationFavoriteDto locationFavoriteDto);
 	
 	// 피드 감정 추가
 	public FeedEmotionResultDto feedEmotionAdd(FeedEmotionDto feedEmotionDto);

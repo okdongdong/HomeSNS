@@ -502,7 +502,20 @@ public class FeedServiceImpl implements FeedService {
 		return feedResultDto;
 	}
 
+	@Override
+	@Transactional
+	public FeedResultDto locationFavoriteAdd(LocationFavoriteDto locationFavoriteDto) {
 
+		FeedResultDto feedResultDto = new FeedResultDto();
+
+		if (feedDao.locationFavoriteAdd(locationFavoriteDto) == 1) {
+			feedResultDto.setResult(SUCCESS);
+		} else {
+			feedResultDto.setResult(FAIL);
+		}
+
+		return feedResultDto;
+	}
 
 	// 감정표현 하기 :  감정표현 레코드 수정 + 감정표현 사용 레코드 추가
 	@Override

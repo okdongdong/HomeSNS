@@ -164,9 +164,9 @@ export default {
       })
         .then((res) => {
           console.log(res)
-          const groupInfo = this.groupInfo
+          const groupInfo = this.nowGroup
           groupInfo.groupName = res.data.profileImgaeResultDto.groupName
-          groupInfo.groupProfileImageUrl = res.data.profileImgaeResultDto.groupProfileImageUrl
+          groupInfo.groupProfileImageUrl = res.data.profileImageDto.profileImageUrl
           this.setNowGroup(groupInfo)
         })
         .catch((err) => {

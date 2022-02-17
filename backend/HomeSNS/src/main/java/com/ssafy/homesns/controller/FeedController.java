@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -174,6 +175,27 @@ public class FeedController {
 		locationFavoriteDto.setUserSeq(userSeq);
 
 		FeedResultDto feedResultDto = feedService.locationFavoriteDelete(locationFavoriteDto);
+
+		if (feedResultDto.getResult() == SUCCESS) {
+			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	// 장소 즐겨찾기 추가
+	// 받은locationId 와 JWT토큰에서 userSeq를 받아서 추가한다.
+	@PostMapping(value = "/locationFav")
+	public ResponseEntity<FeedResultDto> LocationFavoriteAdd(@RequestParam int locationId) {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println(authentication);
+		int userSeq = Integer.parseInt(authentication.getName());
+
+		LocationFavoriteDto locationFavoriteDto = new LocationFavoriteDto();
+		locationFavoriteDto.setLocationId(locationId);
+		locationFavoriteDto.setUserSeq(userSeq);
+
+		FeedResultDto feedResultDto = feedService.locationFavoriteAdd(locationFavoriteDto);
 
 		if (feedResultDto.getResult() == SUCCESS) {
 			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);
