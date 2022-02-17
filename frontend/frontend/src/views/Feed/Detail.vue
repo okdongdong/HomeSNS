@@ -39,7 +39,7 @@
         <v-icon>location_on</v-icon>{{ feed.location }}
       </v-col>
       <v-col cols="3">
-        <v-btn rounded small @click="sendNotice()">
+        <v-btn rounded small @click="sendNotice()" class='mb-1'>
           추억공유
         </v-btn>
       </v-col>
@@ -71,7 +71,7 @@
         <!-- 타임라인버튼 -->
         <v-col cols="1">
           <v-btn icon large style="padding: 0" @click="timelineToggle">
-            <v-icon v-if="bookmark == false">star_border</v-icon>
+            <v-icon v-if="timeline == false">star_border</v-icon>
             <v-icon v-else color=yellow>star</v-icon>
           </v-btn>
         </v-col>
