@@ -148,7 +148,7 @@
                 >
                 <v-icon v-else>radio_button_unchecked</v-icon></v-btn
               >
-              <v-btn color="red" :dark="nowManager" block class="d-flex justify-space-around" :disabled="!nowManager ||member.userSeq == nowGroup.groupLeaderSeq"
+              <v-btn color="red" :dark="nowManager &&!(member.userSeq == nowGroup.groupLeaderSeq)" block class="d-flex justify-space-around" :disabled="!nowManager ||member.userSeq == nowGroup.groupLeaderSeq"
                @click.stop="deleteMember(member)" >내보내기 <v-icon>do_not_disturb_on</v-icon></v-btn
               >
             </div>
