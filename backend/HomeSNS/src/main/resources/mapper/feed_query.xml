@@ -74,7 +74,7 @@
 	
 	<!-- feed table값만 가져오는 SQL -->
 	<select id="feedDetail" parameterType="int" resultType="com.ssafy.homesns.dto.FeedDto"> 
-		SELECT f.FEED_ID, GROUP_ID, FEED_AUTHOR as feed_author_seq ,u.user_name as FEED_AUTHOR, u.USER_PROFILE_IMAGE_URL as authorProfileImageUrl, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION_ID ,fe.good, fe.sad, fe.check, fe.fun, fe.amaze
+		SELECT f.FEED_ID, GROUP_ID, FEED_AUTHOR as feed_author_seq ,u.user_name as FEED_AUTHOR, u.USER_PROFILE_IMAGE_URL as authorProfileImageUrl, FEED_TITLE, FEED_CONTENT, FEED_UPLOAD_DATE, FEED_EVENT_DATE, FEED_LOCATION_ID ,fe.good, fe.sad, fe.check, fe.fun, fe.amaze, FEED_TIMELINE as timeline
 	  		FROM HOME_SNS.FEED f JOIN USER u ON f.feed_author = u.user_seq
 	  		JOIN HOME_SNS.FEED_EMOTION fe  ON f.feed_id = fe.feed_id
 	     WHERE  f.FEED_ID = #{feedId}
@@ -323,7 +323,31 @@
 	</delete>
 	 
 	 
-	 <update id="feedTimeline" parameterType="int">
+	 
+	<select id="feedTimelineSearch" parameterType="map" resultType="com.ssafy.homesns.dto.TimelineDto">
+		SELECT FEED_ID, FEED_TITLE, FEED_EVENT_DATE, IFNULL(FEED_LOCATION_ID,'') AS FEED_LOCATION_ID,
+			   FEED_AUTHOR as feedAuthor
+		  FROM HOME_SNS.FEED
+		 WHERE GROUP_ID = #{groupId}
+		   AND FEED_TIMELINE = 1
+	  ORDER BY FEED_EVENT_DATE DESC
+		 LIMIT #{limit} 
+		OFFSET #{offset}
+	</select>
+	
+	<select id="userProfileImageUrlSearch" parameterType="int" resultType="string">
+		SELECT USER_PROFILE_IMAGE_URL
+		  FROM HOME_SNS.USER
+		 WHERE USER_SEQ = #{userSeq}
+	</select>
+	
+	<select id="locationNameSearch" parameterType="int" resultType="string">
+		SELECT LOCATION_NAME
+		  FROM HOME_SNS.LOCATION
+		 WHERE LOCATION_ID = #{locationId}
+	</select>
+	
+	<update id="feedTimeline" parameterType="int">
 		UPDATE FEED
 		   SET FEED_TIMELINE = FEED_TIMELINE XOR 1
 		 WHERE FEED_ID = #{feedId}
