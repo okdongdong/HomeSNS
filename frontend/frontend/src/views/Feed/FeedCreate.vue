@@ -82,7 +82,7 @@
             </v-img>
             <!-- 피드 수정 시 새로운 사진 넣을때 프리뷰 이슈있어서 넣은 것 -->
             <video
-              v-else-if="fileId == 0 && file.type == 'video'"
+              v-else-if="file.fileId == 0 && file.type == 'video'"
               autoplay
               muted
               :src="file.previewImage"
@@ -90,7 +90,7 @@
               @click="deleteFile(i,file)"
             ></video>
             <v-img
-              v-else-if="file.type == 'img' && fileId == 0"
+              v-else-if="file.type == 'img' && file.fileId == 0"
               :src="file.previewImage"
               :lazy-src="`https://picsum.photos/200/300`"
               aspect-ratio="1"
