@@ -71,8 +71,8 @@ const comments = {
     },
     createComment: function ({ commit,dispatch }, data) {
       const token = localStorage.getItem("jwt");
-      // console.log('내가 방금 작성한 댓글!')
-      // console.log(data.commentDto)
+      console.log('내가 방금 작성한 댓글!')
+      console.log(data.commentDto)
       axios({
         method: "POST",
         url: `${process.env.VUE_APP_MCS_URL}/feed/comment`,
@@ -87,6 +87,7 @@ const comments = {
             targetUserSeq : data.commentDto.commentTags[i],
             noticeType : "commentTagged",
             noticeContentId : data.commentDto.feedId,
+            noticeCommentContent : data.commentDto.commentContent,
           }
           dispatch('notice/send',noticeInfo,{root:true})
         }
