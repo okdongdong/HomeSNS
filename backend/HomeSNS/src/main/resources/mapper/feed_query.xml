@@ -215,9 +215,16 @@
 		
 	<!-- 장소 즐겨찾기 삭제 -->
 	<delete id="locationFavoriteDelete" parameterType="com.ssafy.homesns.dto.LocationFavoriteDto">
-		DELETE FROM HOME_SNS.FEED
-		 WHERE LOCATION_ID =#{locationId} AND USER_SEQ ={userSeq} 
+		DELETE FROM HOME_SNS.LOCATION_FAVORITE
+		 WHERE LOCATION_ID =#{locationId} AND USER_SEQ =#{userSeq} 
 	</delete>
+	
+	<!-- 장소 즐겨찾기 추가 -->
+	<insert id="locationFavoriteAdd" parameterType="com.ssafy.homesns.dto.LocationFavoriteDto">
+		INSERT INTO HOME_SNS.LOCATION_FAVORITE (LOCATION_ID , USER_SEQ)
+		 								VALUE (#{locationId} ,#{userSeq} ) 
+	</insert>
+	
 	
 	
 	

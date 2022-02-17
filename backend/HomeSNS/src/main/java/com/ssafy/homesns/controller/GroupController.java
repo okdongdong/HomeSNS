@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -111,9 +111,9 @@ public class GroupController {
 		return new ResponseEntity<GroupResultDto>(groupResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@PostMapping(value="/group/profileImage")
+	@PostMapping(consumes = MediaType.ALL_VALUE, value="/group/profileImage")
 	public ResponseEntity<GroupResultDto> groupProfileImageUpdate(
-				@RequestBody int groupId,
+				int groupId,
 				MultipartHttpServletRequest request
 			) {
 		
