@@ -16,7 +16,7 @@
             class="py-5"
           >
             <h3 class="mt-1">게시물</h3>
-            <v-icon>mdi-history</v-icon>
+            <v-icon>home</v-icon>
           </v-btn>
         </v-col>
         <v-col cols="3" class="px-0">
@@ -25,8 +25,8 @@
             style="background-color: rgba(0, 0, 0, 0)"
             class="py-5"
           >
-            <h3 class="mt-1">시간여행</h3>
-            <v-icon>star</v-icon>
+            <h3 class="mt-1">시간 여행</h3>
+            <v-icon>access_time</v-icon>
           </v-btn>
         </v-col>
         <v-col cols="3" class="px-0">
@@ -35,7 +35,7 @@
             style="background-color: rgba(0, 0, 0, 0)"
             class="py-5"
           >
-            <h3 class="mt-1">추억의 장소</h3>
+            <h3 class="mt-1">추억 여행</h3>
             <v-icon>airplane_ticket</v-icon>
           </v-btn>
         </v-col>
@@ -46,7 +46,7 @@
             class="py-5"
           >
             <h3 class="mt-1">일정표</h3>
-            <v-icon>mdi-map-marker</v-icon>
+            <v-icon>date_range</v-icon>
           </v-btn>
         </v-col>
       </v-row>
