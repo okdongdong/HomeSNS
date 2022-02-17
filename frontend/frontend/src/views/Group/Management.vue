@@ -278,6 +278,9 @@ export default {
       })
         .then((res) => {
           console.log(res);
+           const groupInfo = this.nowGroup
+          groupInfo.groupName = this.groupName
+          this.setNowGroup(groupInfo)
         })
         .catch((err) => {
           console.log(err);
