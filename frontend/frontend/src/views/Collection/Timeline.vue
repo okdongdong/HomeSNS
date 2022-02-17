@@ -48,9 +48,9 @@
                     v-for="hashtag in feed.hashtagDtoList"
                     :key="hashtag"
                     class="me-1"
-                    color="white"
+                    
                   >
-                    #{{ hashtag }}
+                    #{{ hashtag.hashtagContent }}
                   </v-chip>
                   <v-chip
                     class="me-1"
