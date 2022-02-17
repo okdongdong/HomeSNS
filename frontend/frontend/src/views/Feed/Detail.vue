@@ -56,7 +56,7 @@
     <div>
       <v-row class="icon-group">
         <!-- 하트 -->
-        <v-col cols="10">
+        <v-col cols="9">
           <span style="padding: 8px"></span>
           <v-btn
             style="width: 25px"
@@ -68,11 +68,18 @@
             <v-img :src="currEmotion.emoji" style="width: 10px; height: auto"></v-img>
           </v-btn>
         </v-col>
+        <!-- 타임라인버튼 -->
+        <v-col cols="1">
+          <v-btn icon large style="padding: 0" @click="timelineToggle">
+            <v-icon v-if="bookmark == false">star_border</v-icon>
+            <v-icon v-else color=yellow>star</v-icon>
+          </v-btn>
+        </v-col>
         <!-- 북마크 -->
-        <v-col cols="2">
+        <v-col cols="1">
           <v-btn icon large style="padding: 0" @click="bookmarkToggle">
             <v-icon v-if="bookmark == false">bookmark_border</v-icon>
-            <v-icon v-else>bookmark</v-icon>
+            <v-icon v-else color=blue>bookmark</v-icon>
           </v-btn>
         </v-col>
       </v-row>
@@ -190,7 +197,9 @@ export default {
     ],
     beforeEmotion: null,
     currEmotion: { emoji: require("@/assets/emotions/heart_off.png"), status: "null", code: 30000 },
-    //북마크
+    // 타임라인
+    timeline: false,
+    // 북마크
     bookmark: false,
     // 댓글쪽
     currComment: null,
@@ -279,6 +288,7 @@ export default {
         }else{
           this.bookmark = false
         }
+        this.timeline = res.data.feedDto.timeline
       });
     },
     getContent() {
@@ -433,6 +443,21 @@ export default {
         })
       }
       
+    },
+    timelineToggle() {
+      const token = localStorage.getItem("jwt");
+      axios({
+        method : "put",
+        url : `${process.env.VUE_APP_MCS_URL}/feed/timeline/${this.feedId}`,
+        headers : {Authorization : token}
+      })
+      .then(()=>{
+        console.log('타임라인 등록완료')
+        this.timeline = !this.timeline;
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
     },
   },
   mounted() {

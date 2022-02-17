@@ -26,7 +26,7 @@
             class="py-5"
           >
             <h3 class="mt-1">시간여행</h3>
-            <v-icon>mdi-heart</v-icon>
+            <v-icon>star</v-icon>
           </v-btn>
         </v-col>
         <v-col cols="3" class="px-0">
