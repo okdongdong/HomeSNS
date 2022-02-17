@@ -10,6 +10,7 @@ import com.ssafy.homesns.dto.FeedResultDto;
 import com.ssafy.homesns.dto.GroupMemberDto;
 import com.ssafy.homesns.dto.LocationFavoriteDto;
 import com.ssafy.homesns.dto.MainFeedResultDto;
+import com.ssafy.homesns.dto.TimelineResultDto;
 
 public interface FeedService {
 
@@ -25,13 +26,18 @@ public interface FeedService {
 	
 	public FeedResultDto feedDelete(int feedId);
 	
+	// 피드 장소 삭제
 	public FeedResultDto locationFavoriteDelete(LocationFavoriteDto locationFavoriteDto);
+	// 피드 장소 추가
+	public FeedResultDto locationFavoriteAdd(LocationFavoriteDto locationFavoriteDto);
 	
 	// 피드 감정 추가
 	public FeedEmotionResultDto feedEmotionAdd(FeedEmotionDto feedEmotionDto);
 	// 피드 감정 삭제 
 	public FeedEmotionResultDto feedEmotionSub(FeedEmotionDto feedEmotionDto);
 	
+	// 피드 타임라인 조회
+	public TimelineResultDto feedTimelineSearch(FeedParamDto feedParamDto);
 	// 피드 타임라인 변경
 	public FeedResultDto feedTimeline(int feedId);
 	

@@ -30,7 +30,7 @@
           :img-url="feedAuthorProfileImageUrl"
           :user-seq="feedAuthorSeq"
         />
-        <h3 class="mx-3">
+        <h3 class="mx-3" @click="$router.push({name:'UserPage', params : {userSeq : feedAuthorSeq}})">
           {{ feed.author }}
         </h3>
       </div>
@@ -71,8 +71,8 @@
         <!-- 타임라인버튼 -->
         <v-col cols="1">
           <v-btn icon large style="padding: 0" @click="timelineToggle">
-            <v-icon v-if="timeline == false">star_border</v-icon>
-            <v-icon v-else color=yellow>star</v-icon>
+            <v-icon v-if="bookmark == false">access_time</v-icon>
+            <v-icon v-else color=green>access_time</v-icon>
           </v-btn>
         </v-col>
         <!-- 북마크 -->
@@ -144,7 +144,7 @@
         </v-list>
       </v-card>
     </v-form>
-    <Comment v-for="(comment, idx) in comments" :key="idx" :comment="comment" :feed-id="feedId"/>
+    <Comment v-for="(comment, idx) in comments" :key="idx" :comment="comment" :feed-id="feedId" :members="members"/>
     <infinite-loading @infinite="getComments"></infinite-loading>
   </v-app>
 </template>
@@ -267,7 +267,7 @@ export default {
           "일";
         this.feed.location = res.data.feedDto.locationDto.locationName;
         this.nowLoading = false;
-        this.memberList = res.data.feedDto.userList;
+        // this.memberList = res.data.feedDto.userList;
         this.feed.hashtagList = res.data.feedDto.hashtagList;
         if(res.data.feedDto.code != "30000"){
           for(let i=0;i<this.emotions.length;i++){
@@ -327,6 +327,7 @@ export default {
             commentTags: commentTag,
             commentContent: this.currComment,
           },
+          feedAuthorSeq : this.feedAuthorSeq,
         };
         this.$store.dispatch("comments/createComment", data);
         this.currComment = null;

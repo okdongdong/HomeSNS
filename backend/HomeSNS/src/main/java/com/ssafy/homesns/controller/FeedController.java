@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -28,6 +29,7 @@ import com.ssafy.homesns.dto.FeedResultDto;
 import com.ssafy.homesns.dto.GroupMemberDto;
 import com.ssafy.homesns.dto.LocationFavoriteDto;
 import com.ssafy.homesns.dto.MainFeedResultDto;
+import com.ssafy.homesns.dto.TimelineResultDto;
 import com.ssafy.homesns.service.FeedService;
 
 @CrossOrigin(origins = { "http://localhost:5500", "http://172.30.1.59:5500", "http://192.168.0.100:5500",
@@ -180,6 +182,27 @@ public class FeedController {
 			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	// 장소 즐겨찾기 추가
+	// 받은locationId 와 JWT토큰에서 userSeq를 받아서 추가한다.
+	@PostMapping(value = "/locationFav")
+	public ResponseEntity<FeedResultDto> LocationFavoriteAdd(@RequestParam int locationId) {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println(authentication);
+		int userSeq = Integer.parseInt(authentication.getName());
+
+		LocationFavoriteDto locationFavoriteDto = new LocationFavoriteDto();
+		locationFavoriteDto.setLocationId(locationId);
+		locationFavoriteDto.setUserSeq(userSeq);
+
+		FeedResultDto feedResultDto = feedService.locationFavoriteAdd(locationFavoriteDto);
+
+		if (feedResultDto.getResult() == SUCCESS) {
+			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 
 	// 감정표현 하기 => 댓글 감정표현 레코드 수정 + 댓글 감정표현 사용 레코드 추가
@@ -215,6 +238,16 @@ public class FeedController {
 		return new ResponseEntity<FeedEmotionResultDto>(feedEmotionResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	@GetMapping(value="/feed/timeline")
+	public ResponseEntity<TimelineResultDto> feedTimelineSearch(FeedParamDto feedParamDto) {
+		
+		TimelineResultDto timelineResultDto = feedService.feedTimelineSearch(feedParamDto);
+		
+		if ( timelineResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<TimelineResultDto>(timelineResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<TimelineResultDto>(timelineResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
 	@PutMapping(value="/feed/timeline/{feedId}")
 	public ResponseEntity<FeedResultDto> feedTimeline(@PathVariable int feedId) {

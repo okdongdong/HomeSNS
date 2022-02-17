@@ -69,10 +69,10 @@ const comments = {
           console.log(err);
         });
     },
-    createComment: function ({ commit,dispatch }, data) {
+    createComment: function ({ commit,dispatch,rootState }, data) {
       const token = localStorage.getItem("jwt");
-      // console.log('내가 방금 작성한 댓글!')
-      // console.log(data.commentDto)
+      console.log('내가 방금 작성한 댓글!')
+      console.log(data.commentDto)
       axios({
         method: "POST",
         url: `${process.env.VUE_APP_MCS_URL}/feed/comment`,
@@ -81,12 +81,24 @@ const comments = {
       }).then((res) => {
         // console.log("댓글 생성완료!!");
         // console.log(res.data);
+        // 댓글 알람
+        if(data.feedAuthorSeq != rootState.account.userSeq){
+          let commentNoticeInfo = {
+            targetUserSeq : data.feedAuthorSeq,
+            noticeType : "commentCreate",
+            noticeContentId : data.commentDto.feedId,
+            noticeCommentContent : data.commentDto.commentContent,
+          }
+          dispatch('notice/send',commentNoticeInfo,{root:true})
+        }
+        //태그 알람
         commit("CREATE_COMMENT", res.data.comment);
         for(let i=0; i<data.commentDto.commentTags.length; i++){
           let noticeInfo = {
             targetUserSeq : data.commentDto.commentTags[i],
             noticeType : "commentTagged",
             noticeContentId : data.commentDto.feedId,
+            noticeCommentContent : data.commentDto.commentContent,
           }
           dispatch('notice/send',noticeInfo,{root:true})
         }

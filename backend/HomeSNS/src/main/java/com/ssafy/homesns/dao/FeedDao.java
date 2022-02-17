@@ -17,6 +17,7 @@ import com.ssafy.homesns.dto.LocationDto;
 import com.ssafy.homesns.dto.LocationFavoriteDto;
 import com.ssafy.homesns.dto.MainFeedDto;
 import com.ssafy.homesns.dto.MainFileDto;
+import com.ssafy.homesns.dto.TimelineDto;
 import com.ssafy.homesns.dto.UserDto;
 
 @Mapper
@@ -67,8 +68,11 @@ public interface FeedDao {
 	// feed지우면 fk 테이블 자동삭제 cascade
 	public int feedDelete(int feedId);
 	public int noticeFeedDelete(int feedId);
-	public int locationFavoriteDelete(LocationFavoriteDto locationFavoriteDto);
 	
+	// 피드 장소 즐겨찾기 삭제 
+	public int locationFavoriteDelete(LocationFavoriteDto locationFavoriteDto);
+	// 피드 장소 즐겨찾기 추가 
+	public int locationFavoriteAdd(LocationFavoriteDto locationFavoriteDto);
 	
 	// 피드 감정표현 추가, 피드를 생성하면서 동시에 모든 값이 0인 피드 감정표현 테이블 생성
 	public int feedEmotionCreate(int feedId);
@@ -102,6 +106,12 @@ public interface FeedDao {
 	// 피드 감정표현 기록 삭제, 피드 감정표현의 수정에 따라 테이블 삭제
 	public int feedEmotionUserUseDelete(FeedEmotionDto feedEmotionDto);
 	
+	// 피드 타임라인 조회
+	public List<TimelineDto> feedTimelineSearch(FeedParamDto feedParamDto);
+	// userSeq를 사용해서 userProfileImageUrl
+	public String userProfileImageUrlSearch(int userSeq);
+	// feedLocationId를 사용해서 feedLocation
+	public String locationNameSearch(int locationId);
 	// 피드 타임라인 변경
 	public int feedTimeline(int feedId);
 	
