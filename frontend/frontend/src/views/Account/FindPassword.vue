@@ -32,8 +32,8 @@
           <v-card-text class="main-text justify-left font-weight-bold"
             >사용한 이메일로</v-card-text
           >
-          <v-card-text class="main-text justify-left font-weight-bold"
-            >비밀번호가</v-card-text
+          <v-card-text class="main-text justify-left font-weight-bold yellow--text text--accent-4"
+            >임시 비밀번호<span class="white--text">가</span></v-card-text
           >
           <v-card-text class="main-text justify-left font-weight-bold"
             >발송됩니다.</v-card-text
