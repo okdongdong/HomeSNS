@@ -6,6 +6,7 @@ import com.ssafy.homesns.dto.GroupDto;
 import com.ssafy.homesns.dto.GroupMemberDto;
 import com.ssafy.homesns.dto.GroupMemberResultDto;
 import com.ssafy.homesns.dto.GroupResultDto;
+import com.ssafy.homesns.dto.ProfileImageResultDto;
 
 public interface GroupService {
 	
@@ -13,6 +14,9 @@ public interface GroupService {
 	public GroupResultDto groupListCreate(GroupDto groupDto, MultipartHttpServletRequest request);
 	// 그룹 프로필 이미지 수정
 	public GroupResultDto groupProfileImageUpdate(int groupId, MultipartHttpServletRequest request);
+	// 그룹 프로필 이미지 조회
+	public ProfileImageResultDto groupProfileImageSearch(int groupId);
+
 	
 	// 그룹 리스트 불러오기
 	public GroupResultDto groupListSearch(int userSeq);

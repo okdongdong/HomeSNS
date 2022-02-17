@@ -18,6 +18,16 @@
 		 WHERE GROUP_ID = #{groupId}
 	</update>
 	
+	<select id="groupProfileImageSearch" parameterType="int" resultType="com.ssafy.homesns.dto.ProfileImageDto">
+		SELECT PROFILE_IMAGE_ID as profileImageId, GROUP_ID as groupId, PROFILE_IMAGE_NAME as profileImageName, 
+			   PROFILE_IMAGE_URL as profileImageUrl
+		  FROM PROFILE_IMAGE
+		 WHERE GROUP_ID = #{groupId}
+	  ORDER BY PROFILE_IMAGE_ID DESC
+	     LIMIT 1
+	</select>
+	
+	
 	
 	
 	<select id="groupListRecentMake" parameterType="int" resultType="int">

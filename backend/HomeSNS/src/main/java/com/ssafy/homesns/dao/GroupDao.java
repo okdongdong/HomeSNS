@@ -18,6 +18,8 @@ public interface GroupDao {
 	public int groupProfileImageInsert(ProfileImageDto profileImageDto);
 	// 그룹 프로필 사진 수정
 	public int groupProfileImageUpdate(ProfileImageDto profileImageDto);
+	// 그룹 프로필 사진 조회
+	public ProfileImageDto groupProfileImageSearch(int groupId);
 	
 	// 특정 유저가 그룹 리더이고 가장 최근에 생성된 그룹ID 찾기
 	public int groupListRecentMake(int userSeq);
