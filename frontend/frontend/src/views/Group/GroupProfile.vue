@@ -82,7 +82,7 @@
         <p
           style="position: relative"
           class="ma-0 mt-5"
-          @click.stop="dialog = true"
+          @click.stop="nowManager?dialog = true:''"
         >
           <v-icon
             class="pa-2"
@@ -134,7 +134,7 @@
 <script>
 import axios from "axios";
 import ProfilePhoto from "../../components/ProfilePhoto.vue";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   components: { ProfilePhoto },
@@ -150,9 +150,28 @@ export default {
     this.getMembers();
   },
   methods: {
+    ...mapActions('account', ['setNowGroup']),
     selectFile: function (file) {
       this.image = file;
       this.previewImage = URL.createObjectURL(this.image);
+    },
+    getProfile() {
+      const token = localStorage.getItem("jwt");
+      axios({
+        method: "get",
+        url: `${process.env.VUE_APP_MCS_URL}/group/profileImage/${this.nowGroup.groupId}`,
+        headers: { Authorization: token },
+      })
+        .then((res) => {
+          console.log(res)
+          const groupInfo = this.groupInfo
+          groupInfo.groupName = res.data.profileImgaeResultDto.groupName
+          groupInfo.groupProfileImageUrl = res.data.profileImgaeResultDto.groupProfileImageUrl
+          this.setNowGroup(groupInfo)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     updateProfileImage() {
       const token = localStorage.getItem("jwt");

@@ -14,7 +14,7 @@
           class="ma-0 mt-5"
           @click.stop="dialog = true"
         >
-          <v-icon
+          <!-- <v-icon
             class="pa-2"
             @click.stop="dialog = true"
             v-if="nowManager"
@@ -29,7 +29,7 @@
             color="black"
             size="32"
             >edit</v-icon
-          >
+          > -->
           <v-img
             aspect-ratio="1"
             :src="nowGroup.groupProfileImageUrl"
