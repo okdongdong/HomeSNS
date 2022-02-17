@@ -25,6 +25,7 @@
 
 <script>
 import axios from "axios";
+import {mapState} from "vuex";
 export default {
   name: "UserPageScrap",
   props: {
@@ -41,15 +42,15 @@ export default {
         method: "get",
         url: `${process.env.VUE_APP_MCS_URL}/user/scrap/other`,
         headers: { Authorization: token },
-        params: { userSeq: this.userSeq, offset: this.offset, limit: 18 },
+        params: { userSeq: this.userSeq, groupId : this.nowGroup.groupId, offset: this.offset, limit: 18 },
       })
         .then((res) => {
 
           if (res.data.mainFeedDtoList.length) {
             res.data.mainFeedDtoList.forEach((feed) => {
               this.feeds.push(feed);
-              this.offset += 18;
             });
+            this.offset += 18;
             $state.loaded();
           } else {
             $state.complete();
@@ -60,6 +61,9 @@ export default {
         });
     },
   },
+  computed :{
+    ...mapState("account",["nowGroup"])
+  }
 };
 </script>
 
