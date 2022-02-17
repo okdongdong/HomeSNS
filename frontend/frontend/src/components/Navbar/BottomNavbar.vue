@@ -6,8 +6,7 @@
     class="my-bar"
     style="left: calc(max(((100% - 450px) / 2), 0px))"
   >
-   
-    <div class="align-center py-4" style="width: 100%">
+    <v-row class="align-center py-4 mx-0" style="width: 100%">
       <v-row class="text-center px-5">
         <v-col cols="3" class="px-0">
           <v-btn
@@ -25,7 +24,7 @@
             style="background-color: rgba(0, 0, 0, 0)"
             class="py-5"
           >
-            <h3 class="mt-1">시간 여행</h3>
+            <h3 class="mt-1">추억 여행</h3>
             <v-icon>access_time</v-icon>
           </v-btn>
         </v-col>
@@ -35,7 +34,7 @@
             style="background-color: rgba(0, 0, 0, 0)"
             class="py-5"
           >
-            <h3 class="mt-1">추억 여행</h3>
+            <h3 class="mt-1">추억의 장소</h3>
             <v-icon>airplane_ticket</v-icon>
           </v-btn>
         </v-col>
@@ -50,7 +49,7 @@
           </v-btn>
         </v-col>
       </v-row>
-    </div>
+    </v-row>
   </v-bottom-navigation>
 </template>
 
