@@ -27,6 +27,12 @@
 	     LIMIT 1
 	</select>
 	
+	<select id="groupNameSearch" parameterType="int" resultType="string">
+		SELECT GROUP_NAME as groupName
+		  FROM GROUP_LIST
+		 WHERE GROUP_ID = #{groupId}
+	</select>
+	
 	
 	
 	

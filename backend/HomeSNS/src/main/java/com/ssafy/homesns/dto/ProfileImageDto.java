@@ -7,12 +7,20 @@ public class ProfileImageDto {
 	private int profileImageId;
 	private int userSeq;
 	private int groupId;
+	private String groupName;
 	
 	private String profileImageName;
 	private long profileImageSize;
 	private String profileImageUrl;
 	private Date regDt;
 	
+	
+	public String getGroupName() {
+		return groupName;
+	}
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
 	public int getProfileImageId() {
 		return profileImageId;
 	}
@@ -59,8 +67,8 @@ public class ProfileImageDto {
 	@Override
 	public String toString() {
 		return "ProfileImageDto [profileImageId=" + profileImageId + ", userSeq=" + userSeq + ", groupId=" + groupId
-				+ ", profileImageName=" + profileImageName + ", profileImageSize=" + profileImageSize
-				+ ", profileImageUrl=" + profileImageUrl + ", regDt=" + regDt + "]";
+				+ ", groupName=" + groupName + ", profileImageName=" + profileImageName + ", profileImageSize="
+				+ profileImageSize + ", profileImageUrl=" + profileImageUrl + ", regDt=" + regDt + "]";
 	}
 	
 }

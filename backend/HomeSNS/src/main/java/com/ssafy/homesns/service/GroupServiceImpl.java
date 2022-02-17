@@ -173,6 +173,8 @@ public class GroupServiceImpl implements GroupService{
 		try {
 			ProfileImageDto profileImageDto = groupDao.groupProfileImageSearch(groupId);
 			
+			profileImageDto.setGroupName(groupDao.groupNameSearch(groupId));
+			
 			profileImageResultDto.setProfileImageDto(profileImageDto);
 			profileImageResultDto.setResult(SUCCESS);
 		} catch (Exception e) {
