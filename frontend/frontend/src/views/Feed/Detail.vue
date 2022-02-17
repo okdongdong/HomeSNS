@@ -71,8 +71,8 @@
         <!-- 타임라인버튼 -->
         <v-col cols="1">
           <v-btn icon large style="padding: 0" @click="timelineToggle">
-            <v-icon v-if="timeline == false">star_border</v-icon>
-            <v-icon v-else color=yellow>star</v-icon>
+            <v-icon v-if="bookmark == false">access_time</v-icon>
+            <v-icon v-else color=green>access_time</v-icon>
           </v-btn>
         </v-col>
         <!-- 북마크 -->
