@@ -39,7 +39,7 @@
               <!-- :src="`https://i6e205.p.ssafy.io/${file.markerImg}`" -->
               <v-img
                   v-if="file.type == 'img'" 
-                  :src="`https://i6e205.p.ssafy.io/${file.markerImg}`"
+                  src="'http://image.yes24.com/momo/TopCate282/MidCate005/28147902.jpg'"
                   aspect-ratio="1"
                   class="grey lighten-2"
                   @click="$router.push({name : 'Detail', params : {feedId : file.feedId}})"
@@ -232,8 +232,9 @@ export default {
 }
 
 .gm-style>div>div>div>div> img {
-  border :white 4px solid !important;
+  /* border :white 4px solid !important; */
   /* box-shadow: 0 0 5px 5px black !important; */
   /* border-color :black; */
+  border-radius : 25px !important;
 }
 </style>
