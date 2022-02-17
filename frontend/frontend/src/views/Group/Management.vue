@@ -113,7 +113,7 @@
                 class="ma-3"
                 :name="member.userName"
                 :size="64"
-                :imgUrl="member.userImgUrl"
+                :imgUrl="member.userProfileImageUrl"
                 :userSeq="member.userSeq"
               />
             </div>
@@ -136,7 +136,7 @@
                     ? 'rgba(98, 101, 232)'
                     : 'rgba(255, 255, 255, 0.5)'
                 "
-                :dark="member.managerYn == 'Y' || member.managerYn == 'y'"
+                :dark="(member.managerYn == 'Y' || member.managerYn == 'y') &&  nowGroup.groupLeaderSeq == userSeq"
                 @click.stop="
                   member.managerYn == 'Y' || member.managerYn == 'y'
                     ? deleteManager(member)
@@ -148,7 +148,7 @@
                 >
                 <v-icon v-else>radio_button_unchecked</v-icon></v-btn
               >
-              <v-btn color="red" dark block class="d-flex justify-space-around" :disabled="!nowManager"
+              <v-btn color="red" :dark="nowManager &&!(member.userSeq == nowGroup.groupLeaderSeq)" block class="d-flex justify-space-around" :disabled="!nowManager ||member.userSeq == nowGroup.groupLeaderSeq"
                @click.stop="deleteMember(member)" >내보내기 <v-icon>do_not_disturb_on</v-icon></v-btn
               >
             </div>

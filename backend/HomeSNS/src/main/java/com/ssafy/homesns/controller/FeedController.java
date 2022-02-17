@@ -28,6 +28,7 @@ import com.ssafy.homesns.dto.FeedResultDto;
 import com.ssafy.homesns.dto.GroupMemberDto;
 import com.ssafy.homesns.dto.LocationFavoriteDto;
 import com.ssafy.homesns.dto.MainFeedResultDto;
+import com.ssafy.homesns.dto.TimelineResultDto;
 import com.ssafy.homesns.service.FeedService;
 
 @CrossOrigin(origins = { "http://localhost:5500", "http://172.30.1.59:5500", "http://192.168.0.100:5500",
@@ -150,6 +151,7 @@ public class FeedController {
 	public ResponseEntity<FeedResultDto> feedDelete(@PathVariable int feedId) {
 
 		FeedResultDto feedResultDto = feedService.feedDelete(feedId);
+		
 
 		if (feedResultDto.getResult() == SUCCESS) {
 			return new ResponseEntity<FeedResultDto>(feedResultDto, HttpStatus.OK);
@@ -214,6 +216,16 @@ public class FeedController {
 		return new ResponseEntity<FeedEmotionResultDto>(feedEmotionResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	@GetMapping(value="/feed/timeline")
+	public ResponseEntity<TimelineResultDto> feedTimelineSearch(FeedParamDto feedParamDto) {
+		
+		TimelineResultDto timelineResultDto = feedService.feedTimelineSearch(feedParamDto);
+		
+		if ( timelineResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<TimelineResultDto>(timelineResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<TimelineResultDto>(timelineResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
 	@PutMapping(value="/feed/timeline/{feedId}")
 	public ResponseEntity<FeedResultDto> feedTimeline(@PathVariable int feedId) {

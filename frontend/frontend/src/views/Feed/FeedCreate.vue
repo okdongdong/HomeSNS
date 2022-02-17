@@ -80,6 +80,32 @@
                 </v-row>
               </template>
             </v-img>
+            <!-- 피드 수정 시 새로운 사진 넣을때 프리뷰 이슈있어서 넣은 것 -->
+            <video
+              v-else-if="fileId == 0 && file.type == 'video'"
+              autoplay
+              muted
+              :src="file.previewImage"
+              :lazy-src="`https://picsum.photos/200/300`"
+              @click="deleteFile(i,file)"
+            ></video>
+            <v-img
+              v-else-if="file.type == 'img' && fileId == 0"
+              :src="file.previewImage"
+              :lazy-src="`https://picsum.photos/200/300`"
+              aspect-ratio="1"
+              class="grey lighten-2"
+              @click="deleteFile(i,file)"
+            >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="grey lighten-5"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+            </v-img>
           </v-col>
           <v-col cols="12">
             <v-file-input
@@ -102,14 +128,14 @@
               label="장소 이름"
               @change="locaLabelInput"
             >
-              <v-btn
+              <!-- <v-btn
                 slot="append"
                 icon
                 @click.stop="toggleCurrLocaFavBtn()"
                 v-bind:color="form.currLocaFav ? 'orange' : 'gray'"
               >
                 <v-icon>mdi-star</v-icon>
-              </v-btn>
+              </v-btn> -->
               <template slot="item" slot-scope="data">
                 <v-btn
                   icon
@@ -548,15 +574,44 @@ export default {
     toggleFavBtn(data) {
       // 목록에 있는 데이터 즐겨찾기 토글
       // 목록안의 idx를 가지고와서 토글하면 엉뚱한게 토글되므로, 그 index를 가진 위치(index)를 찾아야함.
+      const token = localStorage.getItem("jwt");
       let toggleIdx = data.item.idx;
+      let locationId = null;
       for (let i = 0; i < this.locaLabels.length; i++) {
         if (this.locaLabels[i].idx === toggleIdx) {
-          console.log(this.locaLabels[i].idx);
+          // console.log(this.locaLabels[i].idx);
+          locationId = this.locaLabels[i].idx;
           toggleIdx = i;
+          console.log('토글한 로케이션 실제 idx')
           console.log(toggleIdx);
         }
       }
-      this.locaLabels[toggleIdx].fav = !this.locaLabels[toggleIdx].fav;
+      if(this.locaLabels[toggleIdx].fav == true){ // 즐겨찾기삭제
+        axios({
+          method : "DELETE",
+          url : `${process.env.VUE_APP_MCS_URL}/locationFav/${locationId}`,
+          headers: { Authorization: token },
+        })
+        .then(()=>{
+          this.locaLabels[toggleIdx].fav = !this.locaLabels[toggleIdx].fav;
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+      }else{
+        axios({
+          method : "POST",
+          url : `${process.env.VUE_APP_MCS_URL}/locationFav`,
+          data : locationId,
+          headers: { Authorization: token },
+        })
+        .then(()=>{
+          this.locaLabels[toggleIdx].fav = !this.locaLabels[toggleIdx].fav;
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+      }
       if (this.form.locaLabel === data.item.item) {
         this.form.currLocaFav = this.locaLabels[toggleIdx].fav;
       }
@@ -572,10 +627,10 @@ export default {
       this.markers = [{ position: marker }];
       this.getActualAddress(marker);
     },
-    toggleCurrLocaFavBtn() {
+    // toggleCurrLocaFavBtn() {
       // 현재 장소 즐겨찾기 등록 여부
-      this.form.currLocaFav = !this.form.currLocaFav;
-    },
+    //   this.form.currLocaFav = !this.form.currLocaFav;
+    // },
     selectFile: function (data) {
       for (let i = 0; i < data.length; i++) {
         if (data[i].type.includes("video")) {
@@ -635,7 +690,7 @@ export default {
               feedLocationStr["locationName"] = this.form.locaLabel;
               feedLocationStr["lat"] = this.markers[0].position.lat; // 위도
               feedLocationStr["lng"] = this.markers[0].position.lng; // 경도
-              feedLocationStr["favorite"] = this.form.currLocaFav; // 장소 즐겨찾기 여부
+              feedLocationStr["favorite"] = false; // 처음 즐겨찾기 버튼은 그냥 false로 넘겨줌
             }
             data.append("feedLocationStr", JSON.stringify(feedLocationStr));
       }

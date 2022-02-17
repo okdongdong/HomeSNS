@@ -10,98 +10,96 @@
           :userSeq="comment.commentAuthorSeq"
         />
       </v-col>
-      <v-col class="comment-content-987987 pr-3" :id="`comment${comment.commentId}`" cols="7" v-if="comment.commentAuthorSeq == userSeq">
-        <div>{{ comment.uploadDate }}</div>
-        <!-- <span class="hashtag"> @{{ comment.commentContent }} </span>
-        <span> {{ comment.commentContent }} </span> -->
+      <v-col
+        class="comment-content-987987 pr-3"
+        :cols="comment.commentAuthorSeq == userSeq ? 7 : 9"
+        ><div>
+          <div>
+            <span
+              v-for="(content, idx) in comment.commentContent"
+              :key="idx"
+              :class="content.type"
+              @click="move(content)"
+            >
+              {{ content.content }}
+            </span>
+          <br>
+          <div>{{ comment.commentUploadDate }}</div>
+          </div>
+        </div>
       </v-col>
-      <v-col class="comment-content pr-4" :id="`comment${comment.commentId}`" cols="9" v-else>
-        <div>{{ comment.uploadDate }}</div>
-        <!-- <span class="hashtag"> @{{ comment.commentContent }} </span> -->
-        <!-- <span> {{ comment.commentContent }} </span> -->
-      </v-col>
-      <v-col cols="2" class="d-inline-flex pr-3" v-if="comment.commentAuthorSeq == userSeq">
+      <v-col
+        cols="2"
+        class="d-inline-flex pr-3"
+        v-if="comment.commentAuthorSeq == userSeq"
+      >
         <v-btn icon @click="deleteComment(comment.commentId)">
           <v-icon size="32">delete_forever</v-icon>
-        </v-btn>  
+        </v-btn>
       </v-col>
     </v-row>
-    <hr>
+    <hr />
   </div>
-    <!-- <Emotion /> -->
+  <!-- <Emotion /> -->
   <!-- </v-row> -->
 </template>
 
 <script>
-import {mapState} from "vuex";
+import { mapState } from "vuex";
 import ProfilePhoto from "../ProfilePhoto.vue";
 // import Emotion from "./Emotion.vue";
 export default {
   name: "Comment",
+  data: () => ({
+    commentContentList: [],
+  }),
   props: {
     comment: Object,
-    feedId : Number,
+    feedId: Number,
+    members : Array,
   },
   components: {
     ProfilePhoto,
     // Emotion,
   },
-  methods:{
-    deleteComment(commentId){
-      console.log(this.feedId)
-      let data ={
+  methods: {
+    move(content){
+      if(content.type == 'hashtag'){
+        let memberName = content.content.substr(1).trim();
+        console.log(memberName)
+        for(let i=0;i<this.members.length;i++){
+          if(this.members[i].userName == memberName){
+            this.$router.push({name : 'UserPage', params:{userSeq : this.members[i].userSeq}})
+          }
+        }
+      }
+    },
+    deleteComment(commentId) {
+      console.log(this.feedId);
+      let data = {
         // feedId : this.feedId,
-        commentId : commentId,
-      }
-      this.$store.dispatch('comments/deleteComment',data)
-    }
+        commentId: commentId,
+      };
+      this.$store.dispatch("comments/deleteComment", data);
+    },
   },
-  computed:{
-    ...mapState("account",["userSeq"]),
-    ...mapState("comments",["comments"])
+  computed: {
+    ...mapState("account", ["userSeq"]),
+    ...mapState("comments", ["comments"]),
   },
-  mounted () {
-    console.log('현재댓글')
-
-    const commentList = this.comment.commentContent.split(" ");
-    let commentTag = document.querySelector('#comment'+this.comment.commentId)
-    console.log('선택한 태그')
-    console.log(commentTag)
-    console.log(commentList)
-    for(let i=0; i<commentList.length;i++){
-      if(commentList[i].substring(0,1)=='@'){
-        let tagSpanTag = document.createElement('div')
-        tagSpanTag.innerText = commentList[i]+" "
-        console.log('댓글xorm=======================')
-        console.log(tagSpanTag)
-        commentTag.appendChild(tagSpanTag)
-      }else{
-        let commentSpanTag = document.createElement('span')
-        commentSpanTag.innerText = commentList[i]+" "
-        console.log('댓글=======================')
-        console.log(commentSpanTag)
-        commentTag.appendChild(commentSpanTag)
-      }
-    }
-  },
-  // updated(){
-
-  // }
 };
-
 </script>
 
 <style>
-.comment-box-987987{
+.comment-box-987987 {
   background-color: rgba(251, 251, 251, 0.705);
 }
-/* .hashtag {
-  color: rgb(110, 110, 252);
-} */
-.comment-content-987987 div{
-  display: inline;
+.hashtag {
+  color: rgb(87, 75, 255);
   font-weight: bold;
   text-decoration: underline;
-  color: rgb(87, 75, 255);
+}
+.comment-content-987987 div {
+  display: inline;
 }
 </style>

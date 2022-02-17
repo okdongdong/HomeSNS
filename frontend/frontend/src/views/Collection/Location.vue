@@ -1,7 +1,6 @@
 <template>
-  <v-app class="container" style="padding : 0px;">
-    <div style="height:100%;">
-    <GmapMap class="gmap-marker-clustering" :center="center" :zoom="12">
+  <div class="gmap-marker-clustering" id="부엉부엉시부엉">
+    <GmapMap  style="height:100%" :center="center" :zoom="15">
       <GmapCluster
         :zoomOnClick="true"
         :enableRetinaIcons="true"
@@ -13,30 +12,95 @@
           :key="index"
           v-for="(m, index) in markers"
           :position="m.position"
-          @click="center = m.position"
+          @click="getPhotos(m)"
           :clickable="true"
           :icon="{
-            url: m.markerImg,
+            url: 'https://i6e205.p.ssafy.io/'+m.files[0].markerImg,
             scaledSize: { width: 100, height: 100 },
             position: m.position,
           }"
         />
+        <v-dialog v-model="show" scrollable max-width="400px">
+          <v-card>
+            <div class="justify-space-between d-flex align-center">
+              <v-btn color="" text @click="show = !show">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </div>
+            <v-divider></v-divider>
+            <v-container>
+            <v-row>
+              <v-col
+                v-for="(file, i) in currPhotos[0]"
+                :key="i"
+                class="pa-0"
+                cols="4"
+              >
+              <!-- :src="`https://i6e205.p.ssafy.io/${file.markerImg}`" -->
+              <v-img
+                  v-if="file.type == 'img'" 
+                  src="'http://image.yes24.com/momo/TopCate282/MidCate005/28147902.jpg'"
+                  aspect-ratio="1"
+                  class="grey lighten-2"
+                  @click="$router.push({name : 'Detail', params : {feedId : file.feedId}})"
+                >
+                  <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-progress-circular
+                        indeterminate
+                        color="grey lighten-5"
+                      ></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+                <!-- :src="`https://i6e205.p.ssafy.io/${photo.markerImg}`" -->
+                <v-video
+                  v-else
+                  :src="`https://i6e205.p.ssafy.io/${photo.markerImg}`" 
+                  aspect-ratio="1"
+                  class="grey lighten-2"
+                >
+                <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-progress-circular
+                        indeterminate
+                        color="grey lighten-5"
+                      ></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-video>
+              </v-col>
+            </v-row>
+            </v-container>
+          </v-card>
+        </v-dialog>
       </GmapCluster>
     </GmapMap>
-    </div>
-  </v-app>
+  </div>
 </template>
 
 <script>
+import axios from 'axios';
 import {gmapApi} from 'vue2-google-maps'
 import GmapCluster from 'vue2-google-maps/dist/components/cluster';
+import { mapState } from "vuex";
 export default {
   name: "Location",
   components: {
-    GmapCluster
+    GmapCluster,
   },
   data() {
     return {
+      show : false,
+      currPhotos : [],
       clusterStyles:[
         {
           textColor : 'white',
@@ -57,72 +121,120 @@ export default {
           textsize:10
         },
       ],
-      center: { lat: -31.56391, lng: 147.154312 }, // 처음 센터 값
+      center: { lat: 37.501250, lng: 127.039523 }, // 처음 센터 값
       currentPlace: null, // 현재위치
-      markers: [
-        
-          {
-          position: { lat: -31.56391, lng: 147.154312 },
-          markerImg: "https://cdn.iworldtoday.com/news/photo/201603/188668_62908_1934.png",
-        },
-        {
-          position: { lat: -33.718234, lng: 150.363181 },
-          markerImg:
-            "https://images.chosun.com/resizer/KRM2YgbS9kVVz7QMgCMhH5eUaro=/596x795/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/B6DG6T572KT44ELDCUB5IYGTKU.jpg",
-        },
-        {
-          position: { lat: -33.727111, lng: 150.371124 },
-          markerImg: "http://image.newsis.com/2021/07/05/NISI20210705_0000781122_web.jpg",
-        },
-        {
-          position: { lat: -33.848588, lng: 151.209834 },
-          markerImg: "https://news.imaeil.com/photos/2021/03/05/2021030509243023923_l.jpg",
-        },
-        {
-          position: { lat: -33.851702, lng: 151.216968 },
-          markerImg:
-            "https://w.namu.la/s/76fae914da2d988202808b9f68f39d49631dd668dd31403910ed389d13db136fda62fe2be3b7a2d88168359f60d1f4fa780ffcb475c4cccafac35b703cc15a718a59320897465d17bb376dc67a8842601c0b1120428fa86d75ad2f8fce154bae",
-        },
-        {
-          position: { lat: -34.671264, lng: 150.863657 },
-          markerImg: "http://img.segye.com/content/image/2019/04/12/20190412504845.jpg",
-        },
-        {
-          position: { lat: -35.304724, lng: 148.662905 },
-          markerImg: "https://t1.daumcdn.net/cfile/tistory/998E2C4B5E17DD5C32",
-        },
-        {
-          position: { lat: -36.817685, lng: 175.699196 },
-          markerImg: "https://photo.newsen.com/mphoto/2019/07/18/201907181902081910_1.jpg",
-        },
-
-        
-      ],
+      markers: [],
     };
   },
-  // created() {
-  //   this.$gmapApiPromiseLazy().then(() => {
-  //     this.initialize(); //init once  library has been loaded
-  //   });
-  // },
-  computed : {
-    google : gmapApi,
-  },
-  methods: {
+  methods :{
+    getLocation(){
+      const token = localStorage.getItem("jwt");
+      axios({
+        method : "GET",
+        url : `${process.env.VUE_APP_MCS_URL}/location/${this.nowGroup.groupId}`,
+        headers: { Authorization: token },
+      })
+      .then((res)=>{
+        console.log('들고온파일')
+        console.log(res.data)
+        for(let i=0;i<res.data.groupFeedList.length;i++){
+          if(this.markers.length == 0){
+            this.markers.push({
+              position:{
+                lat : res.data.groupFeedList[i].lat,
+                lng : res.data.groupFeedList[i].lng
+              },
+              files : [],
+            })
+          }else{
+            let flag = 0
+            for(let j=0;j<this.markers.length;j++){
+              if(res.data.groupFeedList[i].lat == this.markers[j].position.lat && res.data.groupFeedList[i].lng == this.markers[j].position.lng){
+                flag = 1
+                break
+              }
+            }
+            if(!flag){
+              this.markers.push({
+              position:{
+                lat : res.data.groupFeedList[i].lat,
+                lng : res.data.groupFeedList[i].lng
+                },
+                files : [],
+              })
+            }
+          }
+        }
+        // console.log('==================')
+        // console.log(this.markers)
+        return res
+      })
+      .then((res)=>{
+        for(let k=0;k<res.data.groupFeedList.length;k++){
+          console.log('시부레')
+          for(let m=0;m<this.markers.length;m++){
+            console.log('시부레')
+            if(this.markers[m].position.lat == res.data.groupFeedList[k].lat && this.markers[m].position.lng == res.data.groupFeedList[k].lng){
+              for(let n=0;n<res.data.groupFeedList[k].fileDto.length;n++){
+                if(res.data.groupFeedList[k].fileDto[n].fileContentType.includes('image')){
+                  this.markers[m].files.push({
+                    markerImg : res.data.groupFeedList[k].fileDto[n].fileUrl,
+                    feedId : res.data.groupFeedList[k].feedId,
+                    type : 'img'
+                  })
+                }else{
+                  this.markers[m].files.push({
+                    markerImg : res.data.groupFeedList[k].fileDto[n].fileUrl,
+                    feedId : res.data.groupFeedList[k].feedId,
+                    type : 'video'
+                  })
+                }
+                
+                }
+              }
+            }
+          }
+        // console.log('마커에 들어가죠!!!!!!!!!!!!!!!!')
+        // console.log(this.markers)
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+    },
     checkcluster(data) {
       console.log(data.getMarkers());
-      }
+    },
+    getPhotos(marker){
+      this.currPhotos = []
+      this.show = true
+      console.log(this.show)
+      this.center = marker.position
+      this.currPhotos.push(marker.files)
+      console.log('=============currPhotos====================')
+      console.log(this.currPhotos)
+    },
+  },
+  created() {
+    this.getLocation();
+  },
+  computed : {
+    ...mapState("account",["nowGroup"]),
+    google : gmapApi,
   },
 };
 </script>
 
-<style scoped>
+<style>
 .gmap-marker-clustering {
-  /* width:300px;
-  height:300px; */
-  width: 100%;
-  height: calc(100% - 160px);
+  top:80px;
+  width:100%;
+  height: calc(100vh - 160px);
 }
 
-
+.gm-style>div>div>div>div> img {
+  /* border :white 4px solid !important; */
+  /* box-shadow: 0 0 5px 5px black !important; */
+  /* border-color :black; */
+  border-radius : 25px !important;
+}
 </style>

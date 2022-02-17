@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.ssafy.homesns.dao.HistoryTravelDao">
+
+	<select id="groupFeedIdList" parameterType="int" resultType="int">
+		SELECT FEED_ID
+		  FROM FEED 
+		 WHERE GROUP_ID =#{groupId}
+	</select>
+	
+	<select id="locationInfo" parameterType="int" resultType="com.ssafy.homesns.dto.LocationDto" >
+		SELECT LNG,LAT 
+		  FROM FEED 
+		  JOIN LOCATION ON FEED_LOCATION_ID = LOCATION_ID
+		 WHERE FEED_ID =#{feedId}
+	</select>
+	<!-- <select id="groupFileList" parameterType="int" resultType="com.ssafy.homesns.dto.FileDto">
+		SELECT FILE_CONTENT_TYPE, FILE_URL
+		FROM HOME_SNS.FILE
+		WHERE FEED_ID =#{feedId}
+	</select> -->
+	
+</mapper>

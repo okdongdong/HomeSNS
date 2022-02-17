@@ -19,7 +19,7 @@
             <div class="d-inline-flex">{{ feed.eventDate }}</div>
           </div>
         </v-col>
-        <v-col cols="2" class="d-flex justify-center align-center">
+        <v-col v-if="userSeq == feedAuthorSeq" cols="2" class="d-flex justify-center align-center" >
           <FeedPopup :feed-id="feedId" :feed-author-seq="feedAuthorSeq" />
         </v-col>
       </v-row>
@@ -30,11 +30,20 @@
           :img-url="feedAuthorProfileImageUrl"
           :user-seq="feedAuthorSeq"
         />
-        <h3 class="mx-3">
+        <h3 class="mx-3" @click="$router.push({name:'UserPage', params : {userSeq : feedAuthorSeq}})">
           {{ feed.author }}
         </h3>
       </div>
-      <div class="d-inline-flex"><v-icon>location_on</v-icon>{{ feed.location }}</div>
+      <v-row justify="space-around">
+      <v-col cols="9">
+        <v-icon>location_on</v-icon>{{ feed.location }}
+      </v-col>
+      <v-col cols="3">
+        <v-btn rounded small @click="sendNotice()" class='mb-1'>
+          추억공유
+        </v-btn>
+      </v-col>
+      </v-row>
     </div>
     <div class="feed-photos">
       <!-- 사진 -->
@@ -47,7 +56,7 @@
     <div>
       <v-row class="icon-group">
         <!-- 하트 -->
-        <v-col cols="10">
+        <v-col cols="9">
           <span style="padding: 8px"></span>
           <v-btn
             style="width: 25px"
@@ -59,11 +68,18 @@
             <v-img :src="currEmotion.emoji" style="width: 10px; height: auto"></v-img>
           </v-btn>
         </v-col>
+        <!-- 타임라인버튼 -->
+        <v-col cols="1">
+          <v-btn icon large style="padding: 0" @click="timelineToggle">
+            <v-icon v-if="bookmark == false">access_time</v-icon>
+            <v-icon v-else color=green>access_time</v-icon>
+          </v-btn>
+        </v-col>
         <!-- 북마크 -->
-        <v-col cols="2">
+        <v-col cols="1">
           <v-btn icon large style="padding: 0" @click="bookmarkToggle">
             <v-icon v-if="bookmark == false">bookmark_border</v-icon>
-            <v-icon v-else>bookmark</v-icon>
+            <v-icon v-else color=blue>bookmark</v-icon>
           </v-btn>
         </v-col>
       </v-row>
@@ -128,7 +144,7 @@
         </v-list>
       </v-card>
     </v-form>
-    <Comment v-for="(comment, idx) in comments" :key="idx" :comment="comment" :feed-id="feedId"/>
+    <Comment v-for="(comment, idx) in comments" :key="idx" :comment="comment" :feed-id="feedId" :members="members"/>
     <infinite-loading @infinite="getComments"></infinite-loading>
   </v-app>
 </template>
@@ -139,7 +155,7 @@ import FeedPopup from "../../components/Feed/FeedPopup.vue";
 import Emotion from "../../components/Feed/Emotion.vue";
 import ProfilePhoto from "../../components/ProfilePhoto.vue";
 import axios from "axios";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "Detail",
@@ -181,7 +197,9 @@ export default {
     ],
     beforeEmotion: null,
     currEmotion: { emoji: require("@/assets/emotions/heart_off.png"), status: "null", code: 30000 },
-    //북마크
+    // 타임라인
+    timeline: false,
+    // 북마크
     bookmark: false,
     // 댓글쪽
     currComment: null,
@@ -190,6 +208,15 @@ export default {
     tagList: [], // 해시태그한 사람
   }),
   methods: {
+    ...mapActions("notice", ["send"]),
+    sendNotice(){
+      const noticeInfo ={
+        targetUserSeq : -1,
+        noticeType : "shareCreate",
+        noticeContentId: this.feedId,
+      };
+      this.send(noticeInfo);
+    },
     emotionShowToggle(){
       this.showEmotions = false
     },
@@ -240,7 +267,7 @@ export default {
           "일";
         this.feed.location = res.data.feedDto.locationDto.locationName;
         this.nowLoading = false;
-        this.memberList = res.data.feedDto.userList;
+        // this.memberList = res.data.feedDto.userList;
         this.feed.hashtagList = res.data.feedDto.hashtagList;
         if(res.data.feedDto.code != "30000"){
           for(let i=0;i<this.emotions.length;i++){
@@ -261,6 +288,7 @@ export default {
         }else{
           this.bookmark = false
         }
+        this.timeline = res.data.feedDto.timeline
       });
     },
     getContent() {
@@ -282,22 +310,28 @@ export default {
     },
     createComment(event) {
       event.preventDefault();
-      // const token = localStorage.getItem("jwt");
-      let commentTag = [];
-      for (let i = 0; i < this.tagList.length; i++) {
-        commentTag.push(this.tagList[i].userSeq);
+      if(this.currComment == null || this.currComment.trim() == ''){
+        this.$store.commit(
+          "snackbar/SET_SNACKBAR",
+          "댓글을 입력해주세요."
+        )
       }
-      let data = {
-        commentDto: {
-          feedId: this.feedId,
-          commentTags: commentTag,
-          commentContent: this.currComment,
-        },
-      };
-      console.log("댓글작성 전");
-      console.log(data);
-      this.$store.dispatch("comments/createComment", data);
-      this.currComment = null;
+      else{
+        let commentTag = [];
+        for (let i = 0; i < this.tagList.length; i++) {
+          commentTag.push(this.tagList[i].userSeq);
+        }
+        let data = {
+          commentDto: {
+            feedId: this.feedId,
+            commentTags: commentTag,
+            commentContent: this.currComment,
+          },
+          feedAuthorSeq : this.feedAuthorSeq,
+        };
+        this.$store.dispatch("comments/createComment", data);
+        this.currComment = null;
+      }
     },
     selectTagMember(member) {
       // 원래는 자동으로 토글되야하는데 안되서 일단 수동으로 구현(comment내에 태그 지우면 없어짐)
@@ -397,7 +431,7 @@ export default {
         })
       }else{
         axios({
-          method : "PUT",
+          method : "POST",
           url : `${process.env.VUE_APP_MCS_URL}/feed/scrap/${this.feedId}`,
           headers : {Authorization : token}
         })
@@ -411,6 +445,21 @@ export default {
       }
       
     },
+    timelineToggle() {
+      const token = localStorage.getItem("jwt");
+      axios({
+        method : "put",
+        url : `${process.env.VUE_APP_MCS_URL}/feed/timeline/${this.feedId}`,
+        headers : {Authorization : token}
+      })
+      .then(()=>{
+        console.log('타임라인 등록완료')
+        this.timeline = !this.timeline;
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+    },
   },
   mounted() {
     this.feedId *= 1;
@@ -422,7 +471,7 @@ export default {
     this.$store.dispatch("comments/resetOffset");
   },
   computed: {
-    ...mapState("account", ["nowGroup", "userName"]),
+    ...mapState("account", ["nowGroup", "userName","userSeq"]),
     ...mapState("comments", ["comments", "offset"]),
     commentInTag() {
       if (this.currComment != null && this.currComment.substr(-1) == "@") {

@@ -6,42 +6,47 @@
     class="my-bar"
     style="left: calc(max(((100% - 450px) / 2), 0px))"
   >
-    <v-icon
-      class="pa-1 back-button"
-      @click.stop="$router.go(-1)"
-      color="black"
-      size="36"
-      >arrow_back</v-icon
-    >
-    <a  href="#" title="맨 위로">
-      <v-icon class="to-top-button pa-1" color="black" size="36">
-        arrow_upward
-        </v-icon>
-    </a>
-    <div class="align-center" style="width: 100%">
-      <v-row class="text-center pa-5">
+   
+    <div class="align-center py-4" style="width: 100%">
+      <v-row class="text-center px-5">
         <v-col cols="3" class="px-0">
-          <v-btn @click.stop="move('Main')">
+          <v-btn
+            @click.stop="move('Main')"
+            style="background-color: rgba(0, 0, 0, 0)"
+            class="py-5"
+          >
             <h3 class="mt-1">게시물</h3>
-            <v-icon>mdi-history</v-icon>
+            <v-icon>home</v-icon>
           </v-btn>
         </v-col>
         <v-col cols="3" class="px-0">
-          <v-btn @click.stop="move('Timeline')">
-            <h3 class="mt-1">시간여행</h3>
-            <v-icon>mdi-heart</v-icon>
+          <v-btn
+            @click.stop="move('Timeline')"
+            style="background-color: rgba(0, 0, 0, 0)"
+            class="py-5"
+          >
+            <h3 class="mt-1">시간 여행</h3>
+            <v-icon>access_time</v-icon>
           </v-btn>
         </v-col>
         <v-col cols="3" class="px-0">
-          <v-btn @click.stop="move('Location')">
-            <h3 class="mt-1">추억의 장소</h3>
+          <v-btn
+            @click.stop="move('Location')"
+            style="background-color: rgba(0, 0, 0, 0)"
+            class="py-5"
+          >
+            <h3 class="mt-1">추억 여행</h3>
             <v-icon>airplane_ticket</v-icon>
           </v-btn>
         </v-col>
         <v-col cols="3" class="px-0">
-          <v-btn @click.stop="move('Calendar')">
+          <v-btn
+            @click.stop="move('Calendar')"
+            style="background-color: rgba(0, 0, 0, 0)"
+            class="py-5"
+          >
             <h3 class="mt-1">일정표</h3>
-            <v-icon>mdi-map-marker</v-icon>
+            <v-icon>date_range</v-icon>
           </v-btn>
         </v-col>
       </v-row>
@@ -72,21 +77,5 @@ export default {
 .my-bar {
   left: calc((100vw - 450px) / 2);
 }
-.back-button {
-  left: 20px;
-}
-.to-top-button {
-  right: 20px;
-  text-decoration: none;
-}
-.back-button,
-.to-top-button {
-  display: scroll;
-  position: absolute;
-  top: -65px;
-  z-index: 4;
-  transition-duration: 1s;
-  border-radius: 50%;
-  background-color:rgba(255,255,255,0.8)
-}
+
 </style>
