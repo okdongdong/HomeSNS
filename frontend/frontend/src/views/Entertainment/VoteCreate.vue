@@ -122,7 +122,6 @@ export default {
         data: data,
       })
         .then((res) => {
-          console.log("투표생성 완료: ", res);
           this.$router.push({ name: "EntFeedList" });
           const noticeInfo = {
             targetUserSeq: -1,
@@ -131,9 +130,6 @@ export default {
           };
           this.send(noticeInfo);
         })
-        .catch((err) => {
-          console.log(err);
-        });
     },
   },
   computed: {

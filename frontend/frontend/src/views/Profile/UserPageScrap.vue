@@ -36,7 +36,6 @@ export default {
   }),
   methods: {
     getScrap: function ($state) {
-      console.log("스크랩 조회");
       const token = localStorage.getItem("jwt");
       axios({
         method: "get",
@@ -45,7 +44,6 @@ export default {
         params: { userSeq: this.userSeq, offset: this.offset, limit: 18 },
       })
         .then((res) => {
-          console.log(res);
 
           if (res.data.mainFeedDtoList.length) {
             res.data.mainFeedDtoList.forEach((feed) => {
@@ -56,8 +54,6 @@ export default {
           } else {
             $state.complete();
           }
-          console.log('============================')
-          console.log(this.feeds)
         })
         .catch((err) => {
           console.log(err);

@@ -242,17 +242,14 @@ export default {
         headers: { Authorization: token },
       })
         .then((res) => {
-          console.log(res);
           const userInfo = res.data.userDto;
           this.$store.commit("account/LOGIN", userInfo);
         })
-        .catch((err) => {
+        .catch(() => {
           this.$store.commit(
             "snackbar/SET_SNACKBAR",
             "유저정보 조회에 실패했습니다."
           );
-          console.log(err);
-          console.log(err.response);
         });
     },
     updateProfileImage() {
@@ -268,19 +265,15 @@ export default {
         },
         data: data,
       })
-        .then((res) => {
-          console.log(res);
-          console.log(res.data);
+        .then(() => {
           this.getProfile(this.userSeq);
           this.getMyProfile(this.userSeq);
         })
-        .catch((err) => {
+        .catch(() => {
           this.$store.commit(
             "snackbar/SET_SNACKBAR",
             "양식을 다시 확인해주세요."
           );
-          console.log(err);
-          console.log(err.response);
         });
     },
     passwordCheck() {
@@ -294,18 +287,15 @@ export default {
         },
         data: { userPassword: this.password },
       })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           this.dialog = false;
           this.$router.push({ name: "MyPage" });
         })
-        .catch((err) => {
+        .catch(() => {
           this.$store.commit(
             "snackbar/SET_SNACKBAR",
             "비밀번호가 일치하지 않습니다."
           );
-          console.log(err);
-          console.log(err.response);
           localStorage.removeItem("checkPasswordFlag");
         });
     },

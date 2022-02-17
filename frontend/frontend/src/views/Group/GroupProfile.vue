@@ -187,18 +187,14 @@ export default {
         },
         data: data,
       })
-        .then((res) => {
-          console.log(res);
-          console.log(res.data);
+        .then(() => {
           this.getProfile(this.userSeq);
         })
-        .catch((err) => {
+        .catch(() => {
           this.$store.commit(
             "snackbar/SET_SNACKBAR",
             "양식을 다시 확인해주세요."
           );
-          console.log(err);
-          console.log(err.response);
         });
     },
     getMembers() {
@@ -210,8 +206,6 @@ export default {
         // params: params,
       })
         .then((res) => {
-          console.log('그룹원들')
-          console.log(res);
           this.members = res.data.userDtoList;
           for (let i = 0; i < this.members.length; i++) {
             if (this.members[i].userSeq == this.userSeq) {
@@ -225,9 +219,6 @@ export default {
             }
           }
         })
-        .catch((err) => {
-          console.log(err);
-        });
     },
   },
   computed: {

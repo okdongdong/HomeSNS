@@ -208,7 +208,6 @@ export default {
       data.ghostLegDto.map = data.ghostLegDto.map.join();
       data.ghostLegDto.player = this.playerNames.join();
       data.ghostLegDto.result = this.resultNames.join();
-      console.log(data);
 
       const token = localStorage.getItem("jwt");
       axios({
@@ -225,12 +224,7 @@ export default {
             noticeContentId: res.data.gameId,
           };
           this.send(noticeInfo);
-
-          console.log(res);
         })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     randomPick() {
       this.isEdge = [
