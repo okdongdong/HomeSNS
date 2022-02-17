@@ -39,7 +39,7 @@
               <!-- :src="`https://i6e205.p.ssafy.io/${file.markerImg}`" -->
               <v-img
                   v-if="file.type == 'img'" 
-                  src="'http://image.yes24.com/momo/TopCate282/MidCate005/28147902.jpg'"
+                  :src="`https://i6e205.p.ssafy.io/${photo.markerImg}`" 
                   aspect-ratio="1"
                   class="grey lighten-2"
                   @click="$router.push({name : 'Detail', params : {feedId : file.feedId}})"
@@ -194,8 +194,6 @@ export default {
               }
             }
           }
-        // console.log('마커에 들어가죠!!!!!!!!!!!!!!!!')
-        // console.log(this.markers)
       })
       .catch((err)=>{
         console.log(err)

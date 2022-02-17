@@ -211,7 +211,7 @@
               <h1>그룹 목록</h1>
             </v-list-item-title>
           </v-list-item>
-          <v-list-item @click.stop="move('Main')">
+          <!-- <v-list-item @click.stop="move('Main')">
             <v-list-item-title class="d-flex align-center">
               <v-icon class="mx-3">mdi-history</v-icon>
               <h1>게시물</h1>
@@ -228,7 +228,7 @@
               <v-icon class="mx-3">mdi-map-marker</v-icon>
               <h1>일정표</h1>
             </v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
           <v-list-item @click.stop="move('EntFeedList')">
             <v-list-item-title class="d-flex align-center">
               <v-icon class="mx-3">extension</v-icon>
@@ -236,12 +236,12 @@
             </v-list-item-title>
           </v-list-item>
 
-          <v-list-item @click.stop="move('Management')">
+          <!-- <v-list-item @click.stop="move('Management')">
             <v-list-item-title class="d-flex align-center">
               <v-icon class="mx-3">manage_accounts</v-icon>
               <h1>그룹관리</h1>
             </v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
           <hr style="margin: auto; border-top: 1px solid #f0f0f0" />
           <v-list-item @click.stop="logout()">
             <v-list-item-title class="d-flex align-center">
