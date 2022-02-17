@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -27,6 +26,7 @@ import com.ssafy.homesns.dto.FeedEmotionResultDto;
 import com.ssafy.homesns.dto.FeedParamDto;
 import com.ssafy.homesns.dto.FeedResultDto;
 import com.ssafy.homesns.dto.GroupMemberDto;
+import com.ssafy.homesns.dto.LocationDto;
 import com.ssafy.homesns.dto.LocationFavoriteDto;
 import com.ssafy.homesns.dto.MainFeedResultDto;
 import com.ssafy.homesns.dto.TimelineResultDto;
@@ -185,8 +185,10 @@ public class FeedController {
 	// 장소 즐겨찾기 추가
 	// 받은locationId 와 JWT토큰에서 userSeq를 받아서 추가한다.
 	@PostMapping(value = "/locationFav")
-	public ResponseEntity<FeedResultDto> LocationFavoriteAdd(@RequestParam int locationId) {
+	public ResponseEntity<FeedResultDto> LocationFavoriteAdd(@RequestBody LocationDto locationDto) {
 
+		int locationId = locationDto.getLocationId();
+		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		System.out.println(authentication);
 		int userSeq = Integer.parseInt(authentication.getName());

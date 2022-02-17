@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -25,6 +24,7 @@ import com.ssafy.homesns.dto.GroupDto;
 import com.ssafy.homesns.dto.GroupMemberDto;
 import com.ssafy.homesns.dto.GroupMemberResultDto;
 import com.ssafy.homesns.dto.GroupResultDto;
+import com.ssafy.homesns.dto.ProfileImageResultDto;
 import com.ssafy.homesns.service.GroupService;
 @CrossOrigin(
 		origins = { "http://localhost:5500", "http://172.30.1.59:5500", "http://192.168.0.100:5500", "http://192.168.0.40:5500","https://i6e205.p.ssafy.io" },
@@ -123,6 +123,17 @@ public class GroupController {
 			return new ResponseEntity<GroupResultDto>(groupResultDto, HttpStatus.OK);
 		}
 		return new ResponseEntity<GroupResultDto>(groupResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@GetMapping(value="/group/profileImage/{groupId}")
+	public ResponseEntity<ProfileImageResultDto> groupProfileImageSearch(@PathVariable(value="groupId") int groupId) {
+
+		ProfileImageResultDto profileImageResultDto = groupService.groupProfileImageSearch(groupId);
+		
+		if ( profileImageResultDto.getResult() == SUCCESS ) {
+			return new ResponseEntity<ProfileImageResultDto>(profileImageResultDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<ProfileImageResultDto>(profileImageResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	// 그룹을 나가는 것이 아니라 그룹을 삭제하는 동작이어야 한다

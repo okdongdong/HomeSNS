@@ -20,6 +20,7 @@ import com.ssafy.homesns.dto.GroupMemberDto;
 import com.ssafy.homesns.dto.GroupMemberResultDto;
 import com.ssafy.homesns.dto.GroupResultDto;
 import com.ssafy.homesns.dto.ProfileImageDto;
+import com.ssafy.homesns.dto.ProfileImageResultDto;
 import com.ssafy.homesns.dto.UserDto;
 
 @Service
@@ -162,6 +163,27 @@ public class GroupServiceImpl implements GroupService{
 		
 		return groupResultDto;
 	}
+	
+
+	@Override
+	public ProfileImageResultDto groupProfileImageSearch(int groupId) {
+		
+		ProfileImageResultDto profileImageResultDto = new ProfileImageResultDto();
+		
+		try {
+			ProfileImageDto profileImageDto = groupDao.groupProfileImageSearch(groupId);
+			
+			profileImageDto.setGroupName(groupDao.groupNameSearch(groupId));
+			
+			profileImageResultDto.setProfileImageDto(profileImageDto);
+			profileImageResultDto.setResult(SUCCESS);
+		} catch (Exception e) {
+			profileImageResultDto.setResult(FAIL);
+		}
+		
+		return profileImageResultDto;
+	}
+
 
 	
 	@Override
