@@ -335,8 +335,6 @@ export default {
         headers: { Authorization: token },
       })
         .then((res) => {
-          console.log(res);
-          console.log("=====================");
           this.items = res.data.members;
           res.data.locations.forEach((location) => {
             this.locaLabels.push({
@@ -347,12 +345,7 @@ export default {
               fav: location.favorite,
             });
           });
-          console.log('locaLabel 들어오는지 확인')
-          console.log(this.locaLabels);
         })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     ////////// feed update시 들고올 데이터 ////////////
     FeedUpdateInfo() {
@@ -363,7 +356,6 @@ export default {
         headers: { Authorization: token },
       })
         .then((res) => {
-          console.log(res.data);
           const originData = res.data.feedDto;
           /////////// 문자열 -> 날짜 최종 포맷 (ex - '2021-10-08') ///////////////
           let dateString =
@@ -417,16 +409,12 @@ export default {
           this.locationId = originData.locationDto.locationId; // 수정할때 기본 선택되어있는 locationId
           // 구글맵쪽 설정해줄 것 설정해주기..!
         })
-        .catch((error) => {
-          console.log(error);
-        });
     },
     submit() {
       this.snackbar = true;
       // this.resetForm();
     },
     locaLabelInput(value) {
-      console.log(value)
       if (value === null) {
         if (this.locaLabel !== null) {
           value = true;
@@ -475,8 +463,6 @@ export default {
       });
     },
     setPlace(place) {
-      // console.log('----------------')
-      // console.log(place)
       const marker = {
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng(),
@@ -548,9 +534,6 @@ export default {
           }
           this.window_open = true; // 실제주소 popup true
         })
-        .catch((error) => {
-          console.log(error);
-        });
     },
     mark(event) {
       const marker = {
@@ -579,13 +562,13 @@ export default {
       let locationId = null;
       for (let i = 0; i < this.locaLabels.length; i++) {
         if (this.locaLabels[i].idx === toggleIdx) {
-          // console.log(this.locaLabels[i].idx);
           locationId = this.locaLabels[i].idx;
           toggleIdx = i;
-          console.log('토글한 로케이션 실제 idx')
-          console.log(toggleIdx);
+          // console.log('토글한 로케이션 실제 idx')
+          // console.log(toggleIdx);
         }
       }
+
       if(this.locaLabels[toggleIdx].fav == true){ // 즐겨찾기삭제
         axios({
           method : "DELETE",
@@ -595,21 +578,15 @@ export default {
         .then(()=>{
           this.locaLabels[toggleIdx].fav = !this.locaLabels[toggleIdx].fav;
         })
-        .catch((err)=>{
-          console.log(err)
-        })
       }else{
         axios({
           method : "POST",
           url : `${process.env.VUE_APP_MCS_URL}/locationFav`,
-          data : locationId,
+          data : { locationId : locationId },
           headers: { Authorization: token },
         })
         .then(()=>{
           this.locaLabels[toggleIdx].fav = !this.locaLabels[toggleIdx].fav;
-        })
-        .catch((err)=>{
-          console.log(err)
         })
       }
       if (this.form.locaLabel === data.item.item) {
@@ -617,7 +594,6 @@ export default {
       }
     },
     selectLoca(data) {
-      console.log(data);
       // 목록에 있는 데이터를 장소정보로 쓸려고할때
       this.form.locaLabel = data.item.item;
       this.form.currLocaFav = data.item.fav;
@@ -653,7 +629,6 @@ export default {
     },
     deleteFile(i,deletefile) {
       if(this.feedId != -1 && deletefile.fileId != 0){ // 수정일때, 그리고 새로올린 사진이 아닐때
-        console.log(deletefile)
         this.deleteFiles.push({
           fileId : deletefile.fileId,
           fileUrl :deletefile.fileUrl,
@@ -707,16 +682,14 @@ export default {
       for (let i = 0; i < this.form.files.length; i++) {
         data.append("file", this.form.files[i].content);
         }
-      for (let [key, value] of data) {
-        console.log(key);
-        console.log(value);
-      }
+      // for (let [key, value] of data) {
+      //   console.log(key);
+      //   console.log(value);
+      // }
       data.append("groupId", this.nowGroup.groupId);
 
       ////////////// 새로운 피드 작성 /////////////////////
       if (this.feedId == -1) {
-        
-        console.log('새로운 피드작성')
         axios({
           method: "POST",
           url: `${process.env.VUE_APP_MCS_URL}/feed`,
@@ -727,7 +700,6 @@ export default {
           },
         })
           .then((res) => {
-            console.log("피드작성 성공");
             this.nowLoading = false;
             const noticeInfo = {
                 targetUserSeq: -1,
@@ -742,14 +714,12 @@ export default {
               params: { groupId: this.nowGroup.groupId },
             }); // 이전 페이지로 보내기
           })
-          .catch((err) => {
+          .catch(() => {
             this.nowLoading = false;
-            console.log(err);
           });
       }
       //////////////////////////// 피드 업데이트 /////////////////////////
       else{
-        console.log('기존 피드 업데이트')
         if(flag===0){
           data.append("feedLocationId", 0)
         }
@@ -765,21 +735,14 @@ export default {
           },
         })
         .then(()=>{
-          console.log('피드수정 성공')
           this.$router.push({name:"Detail", params:{feedId:this.feedId}})
-        })
-        .catch((error)=>{
-          console.log('피드수정 실패')
-          console.log(error)
         })
       }
     },
   },
   created() {
-    console.log(typeof this.feedId)
     this.getFeedInfo();
     if (this.feedId != -1) {
-      console.log('여기들어옴?')
       this.FeedUpdateInfo();
     }
   },

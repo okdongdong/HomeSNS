@@ -38,7 +38,6 @@ export default {
   }),
   methods: {
     getFeed: function ($state) {
-      console.log("게시물 조회");
       const token = localStorage.getItem("jwt");
       axios({
         method: "get",
@@ -47,8 +46,6 @@ export default {
         params: { userSeq: this.userSeq, groupId :this.nowGroup.groupId ,offset: this.offset, limit: 18 },
       })
         .then((res) => {
-          console.log(res);
-
           if (res.data.mainFeedDtoList.length) {
             res.data.mainFeedDtoList.forEach((feed) => {
               this.feeds.push(feed);

@@ -133,7 +133,6 @@ export default {
         },
       })
         .then((res) => {
-          console.log("입장성공", res);
           const groupInfo = res.data.groupDto;
           this.$store.dispatch("account/setNowGroup", groupInfo);
           this.$router.push({
@@ -142,23 +141,17 @@ export default {
           });
         })
         .then(() => {
-          console.log("알림요청");
           this.connect({
             targetUserSeq: -1,
             noticeType: "member",
             noticeContentId: this.userSeq,
           });
         })
-        .catch((err) => {
+        .catch(() => {
           this.$store.commit(
             "snackbar/SET_SNACKBAR",
             "그룹아이디와 비밀번호를 다시 확인해주세요."
           );
-          console.log(err);
-          console.log(err.request);
-          console.log(err.message);
-          console.log(err.config);
-          console.log(err.response);
         });
     },
   },

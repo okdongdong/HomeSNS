@@ -223,17 +223,13 @@ export default {
         },
         data: data,
       })
-        .then((res) => {
-          console.log(res);
-          console.log(res.data);
+        .then(() => {
         })
-        .catch((err) => {
+        .catch(() => {
           this.$store.commit(
             "snackbar/SET_SNACKBAR",
             "양식을 다시 확인해주세요."
           );
-          console.log(err);
-          console.log(err.response);
         });
     },
     getMembers() {
@@ -245,7 +241,6 @@ export default {
         // params: params,
       })
         .then((res) => {
-          console.log(res);
           this.members = res.data.userDtoList;
           this.members = res.data.userDtoList;
           for (let i = 0; i < this.members.length; i++) {
@@ -260,9 +255,6 @@ export default {
             }
           }
         })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     updateGroupProfile() {
       const token = localStorage.getItem("jwt");
@@ -278,7 +270,7 @@ export default {
       })
         .then((res) => {
           console.log(res);
-           const groupInfo = this.nowGroup
+          const groupInfo = this.nowGroup
           groupInfo.groupName = this.groupName
           this.setNowGroup(groupInfo)
         })
@@ -299,13 +291,6 @@ export default {
           managerYn: memberInfo.managerYn,
         },
       })
-        .then((res) => {
-          console.log(res);
-          this.getMembers();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     deleteManager(memberInfo) {
       const token = localStorage.getItem("jwt");
@@ -320,14 +305,9 @@ export default {
           managerYn: memberInfo.managerYn,
         },
       })
-        .then((res) => {
-          console.log("매니저뺏기 성공");
-          console.log(res);
+        .then(() => {
           this.getMembers();
         })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     deleteGroup(memberInfo) {
       const token = localStorage.getItem("jwt");
@@ -342,14 +322,9 @@ export default {
           managerYn: memberInfo.managerYn,
         },
       })
-        .then((res) => {
-          console.log("매니저뺏기 성공");
-          console.log(res);
+        .then(() => {
           this.getMembers();
         })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     deleteMember(memberInfo){
       const token = localStorage.getItem("jwt");
@@ -362,14 +337,9 @@ export default {
           userSeq: memberInfo.userSeq,
         },
       })
-        .then((res) => {
-          console.log("멤버삭제 성공");
-          console.log(res);
+        .then(() => {
           this.getMembers();
         })
-        .catch((err) => {
-          console.log(err);
-        });
     }
   },
   computed: {

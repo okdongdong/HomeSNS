@@ -78,7 +78,6 @@ export default {
   methods: {
     ...mapActions("account", ["logout"]),
     getGroup() {
-      console.log("12333");
       const token = localStorage.getItem("jwt");
       axios({
         method: "GET",
@@ -89,17 +88,10 @@ export default {
       })
         .then((res) => {
           this.groups = res.data.groupDtoList;
-          console.log(res);
-          console.log("123");
         })
-        .catch((err) => {
-          console.log(err);
-          console.log("234");
-        });
     },
     // 그룹 사진 클릭 시, 해당 그룹 메인페이지로 이동
     groupMainPage: function (groupInfo) {
-      console.log("groupInfo", groupInfo);
       this.$store.dispatch("account/setNowGroup", groupInfo);
       this.$router.push({
         name: "Main",

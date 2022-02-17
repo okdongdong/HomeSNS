@@ -125,7 +125,6 @@ export default {
         headers: { Authorization: token },
       })
         .then((res) => {
-          // console.log(res.data);
           if (res.data.mainFeedDtoList.length) {
             let feedByDateList = [];
             for (let i = 0; i < res.data.mainFeedDtoList.length; i++) {
@@ -151,7 +150,6 @@ export default {
               feedData.feedLocation = currFeed.feedLocation; // 등록안된 곳은 빈값''
               feedData.feedTitle = currFeed.feedTitle;
               feedData.fileList = [];
-              // console.log('=======================================')
               for (let i = 0; i < currFeed.fileList.length; i++){
                 if (currFeed.fileList[i].fileContentType.includes("image")){
                   feedData.fileList.push({
@@ -166,7 +164,6 @@ export default {
                 }
               } 
               
-              // console.log(currFeed.fileList)
               if (i === 0) {
                 feedByDateList.push(feedData);
               } else if (
@@ -183,24 +180,13 @@ export default {
             if (feedByDateList.length > 0) {
               this.feedList.push(feedByDateList);
             }
-            // console.log("==================");
-            // console.log(this.feedList);
             this.offset += 10;
             $state.loaded();
           } else {
             $state.complete();
           }
         })
-        .catch((err) => {
-          console.log(err);
-        });
     },
-    // getImg() {
-    // getImg(url){
-    //   const tmpUrl = '@assets/'+url
-    //   return require(tmpUrl)
-    // return require("@/assets/upload/test1.png");
-    // },
   },
   computed: {
     ...mapState("account", ["nowGroup"]),
