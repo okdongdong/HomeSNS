@@ -218,9 +218,7 @@ export default {
       rules: {
         passwordRules: [
           (v) => !!v || " 비밀번호를 입력해주세요.",
-          (v) =>
-            !(v && v.length >= 20) ||
-            "패스워드는 20자 이상 입력할 수 없습니다.",
+          
         ],
       },
       image: null,
