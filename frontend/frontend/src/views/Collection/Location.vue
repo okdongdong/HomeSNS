@@ -13,7 +13,6 @@
           v-for="(m, index) in markers"
           :position="m.position"
           @click="getPhotos(m)"
-          :clickable="true"
           :icon="{
             url: 'https://i6e205.p.ssafy.io/'+m.files[0].markerImg,
             scaledSize: { width: 100, height: 100 },
@@ -39,7 +38,7 @@
               <!-- :src="`https://i6e205.p.ssafy.io/${file.markerImg}`" -->
               <v-img
                   v-if="file.type == 'img'" 
-                  :src="`https://i6e205.p.ssafy.io/${photo.markerImg}`" 
+                  :src="`https://i6e205.p.ssafy.io/${file.markerImg}`" 
                   aspect-ratio="1"
                   class="grey lighten-2"
                   @click="$router.push({name : 'Detail', params : {feedId : file.feedId}})"
@@ -60,9 +59,10 @@
                 <!-- :src="`https://i6e205.p.ssafy.io/${photo.markerImg}`" -->
                 <v-video
                   v-else
-                  :src="`https://i6e205.p.ssafy.io/${photo.markerImg}`" 
+                  :src="`https://i6e205.p.ssafy.io/${file.markerImg}`" 
                   aspect-ratio="1"
                   class="grey lighten-2"
+                  @click="$router.push({name : 'Detail', params : {feedId : file.feedId}})"
                 >
                 <template v-slot:placeholder>
                     <v-row
@@ -194,6 +194,8 @@ export default {
               }
             }
           }
+        // console.log('마커에 들어가죠!!!!!!!!!!!!!!!!')
+        // console.log(this.markers)
       })
       .catch((err)=>{
         console.log(err)
@@ -204,7 +206,7 @@ export default {
     },
     getPhotos(marker){
       this.currPhotos = []
-      this.show = true
+      this.show = !this.show
       console.log(this.show)
       this.center = marker.position
       this.currPhotos.push(marker.files)
