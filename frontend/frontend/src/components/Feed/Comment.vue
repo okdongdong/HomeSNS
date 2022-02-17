@@ -19,6 +19,7 @@
               v-for="(content, idx) in comment.commentContent"
               :key="idx"
               :class="content.type"
+              @click="move(content)"
             >
               {{ content.content }}
             </span>
@@ -55,12 +56,24 @@ export default {
   props: {
     comment: Object,
     feedId: Number,
+    members : Array,
   },
   components: {
     ProfilePhoto,
     // Emotion,
   },
   methods: {
+    move(content){
+      if(content.type == 'hashtag'){
+        let memberName = content.content.substr(1).trim();
+        console.log(memberName)
+        for(let i=0;i<this.members.length;i++){
+          if(this.members[i].userName == memberName){
+            this.$router.push({name : 'UserPage', params:{userSeq : this.members[i].userSeq}})
+          }
+        }
+      }
+    },
     deleteComment(commentId) {
       console.log(this.feedId);
       let data = {
