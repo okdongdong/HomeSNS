@@ -19,30 +19,25 @@
             <div class="d-inline-flex">{{ feed.eventDate }}</div>
           </div>
         </v-col>
-        <v-col v-if="userSeq == feedAuthorSeq" cols="2" class="d-flex justify-center align-center" >
+        <v-col v-if="userSeq == feedAuthorSeq" cols="2" class="d-flex justify-center align-center">
           <FeedPopup :feed-id="feedId" :feed-author-seq="feedAuthorSeq" />
         </v-col>
       </v-row>
       <hr />
       <div class="d-flex align-center" style="margin-top: 12px; margin-bottom: 3px">
-        <ProfilePhoto
-          :size="25"
-          :img-url="feedAuthorProfileImageUrl"
-          :user-seq="feedAuthorSeq"
-        />
-        <h3 class="mx-3" @click="$router.push({name:'UserPage', params : {userSeq : feedAuthorSeq}})">
+        <ProfilePhoto :size="25" :img-url="feedAuthorProfileImageUrl" :user-seq="feedAuthorSeq" />
+        <h3
+          class="mx-3"
+          @click="$router.push({ name: 'UserPage', params: { userSeq: feedAuthorSeq } })"
+        >
           {{ feed.author }}
         </h3>
       </div>
       <v-row justify="space-around">
-      <v-col cols="9">
-        <v-icon>location_on</v-icon>{{ feed.location }}
-      </v-col>
-      <v-col cols="3">
-        <v-btn rounded small @click="sendNotice()" class='mb-1'>
-          추억공유
-        </v-btn>
-      </v-col>
+        <v-col cols="9"> <v-icon>location_on</v-icon>{{ feed.location }} </v-col>
+        <v-col cols="3">
+          <v-btn rounded small @click="sendNotice()" class="mb-1"> 추억공유 </v-btn>
+        </v-col>
       </v-row>
     </div>
     <div class="feed-photos">
@@ -71,15 +66,15 @@
         <!-- 타임라인버튼 -->
         <v-col cols="1">
           <v-btn icon large style="padding: 0" @click="timelineToggle">
-            <v-icon v-if="bookmark == false">access_time</v-icon>
-            <v-icon v-else color=green>access_time</v-icon>
+            <v-icon v-if="timeline == false">access_time</v-icon>
+            <v-icon v-else color="green">access_time</v-icon>
           </v-btn>
         </v-col>
         <!-- 북마크 -->
         <v-col cols="1">
           <v-btn icon large style="padding: 0" @click="bookmarkToggle">
             <v-icon v-if="bookmark == false">bookmark_border</v-icon>
-            <v-icon v-else color=blue>bookmark</v-icon>
+            <v-icon v-else color="blue">bookmark</v-icon>
           </v-btn>
         </v-col>
       </v-row>
@@ -104,12 +99,12 @@
     <div class="px-3">
       <v-chip-group active-class="primary--text" column>
         <span v-for="emotion in emotions" :key="emotion.code">
-        <v-chip class="px-2" small color="white" v-if="emotion.cnt != 0">
-          <v-avatar center>
-            <v-img :src="emotion.emoji"></v-img>
-          </v-avatar>
-          <span class="pl-1">{{ emotion.cnt }}</span>
-        </v-chip>
+          <v-chip class="px-2" small color="white" v-if="emotion.cnt != 0">
+            <v-avatar center>
+              <v-img :src="emotion.emoji"></v-img>
+            </v-avatar>
+            <span class="pl-1">{{ emotion.cnt }}</span>
+          </v-chip>
         </span>
       </v-chip-group>
     </div>
@@ -144,7 +139,13 @@
         </v-list>
       </v-card>
     </v-form>
-    <Comment v-for="(comment, idx) in comments" :key="idx" :comment="comment" :feed-id="feedId" :members="members"/>
+    <Comment
+      v-for="(comment, idx) in comments"
+      :key="idx"
+      :comment="comment"
+      :feed-id="feedId"
+      :members="members"
+    />
     <infinite-loading @infinite="getComments"></infinite-loading>
   </v-app>
 </template>
@@ -188,12 +189,12 @@ export default {
     },
     // 감정
     emotions: [
-      { emoji: require("@/assets/emotions/heart_off.png"), status: "null", code: 30000, cnt:0},
-      { emoji: require("@/assets/emotions/heart_on.png"), status: "good", code: 30001, cnt:0},
-      { emoji: require("@/assets/emotions/sad.png"), status: "sad", code: 30002, cnt:0},
-      { emoji: require("@/assets/emotions/check.png"), status: "check", code: 30003 , cnt:0},
-      { emoji: require("@/assets/emotions/fun.png"), status: "fun", code: 30004, cnt:0},
-      { emoji: require("@/assets/emotions/amaze.png"), status: "amaze", code: 30005, cnt:0},
+      { emoji: require("@/assets/emotions/heart_off.png"), status: "null", code: 30000, cnt: 0 },
+      { emoji: require("@/assets/emotions/heart_on.png"), status: "good", code: 30001, cnt: 0 },
+      { emoji: require("@/assets/emotions/sad.png"), status: "sad", code: 30002, cnt: 0 },
+      { emoji: require("@/assets/emotions/check.png"), status: "check", code: 30003, cnt: 0 },
+      { emoji: require("@/assets/emotions/fun.png"), status: "fun", code: 30004, cnt: 0 },
+      { emoji: require("@/assets/emotions/amaze.png"), status: "amaze", code: 30005, cnt: 0 },
     ],
     beforeEmotion: null,
     currEmotion: { emoji: require("@/assets/emotions/heart_off.png"), status: "null", code: 30000 },
@@ -209,16 +210,16 @@ export default {
   }),
   methods: {
     ...mapActions("notice", ["send"]),
-    sendNotice(){
-      const noticeInfo ={
-        targetUserSeq : -1,
-        noticeType : "shareCreate",
+    sendNotice() {
+      const noticeInfo = {
+        targetUserSeq: -1,
+        noticeType: "shareCreate",
         noticeContentId: this.feedId,
       };
       this.send(noticeInfo);
     },
-    emotionShowToggle(){
-      this.showEmotions = false
+    emotionShowToggle() {
+      this.showEmotions = false;
     },
     getMember() {
       // 해시태그용
@@ -228,10 +229,9 @@ export default {
         method: "get",
         url: `${process.env.VUE_APP_MCS_URL}/feed/info/${groupId}`,
         headers: { Authorization: token },
-      })
-        .then((res) => {
-          this.members = res.data.members;
-        })
+      }).then((res) => {
+        this.members = res.data.members;
+      });
     },
     getFeed() {
       this.nowLoading = true;
@@ -261,12 +261,12 @@ export default {
         this.nowLoading = false;
         // this.memberList = res.data.feedDto.userList;
         this.feed.hashtagList = res.data.feedDto.hashtagList;
-        if(res.data.feedDto.code != "30000"){
-          for(let i=0;i<this.emotions.length;i++){
-          if(this.emotions[i].code == res.data.feedDto.code){
-            this.currEmotion = this.emotions[i]
-            this.beforeEmotion = this.emotions[i]
-            break
+        if (res.data.feedDto.code != "30000") {
+          for (let i = 0; i < this.emotions.length; i++) {
+            if (this.emotions[i].code == res.data.feedDto.code) {
+              this.currEmotion = this.emotions[i];
+              this.beforeEmotion = this.emotions[i];
+              break;
             }
           }
         }
@@ -275,12 +275,12 @@ export default {
         this.emotions[3].cnt = res.data.feedDto.check;
         this.emotions[4].cnt = res.data.feedDto.fun;
         this.emotions[5].cnt = res.data.feedDto.amaze;
-        if(res.data.feedDto.scrapYn == 'y'){
-          this.bookmark = true
-        }else{
-          this.bookmark = false
+        if (res.data.feedDto.scrapYn == "y") {
+          this.bookmark = true;
+        } else {
+          this.bookmark = false;
         }
-        this.timeline = res.data.feedDto.timeline
+        this.timeline = res.data.feedDto.timeline;
       });
     },
     getContent() {
@@ -302,13 +302,9 @@ export default {
     },
     createComment(event) {
       event.preventDefault();
-      if(this.currComment == null || this.currComment.trim() == ''){
-        this.$store.commit(
-          "snackbar/SET_SNACKBAR",
-          "댓글을 입력해주세요."
-        )
-      }
-      else{
+      if (this.currComment == null || this.currComment.trim() == "") {
+        this.$store.commit("snackbar/SET_SNACKBAR", "댓글을 입력해주세요.");
+      } else {
         let commentTag = [];
         for (let i = 0; i < this.tagList.length; i++) {
           commentTag.push(this.tagList[i].userSeq);
@@ -319,7 +315,7 @@ export default {
             commentTags: commentTag,
             commentContent: this.currComment,
           },
-          feedAuthorSeq : this.feedAuthorSeq,
+          feedAuthorSeq: this.feedAuthorSeq,
         };
         this.$store.dispatch("comments/createComment", data);
         this.currComment = null;
@@ -345,87 +341,85 @@ export default {
     },
     changeEmotion(data) {
       const token = localStorage.getItem("jwt");
-      if (data == undefined || this.currEmotion.status == data) { // 선택한 감정 없음(감정 삭제)
+      if (data == undefined || this.currEmotion.status == data) {
+        // 선택한 감정 없음(감정 삭제)
         this.currEmotion = this.emotions[0];
-        let deleteEmotion={
-          feedId : this.feedId,
-        }
-        deleteEmotion[this.beforeEmotion.status]=1
-        for(let i=0;i<this.emotions.length;i++){
-          if(this.emotions[i].status == this.beforeEmotion.status){
-            this.emotions[i].cnt -= 1
+        let deleteEmotion = {
+          feedId: this.feedId,
+        };
+        deleteEmotion[this.beforeEmotion.status] = 1;
+        for (let i = 0; i < this.emotions.length; i++) {
+          if (this.emotions[i].status == this.beforeEmotion.status) {
+            this.emotions[i].cnt -= 1;
           }
         }
         axios({
-          method : "PUT",
-          url : `${process.env.VUE_APP_MCS_URL}/feed/emotion/sub`,
-          data : deleteEmotion,
-          headers : { Authorization: token },
-        })
+          method: "PUT",
+          url: `${process.env.VUE_APP_MCS_URL}/feed/emotion/sub`,
+          data: deleteEmotion,
+          headers: { Authorization: token },
+        });
+      } else {
+        // 감정 수정
+        if (this.beforeEmotion != null && this.beforeEmotion.cnt > 0) {
+          for (let i = 0; i < this.emotions.length; i++) {
+            if (this.emotions[i].status == this.beforeEmotion.status) {
+              this.emotions[i].cnt -= 1;
+              break;
+            }
+          }
+        }
+        for (let i = 0; i < this.emotions.length; i++) {
+          if (this.emotions[i].status == data) {
+            this.emotions[i].cnt += 1;
+            this.currEmotion = this.emotions[i];
+            this.beforeEmotion = this.emotions[i];
+            break;
+          }
+        }
 
-      } else { // 감정 수정
-        if(this.beforeEmotion != null && this.beforeEmotion.cnt > 0){
-          for (let i = 0; i < this.emotions.length; i++) {
-              if (this.emotions[i].status == this.beforeEmotion.status) {
-                this.emotions[i].cnt -= 1;
-                break
-              }
-            }
-        }
-          for (let i = 0; i < this.emotions.length; i++) {
-            if (this.emotions[i].status == data) {
-              this.emotions[i].cnt += 1;
-              this.currEmotion = this.emotions[i];
-              this.beforeEmotion = this.emotions[i];
-              break
-            }
-          }
-        
         let selectEmotion = {
-          feedId : this.feedId
-        }
-        selectEmotion[this.currEmotion.status]=1
+          feedId: this.feedId,
+        };
+        selectEmotion[this.currEmotion.status] = 1;
         axios({
-          method : "PUT",
-          url : `${process.env.VUE_APP_MCS_URL}/feed/emotion/add`,
-          data : selectEmotion,
-          headers : {Authorization : token},
-        })
+          method: "PUT",
+          url: `${process.env.VUE_APP_MCS_URL}/feed/emotion/add`,
+          data: selectEmotion,
+          headers: { Authorization: token },
+        });
       }
     },
     bookmarkToggle() {
       const token = localStorage.getItem("jwt");
-      if(this.bookmark){ // 북마크 true이면 삭제해줘야함
+      if (this.bookmark) {
+        // 북마크 true이면 삭제해줘야함
         axios({
-          method : "DELETE",
-          url : `${process.env.VUE_APP_MCS_URL}/feed/scrap/${this.feedId}`,
-          headers : {Authorization : token}
-        })
-        .then(()=>{
+          method: "DELETE",
+          url: `${process.env.VUE_APP_MCS_URL}/feed/scrap/${this.feedId}`,
+          headers: { Authorization: token },
+        }).then(() => {
           this.bookmark = !this.bookmark;
-        })
-      }else{
+        });
+      } else {
         axios({
-          method : "POST",
-          url : `${process.env.VUE_APP_MCS_URL}/feed/scrap/${this.feedId}`,
-          headers : {Authorization : token}
-        })
-        .then(()=>{
+          method: "POST",
+          url: `${process.env.VUE_APP_MCS_URL}/feed/scrap/${this.feedId}`,
+          headers: { Authorization: token },
+        }).then(() => {
           this.bookmark = !this.bookmark;
-        })
+        });
       }
-      
     },
     timelineToggle() {
       const token = localStorage.getItem("jwt");
       axios({
-        method : "put",
-        url : `${process.env.VUE_APP_MCS_URL}/feed/timeline/${this.feedId}`,
-        headers : {Authorization : token}
-      })
-      .then(()=>{
+        method: "put",
+        url: `${process.env.VUE_APP_MCS_URL}/feed/timeline/${this.feedId}`,
+        headers: { Authorization: token },
+      }).then(() => {
         this.timeline = !this.timeline;
-      })
+      });
     },
   },
   mounted() {
@@ -438,7 +432,7 @@ export default {
     this.$store.dispatch("comments/resetOffset");
   },
   computed: {
-    ...mapState("account", ["nowGroup", "userName","userSeq"]),
+    ...mapState("account", ["nowGroup", "userName", "userSeq"]),
     ...mapState("comments", ["comments", "offset"]),
     commentInTag() {
       if (this.currComment != null && this.currComment.substr(-1) == "@") {
