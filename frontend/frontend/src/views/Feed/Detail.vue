@@ -30,7 +30,7 @@
           :img-url="feedAuthorProfileImageUrl"
           :user-seq="feedAuthorSeq"
         />
-        <h3 class="mx-3">
+        <h3 class="mx-3" @click="$router.push({name:'UserPage', params : {userSeq : feedAuthorSeq}})">
           {{ feed.author }}
         </h3>
       </div>
@@ -144,7 +144,7 @@
         </v-list>
       </v-card>
     </v-form>
-    <Comment v-for="(comment, idx) in comments" :key="idx" :comment="comment" :feed-id="feedId"/>
+    <Comment v-for="(comment, idx) in comments" :key="idx" :comment="comment" :feed-id="feedId" :members="members"/>
     <infinite-loading @infinite="getComments"></infinite-loading>
   </v-app>
 </template>
@@ -267,7 +267,7 @@ export default {
           "일";
         this.feed.location = res.data.feedDto.locationDto.locationName;
         this.nowLoading = false;
-        this.memberList = res.data.feedDto.userList;
+        // this.memberList = res.data.feedDto.userList;
         this.feed.hashtagList = res.data.feedDto.hashtagList;
         if(res.data.feedDto.code != "30000"){
           for(let i=0;i<this.emotions.length;i++){
