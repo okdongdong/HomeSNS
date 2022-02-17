@@ -31,26 +31,16 @@
             </div>
             <v-container>
               <v-row>
-                <v-col
-                  v-for="(file, idx3) in feed.fileList"
-                  :key="idx3"
-                  class="pa-0"
-                  cols="4"
-                >
+                <v-col v-for="(file, idx3) in feed.fileList" :key="idx3" class="pa-0" cols="4">
                   <!-- :src="require(`@/uploadImg/${file.fileUrl}`)" -->
                   <v-img
                     v-if="file.type == 'img'"
                     :src="`https://i6e205.p.ssafy.io/${file.fileUrl}`"
-                    :lazy-src="`https://picsum.photos/200/300`"
                     aspect-ratio="1"
                     class="grey lighten-2"
                   >
                     <template v-slot:placeholder>
-                      <v-row
-                        class="fill-height ma-0"
-                        align="center"
-                        justify="center"
-                      >
+                      <v-row class="fill-height ma-0" align="center" justify="center">
                         <v-progress-circular
                           indeterminate
                           color="grey lighten-5"
@@ -61,16 +51,11 @@
                   <v-video
                     v-else
                     :src="`https://i6e205.p.ssafy.io/${file.fileUrl}`"
-                    :lazy-src="`https://picsum.photos/200/300`"
                     aspect-ratio="1"
                     class="grey lighten-2"
                   >
-                  <template v-slot:placeholder>
-                      <v-row
-                        class="fill-height ma-0"
-                        align="center"
-                        justify="center"
-                      >
+                    <template v-slot:placeholder>
+                      <v-row class="fill-height ma-0" align="center" justify="center">
                         <v-progress-circular
                           indeterminate
                           color="grey lighten-5"
@@ -123,69 +108,66 @@ export default {
         url: `${process.env.VUE_APP_MCS_URL}/main`,
         params: data,
         headers: { Authorization: token },
-      })
-        .then((res) => {
-          if (res.data.mainFeedDtoList.length) {
-            let feedByDateList = [];
-            for (let i = 0; i < res.data.mainFeedDtoList.length; i++) {
-              let feedData = {
-                feedId: null,
-                feedEventDate: "1900.01.01",
-                feedLocation: null,
-                feedTitle: null,
-                fileList: [],
-              };
-              let currFeed = res.data.mainFeedDtoList[i];
-              feedData.feedId = currFeed.feedId;
-              feedData.feedEventDate =
-                currFeed.feedEventDate.year +
-                "년" +
-                " " +
-                currFeed.feedEventDate.month +
-                "월" +
-                " " +
-                currFeed.feedEventDate.day +
-                "일";
-              // feedData.feedEventDate = this.$moment(currFeed.feedEventDate).format("YYYY년 MM월 DD일");
-              feedData.feedLocation = currFeed.feedLocation; // 등록안된 곳은 빈값''
-              feedData.feedTitle = currFeed.feedTitle;
-              feedData.fileList = [];
-              for (let i = 0; i < currFeed.fileList.length; i++){
-                if (currFeed.fileList[i].fileContentType.includes("image")){
-                  feedData.fileList.push({
-                    fileUrl : currFeed.fileList[i].fileUrl,
-                    type : 'img',
-                  })
-                }else{
-                  feedData.fileList.push({
-                    fileUrl : currFeed.fileList[i].fileUrl,
-                    type : 'video',
-                  }) 
-                }
-              } 
-              
-              if (i === 0) {
-                feedByDateList.push(feedData);
-              } else if (
-                feedByDateList[0].feedEventDate === feedData.feedEventDate
-              ) {
-                feedByDateList.push(feedData);
+      }).then((res) => {
+        if (res.data.mainFeedDtoList.length) {
+          let feedByDateList = [];
+          for (let i = 0; i < res.data.mainFeedDtoList.length; i++) {
+            let feedData = {
+              feedId: null,
+              feedEventDate: "1900.01.01",
+              feedLocation: null,
+              feedTitle: null,
+              fileList: [],
+            };
+            let currFeed = res.data.mainFeedDtoList[i];
+            feedData.feedId = currFeed.feedId;
+            feedData.feedEventDate =
+              currFeed.feedEventDate.year +
+              "년" +
+              " " +
+              currFeed.feedEventDate.month +
+              "월" +
+              " " +
+              currFeed.feedEventDate.day +
+              "일";
+            // feedData.feedEventDate = this.$moment(currFeed.feedEventDate).format("YYYY년 MM월 DD일");
+            feedData.feedLocation = currFeed.feedLocation; // 등록안된 곳은 빈값''
+            feedData.feedTitle = currFeed.feedTitle;
+            feedData.fileList = [];
+            for (let i = 0; i < currFeed.fileList.length; i++) {
+              if (currFeed.fileList[i].fileContentType.includes("image")) {
+                feedData.fileList.push({
+                  fileUrl: currFeed.fileList[i].fileUrl,
+                  type: "img",
+                });
               } else {
-                // 날짜 다르면 날짜별로 모아놓은거 feedList에 push
-                this.feedList.push(feedByDateList);
-                feedByDateList = []; // 초기화
-                feedByDateList.push(feedData);
+                feedData.fileList.push({
+                  fileUrl: currFeed.fileList[i].fileUrl,
+                  type: "video",
+                });
               }
             }
-            if (feedByDateList.length > 0) {
+
+            if (i === 0) {
+              feedByDateList.push(feedData);
+            } else if (feedByDateList[0].feedEventDate === feedData.feedEventDate) {
+              feedByDateList.push(feedData);
+            } else {
+              // 날짜 다르면 날짜별로 모아놓은거 feedList에 push
               this.feedList.push(feedByDateList);
+              feedByDateList = []; // 초기화
+              feedByDateList.push(feedData);
             }
-            this.offset += 10;
-            $state.loaded();
-          } else {
-            $state.complete();
           }
-        })
+          if (feedByDateList.length > 0) {
+            this.feedList.push(feedByDateList);
+          }
+          this.offset += 10;
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+      });
     },
   },
   computed: {
