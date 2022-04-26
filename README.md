@@ -1,5 +1,6 @@
-
 # 🏠우리집SNS
+
+![img](https://cdn.discordapp.com/attachments/968375583291617310/968529586587574333/unknown.png)
 
 > Share Emotion - 감정을 공유해요🥰.
 >
@@ -141,24 +142,28 @@ https://www.notion.so/2-1-SNS-40da49792c554a05bc2bd92403d28512
 ## 시연
 
 ### 1. 회원가입 및 로그인
-
+<div align="center">
 <img src="README.assets/image-20220217210200137.png" alt="image-20220217210200137" style="zoom:49%;" /><img src="README.assets/image-20220217210218233.png" alt="image-20220217210218233" style="zoom:49%;" />
+</div>
+
 
 - 회원가입 및 로그인 기능
 
 <br>
 
 ### 2. 아이디 및 비밀번호 찾기
-
+<div align="center">
 <img src="README.assets/image-20220217210358363.png" alt="image-20220217210358363" style="zoom:49%;" /><img src="README.assets/image-20220217210531334.png" alt="image-20220217210531334" style="zoom:49%;" />
+</div>
 
 - 가입시 사용한 이메일 주소를 이용해 아이디와 비밀번호를 찾을 수 있다.
 
 <br>
 
 ### 3. 그룹 추가 및 선택
-
+<div align="center">
 <img src="README.assets/image-20220217220119923.png" alt="image-20220217220119923" style="zoom:49%;" /><img src="README.assets/image-20220217220222453.png" alt="image-20220217220222453" style="zoom:49%;" /><img src="README.assets/image-20220217213723064.png" alt="image-20220217213723064" style="zoom:49%;" />
+</div>
 
 - 새로운 그룹을 생성하거나 기존에 속해있지 않았던 다른 그룹에 입장할 수 있다.
   - 다른그룹의 그룹아이디와 그룹비밀번호를 이용해 입장할 수 있다.
@@ -167,9 +172,9 @@ https://www.notion.so/2-1-SNS-40da49792c554a05bc2bd92403d28512
 <br>
 
 ### 4. 게시물 - 시간여행 - 추억여행 - 일정표
-
+<div align="center">
 <img src="README.assets/image-20220217220353806.png" alt="image-20220217220353806" style="zoom:49%;" /><img src="README.assets/image-20220217212520047.png" alt="image-20220217212520047" style="zoom:49%;" /><img src="README.assets/image-20220217212456215.png" alt="image-20220217212456215" style="zoom:49%;" /><img src="README.assets/image-20220217212611566.png" alt="image-20220217212611566" style="zoom:49%;" />
-
+</div>
 - 게시물 
   - 가족그룹에 게시된 모든 피드를 조회할 수 있는 페이지
 - 시간여행 
@@ -182,8 +187,9 @@ https://www.notion.so/2-1-SNS-40da49792c554a05bc2bd92403d28512
 <br>
 
 ### 5. 게시물 작성
-
+<div align="center">
 <img src="README.assets/image-20220217223526687.png" alt="image-20220217223526687" style="zoom:49%;" /><img src="README.assets/image-20220217223508369.png" alt="image-20220217223508369" style="zoom:49%;" />
+</div>
 
 - 추억담기 버튼을 통해 새로운 게시물을 추가할 수 있다.
 - 지도를 통해 장소를 등록할 수 있으며, 과거에 사용했던 장소와 즐겨찾기로 등록해둔 장소를 사용할 수도 있다.
@@ -192,8 +198,9 @@ https://www.notion.so/2-1-SNS-40da49792c554a05bc2bd92403d28512
 <br>
 
 ### 6. 게시물 상세
-
+<div align="center">
 <img src="README.assets/image-20220217223806841.png" alt="image-20220217223806841" style="zoom:49%;" /><img src="README.assets/image-20220217223943219.png" alt="image-20220217223943219" style="zoom:49%;" /><img src="README.assets/image-20220217223824800.png" alt="image-20220217223824800" style="zoom:49%;" />
+</div>
 
 - 게시물의 상세내용을 조회할 수 있으며, 해당 게시물에 작성된 댓글을 조회할 수 있다.
 - 게시물 사진 아래 좌측 좋아요 버튼을 누르면 5가지 감정표현중에 하나를 선택할 수 있다.
@@ -203,8 +210,9 @@ https://www.notion.so/2-1-SNS-40da49792c554a05bc2bd92403d28512
 <br>
 
 ### 7. 실시간 알림기능
-
+<div align="center">
 <img src="README.assets/image-20220217213243046.png" alt="image-20220217213243046" style="zoom:49%;" /><img src="README.assets/image-20220217213320913.png" alt="image-20220217213320913" style="zoom:49%;" />
+</div>
 
 - 같은 가족그룹 내 다른사람이 아래와 같은 행동을 했을 때 해당하는 대상에게 실시간으로 알림이 전송된다.
   - 피드작성
@@ -217,8 +225,9 @@ https://www.notion.so/2-1-SNS-40da49792c554a05bc2bd92403d28512
 <br>
 
 ### 8. 미니게임(사다리타기 & 투표)
-
+<div align="center">
 <img src="README.assets/image-20220217220823403.png" alt="image-20220217220823403" style="zoom:49%;" /><img src="README.assets/image-20220217221059798.png" alt="image-20220217221059798" style="zoom:49%;" /><img src="README.assets/image-20220217220951356.png" alt="image-20220217220951356" style="zoom:49%;" /><img src="README.assets/image-20220217221137787.png" alt="image-20220217221137787" style="zoom:49%;" />
+</div>
 
 - 가족간의 오락거리로 사용할 수 있는 사다리타기와 투표기능이다.
 - 우측상단의 +버튼으로 새로운 사다리타기 투표기능을 추가할 수 있다.
@@ -226,8 +235,9 @@ https://www.notion.so/2-1-SNS-40da49792c554a05bc2bd92403d28512
 <br>
 
 ### 9. 그룹프로필
-
+<div align="center">
 <img src="README.assets/image-20220217221959300.png" alt="image-20220217221959300" style="zoom:49%;" /><img src="README.assets/image-20220217222447579.png" alt="image-20220217222447579" style="zoom:49%;" /><img src="README.assets/image-20220217222520768.png" alt="image-20220217222520768" style="zoom:49%;" /><img src="README.assets/image-20220217222331911.png" alt="image-20220217222331911" style="zoom:49%;" />
+</div>
 
 - 그룹 프로필 페이지에서 그룹ID와 그룹원들을 조회할 수 있다.
   - 권한이 있는 사용자에게만 그룹정보를 수정할 수 있는 그룹관리 버튼이 출력된다.
@@ -237,8 +247,9 @@ https://www.notion.so/2-1-SNS-40da49792c554a05bc2bd92403d28512
 <br>
 
 ### 10. 개인프로필
-
+<div align="center">
 <img src="README.assets/image-20220217222813495.png" alt="image-20220217222813495" style="zoom:49%;" /><img src="README.assets/image-20220217223044680.png" alt="image-20220217223044680" style="zoom:49%;" /><img src="README.assets/image-20220217223114732.png" alt="image-20220217223114732" style="zoom:49%;" /><img src="README.assets/image-20220217223130065.png" alt="image-20220217223130065" style="zoom:49%;" />
+</div>
 
 - 개인 프로필 페이지에서 해당유저가 작성한 게시물과 스크랩한 게시물을 조회할 수 있다.
   - 본인의 프로필 페이지일 경우 프로필 사진을 수정할 수 있고 정보수정 버튼이 출력된다.
